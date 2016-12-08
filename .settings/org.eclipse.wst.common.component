@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="ms-mmall">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/net/mingsoft/ms-mcomment/1.0.0-SNAPSHOT/ms-mcomment-1.0.0-SNAPSHOT.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+            <dependency-type>consumes</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/net/mingsoft/ms-mattention/1.0.0-SNAPSHOT/ms-mattention-1.0.0-SNAPSHOT.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+            <dependency-type>consumes</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/net/mingsoft/ms-morder/1.0.0-SNAPSHOT/ms-morder-1.0.0-SNAPSHOT.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+            <dependency-type>consumes</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/net/mingsoft/ms-mbank/1.0.0-SNAPSHOT/ms-mbank-1.0.0-SNAPSHOT.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+            <dependency-type>consumes</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/" handle="module:/overlay/prj/ms-mpeople?includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+            <dependency-type>consumes</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/net/mingsoft/ms-mcms/1.0.0-SNAPSHOT/ms-mcms-1.0.0-SNAPSHOT.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+            <dependency-type>consumes</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/net/mingsoft/ms-mdiy/1.0.2-SNAPSHOT/ms-mdiy-1.0.2-SNAPSHOT.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+            <dependency-type>consumes</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/net/mingsoft/ms-basic/1.0.3-SNAPSHOT/ms-basic-1.0.3-SNAPSHOT.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+            <dependency-type>consumes</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/" handle="module:/overlay/slf/?includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+            <dependency-type>consumes</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="ms-mmall"/>
+        <property name="java-output-path" value="/ms-mmall/target/classes"/>
+    </wb-module>
+</project-modules>
