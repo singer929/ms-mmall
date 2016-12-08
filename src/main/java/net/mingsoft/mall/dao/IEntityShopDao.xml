@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 文章管理持久化层配置文件 -->
+<mapper namespace="net.mingsoft.mall.dao.IEntityShopDao">
+	<!-- 表栏目名 开始 -->
+	<sql id="column_list">
+		es_basic_id,es_city_Id,es_tel,es_address,es_x,es_y,es_app_id,es_province_id,es_area_id,
+		BASIC_ID,BASIC_TITLE,BASIC_DESCRIPTION,BASIC_THUMBNAILS,BASIC_HIT,BASIC_DATETIME,BASIC_UPDATETIME,BASIC_PEOPLEID,BASIC_CATEGORYID,BASIC_SORT
+	</sql>
+	
+	<sql id="all_column_list">
+		es_basic_id,es_city_Id,es_tel,es_address,es_x,es_y,es_app_id,es_province_id,es_area_id,city.category_title as es_City_Title ,par.category_title as es_province_Title,
+		BASIC_ID,BASIC_TITLE,BASIC_DESCRIPTION,BASIC_THUMBNAILS,BASIC_HIT,BASIC_DATETIME,BASIC_UPDATETIME,BASIC_PEOPLEID,BASIC_CATEGORYID,BASIC_SORT
+	</sql>
+	<!-- 表栏目名 结束 --> 
+
+	<!-- 获取表字段 开始 -->
+	<resultMap type="net.mingsoft.mall.entity.EntityShopEntity" id="resultMap">
+		<id column="es_basic_id" property="entityShopId" />				<!-- 与绑定id -->
+		<result column="es_city_Id" property="entityShopCity" />	<!-- 城市id -->
+		<result column="es_tel" property="entityShopPhone" />		<!-- 联系电话 -->
+		<result column="es_address" property="entityShopAddress" />			<!--  商店实体店的详细地址 -->
+		<result column="es_x" property="entityShopX" />		<!-- 商店实体店的x轴 -->
+		<result column="es_y" property="entityShopY" />			<!--  商店实体店的Y轴 -->
+		<result column="es_app_id" property="entityShopAppId" />	<!-- 商店实体店所属的应用appid-->
+		<result column="es_province_id" property="entityShopProvinceId" />	<!-- 商店实体店所属的省id-->
+		<result column="es_area_id" property="entityShopAreaId" />	<!-- 商店实体店所属的区id-->
+		<result column="es_City_Title" property="entityShopCityTitle" />	<!-- 商店实体店所属城市名称-->
+		<result column="es_province_Title" property="entityShopProvinceTitle" />	<!-- 商店实体店省份名称-->
+		
+		
+		<result column="BASIC_ID" property="basicId" />					<!-- 与表basic绑定 自增长ID -->
+		<result column="BASIC_TITLE" property="basicTitle" />			<!-- 文章标题 -->
+		<result column="BASIC_DESCRIPTION" property="basicDescription" /><!-- 文章描述 -->
+		<result column="BASIC_THUMBNAILS" property="basicThumbnails" />	<!-- 文章缩略图 -->
+		<result column="BASIC_HIT" property="basicHit" />				<!-- 文章点击次数 -->
+		<result column="BASIC_DATETIME" property="basicDateTime" />		<!-- 文章发布时间 -->
+		<result column="BASIC_UPDATETIME" property="basicUpdateTime" />	<!-- 文章更新时间 -->
+		<result column="BASIC_PEOPLEID" property="basicPeopleId" />		<!-- 文章发布者id -->
+		<result column="BASIC_CATEGORYID" property="basicCategoryId" />	<!-- 文章所属主栏目id -->
+		<result column="BASIC_SORT" property="basicSort" />
+	</resultMap>
+	<!-- 获取表字段 结束 -->
+
+	<!-- 添加商品实体店实体信息 开始 -->
+	<insert id="saveEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
+		insert into mall_entity_shop
+		<!-- 添加表字段 -->
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="basicId != null">es_basic_id,</if>
+			<if test="entityShopCity != null">es_city_Id,</if>
+			<if test="entityShopPhone != null">es_tel,</if>
+			<if test="entityShopAddress != null">es_address,</if>
+			<if test="entityShopX != null">es_x,</if>
+			<if test="entityShopY != null">es_y,</if>
+			<if test="entityShopAppId != null">es_app_id,</if>
+			<if test="entityShopAreaId != null">es_area_id,</if>
+			<if test="entityShopProvinceId != null">es_province_id,</if>
+		</trim>
+		<!-- 注入控制层字段 -->
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="basicId != null">#{basicId},</if>
+			<if test="entityShopCity != null">#{entityShopCity},</if>
+			<if test="entityShopPhone != null">#{entityShopPhone},</if>
+			<if test="entityShopAddress != null">#{entityShopAddress},</if>
+			<if test="entityShopX != null">#{entityShopX},</if>
+			<if test="entityShopY != null">#{entityShopY},</if>
+			<if test="entityShopAppId != null">#{entityShopAppId},</if>
+			<if test="entityShopAreaId != null">#{entityShopAreaId},</if>
+			<if test="entityShopProvinceId != null">#{entityShopProvinceId},</if>
+		</trim>
+	</insert>
+	<!-- 添加文章信息 结束 -->
+
+	<!-- 删除商品实体店实体信息 开始 -->
+	<delete id="deleteEntity" parameterType="int">
+		delete from mall_entity_shop
+		where es_basic_id = #{basicId}
+	</delete>
+	<!-- 删除商品实体店实体信息 结束 -->
+
+	<!-- 更新商品实体店实体的信息 开始 -->
+	<update id="updateEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
+		update mall_entity_shop
+		<set>
+			<if test="entityShopCity != null">es_city_Id=#{entityShopCity},</if>
+			<if test="entityShopPhone != null">es_tel=#{entityShopPhone},</if>
+			<if test="entityShopAddress != null">es_address=#{entityShopAddress},</if>
+			<if test="entityShopX != null">es_x=#{entityShopX},</if>
+			<if test="entityShopY != null">es_y=#{entityShopY},</if>
+			<if test="entityShopProvinceId != null">es_province_id=#{entityShopProvinceId},</if>
+			<if test="entityShopAreaId != null">es_area_id=#{entityShopAreaId},</if>
+		</set>
+		where es_basic_id = #{basicId}
+	</update>
+	<!-- 更新商品实体店实体信息 开始 -->
+	
+	<!-- 获取商品实体店信息开始 -->
+	<select id="getEntity"  resultMap="resultMap" parameterType="int">
+			select  <include refid="all_column_list" /> from v_mall_entity_shop es 
+		left join category as city on city.category_id=es_city_id
+		 left join category as par on par.category_id=es_province_id  where es_basic_id = #{basicId}
+	</select>
+	<!-- 获取商品实体店信息结束-->
+	
+	<!-- 获取商品实体店总数开始 -->
+	<select id="getCountByAppId"  resultType="int" >
+		select  count(*) from mall_entity_shop where  1=1
+		<if test="appId != null">and  es_app_id= #{appId}</if>
+	</select>
+	<!-- 获取商品实体店总数结束-->
+	
+	<!-- 根据应用ID查询商品分页开始 -->
+	<select id="queryPageByAppId" resultMap="resultMap">
+			select  <include refid="all_column_list" /> from v_mall_entity_shop es 
+		left join category as city on city.category_id=es_city_id
+		 left join category as par on par.category_id=es_province_id
+		<where>
+			<if test="appId != null">and  es_app_id= #{appId}</if>
+		</where>
+		order by es_basic_id 	desc
+		<if test=" pageNo != null">
+			<if test=" pageSize != null">limit ${pageNo*pageSize},#{pageSize}</if>
+		</if>
+	</select>
+	<!-- 根据应用ID查询商品分页结束 -->
+	
+	<!-- 根据应用ID查询商品分页开始 -->
+	<select id="queryListByProvinceId"   resultMap="resultMap"> 
+		select  <include refid="all_column_list" /> from v_mall_entity_shop es 
+		left join category as city on city.category_id=es_city_id
+		 left join category as par on par.category_id=es_province_id
+		<where>
+			<if test="appId != null">and  es_app_id= #{appId}</if>
+			<if test="provinceId != null">and  es_province_id= #{provinceId}</if>
+		</where>
+		order by es_basic_id 	desc
+		<if test=" pageNo != null"> 
+			<if test=" pageSize != null">limit ${pageNo*pageSize},#{pageSize}</if>
+		</if>
+	</select>
+	<!-- 根据应用ID查询商品分页结束 -->
+	
+</mapper>

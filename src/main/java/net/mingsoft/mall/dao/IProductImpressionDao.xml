@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.mingsoft.mall.dao.IProductImpressionDao">
+	
+	<resultMap id="resultMap" type="net.mingsoft.mall.entity.ProductImpressionEntity">
+		<id column="PI_ID" property="piId" /><!-- -->
+		<result column="PI_ID" property="piId" /><!-- -->
+		<result column="PI_BASIC_ID" property="piBasicId" /><!--商品编号 -->
+		<result column="PI_TITLE" property="piTitle" /><!--印象 -->
+		<result column="PI_PEOPLE_ID" property="piPeopleId" /><!--添加用户 -->
+		<result column="PI_AMOUNT" property="piAmount" /><!--数量 -->
+		<result column="PI_DATETIME" property="piDatetime" /><!--添加时间 -->
+	</resultMap>
+	
+	<!--保存-->	
+	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="piId"
+		parameterType="net.mingsoft.mall.entity.ProductImpressionEntity" >
+		insert into mall_product_impression
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="piBasicId != null">PI_BASIC_ID,</if>
+			<if test="piTitle != null">PI_TITLE,</if>
+			<if test="piPeopleId != null">PI_PEOPLE_ID,</if>
+			<if test="piAmount != null">PI_AMOUNT,</if>
+			<if test="piDatetime != null">PI_DATETIME,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="piBasicId != null">#{piBasicId},</if>
+			<if test="piTitle != null">#{piTitle},</if>
+			<if test="piPeopleId != null">#{piPeopleId},</if>
+			<if test="piAmount != null">#{piAmount},</if>
+			<if test="piDatetime != null">#{piDatetime},</if>
+		</trim>
+	</insert>
+	
+	<!--更新-->	
+	<update id="updateEntity" parameterType="net.mingsoft.mall.entity.ProductImpressionEntity">
+		update mall_product_impression
+		<set>
+			<if test="piBasicId != null">PI_BASIC_ID=#{piBasicId},</if>
+			<if test="piTitle != null">PI_TITLE=#{piTitle},</if>
+		</set>
+		where PI_ID = #{piId}
+	</update>
+	
+	<!--根据id获取-->	
+	<select id="getEntity" resultMap="resultMap" parameterType="int">
+		select * from mall_product_impression where PI_ID=#{piId}
+	</select>
+	
+	<!--根据实体获取-->
+	<select id="getByEntity" resultMap="resultMap" parameterType="net.mingsoft.mall.entity.ProductImpressionEntity">
+		select * from mall_product_impression 
+		<where>
+			<if test="piBasicId != null"> and PI_BASIC_ID=#{piBasicId}</if>
+			<if test="piTitle != null"> and PI_TITLE=#{piTitle}</if>
+			<if test="piPeopleId != null"> and PI_PEOPLE_ID=#{piPeopleId}</if>
+			<if test="piAmount != null"> and PI_AMOUNT=#{piAmount}</if>
+			<if test="piDatetime != null"> and PI_DATETIME=#{piDatetime}</if>
+		</where>
+		limit 0,1
+	</select>	
+	
+	
+	<!--删除-->	
+	<delete id="deleteEntity" parameterType="int">
+		delete from mall_product_impression  where PI_ID=#{piId}
+	</delete>	
+	
+	<!--批量删除-->	
+	<delete id="delete" >
+		delete from mall_product_impression
+		<where>
+			 PI_ID  in <foreach collection="ids" item="item" index="index" 
+			open="(" separator="," close=")">#{item}</foreach>
+		</where>
+	</delete>
+	<!--查询全部-->	
+	<select id="queryAll" resultMap="resultMap">
+		select * from mall_product_impression order by PI_ID desc
+	</select>
+	<!--条件查询-->	
+	<select id="query" resultMap="resultMap">
+		select * from mall_product_impression  
+		<where>
+			<if test="piBasicId != null"> and PI_BASIC_ID=#{piBasicId} </if>				
+			<if test="piTitle != null"> and PI_TITLE=#{piTitle} </if>				
+			<if test="piPeopleId != null"> and PI_PEOPLE_ID=#{piPeopleId} </if>				
+			<if test="piAmount != null"> and PI_AMOUNT=#{piAmount} </if>				
+			<if test="piDatetime != null"> and PI_DATETIME=#{piDatetime} </if>				
+		</where>		
+		order by PI_ID desc
+	</select>
+	
+</mapper>

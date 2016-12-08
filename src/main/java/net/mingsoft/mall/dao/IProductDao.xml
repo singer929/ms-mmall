@@ -1,0 +1,1297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.mingsoft.mall.dao.IProductDao">
+	<sql id="column_list">
+		p.product_basicID,p.product_brand,p.product_price,p.product_inventory,p.product_appId,p.product_content,p.product_code,p.product_sale,p.product_linkUrl,p.product_cost_price,p.product_shelf,
+		b.BASIC_ID,b.BASIC_TITLE,b.BASIC_DESCRIPTION,b.BASIC_THUMBNAILS,b.BASIC_HIT,b.BASIC_DATETIME,b.BASIC_UPDATETIME,b.BASIC_PEOPLEID,b.BASIC_CATEGORYID,b.BASIC_MODELID,b.BASIC_SORT,b.basic_type
+	</sql>
+
+	<!-- 获取表字段 开始 -->
+	<resultMap type="net.mingsoft.mall.entity.ProductEntity" id="resultMap">
+		<id column="BASIC_ID" property="basicId" />					<!-- 与表basic绑定 自增长ID -->
+		<result column="product_basicID" property="productId" />				<!-- 与产品表绑定id -->
+		<result column="product_price" property="productPrice" />	<!-- 产品价格 -->
+		<result column="product_inventory" property="productStock" />		<!-- 产品库存量 -->
+		<result column="product_appId" property="productAppId" />		<!-- 产品所属appID -->
+		<result column="product_code" property="productCode" />		<!-- 产品所属appID -->
+		<result column="product_sale" property="productSale" />		<!-- 产品销量 -->
+		<result column="product_linkUrl" property="productLinkUrl" />		<!-- 产品链接 -->
+		<result column="product_cost_price" property="productCostPrice" />		<!-- 产品原价 -->
+		<result column="product_shelf" property="productShelf" />		<!-- 产品是否下架 -->
+		<result column="product_content" property="productContent" />		<!-- 产品属性 -->
+		<result column="product_brand" property="productBrand" />		
+		<result column="BASIC_TITLE" property="basicTitle" />			<!-- 标题 -->
+		<result column="BASIC_DESCRIPTION" property="basicDescription" /><!-- 
+			描述 -->
+		<result column="BASIC_THUMBNAILS" property="basicThumbnails" />	<!-- 缩略图 -->
+		<result column="BASIC_HIT" property="basicHit" />				<!-- 文章点击次数 -->
+		<result column="BASIC_DATETIME" property="basicDateTime" />		<!-- 发布时间 -->
+		<result column="BASIC_UPDATETIME" property="basicUpdateTime" />	<!-- 更新时间 -->
+		<result column="BASIC_PEOPLEID" property="basicPeopleId" />		<!-- 发布者id -->
+		<result column="BASIC_CATEGORYID" property="basicCategoryId" />	<!-- 所属主栏目id -->
+		<result column="BASIC_CATEGORYID" property="basicCategoryId" />	<!-- 所属主栏目id -->
+		<result column="BASIC_MODELID" property="basicModelId" />	<!-- 所属主栏目id -->
+		<result column="BASIC_SORT" property="basicSort" />	<!-- 商品顺序 -->
+		<result column="BASIC_TYPE" property="basicType" />	<!-- 商品顺序 -->
+
+		<!-- 一对一关联栏目 -->
+		<association property="column" column="BASIC_CATEGORYID"
+			javaType="com.mingsoft.basic.entity.ColumnEntity">
+			<result property="columnPath" column="column_path" />
+			<result property="categoryTitle" column="category_title" />
+			<result property="categoryId" column="category_id" />
+			<result property="columnContentModelId" column="COLUMN_CONTENTMODELID" />
+			<result property="columnType" column="COLUMN_TYPE" />
+		</association>
+	</resultMap>
+
+
+	<!-- 获取表字段主要是开始 -->
+	<resultMap id="resultPsMap" type="net.mingsoft.mall.entity.ProductEntity">
+		<result column="BASIC_ID" property="basicId" />					<!-- 与表basic绑定 自增长ID -->
+		<result column="product_basicID" property="productId" />				<!-- 与产品表绑定id -->
+		<result column="product_price" property="productPrice" />	<!-- 产品价格 -->
+		<result column="product_inventory" property="productStock" />		<!-- 产品库存量 -->
+		<result column="product_appId" property="productAppId" />		<!-- 产品所属appID -->
+		<result column="product_code" property="productCode" />		<!-- 产品所属appID -->
+		<result column="product_sale" property="productSale" />		<!-- 产品销量 -->
+		<result column="product_linkUrl" property="productLinkUrl" />		<!-- 产品链接 -->
+		<result column="product_cost_price" property="productCostPrice" />		<!-- 产品原价 -->
+		<result column="product_brand" property="productBrand" />
+		<result column="product_shelf" property="productShelf" />		<!-- 产品是否下架 -->
+		<result column="psi_product_specifications_id" property="productSpecificationId" />		<!-- 产品的规格id -->
+		<result column="psi_price" property="productSpecificationPrice" />		<!-- 产品的规格价格 -->
+		<result column="psi_invertory" property="productSpecificationStock" />		<!-- 产品的规格库存 -->
+		<result column="psi_code" property="productSpecificationCode" />		<!-- 产品的规格编码 -->
+		<result column="product_specification_title" property="productSpecificationTitle" />		<!-- 产品的规格编码 -->
+		<result column="product_specification_img" property="productSpecificationImg" />		<!-- 产品属性 -->
+		<result column="BASIC_TITLE" property="basicTitle" />			<!-- 标题 -->
+		<result column="BASIC_DESCRIPTION" property="basicDescription" /><!-- 
+			描述 -->
+		<result column="BASIC_THUMBNAILS" property="basicThumbnails" />	<!-- 缩略图 -->
+		<result column="BASIC_HIT" property="basicHit" />				<!-- 文章点击次数 -->
+		<result column="BASIC_DATETIME" property="basicDateTime" />		<!-- 发布时间 -->
+		<result column="BASIC_UPDATETIME" property="basicUpdateTime" />	<!-- 更新时间 -->
+		<result column="BASIC_PEOPLEID" property="basicPeopleId" />		<!-- 发布者id -->
+		<result column="BASIC_CATEGORYID" property="basicCategoryId" />	<!-- 所属主栏目id -->
+		<result column="BASIC_CATEGORYID" property="basicCategoryId" />	<!-- 所属主栏目id -->
+		<result column="BASIC_MODELID" property="basicModelId" />	<!-- 所属主栏目id -->
+		<result column="BASIC_SORT" property="basicSort" />	<!-- 商品顺序 -->
+		<result column="BASIC_TYPE" property="basicType" />	<!-- 商品顺序 -->
+		<!-- 一对一关联栏目 -->
+		<association property="column" column="BASIC_CATEGORYID"
+			javaType="com.mingsoft.basic.entity.ColumnEntity">
+			<result property="columnPath" column="column_path" />
+			<result property="categoryTitle" column="category_title" />
+			<result property="categoryId" column="category_id" />
+			<result property="columnContentModelId" column="COLUMN_CONTENTMODELID" />
+			<result property="columnType" column="COLUMN_TYPE" />
+		</association>
+	</resultMap>
+
+
+	<sql id="bean_column_list">
+		product_basicID,product_price,product_inventory,product_appId,product_code,product_sale,product_linkUrl,product_cost_price,product_shelf,basic_type,
+		BASIC_ID,BASIC_TITLE,BASIC_DESCRIPTION,BASIC_THUMBNAILS,BASIC_HIT,BASIC_DATETIME,BASIC_UPDATETIME,BASIC_PEOPLEID,BASIC_CATEGORYID,BASIC_MODELID,BASIC_SORT
+	</sql>
+	<!-- 获取表字段主要是开始 -->
+	<resultMap id="productBeanMap" type="net.mingsoft.mall.bean.ProductBean">
+		<result column="product_price" property="productPrice" />	<!-- 产品价格 -->
+		<result column="product_inventory" property="productStock" />		<!-- 产品库存量 -->
+		<result column="product_code" property="productCode" />		<!-- 产品所属appID -->
+		<result column="product_sale" property="productSale" />		<!-- 产品销量 -->
+		<result column="product_linkUrl" property="productLinkUrl" />		<!-- 产品链接 -->
+		<result column="product_cost_price" property="productCostPrice" />		<!-- 产品原价 -->
+		<result column="product_shelf" property="productShelf" />		<!-- 产品是否下架 -->
+		<result column="basic_type" property="basicType" />		<!-- 产品属性类型 -->
+		<result column="BASIC_TITLE" property="productTitle" />			<!-- 标题 -->
+		<result column="BASIC_DESCRIPTION" property="productDescription" /><!-- 
+			描述 -->
+		<result column="BASIC_THUMBNAILS" property="productImages" />	<!-- 缩略图 -->
+		<result column="BASIC_DATETIME" property="productDateTime" />		<!-- 发布时间 -->
+		<result column="BASIC_UPDATETIME" property="productUpdateTime" />	<!-- 更新时间 -->
+		<!-- 一对一关联栏目 -->
+		<association property="column" column="BASIC_CATEGORYID"
+			javaType="com.mingsoft.basic.entity.ColumnEntity">
+			<result property="columnPath" column="column_path" />
+			<result property="categoryTitle" column="category_title" />
+			<result property="categoryId" column="category_id" />
+		</association>
+	</resultMap>
+
+	<!-- 增加产品开始 -->
+	<insert id="saveEntity" parameterType="net.mingsoft.mall.entity.ProductEntity">
+		insert into mall_product
+		<!-- 添加表字段 -->
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="basicId != null">product_basicID,</if>
+			<if test="productPrice != null">product_price,</if>
+			<if test="productStock !=null">product_inventory,</if>
+			<if test="productAppId !=null">product_appId,</if>
+			<if test="productCode !=null">product_code,</if>
+			<if test="productSale !=null">product_sale,</if>
+			<if test="productLinkUrl !=null">product_linkUrl,</if>
+			<if test="productCostPrice !=null">product_cost_price,</if>
+			<if test="productShelf !=null">product_shelf,</if>
+			<if test="productContent !=null">product_content,</if>
+			<if test="productBrand &gt; 0">product_brand,</if>
+		</trim>
+		<!-- 注入控制层字段 -->
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="basicId != null">#{basicId},</if>
+			<if test="productPrice != null">#{productPrice},</if>
+			<if test="productStock !=null">#{productStock},</if>
+			<if test="productAppId !=null">#{productAppId},</if>
+			<if test="productCode !=null">#{productCode},</if>
+			<if test="productSale !=null">#{productSale},</if>
+			<if test="productLinkUrl !=null">#{productLinkUrl},</if>
+			<if test="productCostPrice !=null">#{productCostPrice},</if>
+			<if test="productShelf !=null">#{productShelf},</if>
+			<if test="productContent !=null">#{productContent},</if>
+			<if test="productBrand &gt; 0 ">#{productBrand},</if>
+		</trim>
+	</insert>
+	<!-- 增加产品结束 -->
+
+	<!-- 删除商品的信息 开始 -->
+	<delete id="deleteEntity" parameterType="int">
+		delete from mall_product
+		where product_basicID = #{basicId}
+	</delete>
+	<delete id="delete">
+		delete from mall_product
+		<where>
+			product_basicID in
+			<foreach collection="ids" item="item" index="index" open="("
+				separator="," close=")">#{item}</foreach>
+		</where>
+	</delete>
+	<!-- 删除商品的信息结束 -->
+
+	<!-- -更新商品的信息 开始 -->
+	<update id="updateEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
+		update mall_product
+		<set>
+			<if test="productPrice != null">product_price=#{productPrice},</if>
+			<if test="productStock != null">product_inventory=#{productStock},</if>
+			<if test="productCode != null">product_code=#{productCode},</if>
+			<if test="productSale !=null">product_sale=#{productSale},</if>
+			<if test="productLinkUrl !=null">product_linkUrl=#{productLinkUrl},</if>
+			<if test="productCostPrice !=null">product_cost_price=#{productCostPrice},</if>
+			<if test="productShelf !=null">product_shelf=#{productShelf},</if>
+			<if test="productContent !=null">product_content=#{productContent},</if>
+			<if test="productBrand &gt; 0">product_brand=#{productBrand},</if>
+		</set>
+		where product_basicID = #{basicId}
+	</update>
+	<!-- -更新商品的信息 结束 -->
+
+	<!-- 获取产品信息开始 -->
+	<select id="getEntity" resultMap="resultMap" parameterType="int">
+		select
+		<include refid="column_list" />
+		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CONTENTMODELID
+		from
+		basic b
+		LEFT JOIN
+		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		LEFT JOIN
+		cms_column
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		LEFT
+		JOIN
+		mall_product p ON
+		b.basic_id=p.product_basicID
+		where b.BASIC_ID =
+		#{basicId}
+	</select>
+	<!-- 获取产品信息结束 -->
+
+	<!-- 根据应用ID获取产品总数 开始 -->
+	<select id="count" resultType="int">
+		select count(*) from mall_product where 1=1
+		<if test="appId != null">and product_appId= #{appId}</if>
+	</select>
+	<!-- 根据应用ID获取产品总数结束 -->
+
+	<!-- 根据应用ID查询商品分页开始 -->
+	<select id="queryPageByAppId" resultMap="resultMap">
+		select
+		<include refid="column_list" />
+		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CONTENTMODELID
+		from
+		basic b
+		LEFT JOIN
+		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		LEFT JOIN
+		cms_column
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		LEFT
+		JOIN
+		mall_product p ON
+		b.basic_id=p.product_basicID
+		where 1=1
+		<if test="appId != null">and product_appId= #{appId}</if>
+		order by p.product_basicID desc
+		<if test=" pageNo != null">
+			<if test=" pageSize != null">limit ${pageNo*pageSize},#{pageSize}</if>
+		</if>
+	</select>
+	<!-- 根据应用ID查询商品分页结束 -->
+
+	<!-- 根据模块ID查询商品分页开始 -->
+	<select id="queryPageByModelId" resultMap="resultMap">
+		select
+		<include refid="column_list" />
+		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CONTENTMODELID
+		from
+		basic b
+		LEFT JOIN
+		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		LEFT JOIN
+		cms_column
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		LEFT JOIN
+		mall_product p ON
+		b.basic_id=p.product_basicID
+		where 1=1
+		<if test="appId != null">and b.basic_appId=#{appId}</if>
+		<if test="modelId != null">and b.basic_modelId= #{modelId}</if>
+		<if test="categoryId != null">and b.basic_categoryId= #{categoryId}</if>
+		order by b.BASIC_ID desc
+		<if test=" begin != null">
+			limit #{begin}
+		</if>
+		<if test=" end != null">
+			, #{end}
+		</if>
+	</select>
+
+	<select id="queryCountByModelId" resultType="int">
+		select count(*) from basic where 1=1
+		<if test="appId != null">and basic_appId=#{appId}</if>
+		<if test="modelId != null">and basic_modelId = #{modelId}</if>
+		<if test="categoryId != null">and basic_categoryId= #{categoryId}</if>
+	</select>
+	<!-- 根据模块ID查询商品分页结束 -->
+
+	<!-- 根据更新时间查询商品列表信息开始 -->
+	<select id="queryListByTime" resultMap="resultMap">
+		select * from v_mall_product where 1=1
+		<if test="appId != null">
+			and product_appId= #{appId}
+		</if>
+		<if test="dateTime!=null">
+			and basic_updatetime > #{dateTime}
+		</if>
+		<if test="basicCategoryId!=null">
+			and basic_categoryId = #{basicCategoryId}
+		</if>
+	</select>
+	<!-- 根据更新时间查询商品列表信息结束 -->
+
+	<!-- 根据栏目集合id查找商品数量开始 -->
+	<select id="getCountByColumnId" resultType="int">
+		select count(*)
+		from mall_product m left join basic b on
+		b.basic_id=m.product_basicID
+		where m.product_appId= #{appId}
+		<if test="productShelf != null">and product_shelf= #{productShelf}</if>
+		<if test="basicCategoryIds != null">
+			and
+			b.BASIC_CATEGORYID in
+			<foreach collection="basicCategoryIds" item="id" open="("
+				separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+		<if test=" flag != null">
+			and
+			product_type =#{flag}
+		</if>
+		<if test=" noFlag != null">
+			and
+			product_type !=#{noFlag}
+		</if>
+	</select>
+	<!-- 根据栏目集合id查找商品数量结束 -->
+
+	<!-- 根据栏目集合id查找商品开始 -->
+	<select id="queryList" resultMap="resultMap">
+		select
+		<include refid="column_list" />
+		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CONTENTMODELID
+		from
+		basic b
+		LEFT JOIN
+		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		LEFT JOIN
+		cms_column
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		LEFT JOIN
+		mall_product p ON
+		b.basic_id=p.product_basicID
+		
+		<where>
+			<if test="appId != null">
+				and p.product_appId= #{appId}
+			</if>
+			<if test="productShelf != null">and product_shelf= #{productShelf}</if>
+			<if test=" basicCategoryIds != null">
+				and
+				b.BASIC_CATEGORYID in
+				<foreach collection="basicCategoryIds" item="id" open="("
+					separator="," close=")">
+					#{id}
+				</foreach>
+			</if>
+			<if test=" flag != null">
+				and find_in_set((select group_concat(category_id) from category where
+				category_title in
+				<foreach item="title" collection="flag" open="(" separator=","
+					close=")">
+					#{title}
+				</foreach>
+				),b.basic_type) &gt; 0
+			</if>
+			<if test=" noFlag != null">
+				and find_in_set((select  group_concat(category_id) from category
+				where
+				category_title in
+				<foreach item="title" collection="noFlag" open="(" separator=","
+					close=")">
+					#{title}
+				</foreach>
+				),b.basic_type) = 0
+			</if>
+		</where>
+		<if test="orderBy != null">order by ${orderBy}</if>
+		<if test="orderBy==null">
+			order by b.basic_id
+		</if>
+		<if test="order == true">desc</if>
+		<if test="order == false">asc</if>
+	</select>
+	<!-- 根据栏目集合id查找商品结束 -->
+
+	<!-- 根据字段条件查找商品列表实体开始 -->
+	<select id="queryListForSearch" resultMap="resultMap">
+		select
+		<include refid="column_list" />
+		,c.CATEGORY_TITLE,cl.column_path,c.CATEGORY_id,cl.COLUMN_CONTENTMODELID
+		from mall_product p
+		left join basic b
+		on b.basic_id=p.product_basicID
+		left join category c
+		ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		left join
+		cms_column cl
+		on c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		<if test="tableName!=null">left join ${tableName} d on d.basicId=p.product_basicID
+		</if>
+		where p.product_appID = #{websiteId}
+		<if test="ids!=null">
+			and
+			b.BASIC_CATEGORYID in
+			<foreach item="id" index="key" collection="ids" open="("
+				separator="," close=")">
+				#{id.categoryId}
+			</foreach>
+		</if>
+		<foreach item="item" index="key" collection="map" open=""
+			separator="" close="">
+			<if test=" item[0] == false">
+				and ${key}
+			</if>
+			<if test="item[0]== true">
+				and d.${key}
+			</if>
+			<!-- 数字类型的查找 item[1]:字段是否为数字类型false:数字 -->
+			<if test="item[1] == false">
+				<!--item[2]： 是采用等值还是区间查询。false:区间 itme[3][0]第一个值item[3][1]的二个值 -->
+				<if test="item[2] == true">
+					=
+					<foreach item="val" index="index" collection="item[3]">#{val}
+					</foreach>
+				</if>
+				<if test="item[2] == false">
+					between
+					<foreach item="val" index="index" collection="item[3]"
+						separator="and">
+						#{val}
+					</foreach>
+				</if>
+			</if>
+			<!-- 字符型数据的查找 item[1]:字段是否为数字类型true:字符串 -->
+			<if test="item[1] == true">
+				<!--item[2]： 是采用模糊查询。false:不采用模糊 -->
+				<if test="item[2] == true">
+					like CONCAT("%",
+					<foreach item="val" index="index" collection="item[3]">
+						<if test="index==0">#{val}</if>
+					</foreach>
+					,"%")
+				</if>
+				<if test="item[2] == false">
+					=
+					<foreach item="val" index="index" collection="item[3]">#{val}
+					</foreach>
+				</if>
+			</if>
+		</foreach>
+		<if test="sortMap!=null">
+			order by ${sortMap.order} ${sortMap.by}
+		</if>
+		<!-- 是否采用分页 -->
+		<if test="pageSize != '0'">
+			limit ${pageNo*pageSize},#{pageSize};
+		</if>
+	</select>
+	<!-- 根据字段条件查找商品列表实体结束 -->
+
+	<!-- 根据字段条件查找商品实体总数开始 -->
+	<select id="getSearchCount" resultType="int">
+		select count(*) from
+		mall_product p
+		left join basic b
+		on
+		b.basic_id=p.product_basicID
+		left join category c
+		ON b.BASIC_CATEGORYID
+		= c.CATEGORY_ID
+		left join cms_column cl
+		on c.CATEGORY_ID =
+		cl.COLUMN_CATEGORYID
+		<if test="tableName!=null">left join ${tableName} d on d.basicId=p.product_basicID
+		</if>
+		where p.product_appID = #{websiteId}
+
+		<if test="ids!=null">
+			and
+			b.BASIC_CATEGORYID in
+			<foreach item="id" index="key" collection="ids" open="("
+				separator="," close=")">
+				#{id.categoryId}
+			</foreach>
+		</if>
+
+		<foreach item="item" index="key" collection="map" open=""
+			separator="" close="">
+			<if test=" item[0] == false">
+				and ${key}
+			</if>
+			<if test="item[0]== true">
+				and d.${key}
+			</if>
+			<!-- 数字类型的查找 item[1]:字段是否为数字类型false:数字 -->
+			<if test="item[1] == false">
+				<!--item[2]： 是采用等值还是区间查询。false:区间 itme[3][0]第一个值item[3][1]的二个值 -->
+				<if test="item[2] == true">
+					=
+					<foreach item="val" index="index" collection="item[3]">#{val}
+					</foreach>
+				</if>
+				<if test="item[2] == false">
+					between
+					<foreach item="val" index="index" collection="item[3]"
+						separator="and">
+						#{val}
+					</foreach>
+				</if>
+			</if>
+			<!-- 字符型数据的查找 item[1]:字段是否为数字类型true:字符串 -->
+			<if test="item[1] == true">
+				<!--item[2]： 是采用模糊查询。false:不采用模糊 -->
+				<if test="item[2] == true">
+					like CONCAT("%",
+					<foreach item="val" index="index" collection="item[3]">
+						<if test="index==0">#{val}</if>
+					</foreach>
+					,"%")
+				</if>
+				<if test="item[2] == false">
+					=
+					<foreach item="val" index="index" collection="item[3]">#{val}
+					</foreach>
+				</if>
+			</if>
+
+		</foreach>
+	</select>
+	<!-- 根据字段条件查找商品实体总数结束 -->
+
+	<!-- 根据应用ID查询上架或下架商品开始 -->
+	<select id="queryPageByShelf" resultMap="resultMap">
+		select
+		<include refid="column_list" />
+		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CONTENTMODELID
+		from
+		basic b
+		LEFT JOIN
+		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		LEFT JOIN
+		cms_column
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		LEFT
+		JOIN
+		mall_product p ON
+		b.basic_id=p.product_basicID
+		<where>
+			<if test="appId != null">and product_appId= #{appId}</if>
+			<if test="productShelf != null">and product_shelf= #{productShelf}</if>
+			<if test="categoryId != null">and b.BASIC_CATEGORYID=#{categoryId}</if>
+		</where>
+		order by p.product_basicID desc
+		<if test=" pageNo != null">
+			<if test=" pageSize != null">limit ${pageNo*pageSize},#{pageSize}</if>
+		</if>
+	</select>
+	<!-- 根据应用ID查询上架或下架商品结束 -->
+
+
+
+
+
+
+	<!-- 查询站点下该板块所有上架商品 -->
+	<select id="queryAllShelf" resultMap="resultMap">
+		select
+		<include refid="column_list" />
+		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CONTENTMODELID
+		from
+		basic b
+		LEFT JOIN
+		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		LEFT JOIN
+		cms_column
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		LEFT
+		JOIN
+		mall_product p ON
+		b.basic_id=p.product_basicID
+		<where>
+			<if test="appId != null">and product_appId= #{appId}</if>
+			<if test="productShelf != null">and product_shelf= #{productShelf}</if>
+			<if test="categoryId != null">and b.BASIC_CATEGORYID=#{categoryId}</if>
+		</where>
+	</select>
+	<!--查询站点下该板块所有上架商品结束 -->
+
+
+
+
+
+
+
+
+
+
+	<!-- 根据应用ID和分类查询上架或下架商品总数开始 -->
+	<select id="getCountByShelf" resultType="int">
+		select count(*) from
+		mall_product m left join basic b on
+		b.basic_id=m.product_basicID
+		<where>
+			<if test="appId != null">and b.basic_appId=#{appId}</if>
+			<if test="productShelf != null">and m.product_shelf=#{productShelf}</if>
+			<if test="categoryId != null">and b.BASIC_CATEGORYID=#{categoryId}</if>
+		</where>
+	</select>
+	<!-- 根据应用ID和分类查询上架或下架商品总数结束 -->
+
+	<!-- 根据产品id查询该商品的所有规格商品开始 -->
+	<select id="queryProducntSpecificationList" resultMap="resultPsMap">
+		select *,
+		CONCAT(basic_title,func_parent_specifications_field(psi_product_specifications_id))
+		as product_specification_title,
+		CONCAT(BASIC_THUMBNAILS,func_parent_specifications_img(psi_product_specifications_id))
+		as product_specification_img
+		from mall_product mp left join
+		mall_product_specifications_inventory mpsi
+		on mpsi.psi_productID =
+		mp.product_basicID
+		left join basic b on
+		b.basic_id=mp.product_basicID
+		LEFT JOIN
+		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		LEFT JOIN
+		cms_column
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		<where>
+			<if test="appId != null">
+				and mp.product_appId= #{appId} and mp.product_shelf=1
+			</if>
+			<if test=" basicCategoryIds != null">
+				and
+				b.BASIC_CATEGORYID in
+				<foreach collection="basicCategoryIds" item="id" open="("
+					separator="," close=")">
+					#{id}
+				</foreach>
+			</if>
+			<if test=" flag != null">
+				and
+				mp.product_type =#{flag}
+			</if>
+			<if test=" noFlag != null">
+				and
+				mp.product_type !=#{noFlag}
+			</if>
+
+		</where>
+		<if test="orderBy != null">
+			<if test="orderBy=='date'">
+				order by b.BASIC_DATETIME
+			</if>
+			<if test="orderBy=='sale'">
+				order by p.product_sale
+				<if test="order == true">desc</if>
+				<if test="order == false">asc</if>
+			</if>
+			<if test="orderBy=='price'">
+				order by p.product_price
+				<if test="order == true">desc</if>
+				<if test="order == false">asc</if>
+			</if>
+			<if test="orderBy=='sort'">
+				order by mpsi.psi_sort
+				<if test="order == true">desc</if>
+				<if test="order == false">asc</if>
+				,
+				b.basic_sort
+				<if test="order == true">desc</if>
+				<if test="order == false">asc</if>
+				,
+				b.basic_id
+				<if test="order == true">desc</if>
+				<if test="order == false">asc</if>
+			</if>
+		</if>
+		<if test="orderBy==null">
+			order by b.basic_id
+			<if test="order == true">desc</if>
+			<if test="order == false">asc</if>
+		</if>
+		limit #{begin},#{count};
+	</select>
+	<!-- 根据产品id查询该商品的所有规格商品结束 -->
+
+
+	<!-- 根据产品分类id集合查询该商品的所有规格商品总数开始 -->
+	<select id="getProducntSpecificationCount" resultType="int">
+		select count(*)
+		from mall_product mp left join
+		mall_product_specifications_inventory mpsi
+		on mpsi.psi_productID =
+		mp.product_basicID
+		left join basic b on
+		b.basic_id=mp.product_basicID
+		<where>
+			<if test="appId != null">
+				and mp.product_appId= #{appId} and mp.product_shelf=1
+			</if>
+			<if test=" basicCategoryIds != null">
+				and
+				b.BASIC_CATEGORYID in
+				<foreach collection="basicCategoryIds" item="id" open="("
+					separator="," close=")">
+					#{id}
+				</foreach>
+			</if>
+			<if test="flag!= null">
+				and
+				mp.product_type =#{flag}
+			</if>
+			<if test="noFlag!= null">
+				and
+				mp.product_type !=#{noFlag}
+			</if>
+		</where>
+	</select>
+	<!-- 根据产品分类id集合查询该商品的所有规格商品总数结束 -->
+
+	<!-- 根据产品分类id查询该商品的所有规格商品开始 -->
+	<select id="queryProducntSpecificationByDateAndByColumnId"
+		resultMap="resultPsMap">
+		select *,
+		CONCAT(basic_title,func_parent_specifications_field(psi_product_specifications_id))
+		as product_specification_title
+
+		from mall_product mp left join
+		mall_product_specifications_inventory mpsi
+		on mpsi.psi_productID =
+		mp.product_basicID
+		left join basic b on
+		b.basic_id=mp.product_basicID
+		LEFT JOIN
+		category c ON b.BASIC_CATEGORYID
+		= c.CATEGORY_ID
+		LEFT JOIN
+		cms_column
+		cl ON c.CATEGORY_ID =
+		cl.COLUMN_CATEGORYID
+		<where>
+			<if test="appId != null">
+				and mp.product_appId= #{appId}
+			</if>
+			<if test=" categoryId != null">
+				and
+				b.BASIC_CATEGORYID =#{categoryId}
+			</if>
+			<if test="dateTime!=null">
+				and basic_updatetime > #{dateTime}
+			</if>
+		</where>
+	</select>
+	<!-- 根据产品id查询该商品的所有规格商品结束 -->
+
+	<!-- 根据字段条件查找商品的所有规格商品列表实体开始 -->
+	<select id="queryProducntSpecificationForSearch" resultMap="resultPsMap">
+		select
+		*,CONCAT(basic_title,func_parent_specifications_field(psi_product_specifications_id))
+		as product_specification_title,
+		CONCAT(BASIC_THUMBNAILS,func_parent_specifications_img(psi_product_specifications_id))
+		as product_specification_img
+		from mall_product p left join
+		mall_product_specifications_inventory mpsi
+		on mpsi.psi_productID =
+		p.product_basicID
+		left join basic b on
+		b.basic_id=p.product_basicID
+		LEFT
+		JOIN
+		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		LEFT JOIN
+		cms_column
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		<if test="tableName!=null">left join ${tableName} d on d.basicId=p.product_basicID
+		</if>
+		where p.product_appID = #{appId} and p.product_shelf=1
+		<if test="ids!=null">
+			and
+			b.BASIC_CATEGORYID in
+			<foreach item="id" index="key" collection="ids" open="("
+				separator="," close=")">
+				#{id.categoryId}
+			</foreach>
+		</if>
+		<if test="flag!= null">
+			and
+			p.product_type =#{flag}
+		</if>
+		<if test="noFlag!= null">
+			and
+			p.product_type !=#{noFlag}
+		</if>
+		<foreach item="item" index="key" collection="map" open=""
+			separator="" close="">
+			<if test=" item[0] == false">
+				and ${key}
+			</if>
+			<if test="item[0]== true">
+				and d.${key}
+			</if>
+			<!-- 数字类型的查找 item[1]:字段是否为数字类型false:数字 -->
+			<if test="item[1] == false">
+				<!--item[2]： 是采用等值还是区间查询。false:区间 itme[3][0]第一个值item[3][1]的二个值 -->
+				<if test="item[2] == true">
+					=
+					<foreach item="val" index="index" collection="item[3]">#{val}
+					</foreach>
+				</if>
+				<if test="item[2] == false">
+					between
+					<foreach item="val" index="index" collection="item[3]"
+						separator="and">
+						#{val}
+					</foreach>
+				</if>
+			</if>
+			<!-- 字符型数据的查找 item[1]:字段是否为数字类型true:字符串 -->
+			<if test="item[1] == true">
+				<!--item[2]： 是采用模糊查询。false:不采用模糊 -->
+				<if test="item[2] == true">
+					like CONCAT("%",
+					<foreach item="val" index="index" collection="item[3]">
+						<if test="index==0">#{val}</if>
+					</foreach>
+					,"%")
+				</if>
+				<if test="item[2] == false">
+					=
+					<foreach item="val" index="index" collection="item[3]">#{val}
+					</foreach>
+				</if>
+			</if>
+		</foreach>
+		<if test="sortMap!=null">
+			order by `${sortMap.order}` ${sortMap.by}
+			<if test="orderBy!=null">
+				<if test=" orderBy=='date'">
+					,b.BASIC_DATETIME
+					<if test="order == true">desc</if>
+					<if test="order == false">asc</if>
+				</if>
+				<if test="orderBy=='sort'">
+					, mpsi.psi_sort
+					<if test="order == true">desc</if>
+					<if test="order == false">asc</if>
+					,
+					b.basic_sort
+					<if test="order == true">desc</if>
+					<if test="order == false">asc</if>
+					,
+					b.basic_id
+					<if test="order == true">desc</if>
+					<if test="order == false">asc</if>
+				</if>
+				<if test="orderBy=='date'">
+					,b.BASIC_DATETIME
+					<if test="order == true">desc</if>
+					<if test="order == false">asc</if>
+				</if>
+
+				<if test="orderBy=='sale'">
+					, p.product_sale ${sortMap.by}
+					<if test="order == true">desc</if>
+					<if test="order == false">asc</if>
+				</if>
+			</if>
+		</if>
+		<if test="sortMap==null">
+			<if test="orderBy!=null">
+				<if test="orderBy=='date'">
+					order by b.BASIC_DATETIME
+					<if test="order == true">desc</if>
+					<if test="order == false">asc</if>
+				</if>
+				<if test="orderBy=='sort'">
+					order by mpsi.psi_sort
+					<if test="order == true">desc</if>
+					<if test="order == false">asc</if>
+					,
+					b.basic_sort
+					<if test="order == true">desc</if>
+					<if test="order == false">asc</if>
+					,b.basic_id
+					<if test="order == true">desc</if>
+					<if test="order == false">asc</if>
+				</if>
+				<if test="orderBy=='date'">
+					order by b.BASIC_DATETIME
+					<if test="order == true">desc</if>
+					<if test="order == false">asc</if>
+				</if>
+
+				<if test="orderBy=='sale'">
+					order by p.product_sale
+					<if test="order == true">desc</if>
+					<if test="order == false">asc</if>
+				</if>
+			</if>
+		</if>
+		<!-- 是否采用分页 -->
+		<if test="page!=null">
+			limit ${page.pageNo*page.pageSize},#{page.pageSize};
+		</if>
+	</select>
+	<!-- 根据字段条件查找商品列表实体结束 -->
+
+	<!-- 查询搜索的产品规格总数开始 -->
+	<select id="getProducntSpecificationSearchCount" resultType="int">
+		select count(*)
+		from mall_product p left join
+		mall_product_specifications_inventory mpsi
+		on mpsi.psi_productID =
+		p.product_basicID
+		left join basic b on
+		b.basic_id=p.product_basicID
+		LEFT
+		JOIN
+		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		LEFT JOIN
+		cms_column
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		<if test="tableName!=null">left join ${tableName} d on d.basicId=p.product_basicID
+		</if>
+		where p.product_appID = #{appId} and p.product_shelf=1
+		<if test="ids!=null">
+			and
+			b.BASIC_CATEGORYID in
+			<foreach item="id" index="key" collection="ids" open="("
+				separator="," close=")">
+				#{id.categoryId}
+			</foreach>
+		</if>
+		<if test="flag!= null">
+			and
+			p.product_type =#{flag}
+		</if>
+		<if test="noFlag!= null">
+			and
+			p.product_type !=#{noFlag}
+		</if>
+		<foreach item="item" index="key" collection="map" open=""
+			separator="" close="">
+			<if test=" item[0] == false">
+				and ${key}
+			</if>
+			<if test="item[0]== true">
+				and d.${key}
+			</if>
+			<!-- 数字类型的查找 item[1]:字段是否为数字类型false:数字 -->
+			<if test="item[1] == false">
+				<!--item[2]： 是采用等值还是区间查询。false:区间 itme[3][0]第一个值item[3][1]的二个值 -->
+				<if test="item[2] == true">
+					=
+					<foreach item="val" index="index" collection="item[3]">#{val}
+					</foreach>
+				</if>
+				<if test="item[2] == false">
+					between
+					<foreach item="val" index="index" collection="item[3]"
+						separator="and">
+						#{val}
+					</foreach>
+				</if>
+			</if>
+			<!-- 字符型数据的查找 item[1]:字段是否为数字类型true:字符串 -->
+			<if test="item[1] == true">
+				<!--item[2]： 是采用模糊查询。false:不采用模糊 -->
+				<if test="item[2] == true">
+					like CONCAT("%",
+					<foreach item="val" index="index" collection="item[3]">
+						<if test="index==0">#{val}</if>
+					</foreach>
+					,"%")
+				</if>
+				<if test="item[2] == false">
+					=
+					<foreach item="val" index="index" collection="item[3]">#{val}
+					</foreach>
+
+				</if>
+			</if>
+		</foreach>
+	</select>
+	<!-- 查询搜索的产品规格总数结束 -->
+
+
+	<!--实现简单的产品查询操作 -->
+	<select id="querySearch" resultType="int">
+		select
+		<include refid="column_list" />
+		from mall_product p
+		left join basic b
+		on b.basic_id=p.product_basicID
+		LEFT JOIN
+		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		<if test="tableName!=null">left join ${tableName} on
+			${tableName}.basicId=p.product_basicID
+		</if>
+		<where>
+			<if test="appId!=null">
+				p.product_appID = #{appId}
+			</if>
+			<if test="categoryId!=null">
+				b.BASIC_CATEGORYID = #{categoryId}
+			</if>
+			<foreach item="item" index="key" collection="map" open=""
+				separator="" close="">
+				<if test=" item[0] != null">
+					and ${key} =
+					<foreach item="val" index="index" collection="item[0]">#{val}
+					</foreach>
+				</if>
+			</foreach>
+		</where>
+	</select>
+	<!--实现简单的产品查询操作 -->
+
+
+
+	<!-- 根据字段条件查找商品实体总数开始 -->
+	<select id="getCountByDiyField" resultType="int">
+		select count(*) from
+		mall_product p
+		left join basic b
+		on
+		b.basic_id=p.product_basicID
+		left join category c
+		ON b.BASIC_CATEGORYID
+		= c.CATEGORY_ID
+		left join cms_column cl
+		on c.CATEGORY_ID =
+		cl.COLUMN_CATEGORYID
+		<if test="tableName!=null">left join ${tableName} d on d.basicId=p.product_basicID
+		</if>
+		where p.product_appID = #{appId}
+
+		<if test="categoryId!=null">
+			and
+			b.BASIC_CATEGORYID =
+			#{categoryId}
+
+		</if>
+		<if test="productMap!=null">
+			<if test="productMap.basicTitle!=null">
+				and basic_title like
+				CONCAT("%",#{productMap.basicTitle},"%")
+			</if>
+			<if test="productMap.productShelf!=null">
+				and product_shelf=#{productMap.productShelf}
+			</if>
+			<if test="productMap.productType!=null">
+				and product_type=#{productMap.productType}
+			</if>
+			<if test="productMap.productPrice!=null">
+				and product_price
+				between #{productMap.productStartPrice}
+				and #{productMap.productEndPrice}
+			</if>
+
+		</if>
+		<if test="diyFieldMap!=null">
+			<!-- 自定义字段 -->
+			<foreach item="item" index="key" collection="diyFieldMap"
+				open="" separator="" close="">
+				and d.${key}
+				<!-- 数字类型的查找 item[0]:字段是否为数字类型false:数字 -->
+				<if test="item[0] == false">
+					<!--item[2]： 是采用等值还是区间查询。false:区间 itme[3][0]第一个值item[3][1]的二个值 -->
+					<if test="item[1] == true">
+						=
+						<foreach item="val" index="index" collection="item[2]">#{val}
+						</foreach>
+					</if>
+					<if test="item[1] == false">
+						between
+						<foreach item="val" index="index" collection="item[2]"
+							separator="and">
+							#{val}
+						</foreach>
+					</if>
+				</if>
+				<!-- 字符型数据的查找 item[1]:字段是否为数字类型true:字符串 -->
+				<if test="item[0] == true">
+					<!--item[2]： 是采用模糊查询。false:不采用模糊 -->
+					<if test="item[1] == true">
+						like CONCAT("%",
+						<foreach item="val" index="index" collection="item[2]">
+							<if test="index==0">#{val}</if>
+						</foreach>
+						,"%")
+					</if>
+					<if test="item[1] == false">
+						=
+						<foreach item="val" index="index" collection="item[2]">#{val}
+						</foreach>
+					</if>
+				</if>
+
+			</foreach>
+		</if>
+	</select>
+	<!-- 根据字段条件查找商品实体总数结束 -->
+
+
+	<!-- 根据字段条件查找商品实体列表开始 -->
+	<select id="queryByDiyField" resultMap="resultMap">
+		select
+		<include refid="column_list" />
+		from
+		mall_product p
+		left join basic b
+		on
+		b.basic_id=p.product_basicID
+		left
+		join category c
+		ON b.BASIC_CATEGORYID
+		= c.CATEGORY_ID
+		left join
+		cms_column cl
+		on c.CATEGORY_ID =
+		cl.COLUMN_CATEGORYID
+		<if test="tableName!=null">left join ${tableName} d on d.basicId=p.product_basicID
+		</if>
+		where p.product_appID = #{appId}
+
+		<if test="categoryId!=null">
+			and
+			b.BASIC_CATEGORYID =
+			#{categoryId}
+
+		</if>
+		<if test="productMap!=null">
+			<if test="productMap.basicTitle!=null">
+				and basic_title like
+				CONCAT("%",#{productMap.basicTitle},"%")
+			</if>
+			<if test="productMap.productShelf!=null">
+				and product_shelf=#{productMap.productShelf}
+			</if>
+			<if test="productMap.productType!=null">
+				and product_type=#{productMap.productType}
+			</if>
+			<if test="productMap.productPrice!=null">
+				and product_price
+				between #{productMap.productStartPrice}
+				and #{productMap.productEndPrice}
+			</if>
+		</if>
+		<if test="diyFieldMap!=null">
+			<!-- 自定义字段 -->
+			<foreach item="item" index="key" collection="diyFieldMap"
+				open="" separator="" close="">
+				and d.${key}
+				<!-- 数字类型的查找 item[0]:字段是否为数字类型false:数字 -->
+				<if test="item[0] == false">
+					<!--item[2]： 是采用等值还是区间查询。false:区间 itme[3][0]第一个值item[3][1]的二个值 -->
+					<if test="item[1] == true">
+						=
+						<foreach item="val" index="index" collection="item[2]">#{val}
+						</foreach>
+					</if>
+					<if test="item[1] == false">
+						between
+						<foreach item="val" index="index" collection="item[2]"
+							separator="and">
+							#{val}
+						</foreach>
+					</if>
+				</if>
+				<!-- 字符型数据的查找 item[1]:字段是否为数字类型true:字符串 -->
+				<if test="item[0] == true">
+					<!--item[2]： 是采用模糊查询。false:不采用模糊 -->
+					<if test="item[1] == true">
+						like CONCAT("%",
+						<foreach item="val" index="index" collection="item[2]">
+							<if test="index==0">#{val}</if>
+						</foreach>
+						,"%")
+					</if>
+					<if test="item[1] == false">
+						=
+						<foreach item="val" index="index" collection="item[2]">#{val}
+						</foreach>
+					</if>
+				</if>
+
+			</foreach>
+		</if>
+		order by b.BASIC_Id desc
+		<!-- 是否采用分页 -->
+		<if test="page!=null">
+			limit ${page.pageNo*page.pageSize},#{page.pageSize};
+		</if>
+	</select>
+	<!-- 根据字段条件查找商品实体列表结束 -->
+
+	<!--根据分类id查询articleBean开始 -->
+	<select id="queryByCategoryForBean" resultMap="productBeanMap">
+		select
+		<include refid="bean_column_list" />
+		from v_mall_product
+		<if test="contentModelTableName!=null">
+			left join ${contentModelTableName} cmt on
+			cmt.basicid=basic_id
+		</if>
+		where BASIC_CATEGORYID=#{categoryId}
+		<if test="categoryIds!=null">
+			<foreach item="category" index="index" collection="categoryIds"
+				open="" separator="" close="">
+				UNION ALL (select
+				<include refid="bean_column_list" />
+				from v_mall_product where
+				BASIC_CATEGORYID=#{category.categoryId}
+				order by basic_id desc limit
+				${page.pageNo*page.pageSize},#{page.pageSize})
+			</foreach>
+		</if>
+		order by basic_id desc
+		<if test="page!=null">
+			limit
+			${page.pageNo*page.pageSize},#{page.pageSize}
+		</if>
+
+	</select>
+
+
+	<!-- 根据商品id集合和分页对象查询商品列表信息开始 -->
+	<select id="queryByBasicIds" resultMap="resultMap">
+		select
+		<include refid="column_list" />
+		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CONTENTMODELID
+		from
+		basic b
+		LEFT JOIN
+		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		LEFT JOIN
+		cms_column
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		LEFT
+		JOIN
+		mall_product p ON
+		b.basic_id=p.product_basicID
+		<where>
+			<if test="appId != null">
+				and p.product_appId= #{appId}
+			</if>
+			<if test="productShelf != null">and product_shelf= #{productShelf}</if>
+			<if test="categoryId != null">and b.BASIC_CATEGORYID= #{categoryId}</if>
+			<if test=" basicIds != null">
+				and
+				b.BASIC_Id in
+				<foreach collection="basicIds" item="id" open="(" separator=","
+					close=")">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+		<if test="orderBy!= null">order by ${orderBy}</if>
+		<if test="orderBy==null">
+			order by b.basic_id
+		</if>
+		<if test="order == true">desc</if>
+		<if test="order == false">asc</if>
+		<if test="page!=null">
+			limit ${page.pageNo*page.pageSize},#{page.pageSize};
+		</if>
+
+
+	</select>
+	<!-- 根据商品id集合和分页对象查询商品列表信息结束 -->
+
+	<!-- 根据商品id集合和分类id,以及商品的上下架状态查询商品总数开始 -->
+	<select id="getCountByBasicIds" resultType="int">
+		select count(*) from
+		basic b
+		LEFT JOIN
+		category c ON b.BASIC_CATEGORYID =
+		c.CATEGORY_ID
+		LEFT JOIN
+		cms_column
+		cl ON c.CATEGORY_ID =
+		cl.COLUMN_CATEGORYID
+		LEFT
+		JOIN
+		mall_product p ON
+		b.basic_id=p.product_basicID
+		<where>
+			<if test="appId != null">
+				and p.product_appId= #{appId}
+			</if>
+			<if test="productShelf != null">and product_shelf= #{productShelf}</if>
+			<if test="categoryId != null">and b.BASIC_CATEGORYID= #{categoryId}</if>
+			<if test=" basicIds != null">
+				and
+				b.BASIC_Id in
+				<foreach collection="basicIds" item="id" open="(" separator=","
+					close=")">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	<!-- 根据商品id集合和分类id,以及商品的上下架状态查询商品总数结束 -->
+</mapper>

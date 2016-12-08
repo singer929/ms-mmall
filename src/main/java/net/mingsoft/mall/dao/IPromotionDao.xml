@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace = "net.mingsoft.mall.dao.IPromotionDao">
+	
+	<sql id="column_name">
+		DATE_FORMAT(promotion_start_date,'%Y-%m-%d') As promotion_start_date,
+		DATE_FORMAT(promotion_end_date,'%Y-%m-%d') AS promotion_end_date,
+		DATE_FORMAT(promotion_start_time,'%H:%i') AS promotion_start_time,
+		DATE_FORMAT(promotion_end_time,'%H:%i') AS promotion_end_time,
+		DATE_FORMAT(promotion_datetime,'%Y-%m-%d %H:%i:%s') AS promotion_datetime,
+		promotion_title,promotion_product_id,promotion_limit_day,promotion_limit_people,promotion_app_id,promotion_id,
+	</sql>
+	
+	<sql id="promotion_name">
+		DATE_FORMAT(promotion_start_date,'%Y-%m-%d') As promotion_start_date,
+		DATE_FORMAT(promotion_end_date,'%Y-%m-%d') AS promotion_end_date,
+		DATE_FORMAT(promotion_start_time,'%H:%i') AS promotion_start_time,
+		DATE_FORMAT(promotion_end_time,'%H:%i') AS promotion_end_time,
+		DATE_FORMAT(promotion_datetime,'%Y-%m-%d %H:%i:%s') AS promotion_datetime,
+		promotion_title,promotion_product_id,promotion_limit_day,promotion_limit_people,promotion_app_id,promotion_id,
+		basic_title,basic_categoryId
+	</sql>
+	
+	<resultMap type="net.mingsoft.mall.entity.PromotionEntity" id="resultMap">
+		<id column="promotion_id" property="promotionId" /><!-- 促销编号 -->
+		<result column="promotion_product_id" property="promotionProductId"/><!-- 产品编号 -->
+		<result column="promotion_title" property="promotionTitle"/><!--抢购主题  -->
+		<result column="promotion_start_date" property="promotionStartDate"/><!-- 开始日期 -->
+		<result column="promotion_end_date" property="promotionEndDate"/><!--结束日期  -->
+		<result column="promotion_start_time" property="promotionStartTime"/><!-- 开始时间 -->
+		<result column="promotion_end_time" property="promotionEndTime"/><!-- 结束时间 -->
+		<result column="promotion_limit_day" property="promotionLimitDay"/><!-- 每天限制购买数量 -->
+		<result column="promotion_limit_people" property="promotionLimitPeople"/><!--每人限制购买数量  -->
+		<result column="promotion_datetime" property="promotionDateTime"/><!-- 发布时间 -->
+		<result column="promotion_app_id" property="promotionAppId"/><!--  站点id -->
+	</resultMap>
+	
+	<!-- 促销商品的商品名和分类id -->
+	<resultMap type="net.mingsoft.mall.entity.PromotionEntity" id="resultPromotion">
+		<id column="promotion_id" property="promotionId" /><!-- 促销编号 -->
+		<result column="promotion_product_id" property="promotionProductId"/><!-- 产品编号 -->
+		<result column="promotion_title" property="promotionTitle"/><!--抢购主题  -->
+		<result column="promotion_start_date" property="promotionStartDate"/><!-- 开始日期 -->
+		<result column="promotion_end_date" property="promotionEndDate"/><!--结束日期  -->
+		<result column="promotion_start_time" property="promotionStartTime"/><!-- 开始时间 -->
+		<result column="promotion_end_time" property="promotionEndTime"/><!-- 结束时间 -->
+		<result column="promotion_limit_day" property="promotionLimitDay"/><!-- 每天限制购买数量 -->
+		<result column="promotion_limit_people" property="promotionLimitPeople"/><!--每人限制购买数量  -->
+		<result column="promotion_datetime" property="promotionDateTime"/><!-- 发布时间 -->
+		<result column="promotion_app_id" property="promotionAppId"/><!--  站点id -->
+		<result column="basic_title" property="productTitle"/><!--  商品标题 -->
+		<result column="basic_categoryId" property="productCategoryId"/><!--  商品分类id -->
+	</resultMap>
+	
+	<!--保存促销产品 -->
+	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="promotionId" parameterType="net.mingsoft.mall.entity.PromotionEntity">
+		insert into mall_promotion
+		<!-- 添加表字段 -->
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="promotionProductId &gt; 0">promotion_product_id,</if>
+			<if test="promotionTitle != null">promotion_title,</if>
+			<if test="promotionStartDate != null">promotion_start_date,</if>
+			<if test="promotionEndDate != null">promotion_end_date,</if>
+			<if test="promotionStartTime != null">promotion_start_time,</if>
+			<if test="promotionEndTime != null">promotion_end_time,</if>
+			<if test="promotionLimitDay &gt; 0">promotion_limit_day,</if>
+			<if test="promotionLimitPeople &gt; 0">promotion_limit_people,</if>
+			<if test="promotionDateTime != null">promotion_datetime,</if>
+			<if test="promotionAppId &gt; 0">promotion_app_id,</if>
+		</trim> 
+		<!-- 注入控制层字段 -->
+		<trim prefix="values(" suffix=")" suffixOverrides=",">
+			<if test="promotionProductId &gt; 0">#{promotionProductId},</if>
+			<if test="promotionTitle != null">#{promotionTitle},</if>
+			<if test="promotionStartDate != null">#{promotionStartDate},</if>
+			<if test="promotionEndDate != null">#{promotionEndDate},</if>
+			<if test="promotionStartTime != null">#{promotionStartTime},</if>
+			<if test="promotionEndTime != null">#{promotionEndTime},</if>
+			<if test="promotionLimitDay &gt; 0">#{promotionLimitDay},</if>
+			<if test="promotionLimitPeople &gt; 0">#{promotionLimitPeople},</if>
+			<if test="promotionDateTime != null">#{promotionDateTime},</if>
+			<if test="promotionAppId &gt; 0">#{promotionAppId},</if>
+		</trim>
+	</insert>
+
+	
+	<!-- 更新促销产品信息 -->
+	<update id="updateEntity" parameterType="net.mingsoft.mall.entity.PromotionEntity">
+		update mall_promotion
+		<set>
+			<if test="promotionProductId &gt; 0">promotion_product_id=#{promotionProductId},</if>
+			<if test="promotionTitle != null">promotion_title=#{promotionTitle},</if>
+			<if test="promotionStartDate != null">promotion_start_date=#{promotionStartDate},</if>
+			<if test="promotionEndDate != null">promotion_end_date=#{promotionEndDate},</if>
+			<if test="promotionStartTime != null">promotion_start_time=#{promotionStartTime},</if>
+			<if test="promotionEndTime != null">promotion_end_time=#{promotionEndTime},</if>
+			<if test="promotionLimitDay &gt; 0">promotion_limit_day=#{promotionLimitDay},</if>
+			<if test="promotionLimitPeople &gt; 0">promotion_limit_people=#{promotionLimitPeople},</if>
+			<if test="promotionDateTime &gt; 0">promotion_datetime=#{promotionDateTime},</if>
+		</set>
+		<where>
+			promotion_id = #{promotionId} 
+			and promotion_app_id = #{promotionAppId}
+		</where>
+	</update>
+	
+	<!-- 根据站点id查询促销产品数量 -->
+	<select id="queryCountByAppId" resultType="int" parameterType="int" >
+		select count(*) from mall_promotion where promotion_app_Id = #{appId}
+	</select>
+	
+	<!-- 获取商品对应的促销信息 -->
+	<resultMap type="net.mingsoft.mall.entity.PromotionEntity" id="productDetailMap">
+		<result column="promotion_limit_day" property="promotionLimitDay"/><!-- 每天限制购买数量 -->
+		<result column="promotion_limit_people" property="promotionLimitPeople"/><!--每人限制购买数量  -->
+		<result column="startDay" property="startDay"/><!--已经开始天数  -->
+		<result column="endDay" property="endDay"/><!--距离结束天数  -->
+		<result column="startTime" property="startTime"/><!--已经开始时间  -->
+		<result column="endTime" property="endTime"/><!--距离结束时间  -->
+	</resultMap>	
+	<select id="getByProductId" resultMap="productDetailMap">
+		select DATEDIFF(promotion_start_date,now()) startDay,DATEDIFF(promotion_end_date,now()) endDay ,TIMEDIFF(promotion_start_time,DATE_FORMAT(now(),"%H:%i")) startTime,TIMEDIFF(promotion_end_time,DATE_FORMAT(now(),"%H:%i"))  endTime from mall_promotion where promotion_app_Id = #{appId} and promotion_product_id = #{productId}
+	</select>
+	
+	<!-- 根据站点id和page分页查询限时产品 -->
+	<select  id="queryByPageAppid" resultMap="resultPromotion">
+		select 
+		<include refid="promotion_name" /> 
+		from  mall_promotion m
+		LEFT JOIN basic b ON (m.promotion_product_id = b.basic_id)
+		<where>
+			promotion_app_id = #{appId}
+			<if test="orderBy != null">
+				order by ${orderBy}
+			</if>
+			<if test="orderBy == null">
+				order by promotion_id
+			</if>
+			<if test="order==true">asc</if>
+			<if test="order==false">desc</if>
+			<if test="page!=null">
+				limit ${page.pageNo*page.pageSize},#{page.pageSize}
+			</if>
+			</where> 
+	</select>
+	
+	<!-- 根据commentId删除多条商品-->
+	<delete id="deletes" >
+		DELETE  FROM mall_promotion
+		<where>
+			<if test=" appId !=null">
+			and promotion_app_id = #{appId}
+			</if>
+    		and promotion_id in <foreach collection="ids" item="item" index="index" 
+			open="(" separator="," close=")">#{item}</foreach>
+		</where>
+	</delete>
+	<!-- 根据commentId删除多条评论 -->
+	
+	<!-- 根据促销id查询单个限时促销产品 -->
+	<select id="getEntity" resultMap="resultPromotion" parameterType="int" >
+		select
+		<include refid="promotion_name" />
+			from mall_promotion m
+			LEFT JOIN basic b ON (m.promotion_product_id = b.basic_id)
+		<where>
+			promotion_id = #{promotionId}
+		</where>
+	</select>
+	
+	<!-- 查询疯抢商品信息开始 -->
+	<resultMap type="net.mingsoft.mall.entity.PromotionEntity" id="productMap">
+		<id column="promotion_id" property="promotionId" /><!-- 促销编号 -->
+		<result column="promotion_title" property="promotionTitle"/><!--抢购主题  -->
+		<result column="promotion_limit_day" property="promotionLimitDay"/><!-- 每天限制购买数量 -->
+		<result column="promotion_limit_people" property="promotionLimitPeople"/><!--每人限制购买数量  -->
+		<result column="startDay" property="startDay"/><!--已经开始天数  -->
+		<result column="endDay" property="endDay"/><!--距离结束天数  -->
+		<result column="tomorrowTime" property="tomorrowTime"/><!--距离明天活动开始时间  -->
+		<result column="todayOverTime" property="todayOverTime"/><!--距离今天活动的结束时间  -->
+		<result column="todayStartTime" property="todayStartTime"/><!--距离今天活动开始时间  -->
+		<result column="daySales" property="daySales"/><!--当天销量-->
+		
+	</resultMap>	
+	<select id="queryPromotionProduct" resultMap="productMap">
+		select *, func_staging_promotion_product_today_sales(0,promotion_Id,0) daySales,
+TIMESTAMPDIFF(SECOND,now(),CONCAT(DATE_ADD(DATE_FORMAT(now(),"%Y-%m-%d"),INTERVAL 1 DAY)," ",promotion_start_time)) tomorrowTime,
+TIMESTAMPDIFF(SECOND,now(),CONCAT(DATE_FORMAT(now(),"%Y-%m-%d")," ",promotion_end_time)) todayOverTime ,
+TIMESTAMPDIFF(SECOND,now(),CONCAT(DATE_FORMAT(now(),"%Y-%m-%d")," ",promotion_start_time)) todayStartTime ,
+DATEDIFF(promotion_start_date,now()) startDay,
+DATEDIFF(promotion_end_date,now()) endDay ,
+TIMESTAMPDIFF(SECOND,CONCAT(promotion_start_date," ",DATE_FORMAT(promotion_start_time,"%H:%i:%s")),DATE_FORMAT(now(),"%Y-%m-%d %H:%i:%s")) startTime,
+TIMESTAMPDIFF(SECOND,CONCAT(promotion_end_date," ",DATE_FORMAT(promotion_end_time,"%H:%i:%s")),DATE_FORMAT(now(),"%Y-%m-%d %H:%i:%s"))  endTime
+		from mall_promotion left join  v_mall_specifications_product  on basic_id=promotion_product_id where promotion_app_id=#{appId} 
+	</select>
+	<!-- 查询疯抢商品信息结束 -->
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 购物车持久化层XML配置继承ICartDao -->
+<mapper namespace="net.mingsoft.mall.dao.ICartDao">
+
+
+	<!-- 表字段与属性对接 -->
+	<resultMap id="resultMap" type="net.mingsoft.mall.entity.CartEntity">
+		<id column="CART_ID" property="cartId" />
+		<result column="CART_BASICID" property="cartBasicId" />
+		<result column="CART_TIME" property="cartTime" />
+		<result column="CART_PEOPLEID" property="cartPeopleId" />
+		<result column="CART_NUM" property="cartNum" />
+		<result column="CART_PRICE" property="cartPrice" />
+		<result column="CART_DISCOUNT" property="cartDiscount" />
+		<result column="CART_TITLE" property="cartTitle" />
+		<result column="CART_THUMBNAIL" property="cartThumbnail" />
+		<result column="CART_URL" property="cartUrl" />
+	</resultMap>
+
+	<select id="query" parameterType="net.mingsoft.mall.entity.CartEntity"
+		resultMap="resultMap">
+		select
+		CART_ID,CART_BASICID,CART_TIME,CART_PEOPLEID,CART_APPID,CART_NUM,CART_PRICE,CART_DISCOUNT,CART_THUMBNAIL,CART_TITLE,CART_URL
+		from order_cart
+		left join basic on CART_BASICID=basic_id
+		left join mall_product on cart_id = product_basicID
+		where
+		CART_PEOPLEID=#{cartPeopleId}
+	</select>
+
+
+</mapper>

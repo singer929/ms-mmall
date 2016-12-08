@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.mingsoft.mall.dao.IAttentionDao">
+
+	<sql id="column_list">
+		BASIC_ID,BASIC_TITLE,BASIC_DESCRIPTION,
+		BASIC_THUMBNAILS,BASIC_HIT,BASIC_SORT,BASIC_DATETIME,
+		BASIC_UPDATETIME,BASIC_PEOPLEID,BASIC_CATEGORYID,
+		BASIC_APPID,BASIC_MODELID,product_basicID,
+		product_price,product_cost_price,product_inventory,
+		product_appID,product_code,product_linkUrl,
+		product_sale,ba_id,ba_peopleID,
+		ba_appID,ba_basicID,ba_type,ba_datetime
+	</sql>
+
+	<!--关注商品列表的返回值 -->
+	<resultMap id="resultMap" type="net.mingsoft.mall.entity.ProductEntity">
+		<id column="BASIC_ID" property="basicId" />							<!-- 商品自增长id -->
+		<result column="BASIC_TITLE" property="basicTitle" />				<!-- 商品标题 -->
+		<result column="BASIC_HIT" property="basicHit" />					<!-- 商品点击量 -->
+		<result column="BASIC_DESCRIPTION" property="basicDescription" />	<!-- 商品描述 -->
+		<result column="BASIC_THUMBNAILS" property="basicThumbnails" />		<!-- 商品缩略图 -->
+		<result column="BASIC_UPDATETIME" property="basicUpdateTime" />		<!-- 商品更新时间 -->
+		<result column="BASIC_DATETIME" property="basicDateTime" />			<!-- 商品发布时间 -->
+		<result column="BASIC_APPID" property="basicAppId" />				<!-- 商品的应用id -->
+		<result column="BASIC_CATEGORYID" property="basicCategoryId" />		<!-- 商品的栏目id -->
+		
+
+		<result column="product_price" property="productPrice" />			<!-- 商品价格 -->
+		<result column="product_inventory" property="productStock" />		<!-- 商品库存量 -->
+		<result column="product_code" property="productCode" />				<!-- 商品编码 -->
+		<result column="product_sale" property="productSale" />				<!-- 商品销量 -->
+		<result column="product_linkUrl" property="productLinkUrl" />		<!-- 商品链接 -->
+		<result column="product_cost_price" property="productCostPrice" />	<!-- 商品原价-->
+	</resultMap>
+
+	<select id="query" resultMap="resultMap">
+		select <include refid="column_list" /> from  mall_product left join basic on basic_id = product_basicID left join basic_attention  on ba_basicID=basic_id
+		<where>
+			<if test="basicAttentionAppId != null">and ba_appid=#{basicAttentionAppId}</if>
+			<if test="basicAttentionPeopleId != null">and ba_peopleid=#{basicAttentionPeopleId}</if>
+			<if test="basicAttentionType != null">and ba_type=#{basicAttentionType}</if>
+		</where>
+		order by ba_id desc
+	</select>
+
+</mapper>	

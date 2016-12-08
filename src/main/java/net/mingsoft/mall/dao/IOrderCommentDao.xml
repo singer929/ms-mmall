@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.mingsoft.mall.dao.IOrderCommentDao">
+	
+	<resultMap id="resultMap" type="net.mingsoft.mall.entity.OrderCommentEntity">
+		<id column="OC_COMMENT_ID" property="ocCommentId" /><!--评论编号 -->
+		<result column="OC_COMMENT_ID" property="ocCommentId" /><!--评论编号 -->
+		<result column="OC_ORDER_ID" property="ocOrderId" /><!--订单编号 -->
+		<result column="OC_IMPRESSION" property="ocImpression" /><!--印象 -->
+		<result column="OC_PRODUCT" property="ocProduct" /><!--商品符合度 -->
+		<result column="OC_SERVICE" property="ocService" /><!--店家服务态度 -->
+		<result column="OC_LOGISTICS" property="ocLogistics" /><!--物流发货速度 -->
+		<result column="OC_SERVICE_DESCRIBE" property="ocServiceDescribe" /><!--评价服务 -->
+		<result column="OC_SERVICE_DESCRIBE" property="ocServiceDescribe" /><!--评价服务 -->
+		<result column="COMMENT_COMMENTID" property="commentCommentId" />
+		<result column="COMMENT_CONTENT" property="commentContent" />
+		<result column="COMMENT_PICTURE" property="commentPicture" />
+		<result column="COMMENT_FILE_NAME" property="commentFileName" />
+		<result column="COMMENT_FILE_PATH" property="commentFilePath" />
+		<result column="COMMENT_TIME" property="commentTime" />
+		<result column="COMMENT_TYPE" property="commentType" />
+		<result column="COMMENT_PEOPLEID" property="commentPeopleId" />
+		<result column="COMMENT_POINTS" property="commentPoints" />
+		<result column="COMMENT_BASICID" property="commentBasicId" />
+		<result column="COMMENT_IS_ANONYMOUS" property="isAnonymous"/>
+		<association property="commentPeopleUser" javaType="com.mingsoft.people.entity.PeopleUserEntity">
+			<result property="peopleUserNickName" column="PU_NICKNAME"/>
+		</association>
+	</resultMap>
+	
+	<!--保存-->	
+	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="ocCommentId"
+		parameterType="net.mingsoft.mall.entity.OrderCommentEntity" >
+		insert into mall_order_comment
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="commentId != null">OC_COMMENT_ID,</if>
+			<if test="ocOrderId != null">OC_ORDER_ID,</if>
+			<if test="ocImpression != null">OC_IMPRESSION,</if>
+			<if test="ocProduct != null">OC_PRODUCT,</if>
+			<if test="ocService != null">OC_SERVICE,</if>
+			<if test="ocLogistics != null">OC_LOGISTICS,</if>
+			<if test="ocServiceDescribe != null">OC_SERVICE_DESCRIBE,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="commentId != null">#{commentId},</if>
+			<if test="ocOrderId != null">#{ocOrderId},</if>
+			<if test="ocImpression != null">#{ocImpression},</if>
+			<if test="ocProduct != null">#{ocProduct},</if>
+			<if test="ocService != null">#{ocService},</if>
+			<if test="ocLogistics != null">#{ocLogistics},</if>
+			<if test="ocServiceDescribe != null">#{ocServiceDescribe},</if>
+		</trim>
+	</insert>
+	
+	<!--更新-->	
+	<update id="updateEntity" parameterType="net.mingsoft.mall.entity.OrderCommentEntity">
+		update mall_order_comment
+		<set>
+			<if test="ocOrderId != null">OC_ORDER_ID=#{ocOrderId},</if>
+			<if test="ocImpression != null">OC_IMPRESSION=#{ocImpression},</if>
+			<if test="ocProduct != null">OC_PRODUCT=#{ocProduct},</if>
+			<if test="ocService != null">OC_SERVICE=#{ocService},</if>
+			<if test="ocLogistics != null">OC_LOGISTICS=#{ocLogistics},</if>
+			<if test="ocServiceDescribe != null">OC_SERVICE_DESCRIBE=#{ocServiceDescribe},</if>
+		</set>
+		where OC_COMMENT_ID = #{ocCommentId}
+	</update>
+	
+	<!--根据id获取-->	
+	<select id="getEntity" resultMap="resultMap" parameterType="int">
+		select * from mall_order_comment where OC_COMMENT_ID=#{ocCommentId}
+	</select>
+	
+	<!--根据实体获取-->
+	<select id="getByEntity" resultMap="resultMap" parameterType="net.mingsoft.mall.entity.OrderCommentEntity">
+		select * from mall_order_comment 
+		<where>
+			<if test="ocOrderId != null"> and OC_ORDER_ID=#{ocOrderId}</if>
+			<if test="ocImpression != null"> and OC_IMPRESSION=#{ocImpression}</if>
+			<if test="ocProduct != null"> and OC_PRODUCT=#{ocProduct}</if>
+			<if test="ocService != null"> and OC_SERVICE=#{ocService}</if>
+			<if test="ocLogistics != null"> and OC_LOGISTICS=#{ocLogistics}</if>
+			<if test="ocServiceDescribe != null"> and OC_SERVICE_DESCRIBE=#{ocServiceDescribe}</if>
+		</where>
+		limit 0,1
+	</select>	
+	
+	
+	<!--删除-->	
+	<delete id="deleteEntity" parameterType="int">
+		delete from mall_order_comment  where OC_COMMENT_ID=#{ocCommentId}
+	</delete>	
+	
+	<!--批量删除-->	
+	<delete id="delete" >
+		delete from mall_order_comment
+		<where>
+			 OC_COMMENT_ID  in <foreach collection="ids" item="item" index="index" 
+			open="(" separator="," close=")">#{item}</foreach>
+		</where>
+	</delete>
+	<!--查询全部-->	
+	<select id="queryAll" resultMap="resultMap">
+		select * from mall_order_comment order by OC_COMMENT_ID desc
+	</select>
+	<!--条件查询-->	
+	<select id="query" resultMap="resultMap">
+		select *,people_user.PU_NICKNAME from mall_order_comment 
+		left join comment on OC_COMMENT_ID = COMMENT_ID  
+		left join people_user on PU_PEOPLE_ID = COMMENT_PEOPLEID
+		<where>
+			<if test="ocOrderId != null"> and OC_ORDER_ID=#{ocOrderId} </if>				
+			<if test="ocImpression != null"> and OC_IMPRESSION=#{ocImpression} </if>				
+			<if test="ocProduct != null"> and OC_PRODUCT=#{ocProduct} </if>				
+			<if test="ocService != null"> and OC_SERVICE=#{ocService} </if>				
+			<if test="ocLogistics != null"> and OC_LOGISTICS=#{ocLogistics} </if>				
+			<if test="ocServiceDescribe != null"> and OC_SERVICE_DESCRIBE=#{ocServiceDescribe} </if>				
+			<if test="commentBasicId != null"> and COMMENT_BASICID=#{commentBasicId} </if>				
+		</where>		
+		order by OC_COMMENT_ID desc
+	</select>
+	
+</mapper>
