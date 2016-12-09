@@ -2,8 +2,8 @@
     <wb-module deploy-name="ms-mmall">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/net/mingsoft/ms-mcomment/1.0.0-SNAPSHOT/ms-mcomment-1.0.0-SNAPSHOT.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
             <dependency-type>consumes</dependency-type>
         </dependent-module>
@@ -32,6 +32,6 @@
             <dependency-type>consumes</dependency-type>
         </dependent-module>
         <property name="context-root" value="ms-mmall"/>
-        <property name="java-output-path" value="/ms-mmall/target/classes"/>
+        <property name="java-output-path" value="/ms-mmall/build/classes"/>
     </wb-module>
 </project-modules>
