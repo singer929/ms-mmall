@@ -24,7 +24,7 @@ import net.mingsoft.mall.entity.SpecificationsEntity;
  * Company:景德镇铭飞科技有限公司
  * </p>
  * 
- * @author 姓名 史爱华
+ * @author 王敏
  * 
  * @version 300-001-001
  * 
