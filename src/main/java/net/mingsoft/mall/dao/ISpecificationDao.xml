@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace = "net.mingsoft.mall.dao.ISpecificationDao">
+	<sql id="column_list">
+		s.s_id,s.s_name,s.s_default_fields,s.s_app_id
+	</sql>
+	<!-- 获取表字段开始 -->
+	<resultMap type="net.mingsoft.mall.entity.SpecificationEntity" id="resultMap">
+			<id column="s_id" property="specId" /><!-- -与规格id绑定 -->
+			<result column="s_name" property="name" />	<!-- 与规格名绑定 -->
+			<result column="s_default_fields" property="defaultFields" />	<!-- 与字段义字段名称绑定-->
+			<result column="s_app_id" property="appId" />	<!-- 与appId绑定-->
+	</resultMap>
+	<!-- 获取表字段结束-->
+	
+	<!-- 增加产品规格开始 -->
+	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="specId" parameterType="net.mingsoft.mall.entity.SpecificationEntity">
+		insert mall_specification
+		<!-- 添加表字段 -->
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test = "name != null">s_name,</if>
+			<if test = "defaultFields !=null">s_default_fields,</if>
+			<if test = "appId !=null">s_app_id,</if>
+		</trim>
+		<!-- 注入控制层字段 -->
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test = "name != null">#{name},</if>
+			<if test = "defaultFields !=null">#{defaultFields},</if>
+			<if test = "appId !=null">#{appId},</if>
+		</trim>
+	</insert>
+	<!-- 增加产品规格结束 -->
+	
+	<!-- 更新产品规格开始 -->
+	<update id="updateEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
+		update mall_specification
+		<set>
+			<if test="name != null">s_name=#{name},</if>
+			<if test="defaultFields != null">s_default_fields=#{defaultFields},</if>
+		</set>
+		where  s_id = #{specId}
+	</update>
+	<!-- 更新产品规格结束 -->
+	
+	<!-- 根据ID查询开始 -->
+	<select id="getEntity" resultMap="resultMap" parameterType="int">
+		select 
+		<include refid="column_list" />
+		from mall_specification s where s.s_id = #{specId}
+	</select>
+	<!-- 根据ID查询结束-->
+	
+	<!-- 删除商品规格开始 -->
+	<delete id="deleteEntity" parameterType="int">
+		delete from mall_specification
+		where
+		s_id = #{specId}
+	</delete>
+	<!-- 删除商品规格结束 -->
+	
+	<!-- 根据APPID获取规格列表(带分页)开始 -->
+	<select id="query" resultMap="resultMap">
+		select <include refid="column_list"/> from mall_specification s
+		where 1=1
+		<if test="appId != null">and s.s_app_id = #{appId}</if>
+		order by s.s_id desc
+		<if test=" begin != null">
+			limit #{begin}
+		</if>
+		<if test=" end != null">
+			, #{end}
+		</if>
+	</select>
+	<select id="countByAppId" resultType="int">
+	 	select count(*) from mall_specification
+	 	where 1=1
+	 	<if test="appId != null">and s_app_id = #{appId}</if>
+	</select>
+	<!-- 根据APPID获取规格列表(带分页)结束 -->
+</mapper>
