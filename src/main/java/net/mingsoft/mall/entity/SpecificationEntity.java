@@ -17,7 +17,7 @@ import com.mingsoft.base.entity.BaseEntity;
  * Company:景德镇铭飞科技有限公司
  * </p>
  * 
- * @author 姓名：史爱华
+ * @author 王敏
  * 
  * @version 300-001-001
  * 
@@ -26,7 +26,7 @@ import com.mingsoft.base.entity.BaseEntity;
  * </p>
  *  
  * <p>
- * Comments:产品规格实体类，继承BaseEntity
+ * Comments:规格数据模型, 包含所有产品可能出现的规格
  * </p>
  *  
  * <p>
@@ -39,32 +39,32 @@ import com.mingsoft.base.entity.BaseEntity;
 public class SpecificationEntity extends BaseEntity{
 	
 	/**
-	 * 规格id
+	 * 规格id 主键 
 	 */
 	private int specId;
 	
 	/**
-	 * 规格名称
+	 * 规格名
 	 */
 	private String name;
 	
 	/**
-	 * 默认的字段值
+	 * 默认的字段名
 	 */
 	private String defaultFields;
 	
 	/**
-	 * appId
+	 * 规格所属的appId
 	 */
 	private int appId;
-
 	
-	public int getSpecId() {
+
+	public int getSpecificationId() {
 		return specId;
 	}
 
-	public void setSpecId(int specId) {
-		this.specId = specId;
+	public void setSpecificationId(int specificationId) {
+		this.specId = specificationId;
 	}
 
 	public String getName() {
@@ -79,15 +79,7 @@ public class SpecificationEntity extends BaseEntity{
 		return defaultFields;
 	}
 
-	public void setDefaultFields(String defaultValue) {
-		this.defaultFields = defaultValue;
-	} 
-
-	public int getAppId() {
-		return appId;
-	}
-
-	public void setAppId(int appId) {
-		this.appId = appId;
+	public void setDefaultFields(String defaultFields) {
+		this.defaultFields = defaultFields;
 	}
 }

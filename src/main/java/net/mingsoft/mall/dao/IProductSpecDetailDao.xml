@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.mingsoft.mall.dao.IProductSpecDetailDao">
+
+	<sql id="column_list">
+		psd.psd_id, 
+		psd.psd_product_id, 
+		psd.psd_spec_id, 
+		psd.psd_spec_valuess, 
+		psd.psd_price, 
+		psd.psd_stock, 
+		psd.psd_sale, 
+		psd.psd_code, 
+		psd.psd_sort
+	</sql>
+
+	<!-- 获取表字段开始 -->
+	<resultMap
+		type="net.mingsoft.mall.entity.ProductSpecDetailEntity" 
+		id="resultMap">
+		<result column="psd_id" property="detailId" />
+		<result column="psd_product_id" property="productId" />
+		<result column="psd_spec_id" property="specId" />
+		<result column="psd_spec_values" property="specValues" />
+		<result column="psd_price" property="price" />
+		<result column="psd_stock" property="stock" />
+		<result column="psd_sale" property="sale" />
+		<result column="psd_code" property="code" />
+		<result column="psd_sort" property="sort" />
+	</resultMap>
+
+	<!-- 根据栏目id查询商品规格列表结束 -->
+	<!-- <resultMap id="resultProductSpecificationsInventoryMap"
+		type="net.mingsoft.mall.entity.ProductSpecificationsInventoryEntity">
+		<result column="psd_id" property="detailId" />
+			与产品规格id绑定
+		<result column="psd_price" property="price" />
+			与产品规格价格绑定
+		<result column="psd_stock" property="stock" />
+			与产品规格库存量绑定
+		<result column="psd_sale" property="sale" />与产品规格销量绑定
+		<result column="psd_code" property="code" />
+			该产品规格
+		<result column="psd_product_id" property="productId" />该产品Id
+		<result column="psd_sort" property="sort" />
+		一对一关联栏目
+		<association property="column" column="BASIC_CATEGORYID"
+			javaType="com.mingsoft.basic.entity.ColumnEntity">
+			<result property="columnPath" column="column_path" />
+			<result property="categoryTitle" column="category_title" />
+			<result property="categoryId" column="category_id" />
+			<result property="columnContentModelId" column="COLUMN_CONTENTMODELID" />
+			<result property="columnType" column="COLUMN_TYPE" />
+		</association>
+
+		一对一关联栏目
+		<association property="product" column="psd_product_id"
+			javaType="net.mingsoft.mall.entity.ProductEntity">
+			<result column="BASIC_ID" property="basicId" />					与表basic绑定 自增长ID
+			<result column="product_basicID" property="productId" />				与产品表绑定id
+			<result column="product_price" property="productPrice" />	产品价格
+			<result column="product_inventory" property="productStock" />		产品库存量
+			<result column="product_appId" property="productAppId" />		产品所属appID
+			<result column="product_code" property="productCode" />		产品所属appID
+			<result column="product_sale" property="productSale" />		产品销量
+			<result column="product_linkUrl" property="productLinkUrl" />		产品链接
+			<result column="product_cost_price" property="productCostPrice" />		产品原价
+			<result column="product_shelf" property="productShelf" />		产品是否下架
+			<result column="product_type" property="productType" />		产品属性类型
+			<result column="BASIC_TITLE" property="basicTitle" />			标题
+			<result column="BASIC_DESCRIPTION" property="basicDescription" />
+				描述
+			<result column="BASIC_THUMBNAILS" property="basicThumbnails" />	缩略图
+			<result column="BASIC_HIT" property="basicHit" />				文章点击次数
+			<result column="BASIC_DATETIME" property="basicDateTime" />		发布时间
+			<result column="BASIC_UPDATETIME" property="basicUpdateTime" />	更新时间
+			<result column="BASIC_PEOPLEID" property="basicPeopleId" />		发布者id
+			<result column="BASIC_CATEGORYID" property="basicCategoryId" />	所属主栏目id
+			<result column="BASIC_CATEGORYID" property="basicCategoryId" />	所属主栏目id
+			<result column="BASIC_MODELID" property="basicModelId" />	所属主栏目id
+			<result column="BASIC_SORT" property="basicSort" />	商品顺序
+		</association>
+	</resultMap> -->
+	<!-- 根据栏目id查询商品规格列表 -->
+
+
+	<!-- 增加产品规格库存信息开始 -->
+	<insert id="saveEntity" useGeneratedKeys="true"
+		keyProperty="detailId"
+		parameterType="net.mingsoft.mall.entity.ProductSpecDetailEntity">
+		insert into mall_product_specification_detail
+		<!-- 添加表字段 -->
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="detailId != null">psd_id,</if>
+			<if test="price !=null">psd_price,</if>
+			<if test="stock !=null">psd_stock,</if>
+			<if test="sale !=null">psd_sale,</if>
+			<if test="specValues !=null">psd_spec_values,</if>
+			<if test="code !=null">psd_code,</if>
+			<if test="productId !=null">psd_product_id,</if>
+			<if test="sort !=null">psd_sort,</if>
+		</trim>
+
+		<!-- 注入控制层字段 -->
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="detailId != null">#{detailId},</if>
+			<if test="price !=null">#{price},</if>
+			<if test="stock !=null">#{stock},</if>
+			<if test="sale !=null">#{sale},</if>
+			<if test="specValues !=null">#{specValues},</if>
+			<if test="code !=null">#{code},</if>
+			<if test="productId !=null">#{productId},</if>
+			<if test="sort !=null">#{sort},</if>
+		</trim>
+	</insert>
+	<!-- 增加产品规格库存信息结束 -->
+
+	<!-- 更新产品规格库存信息开始 -->
+	<update id="updateEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
+		update mall_product_specification_detail
+		<set>
+			<if test="price != null">psd_price = #{price},</if>
+			<if test="sale != null">psd_sale = #{sale},</if>
+			<if test="stock != null">psd_stock = #{stock},</if>
+			<if test="code != null">psd_code = #{code},</if>
+			<if test="specValues != null">psd_spec_values = #{specValues},</if>
+			<if test="sort != null">psd_sort = #{sort},</if>
+		</set>
+		where psd_id = #{detailId}
+	</update>
+	<!-- 更新产品规格库存信息结束 -->
+
+	<!-- 获取产品规格库存信息开始 -->
+	<select id="getEntity" resultMap="resultMap" parameterType="int">
+		select
+		<include refid="column_list" />
+		from mall_product_specification_detail psd
+		where
+		psi.psd_id = #{detailId}
+	</select>
+	<!-- 获取产品规格库存信息结束 -->
+
+	<!-- 删除 产品规格库存信息开始 -->
+	<delete id="deleteEntity" parameterType="int">
+		delete from
+		mall_product_specification_detail where
+		psd_id = #{detailId}
+	</delete>
+	<!-- 删除 产品规格库存信息结束 -->
+
+	<!-- 根据产品ID删除产品规格库存信息开始 -->
+	<!-- <delete id="deleteEntityByProductId" parameterType="int">
+		delete from
+		mall_product_specification_detail 
+		<where>
+			psd_product_id in
+			<foreach collection="productIds" item="id" index="index"
+				open="(" separator="," close=")">#{id}</foreach>
+		</where>
+	</delete>
+	根据产品ID删除产品规格库存信息结束
+
+	更新产品规格库存信息开始
+	<update id="updateSort" parameterType="com.mingsoft.base.entity.BaseEntity">
+		update mall_product_specification_detail
+		<set>
+			<if test="sort != null">psd_sort = #{sort},</if>
+		</set>
+		where psd_id = #{detailId}
+	</update> -->
+	<!-- 更新产品规格库存信息结束 -->
+
+	<!-- 根据栏目id查询商品规格总数 -->
+	<select id="getProducntSpecificationCountByColumnId" resultType="int">
+		select count(*)
+		from mall_product_specification_detail mpsd left
+		join mall_product p
+		on mpsd.psd_product_id = p.product_basicID
+		left join
+		basic b on
+		b.basic_id = p.product_basicID
+		LEFT JOIN
+		category c ON
+		b.BASIC_CATEGORYID
+		= c.CATEGORY_ID
+		LEFT JOIN cms_column
+		cl ON
+		c.CATEGORY_ID =
+		cl.COLUMN_CATEGORYID
+
+		<where>
+			<if test="whereMap!=null">
+				<if test="whereMap.basicTitle!=null">
+					basic_title like CONCAT("%",#{whereMap.basicTitle},"%")
+				</if>
+			</if>
+			<if test="appId != null">and basic_appId=#{appId}</if>
+			<if test="modelId != null">and basic_modelId = #{modelId}</if>
+			<if test="categoryId != null">and basic_categoryId= #{categoryId}</if>
+		</where>
+	</select>
+	<!-- 根据栏目id查询商品规格总数结束 -->
+
+
+	<!-- 根据栏目id查询商品规格列表 -->
+	<!-- <select id="queryProducntSpecificationByColumnId" resultMap="resultProductSpecificationsInventoryMap">
+		select
+		category_title,CONCAT(basic_title,func_parent_specifications_field(psd_id))
+		as basic_title,psd_id,psd_product_id,
+		psd_id,psd_sort
+		from
+		mall_product_specification_detail mpsi left join mall_product p
+		on
+		mpsi.psd_product_id = p.product_basicID
+		left join basic b on
+		b.basic_id=p.product_basicID
+		LEFT JOIN
+		category c ON b.BASIC_CATEGORYID
+		= c.CATEGORY_ID
+		LEFT JOIN cms_column
+		cl ON c.CATEGORY_ID =
+		cl.COLUMN_CATEGORYID
+		<where>
+			<if test="whereMap!=null">
+				<if test="whereMap.basicTitle!=null">
+					basic_title like CONCAT("%",#{whereMap.basicTitle},"%")
+				</if>
+			</if>
+			<if test="appId != null">and basic_appId=#{appId}</if>
+			<if test="modelId != null">and basic_modelId = #{modelId}</if>
+			<if test="categoryId != null">and basic_categoryId= #{categoryId}</if>
+			order by p.product_basicID desc
+			<if test="page!=null">
+				limit ${page.pageNo*page.pageSize},#{page.pageSize}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="queryProducntSpecificationByProductId" resultMap="resultProductSpecificationsInventoryMap">
+		select *
+		from v_mall_specifications_product
+		<where>
+			<if test="appId != null">and basic_appId=#{appId}</if>
+			<if test="modelId != null">and basic_modelId = #{modelId}</if>
+			<if test="productId != null">and psd_product_id= #{productId}</if>
+		</where>
+	</select> -->
+	<!-- 根据栏目id查询商品规格列表结束 -->
+	
+	<!-- 根据AppId 和 产品id 查询 数据 -->
+	<select id="queryByAppAndProductId" parameterType="int" resultMap="resultMap">
+		select * from mall_product_specification_detail
+	</select>
+	
+	<!-- 批量保存数据 -->
+	<insert id="saveBatch" useGeneratedKeys="true" parameterType="java.util.List">  
+	   <!--  <selectKey resultType="long" keyProperty="id" order="AFTER">  
+	        SELECT  
+	        LAST_INSERT_ID()  
+	    </selectKey>   -->
+	    insert into mall_product_specification_detail (
+	    	psd_product_id, 
+			psd_spec_id, 
+			psd_spec_values,
+			psd_price,
+			psd_stock,
+			psd_sale,
+			psd_code,
+			psd_sort			
+		)   
+	    values  
+	    <foreach collection="list" item="item" index="index" separator="," > 
+	    (
+	    	#{item.productId},
+	        #{item.specId},
+	        #{item.specValues},
+	        #{item.price},
+	        #{item.stock},
+	        #{item.sale},
+	        #{item.code},
+	        #{item.sort}
+	 	)
+	    </foreach>  
+	</insert>
+	
+</mapper>

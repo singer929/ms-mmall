@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.mingsoft.mall.dao.IProductSpecDao">
+
+	<sql id="column_list">
+		ps.ps_id, 
+		ps.ps_product_id, 
+		ps.ps_spec_id, 
+		ps.ps_spec_value,
+		ps.ps_img
+	</sql>
+
+	<!-- 获取表字段开始 -->
+	<resultMap type="net.mingsoft.mall.entity.ProductSpecEntity"
+		id="resultMap">
+		<id column="ps_id" property="psId" />
+		<result column="ps_product_id" property="productId" />
+		<result column="ps_spec_id" property="specId" />
+		<result column="ps_spec_value" property="specValue" />
+		<result column="ps_img" property="img" />
+	</resultMap>
+
+	<resultMap id="resultMapList"
+		type="net.mingsoft.mall.entity.ProductSpecEntity">
+		<id column="ps_id" property="psId" />
+		<result column="ps_product_id" property="productId" />
+		<result column="ps_spec_id" property="specId" />
+		<result column="ps_spec_value" property="specValue" />
+		<result column="ps_img" property="img" />
+		
+		<!-- <association property="specifications" column="ps_specificationsID"
+			javaType="net.mingsoft.mall.entity.SpecificationsEntity">
+			<id column="specifications_id" property="specificationsId" />-与规格id绑定
+			<result column="specifications_name" property="specificationsName" />	与规格名绑定
+			<result column="specifications_fields" property="specificationsField" />	与字段义字段名称绑定
+			<result column="specifications_appId" property="specificationsAppId" />	与appId绑定
+		</association>
+		
+		<association property="productSpecificationsInventory"
+			column="ps_id"
+			javaType="net.mingsoft.mall.entity.ProductSpecificationsInventoryEntity">
+			<result column="psd_id" property="psId" />
+				与产品规格id绑定
+			<result column="psd_price" property="specificationsPrice" />
+				与产品规格价格绑定
+			<result column="psd_invertory" property="specificationsInvertory" />
+				与产品规格库存量绑定
+			<result column="psd_sale" property="specificationsSale" />
+				与产品规格销量绑定
+			<result column="psd_code" property="productSpecificationsInventoryCode" />
+				该产品规格
+			<result column="psd_productID" property="productId" />该产品Id
+		</association> -->
+	</resultMap>
+	<!-- 获取表字段结束 -->
+
+	<!-- 新增产品规格关联信息开始 -->
+	<insert id="saveEntity" useGeneratedKeys="true"
+		keyProperty="psId" parameterType="net.mingsoft.mall.entity.ProductSpecEntity">
+		insert into mall_product_specification
+		<!-- 添加表字段 -->
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="productId != null">ps_product_id,</if>
+			<if test="specId != null">ps_spec_id,</if>
+			<if test="specValue !=null">ps_spec_value,</if>
+			<if test="img !=null">ps_img,</if>
+		</trim>
+		<!-- 注入控制层字段 -->
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="productId != null">#{productId},</if>
+			<if test="specId != null">#{specId},</if>
+			<if test="specValue !=null">#{specValue},</if>
+			<if test="img !=null">#{img},</if>
+		</trim>
+	</insert>
+	<!-- 新增产品规格关联信息结束 -->
+
+	<!-- 更新产品规格关联信息开始 -->
+	<update id="updateEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
+		update mall_product_specification
+		<set>
+			<if test="productId != null">ps_product_id = #{productId},</if>
+			<if test="specId != null">ps_spec_id = #{specId},</if>
+			<if test="specValue != null">ps_spec_value = #{specValue},</if>
+			<if test="img != null">ps_img = #{img}, </if>
+		</set>
+		where ps_id = #{psId}
+	</update>
+	<!-- 更新产品规格关联信息结束 -->
+
+	<!-- 查询产品规格关联信息开始 -->
+	<select id="getEntity" resultMap="resultMap" parameterType="int">
+		select <include refid="column_list" />
+		from mall_product_specification ps
+		where ps.ps_id = #{psId}
+	</select>
+
+	<!-- 删除产品规格关联信息开始 -->
+	<delete id="deleteEntity" parameterType="int">
+		delete from mall_product_specification
+		where ps_id = #{psId}
+	</delete>
+	<!-- 删除产品规格关联信息结束 -->
+
+	<!-- 根据产品ID删除关联信息开始 -->
+	<delete id="deleteEntityByProductIds" parameterType="int">
+		delete from mall_product_specification
+		<where>
+			ps_product_id in
+			<foreach collection="productIds" item="id" index="index"
+				open="(" separator="," close=")">#{id}
+			</foreach>
+		</where>
+	</delete>
+	<!-- 根据产品ID删除关联信息结束 -->
+
+	<!-- 根据商品ID关联查询产品规格/产品信息开始 -->
+	<select id="queryListJsonByProduct" parameterType="int"
+		resultMap="resultMapList">
+		select * from mall_product_specification ps
+		left join
+		mall_specifications s on ps.ps_specificationsID =
+		s.specifications_id
+		left join mall_product_specification_inventory psd
+		on ps.ps_id =
+		psd.psd_id
+		where ps.ps_product_id =
+		#{productId}
+	</select>
+	<!-- 根据商品ID关联查询产品规格/产品信息结束 -->
+
+	<!-- 根据商品ID关联查询产品规格/产品信息开始 -->
+	<select id="getEntityById" parameterType="int"
+		resultMap="resultMapList">
+		select * from mall_product_specification ps
+		left join
+		mall_product_specification_inventory psd on ps.ps_id =
+		psd.psd_id
+		where ps.ps_id =
+		#{psId}
+	</select>
+	<!-- 根据商品ID关联查询产品规格/产品信息结束 -->
+
+	<select id="deleteBatch" parameterType="List">
+		delete from mall_product_specification where ps_product_id = #{productId}
+		<if test="ids!=null">
+			and ps_id not in
+			<foreach collection="ids" item="id" separator="," open="("
+				close=")">
+				#{id}
+			</foreach>
+		</if>
+
+	</select>
+	
+	<!-- 根据产品Id查询数据 -->
+	<select id="queryByProductId" parameterType="int" resultMap="resultMapList">
+		select <include refid="column_list" /> 
+		  from mall_product_specification ps
+		 where ps.ps_product_id = #{productId}
+	</select>
+	
+	<!-- 批量保存数据 -->
+	<insert id="saveBatch" useGeneratedKeys="true" parameterType="java.util.List">  
+	   <!--  <selectKey resultType="long" keyProperty="id" order="AFTER">  
+	        SELECT  
+	        LAST_INSERT_ID()  
+	    </selectKey>   -->
+	    insert into mall_product_specification (
+	    	ps_product_id, 
+			ps_spec_id, 
+			ps_spec_value,
+			ps_img
+		)   
+	    values  
+	    <foreach collection="list" item="item" index="index" separator="," > 
+	        (#{item.productId},#{item.specId},#{item.specValue},#{item.img})
+	    </foreach>  
+	</insert>  
+</mapper>

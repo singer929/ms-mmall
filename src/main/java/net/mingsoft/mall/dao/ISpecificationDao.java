@@ -25,7 +25,7 @@ import net.mingsoft.mall.entity.SpecificationsEntity;
  * Company:景德镇铭飞科技有限公司
  * </p>
  * 
- * @author 姓名：史爱华
+ * @author 王敏
  * 
  * @version 300-001-001
  * 
@@ -34,7 +34,7 @@ import net.mingsoft.mall.entity.SpecificationsEntity;
  * </p>
  *  
  * <p>
- * Comments:产品规格dao层接口，继承IBaseDao
+ * Comments:产品规格数据层接口
  * </p>
  *  
  * <p>

@@ -2,12 +2,10 @@ package net.mingsoft.mall.biz;
 
 import java.util.List;
 
-
 import com.mingsoft.base.biz.IBaseBiz;
 import com.mingsoft.util.PageUtil;
 
 import net.mingsoft.mall.entity.SpecificationEntity;
-import net.mingsoft.mall.entity.SpecificationsEntity;
 
 /**
  * 
