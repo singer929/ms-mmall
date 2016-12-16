@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.sql.ast.expr.SQLSequenceExpr.Function;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
@@ -219,17 +220,32 @@ public class Product2Action extends BaseAction {
 	 */
 	@ResponseBody
 	@RequestMapping("/save")
-	public void save(@ModelAttribute SaveData data, HttpServletRequest request, HttpServletResponse response) {
+	public void save(String jsonStr, HttpServletRequest request, HttpServletResponse response) {
 		
+		// 字符串为空
+		if (StringUtil.isBlank(jsonStr)) {
+			this.outJson(response, ModelCode.MALL_PRODUCT, false, "传入参数为空");
+			return;
+		}
+		
+		SaveData data = JSON.parseObject(jsonStr, SaveData.class);
+		// 数据解析有问题
+		if (data == null) {
+			this.outJson(response, ModelCode.MALL_PRODUCT, false, "传入参数有误");
+			return;
+		}
+		
+		// 商品数据
 		ProductEntity product = data.getProduct();
 		
 		// 判断提交数据是否符合规范
 		if (!checkForm(product, response)) {
+			this.outJson(response, ModelCode.MALL_PRODUCT, false, "商品数据不符合规范");
 			return;
 		}
-		// 获取appId
+		
 		int appId = getManagerBySession(request).getBasicId();
-		// 获取产品所属的栏目实体
+		// 产品所属的栏目实体
 		ColumnEntity column = (ColumnEntity) columnBiz.getEntity(product.getBasicCategoryId());
 		// 判断商品所属栏目是否存在
 		if (column == null) {
@@ -243,39 +259,32 @@ public class Product2Action extends BaseAction {
 		product.setProductAppId(appId);
 		product.setColumn(column);
 		product.setProductShelf(ProductEnum.ON_SHELF);
+		
 		// 设置产品的发布时间
 		product.setBasicDateTime(new Timestamp(System.currentTimeMillis()));
 		product.setBasicUpdateTime(new Timestamp(System.currentTimeMillis()));
-		// 产品模块ID
-		product.setBasicModelId(this.getModelCodeId(request, ModelCode.MALL_PRODUCT));
+		
+		// 设置产品模块ID
+		int modelCodeId = getModelCodeId(request, ModelCode.MALL_PRODUCT);
+		product.setBasicModelId(modelCodeId);
 		productBiz.saveBasic(product);
-		// 获取当前新增商品ID
-		int productId = product.getBasicId();
 		
 		// 更新访问商品详情链接地址(静态页面地址)
-		product.setProductLinkUrl(column.getColumnPath() + File.separator + productId + IParserRegexConstant.HTML_SUFFIX);
+		int productId = product.getBasicId();
+		String url = column.getColumnPath() + File.separator + productId + IParserRegexConstant.HTML_SUFFIX;
+		product.setProductLinkUrl(url);
 		productBiz.updateBasic(product);
 		
-		// 添加商品规格
-//		String specificationsJson = request.getParameter("specificationsJson");
-//		if (!StringUtil.isBlank(specificationsJson)) {
-//			this.productSpecificationsBiz.saveProductSpecificationsEntity(specificationsJson, product.getBasicId());
-//		}
-		
-		// 保存商品规格数据
+		// 保存商品规格数据 和规格明细数据
 		productSpecBiz.saveEntitiesByProductId(productId, data.getProductSpecList());
-		// 保存商品规格明细数据
 		specDeitalBiz.saveEntitiesByProductId(productId, data.getDetailList());
-		
-		
 		
 		// 判断该栏目是否存在其他内容模型
 		if (column.getColumnContentModelId() != 0) {
 			// 保存所有的字段信息
 			List<BaseEntity> listField = fieldBiz.queryListByCmid(column.getColumnContentModelId());
 			// 获取内容模型实体
-			ContentModelEntity contentModel = (ContentModelEntity) contentModelBiz
-					.getEntity(column.getColumnContentModelId());
+			ContentModelEntity contentModel = (ContentModelEntity) contentModelBiz.getEntity(column.getColumnContentModelId());
 			// 判断内容模型是否存在
 			if (contentModel == null) {
 				this.outJson(response, ModelCode.MALL_PRODUCT, false);
@@ -319,7 +328,7 @@ public class Product2Action extends BaseAction {
 	 * @param product
 	 *            商品实体
 	 */
-	public boolean checkForm(ProductEntity product, HttpServletResponse response) {
+	private boolean checkForm(ProductEntity product, HttpServletResponse response) {
 		// 判断产品的标题是否介于1-300之间
 		if (!StringUtil.checkLength(product.getBasicTitle(), 1, 300)) {
 			this.outJson(response, ModelCode.MALL_PRODUCT, false,

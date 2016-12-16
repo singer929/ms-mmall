@@ -5,8 +5,7 @@
 	<sql id="column_list">
 		psd.psd_id, 
 		psd.psd_product_id, 
-		psd.psd_spec_id, 
-		psd.psd_spec_valuess, 
+		psd.psd_spec_values, 
 		psd.psd_price, 
 		psd.psd_stock, 
 		psd.psd_sale, 
@@ -148,8 +147,8 @@
 	</delete>
 	<!-- 删除 产品规格库存信息结束 -->
 
-	<!-- 根据产品ID删除产品规格库存信息开始 -->
-	<!-- <delete id="deleteEntityByProductId" parameterType="int">
+	<!-- 根据产品ID删除产品规格库存信息开始  -->
+	<delete id="deleteEntityByProductIds" parameterType="int">
 		delete from
 		mall_product_specification_detail 
 		<where>
@@ -158,16 +157,16 @@
 				open="(" separator="," close=")">#{id}</foreach>
 		</where>
 	</delete>
-	根据产品ID删除产品规格库存信息结束
+	<!-- 根据产品ID删除产品规格库存信息结束 -->
 
-	更新产品规格库存信息开始
+	<!-- 更新产品规格库存信息开始 -->
 	<update id="updateSort" parameterType="com.mingsoft.base.entity.BaseEntity">
 		update mall_product_specification_detail
 		<set>
 			<if test="sort != null">psd_sort = #{sort},</if>
 		</set>
 		where psd_id = #{detailId}
-	</update> -->
+	</update>
 	<!-- 更新产品规格库存信息结束 -->
 
 	<!-- 根据栏目id查询商品规格总数 -->
@@ -261,7 +260,6 @@
 	    </selectKey>   -->
 	    insert into mall_product_specification_detail (
 	    	psd_product_id, 
-			psd_spec_id, 
 			psd_spec_values,
 			psd_price,
 			psd_stock,
@@ -273,7 +271,6 @@
 	    <foreach collection="list" item="item" index="index" separator="," > 
 	    (
 	    	#{item.productId},
-	        #{item.specId},
 	        #{item.specValues},
 	        #{item.price},
 	        #{item.stock},
