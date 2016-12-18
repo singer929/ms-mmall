@@ -61,6 +61,7 @@ public interface ISpecificationDao extends IBaseDao {
 	 */
 	public List<SpecificationEntity> queryByProductId(@Param("productId") int productId);
 	
+	
 	/**
 	 * 统计appId下的规格数量
 	 * @param appId

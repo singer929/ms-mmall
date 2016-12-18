@@ -32,7 +32,7 @@ import net.mingsoft.mall.constant.ModelCode;
  *                QQ:330216230
  *
  * <p>
- * Comments:商品规格外部请求JSON
+ * Comments: 商品规格前台 请求
  * </p>
  *
  * <p>
@@ -66,7 +66,7 @@ public class ProductSpecAction extends BaseAction{
 		}
 		
 		//根据商品Id查询当前商品的规格数据
-		String str = this.specBiz.getDataStrByProductId(productId);
+		String str = specBiz.getDataStrByProductId(productId);
 		this.outJson(response, str);
 	}
 	

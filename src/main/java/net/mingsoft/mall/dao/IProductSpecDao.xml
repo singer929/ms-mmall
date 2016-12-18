@@ -160,10 +160,6 @@
 	
 	<!-- 批量保存数据 -->
 	<insert id="saveBatch" useGeneratedKeys="true" parameterType="java.util.List">  
-	   <!--  <selectKey resultType="long" keyProperty="id" order="AFTER">  
-	        SELECT  
-	        LAST_INSERT_ID()  
-	    </selectKey>   -->
 	    insert into mall_product_specification (
 	    	ps_product_id, 
 			ps_spec_id, 

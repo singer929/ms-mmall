@@ -262,7 +262,8 @@ public class ProductSpecBizImpl extends BaseBizImpl implements IProductSpecBiz {
 	@Override
 	public String getDataStrByProductId(int productId) {
 		
-		List<SpecificationEntity> specList = specDao.queryByProductId(productId);
+		//List<SpecificationEntity> specList = specDao.queryByProductId(productId);
+		List<SpecificationEntity> specList = specDao.queryAll();
 		List<ProductSpecEntity> productSpecList = productSpecDao.queryByProductId(productId);
 		List<ProductSpecDetailEntity> detailList =  detailDao.queryEntitiesByProductId(productId);
 		

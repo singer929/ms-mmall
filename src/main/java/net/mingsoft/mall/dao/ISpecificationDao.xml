@@ -61,6 +61,11 @@
 	</delete>
 	<!-- 删除商品规格结束 -->
 	
+	<!-- 查询所有数据 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="column_list" /> from mall_specification s
+	</select>
+	
 	
 	<!-- 根据APPID获取规格列表(带分页)-->
 	<select id="query" resultMap="resultMap">
