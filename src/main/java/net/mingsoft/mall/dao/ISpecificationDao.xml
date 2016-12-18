@@ -2,7 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace = "net.mingsoft.mall.dao.ISpecificationDao">
 	<sql id="column_list">
-		s.s_id,s.s_name,s.s_default_fields,s.s_app_id
+		s.s_id,
+		s.s_name,
+		s.s_default_fields,
+		s.s_app_id
 	</sql>
 	<!-- 获取表字段开始 -->
 	<resultMap type="net.mingsoft.mall.entity.SpecificationEntity" id="resultMap">
@@ -58,7 +61,8 @@
 	</delete>
 	<!-- 删除商品规格结束 -->
 	
-	<!-- 根据APPID获取规格列表(带分页)开始 -->
+	
+	<!-- 根据APPID获取规格列表(带分页)-->
 	<select id="query" resultMap="resultMap">
 		select <include refid="column_list"/> from mall_specification s
 		where 1=1
@@ -71,10 +75,34 @@
 			, #{end}
 		</if>
 	</select>
+	
+	<!-- 根据appId获得规格总数 -->
 	<select id="countByAppId" resultType="int">
 	 	select count(*) from mall_specification
 	 	where 1=1
 	 	<if test="appId != null">and s_app_id = #{appId}</if>
 	</select>
-	<!-- 根据APPID获取规格列表(带分页)结束 -->
+	
+	<!-- 查找与某商品有关的规格 -->
+	<select id="queryByProductId" resultMap="resultMap">
+	 	select 
+		 	ms.s_id,
+			ms.s_name,
+			ms.s_default_fields,
+			ms.s_app_id
+	 	from 
+	 		mall_specification ms, 
+	 		basic b, basic_category bc, 
+	 		category c, 
+	 		mall_product_specification mps
+	 	where 1 = 1
+		 	and b.BASIC_ID = bc.bc_basic_id
+		 	and c.CATEGORY_ID = bc.bc_category_id 
+		 	and b.BASIC_ID = #{productId}
+		 	and mps.ps_spec_id = ms.s_id
+		 	and mps.ps_product_id = b.BASIC_ID
+		 group by ms.s_id
+	</select>
+	
+	
 </mapper>

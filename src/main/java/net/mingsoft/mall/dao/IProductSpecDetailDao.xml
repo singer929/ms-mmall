@@ -14,9 +14,7 @@
 	</sql>
 
 	<!-- 获取表字段开始 -->
-	<resultMap
-		type="net.mingsoft.mall.entity.ProductSpecDetailEntity" 
-		id="resultMap">
+	<resultMap type="net.mingsoft.mall.entity.ProductSpecDetailEntity" id="resultMap">
 		<result column="psd_id" property="detailId" />
 		<result column="psd_product_id" property="productId" />
 		<result column="psd_spec_id" property="specId" />
@@ -29,22 +27,17 @@
 	</resultMap>
 
 	<!-- 根据栏目id查询商品规格列表结束 -->
-	<!-- <resultMap id="resultProductSpecificationsInventoryMap"
-		type="net.mingsoft.mall.entity.ProductSpecificationsInventoryEntity">
+	<resultMap id="resultProductSpecDetailMap" type="net.mingsoft.mall.entity.ProductSpecDetailEntity">
 		<result column="psd_id" property="detailId" />
-			与产品规格id绑定
 		<result column="psd_price" property="price" />
-			与产品规格价格绑定
 		<result column="psd_stock" property="stock" />
-			与产品规格库存量绑定
-		<result column="psd_sale" property="sale" />与产品规格销量绑定
+		<result column="psd_sale" property="sale" />
 		<result column="psd_code" property="code" />
-			该产品规格
-		<result column="psd_product_id" property="productId" />该产品Id
+		<result column="psd_product_id" property="productId" />
 		<result column="psd_sort" property="sort" />
-		一对一关联栏目
-		<association property="column" column="BASIC_CATEGORYID"
-			javaType="com.mingsoft.basic.entity.ColumnEntity">
+		
+		<!-- 一对一关联栏目 -->
+		<association property="column" column="BASIC_CATEGORYID" javaType="com.mingsoft.basic.entity.ColumnEntity">
 			<result property="columnPath" column="column_path" />
 			<result property="categoryTitle" column="category_title" />
 			<result property="categoryId" column="category_id" />
@@ -52,34 +45,32 @@
 			<result property="columnType" column="COLUMN_TYPE" />
 		</association>
 
-		一对一关联栏目
-		<association property="product" column="psd_product_id"
-			javaType="net.mingsoft.mall.entity.ProductEntity">
-			<result column="BASIC_ID" property="basicId" />					与表basic绑定 自增长ID
-			<result column="product_basicID" property="productId" />				与产品表绑定id
-			<result column="product_price" property="productPrice" />	产品价格
-			<result column="product_inventory" property="productStock" />		产品库存量
-			<result column="product_appId" property="productAppId" />		产品所属appID
-			<result column="product_code" property="productCode" />		产品所属appID
-			<result column="product_sale" property="productSale" />		产品销量
-			<result column="product_linkUrl" property="productLinkUrl" />		产品链接
-			<result column="product_cost_price" property="productCostPrice" />		产品原价
-			<result column="product_shelf" property="productShelf" />		产品是否下架
-			<result column="product_type" property="productType" />		产品属性类型
-			<result column="BASIC_TITLE" property="basicTitle" />			标题
+		<!-- 一对一关联栏目 -->
+		<association property="product" column="psd_product_id" javaType="net.mingsoft.mall.entity.ProductEntity">
+			<result column="BASIC_ID" property="basicId" />	
+			<result column="product_basicID" property="productId" />
+			<result column="product_price" property="productPrice" />
+			<result column="product_inventory" property="productStock" />
+			<result column="product_appId" property="productAppId" />
+			<result column="product_code" property="productCode" />	
+			<result column="product_sale" property="productSale" />	
+			<result column="product_linkUrl" property="productLinkUrl" />
+			<result column="product_cost_price" property="productCostPrice" />	
+			<result column="product_shelf" property="productShelf" />
+			<result column="product_type" property="productType" />
+			<result column="BASIC_TITLE" property="basicTitle" />
 			<result column="BASIC_DESCRIPTION" property="basicDescription" />
-				描述
-			<result column="BASIC_THUMBNAILS" property="basicThumbnails" />	缩略图
-			<result column="BASIC_HIT" property="basicHit" />				文章点击次数
-			<result column="BASIC_DATETIME" property="basicDateTime" />		发布时间
-			<result column="BASIC_UPDATETIME" property="basicUpdateTime" />	更新时间
-			<result column="BASIC_PEOPLEID" property="basicPeopleId" />		发布者id
-			<result column="BASIC_CATEGORYID" property="basicCategoryId" />	所属主栏目id
-			<result column="BASIC_CATEGORYID" property="basicCategoryId" />	所属主栏目id
-			<result column="BASIC_MODELID" property="basicModelId" />	所属主栏目id
-			<result column="BASIC_SORT" property="basicSort" />	商品顺序
+			<result column="BASIC_THUMBNAILS" property="basicThumbnails" />	
+			<result column="BASIC_HIT" property="basicHit" />
+			<result column="BASIC_DATETIME" property="basicDateTime" />	
+			<result column="BASIC_UPDATETIME" property="basicUpdateTime" />	
+			<result column="BASIC_PEOPLEID" property="basicPeopleId" />	
+			<result column="BASIC_CATEGORYID" property="basicCategoryId" />	
+			<result column="BASIC_CATEGORYID" property="basicCategoryId" />	
+			<result column="BASIC_MODELID" property="basicModelId" />	
+			<result column="BASIC_SORT" property="basicSort" />
 		</association>
-	</resultMap> -->
+	</resultMap>
 	<!-- 根据栏目id查询商品规格列表 -->
 
 
@@ -202,7 +193,7 @@
 
 
 	<!-- 根据栏目id查询商品规格列表 -->
-	<!-- <select id="queryProducntSpecificationByColumnId" resultMap="resultProductSpecificationsInventoryMap">
+	<!-- <select id="queryProducntSpecificationByColumnId" resultMap="resultProductSpecDetailMap">
 		select
 		category_title,CONCAT(basic_title,func_parent_specifications_field(psd_id))
 		as basic_title,psd_id,psd_product_id,
@@ -236,7 +227,7 @@
 	</select>
 
 
-	<select id="queryProducntSpecificationByProductId" resultMap="resultProductSpecificationsInventoryMap">
+	<select id="queryProducntSpecificationByProductId" resultMap="resultProductSpecDetailMap">
 		select *
 		from v_mall_specifications_product
 		<where>
@@ -249,7 +240,19 @@
 	
 	<!-- 根据AppId 和 产品id 查询 数据 -->
 	<select id="queryByAppAndProductId" parameterType="int" resultMap="resultMap">
-		select * from mall_product_specification_detail
+		select <include refid="column_list" /> 
+		from mall_product_specification_detail psd
+		where 1 = 1 
+		adn psd.psd_app_id = #{appId}
+		and psd.psd_product_id = #{productId}
+	</select>
+	
+	<!-- 根据 产品id 查询 数据 -->
+	<select id="queryEntitiesByProductId" parameterType="int" resultMap="resultMap">
+		select <include refid="column_list" /> 
+		from mall_product_specification_detail psd
+		where 1 = 1
+		and psd.psd_product_id = #{productId}
 	</select>
 	
 	<!-- 批量保存数据 -->

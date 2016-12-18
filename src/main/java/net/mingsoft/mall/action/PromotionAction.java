@@ -78,7 +78,7 @@ public class PromotionAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public String list(HttpServletRequest request, HttpServletResponse response,ModelMap model){
+	public String list(HttpServletRequest request, HttpServletResponse response, ModelMap model){
 		int appId = this.getAppId(request);
 		Integer pageNo = this.getInt(request, "pageNo", 1);
 		Integer pageSize = this.getInt(request,"pageSize", 10);
@@ -102,7 +102,7 @@ public class PromotionAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/save")
-	public void save(@ModelAttribute PromotionEntity promotion,HttpServletRequest request, HttpServletResponse response){
+	public void save(@ModelAttribute PromotionEntity promotion, HttpServletRequest request, HttpServletResponse response){
 		int appId = this.getAppId(request);
 		String PromotionDate= request.getParameter("promotionStartEndDate");//分割日期
 		

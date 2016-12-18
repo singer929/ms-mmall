@@ -52,6 +52,13 @@ public interface IProductSpecBiz extends IBaseBiz{
 	//public List<ProductSpecEntity> queryListJsonByProduct(int productId);
 	
 	/**
+	 * 根据产品ID 获取客户端需要的产品规格信息 json 数据字符串
+	 * @param productId
+	 * @return
+	 */
+	public String getDataStrByProductId(int productId);
+	
+	/**
 	 * 保存商品的规格数据(先删除然后再更新)
 	 * @param productId 商品Id
 	 * @param list 需要保存的商品规格数据列表

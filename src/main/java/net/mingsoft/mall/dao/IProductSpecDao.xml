@@ -11,8 +11,7 @@
 	</sql>
 
 	<!-- 获取表字段开始 -->
-	<resultMap type="net.mingsoft.mall.entity.ProductSpecEntity"
-		id="resultMap">
+	<resultMap type="net.mingsoft.mall.entity.ProductSpecEntity" id="resultMap">
 		<id column="ps_id" property="psId" />
 		<result column="ps_product_id" property="productId" />
 		<result column="ps_spec_id" property="specId" />
@@ -20,8 +19,7 @@
 		<result column="ps_img" property="img" />
 	</resultMap>
 
-	<resultMap id="resultMapList"
-		type="net.mingsoft.mall.entity.ProductSpecEntity">
+	<resultMap id="resultMapList" type="net.mingsoft.mall.entity.ProductSpecEntity">
 		<id column="ps_id" property="psId" />
 		<result column="ps_product_id" property="productId" />
 		<result column="ps_spec_id" property="specId" />
@@ -154,7 +152,7 @@
 	</select>
 	
 	<!-- 根据产品Id查询数据 -->
-	<select id="queryByProductId" parameterType="int" resultMap="resultMapList">
+	<select id="queryByProductId" parameterType="int" resultMap="resultMap">
 		select <include refid="column_list" /> 
 		  from mall_product_specification ps
 		 where ps.ps_product_id = #{productId}
@@ -174,7 +172,7 @@
 		)   
 	    values  
 	    <foreach collection="list" item="item" index="index" separator="," > 
-	        (#{item.productId},#{item.specId},#{item.specValue},#{item.img})
+	        (#{item.productId}, #{item.specId}, #{item.specValue}, #{item.img})
 	    </foreach>  
 	</insert>  
 </mapper>

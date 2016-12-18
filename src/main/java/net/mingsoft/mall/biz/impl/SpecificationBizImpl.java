@@ -2,6 +2,7 @@ package net.mingsoft.mall.biz.impl;
 
 import java.util.List;
 
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,5 +79,12 @@ public class SpecificationBizImpl extends BaseBizImpl implements ISpecificationB
 	public int countByAppId(int appId) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public List<SpecificationEntity> queryByProductId(int productId) {
+		
+		List<SpecificationEntity> list = specDao.queryByProductId(productId);
+		return list;
 	}
 }

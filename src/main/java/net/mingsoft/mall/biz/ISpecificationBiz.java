@@ -44,7 +44,6 @@ import net.mingsoft.mall.entity.SpecificationEntity;
  */
 public interface ISpecificationBiz extends IBaseBiz{
 	
-	
 	/**
 	 * 根据appId查询规格(带分页)
 	 * @param appId 应用ID
@@ -52,6 +51,13 @@ public interface ISpecificationBiz extends IBaseBiz{
 	 * @return 规格列表
 	 */
 	public List<SpecificationEntity> queryPageByAppId(int appId, PageUtil page);
+	
+	/**
+	 * 根据商品Id查找所相关的规格
+	 * @param productId
+	 * @return
+	 */
+	public List<SpecificationEntity> queryByProductId(int productId);
 	
 	/**
 	 * 根据appId查询规格总数

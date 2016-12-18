@@ -68,7 +68,7 @@ public interface IProductSpecDao extends IBaseDao {
 	 * @param productId
 	 * @return
 	 */
-	public List<ProductSpecEntity> queryEntitiesByProductId(@Param("productId")int productId);
+	public List<ProductSpecEntity> queryByProductId(@Param("productId")int productId);
 	
 	/**
 	 * 根据商品编号、规格编号、规格值，查询商品绑定的规格数据

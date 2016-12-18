@@ -7,6 +7,7 @@ import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
@@ -15,8 +16,12 @@ import com.mingsoft.util.StringUtil;
 import net.mingsoft.mall.biz.IProductSpecBiz;
 import net.mingsoft.mall.dao.IProductSpecDao;
 import net.mingsoft.mall.dao.IProductSpecDetailDao;
+import net.mingsoft.mall.dao.IProductSpecificationsDao;
+import net.mingsoft.mall.dao.ISpecificationDao;
+import net.mingsoft.mall.entity.ProductSpecDetailEntity;
 import net.mingsoft.mall.entity.ProductSpecEntity;
 import net.mingsoft.mall.entity.ProductSpecificationsEntity;
+import net.mingsoft.mall.entity.SpecificationEntity;
 
 /**
  * 
@@ -46,15 +51,21 @@ import net.mingsoft.mall.entity.ProductSpecificationsEntity;
 @Service("ProductSpecBizImpl")
 public class ProductSpecBizImpl extends BaseBizImpl implements IProductSpecBiz {
 	/**
-	 * 产品关联规格持久化层
+	 * 产品关联规格 持久层
 	 */
 	private IProductSpecDao productSpecDao;
 
 	/**
-	 * 产品关联规格商品详情持久化层
+	 * 产品关联规格商品详情 持久层
 	 */
 	@Autowired
 	private IProductSpecDetailDao detailDao;
+	
+	/**
+	 * 规格数据 持久层
+	 */
+	@Autowired
+	private ISpecificationDao specDao;
 
 	/**
 	 * 关联查询商品规格已经该规格对应的商品详情</br> 将规格进行关联
@@ -240,5 +251,58 @@ public class ProductSpecBizImpl extends BaseBizImpl implements IProductSpecBiz {
 		productSpecDao.saveBatch(list);
 		
 		return true;
+	}
+
+	
+	/**
+	 * 根据产品ID 获取客户端需要的产品规格信息 json 数据字符串
+	 * @param productId
+	 * @return
+	 */
+	@Override
+	public String getDataStrByProductId(int productId) {
+		
+		List<SpecificationEntity> specList = specDao.queryByProductId(productId);
+		List<ProductSpecEntity> productSpecList = productSpecDao.queryByProductId(productId);
+		List<ProductSpecDetailEntity> detailList =  detailDao.queryEntitiesByProductId(productId);
+		
+		// 构建发给前段的数据
+		ProductSpecData data = new ProductSpecData();
+		data.setProductSpecDetails(detailList);
+		data.setProductSpecs(productSpecList);
+		data.setSpecs(specList);
+		
+		String str = JSON.toJSONString(data);
+		LOG.debug("前端获取的JSON:" +  str);
+		
+		return str;
+	}
+}
+
+/**
+ * 产品规格数据结构 将输出给前段获取页面
+ */
+class ProductSpecData {
+	private List<SpecificationEntity> specs;
+	private List<ProductSpecEntity> productSpecs;
+	private List<ProductSpecDetailEntity> productSpecDetails;
+	
+	public List<SpecificationEntity> getSpecs() {
+		return specs;
+	}
+	public void setSpecs(List<SpecificationEntity> specs) {
+		this.specs = specs;
+	}
+	public List<ProductSpecEntity> getProductSpecs() {
+		return productSpecs;
+	}
+	public void setProductSpecs(List<ProductSpecEntity> productSpecs) {
+		this.productSpecs = productSpecs;
+	}
+	public List<ProductSpecDetailEntity> getProductSpecDetails() {
+		return productSpecDetails;
+	}
+	public void setProductSpecDetails(List<ProductSpecDetailEntity> productSpecDetails) {
+		this.productSpecDetails = productSpecDetails;
 	}
 }

@@ -78,9 +78,15 @@ public interface IProductSpecDetailDao extends IBaseDao{
 	/**
 	 * 根据商品id查询商品规格库存列表信息
 	 * @param appId 应用id
-	 * @param modelId 模块id
 	 * @param productId 产品id
 	 * @return 商品规格库存列表
 	 */
-	public List<ProductSpecDetailEntity> queryByAppAndProductId(@Param("appId")int appId, @Param("modelId")int modelId, @Param("productId")int productId);
+	public List<ProductSpecDetailEntity> queryByAppAndProductId(@Param("appId")int appId, @Param("productId")int productId);
+	
+	/**
+	 * 根据商品id查询商品规格库存列表信息
+	 * @param productId 产品id
+	 * @return 商品规格库存列表
+	 */
+	public List<ProductSpecDetailEntity> queryEntitiesByProductId(@Param("productId") int productId);
 }
