@@ -49,11 +49,6 @@ public class ProductSpecEntity extends BaseEntity{
 	private int productId;
 	
 	/**
-	 * 根据id获得的产品数据
-	 */
-	private ProductEntity product;
-	
-	/**
 	 * 规格id, 对应规格表
 	 */
 	private int specId;
@@ -83,14 +78,6 @@ public class ProductSpecEntity extends BaseEntity{
 
 	public void setProductId(int productId) {
 		this.productId = productId;
-	}
-	
-	public ProductEntity getProduct() {
-		return product;
-	}
-
-	public void setProduct(ProductEntity product) {
-		this.product = product;
 	}
 
 	public int getSpecId() {

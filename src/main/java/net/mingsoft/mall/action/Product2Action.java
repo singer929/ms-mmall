@@ -310,16 +310,22 @@ public class Product2Action extends BaseAction {
 	 */
 	@RequestMapping("/edit")
 	public String edit(@ModelAttribute ProductEntity product, HttpServletRequest request, ModelMap model) {
+		
+		product = new ProductEntity();
+		product.setBasicId(220);
+		
 		int appId = this.getAppId(request);
+		appId = 1;
 		// 根据商品id查找产品实体
 		ProductEntity _product = (ProductEntity) productBiz.getEntity(product.getBasicId());
+		
 		// 获取当前app下的栏目列表信息
 		int modelId = this.getModelCodeId(request, ModelCode.MALL_CATEGORY);
 		List<ColumnEntity> columnList = columnBiz.queryAll(appId, modelId);
 		model.addAttribute("columnList", JSONArray.toJSONString(columnList));
 		model.addAttribute("product", _product);
 		model.addAttribute("appId", BasicUtil.getAppId());
-		return view("/mall/product/product_form");
+		return view("/mall/product/product_form1");
 	}
 
 	/**
@@ -459,7 +465,6 @@ public class Product2Action extends BaseAction {
 					} else {
 						fieldBiz.insertBySQL(contentModel.getCmTableName(), param);
 					}
-
 				}
 			}
 		}

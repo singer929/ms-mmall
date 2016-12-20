@@ -48,11 +48,6 @@ public class ProductSpecDetailEntity extends BaseEntity{
 	 * 产品ID
 	 */
 	private int productId;
-
-	/**
-	 * 规格所属商品
-	 */
-	private ProductEntity product;
 	
 	/**
 	 * 规格产品的类型值集合 (重要字段) 格式: {规格id:规格值, 规格id:规格值} json格式字符串
@@ -98,14 +93,6 @@ public class ProductSpecDetailEntity extends BaseEntity{
 
 	public void setProductId(int productId) {
 		this.productId = productId;
-	}
-
-	public ProductEntity getProduct() {
-		return product;
-	}
-
-	public void setProduct(ProductEntity product) {
-		this.product = product;
 	}
 
 	public String getSpecValues() {
