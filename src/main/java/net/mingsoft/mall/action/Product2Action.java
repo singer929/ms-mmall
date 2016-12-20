@@ -315,7 +315,7 @@ public class Product2Action extends BaseAction {
 		product.setBasicId(220);
 		
 		int appId = this.getAppId(request);
-		appId = 1;
+
 		// 根据商品id查找产品实体
 		ProductEntity _product = (ProductEntity) productBiz.getEntity(product.getBasicId());
 		

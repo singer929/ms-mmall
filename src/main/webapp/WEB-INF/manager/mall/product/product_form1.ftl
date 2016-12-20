@@ -171,36 +171,37 @@
 			<@ms.radio label="开售时间" direction=true name="productShelf" list=[{"id":"1","text":"立刻"},{"id":"2","text":"放入仓库"}] listKey="id" listValue="text" value="${product.productShelf}"/>
     	</@ms.form>
     </@ms.panel>
-
+</@ms.html5>
     <script type="text/javascript" charset="utf-8" src="${base}/js/manager/mall/SpecMgr.js"></script>
 <script type="text/javascript" >
-    alert(222);
-    /**
-    *品牌级联
-    */
-    function brand(categoryId,brandId)  {
-        $("#treeLabelbrandTree").request({url:"${base}/mall/brand/list.do",data:{"categoryCategoryId":categoryId},func:function(data) {
-            if (data.length==0) {
-                $("#treeLabelbrandTree").text("无品牌数据");
-            } else {
-                $("#treeLabelbrandTree").text("请选择品牌");
-            $.fn.zTree.init($("#treebrandTree"),settingbrandTree,data);
-            if (brandId>0) {
-            }
-                var node = zTreeObjbrandTree.getNodeByParam("categoryId",brandId,null);
-                if (node!=null) {
-                        zTreeObjbrandTree.selectNode(node);
-                        $("#treeLabelbrandTree").text(node.categoryTitle);
-                }
-            } else {
-                zTreeObjbrandTree.refresh();
-            }
-        }});
-    }
+
+	
+	/**
+	*品牌级联
+	*/
+	function brand(categoryId,brandId)  {
+		$("#treeLabelbrandTree").request({url:"${base}/mall/brand/list.do",data:{"categoryCategoryId":categoryId},func:function(data) {
+			if (data.length==0) {
+				$("#treeLabelbrandTree").text("无品牌数据");
+			} else {
+				$("#treeLabelbrandTree").text("请选择品牌");
+			}
+			$.fn.zTree.init($("#treebrandTree"),settingbrandTree,data);
+			if (brandId>0) {
+				var node = zTreeObjbrandTree.getNodeByParam("categoryId",brandId,null);
+				if (node!=null) {
+						zTreeObjbrandTree.selectNode(node);
+						$("#treeLabelbrandTree").text(node.categoryTitle);
+				}
+			} else {
+				zTreeObjbrandTree.refresh();
+			}
+		}});
+	}
     
     
     function changeCategory(event,treeId,treeNode) {
-        brand(treeNode.categoryId,0);
+		brand(treeNode.categoryId,0);
         requestDiyContentModelFiled(treeNode.categoryId,${product.basicId?c?default(0)});
     }
     
@@ -236,7 +237,6 @@
     // 初始加载数据
     $(function () {
 
-        alert(1);
         //判断分类是否是父节点，如果是进行系统提示并取消选中数据
         var nodes = zTreeObjinputTree.getSelectedNodes();
         if (nodes!=null && nodes.length > 0) {
@@ -245,7 +245,6 @@
                 zTreeObjinputTree.cancelSelectedNode(nodes[0]);
                 $("input[name=basicCategoryId]").val(0);
                 $("#treeLabelinputTree").text('请选择商品分类');
-                //<@ms.notify msg="请选择“${product.column.categoryTitle}”分类的子分类"/>
             } else {
                     requestDiyContentModelFiled(nodes[0].categoryId,${product.basicId?c?default(0)});
             }
@@ -689,4 +688,3 @@
         return true;
     }
 </script>
-</@ms.html5>
