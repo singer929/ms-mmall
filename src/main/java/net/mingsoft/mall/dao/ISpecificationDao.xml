@@ -68,7 +68,7 @@
 	
 	
 	<!-- 根据APPID获取规格列表(带分页)-->
-	<select id="query" resultMap="resultMap">
+	<select id="queryByAppId" resultMap="resultMap">
 		select <include refid="column_list"/> from mall_specification s
 		where 1=1
 		<if test="appId != null">and s.s_app_id = #{appId}</if>

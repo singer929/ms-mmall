@@ -67,7 +67,8 @@ public class ProductSpecAction extends BaseAction{
 		
 		//根据商品Id查询当前商品的规格数据
 		String str = specBiz.getDataStrByProductId(productId);
-		this.outJson(response, str);
+		//this.outJson(response, str);
+		this.outString(response, str);
 	}
 	
 	/**

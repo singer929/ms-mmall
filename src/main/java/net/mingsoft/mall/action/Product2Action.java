@@ -47,12 +47,14 @@ import net.mingsoft.mall.biz.IProductSpecBiz;
 import net.mingsoft.mall.biz.IProductSpecDetailBiz;
 import net.mingsoft.mall.biz.IProductSpecificationsBiz;
 import net.mingsoft.mall.biz.IProductSpecificationsInventoryBiz;
+import net.mingsoft.mall.biz.ISpecificationBiz;
 import net.mingsoft.mall.biz.ISpecificationsBiz;
 import net.mingsoft.mall.constant.ModelCode;
 import net.mingsoft.mall.constant.e.ProductEnum;
 import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.mall.entity.ProductSpecDetailEntity;
 import net.mingsoft.mall.entity.ProductSpecEntity;
+import net.mingsoft.mall.entity.SpecificationEntity;
 import net.mingsoft.mall.entity.SpecificationsEntity;
 
 /**
@@ -97,6 +99,9 @@ public class Product2Action extends BaseAction {
 	 */
 	@Autowired
 	private ISpecificationsBiz specificationsBiz;
+	
+	@Autowired
+	private ISpecificationBiz specBiz;
 
 	/**
 	 * 注入规格商品关联业务层
@@ -165,6 +170,7 @@ public class Product2Action extends BaseAction {
 		// 获取modelId
 		int appId = this.getAppId(request);
 		int modelId = this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
+		
 		// 查询当前分类的所有子分类
 		int[] childColumnId = this.categoryBiz.queryChildrenCategoryIds(product.getBasicCategoryId(), appId, modelId);
 		/// 查询的总数
@@ -197,23 +203,23 @@ public class Product2Action extends BaseAction {
 		product.setProductShelf(ProductEnum.ON_SHELF);
 		int modelId = this.getModelCodeId(request, ModelCode.MALL_CATEGORY);
 		List<ColumnEntity> columnList = columnBiz.queryAll(this.getAppId(request), modelId);
-		List<SpecificationsEntity> specificationsList = this.specificationsBiz.queryPageByAppId(this.getAppId(request),null);
+		
+		List<SpecificationEntity> specList = specBiz.queryPageByAppId(this.getAppId(request),null);
 		
 		List brands = categoryBiz.query(new CategoryEntity(BasicUtil.getAppId(),BasicUtil.getModelCodeId(ModelCode.MALL_BRAND)));
 		
 		model.addAttribute("brands", JSONArray.toJSONString(brands));
 		model.addAttribute("appId",BasicUtil.getAppId());
 		model.addAttribute("columnList", JSONArray.toJSONString(columnList));
-		model.addAttribute("specificationsJson",JSONObject.toJSONString(new ListJson(specificationsList.size(), specificationsList)));
+		model.addAttribute("specificationsJson",JSONObject.toJSONString(new ListJson(specList.size(), specList)));
 		model.addAttribute("categoryId", request.getParameter("categoryId"));
 		model.addAttribute("categoryTitle", request.getParameter("categoryTitle"));
 		model.addAttribute("product", product);
-		return view("/mall/product/product_form");
+		return view("/mall/product/product_form1");
 	}
 
 	/**
 	 * 对产品实体实现保存
-	 * 
 	 * @param product：要保存的产品实体对象
 	 * @param request：请求对象
 	 * @param response：响应对象
@@ -240,7 +246,6 @@ public class Product2Action extends BaseAction {
 		
 		// 判断提交数据是否符合规范
 		if (!checkForm(product, response)) {
-			this.outJson(response, ModelCode.MALL_PRODUCT, false, "商品数据不符合规范");
 			return;
 		}
 		

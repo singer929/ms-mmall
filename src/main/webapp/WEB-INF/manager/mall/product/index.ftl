@@ -13,7 +13,7 @@
 			</@ms.contentMenu>
   			<@ms.contentBody width="85%" style="overflow-y: hidden;">
 				<@ms.contentPanel  style="margin:0;padding:0;overflow-y: hidden;">
-                   <iframe src="${managerPath}/mall/product/list.do?basicCategoryId=0" style="width:100%;maring:0;padding:0;border:none;height:100%;background-image: url(${skin_manager_loadding});  background-repeat: no-repeat;  background-position: center;" id="listFrame" target="listFrame" ></iframe>
+                   <iframe src="${managerPath}/mall/product2/list.do?basicCategoryId=0" style="width:100%;maring:0;padding:0;border:none;height:100%;background-image: url(${skin_manager_loadding});  background-repeat: no-repeat;  background-position: center;" id="listFrame" target="listFrame" ></iframe>
 				</@ms.contentPanel>	
 			</@ms.contentBody>          
 	</@ms.content>
