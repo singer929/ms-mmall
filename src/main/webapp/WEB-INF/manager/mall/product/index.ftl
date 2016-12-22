@@ -29,9 +29,9 @@
 				callback: {
 					onClick: function(event, treeId, treeNode) {
 						if (treeNode.type==1) {
-								$("#listFrame").attr("src","${managerPath}/mall/product/list.do?basicCategoryId="+treeNode.id+"&column.categoryTitle="+encodeURIComponent(treeNode.name));
+								$("#listFrame").attr("src","${managerPath}/mall/product2/list.do?basicCategoryId="+treeNode.id+"&column.categoryTitle="+encodeURIComponent(treeNode.name));
 						} else {
-								$("#listFrame").attr("src","${managerPath}/mall/product/edit.do?basicCategoryId="+treeNode.id+"&column.categoryTitle="+encodeURIComponent(treeNode.name));
+								$("#listFrame").attr("src","${managerPath}/mall/product2/edit.do?basicCategoryId="+treeNode.id+"&column.categoryTitle="+encodeURIComponent(treeNode.name));
 						}
 					}
 				},

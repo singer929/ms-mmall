@@ -121,6 +121,7 @@
 	        </div>
 			<div id="contentModelFiled">
 			</div>
+		<@ms.editor name="productContent" label="商品详情" content="${product.productContent?default('')}" />
     </@ms.panel>
 </@ms.html5>
 <#noparse>
@@ -160,14 +161,15 @@
 </script>
 </#noparse> 
 
-    <script type="text/javascript" charset="utf-8" src="${base}/js/manager/mall/SpecMgr.js"></script>
+<script src=" http://cdn.mingsoft.net/plugins/validator/5.5.0/validator.js"></script>
+<script type="text/javascript" charset="utf-8" src="${base}/js/manager/mall/SpecMgr.js"></script>
 <script type="text/javascript" >
 
 
 	// 保存数据
 	function onSave(){
 
-
+		
 		var productParams = {
 			basicId: ${product.basicId},
 			basicTitle: $('#basicTitle').val(),
@@ -180,7 +182,7 @@
 			productCode: $('#productCode').val(),
 			basicThumbnails: $('#basicThumbnails').val(),
 			//productShelf: {code: $("[name='productShelf'][checked='checked']").val()},
-			productContent:''
+			productContent: UE.getEditor('editor_productContent').getContent()
 		};
 
 		var params = SpecMgr.buildSpecSvrData();
@@ -196,6 +198,7 @@
 			}
 
 			var reditUrl = '${managerPath}/mall/product2/list.do?${params}';
+			window.location.href = reditUrl;
 		});
 
 		function getShelfStr(shelf){
@@ -643,14 +646,14 @@
                 var baseThWithValue = BASE_TH.format(price, stock, code, sale);
 
                 var tr = $('<tr key="'+dKey+'"></tr>');
-                var _tr = $(tr).append("<td class='norms-td' spec-id="+specName+">"+specValue+"</td>"+baseThWithValue);
+                var _tr = $(tr).append("<td class='text-center norms-td' spec-id="+specName+">"+specValue+"</td>"+baseThWithValue);
                 //将父节点的内容加到最终子节点的行内，并追加到表格中
                 parent.children("td").prependTo(_tr);
                 _tr.appendTo(parent);
             }
             else {
                 var rowSpan = getDataCount(map[key]);    // 表格跨行数
-                $('<td rowspan='+rowSpan+' class="norms-td" spec-id='+specName+'>'+specValue+"</td>").appendTo(parent);
+                $('<td rowspan='+rowSpan+' class="text-center norms-td" spec-id='+specName+'>'+specValue+"</td>").appendTo(parent);
                 drawGrid(dKey, map[key], parent);
             }
         }
@@ -664,6 +667,26 @@
         var tr = $(input).parent().parent();
         var keys = $(tr).attr('key');
         var detailData = SpecMgr.getDetailDataByKeys(keys);
+
+         //判断库存必须为整数
+        if(key=="stock" && !validator.isInt(value)){
+            alert("请输入整数");
+            $(input).val(detailData[key]);
+            return;
+        }
+        //判断价格必须为数字，且只有一个小数点
+        if(key=="price" && !validator.isCurrency(value)){
+            alert("请输入正确价格")
+            $(input).val(detailData[key]);
+            return;
+        }
+        //判断编号值不能为特殊字符
+        if(key=="code" && !validator.isAlphanumeric(value)){
+            alert("不能输入特殊字符")
+            $(input).val(detailData[key]);
+            return;
+        }
+
         detailData[key] = value;
     }
 

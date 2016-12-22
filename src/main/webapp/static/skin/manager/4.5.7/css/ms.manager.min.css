@@ -32,11 +32,15 @@ html {
 .form-horizontal .radio-inline {
   padding-top: 4px;
 }
+body.over-hide {
+  overflow-y: hidden;
+}
 body {
   width: 100%;
   background: #fcfcfc;
   line-height: 21px;
   color: #555;
+  overflow: hidden;
   /*弹出框*/
   /*内容超出部分隐藏*/
   /*清除padding值*/
@@ -864,9 +868,9 @@ body .ms-content table tbody tr .text-left,
 body .ms-content-body table tbody tr .text-left,
 body .ms-content table tbody tr .text-center,
 body .ms-content-body table tbody tr .text-center {
-  padding: 5px;
-  line-height: 20px;
   font-size: 12px;
+  display: table-cell;
+  vertical-align: middle;
 }
 body .ms-content .searchForm,
 body .ms-content-body .searchForm {

@@ -160,7 +160,7 @@ public class Product2Action extends BaseAction {
 	@RequestMapping("/list")
 	public String list(@ModelAttribute ProductEntity product, HttpServletRequest request, ModelMap model, HttpServletResponse response) {
 		// 获取modelId
-		int appId = this.getAppId(request);
+		int appId = BasicUtil.getAppId();
 		int modelId = this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
 		
 		// 查询当前分类的所有子分类
