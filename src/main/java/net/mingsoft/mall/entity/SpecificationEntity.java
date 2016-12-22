@@ -39,12 +39,7 @@ import com.mingsoft.base.entity.BaseEntity;
 public class SpecificationEntity extends BaseEntity{
 	
 	/**
-	 * 规格id 主键 
-	 */
-	private int specId;
-	
-	/**
-	 * 规格名
+	 * 规格名 主键
 	 */
 	private String name;
 	
@@ -57,15 +52,6 @@ public class SpecificationEntity extends BaseEntity{
 	 * 规格所属的appId
 	 */
 	private int appId;
-	
-
-	public int getSpecificationId() {
-		return specId;
-	}
-
-	public void setSpecificationId(int specificationId) {
-		this.specId = specificationId;
-	}
 
 	public String getName() {
 		return name;

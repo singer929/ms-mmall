@@ -125,10 +125,14 @@
 </@ms.html5>
 <#noparse>
 <script type="text/x-jquery-tmpl" id="showNormsGroup">
-    <div class="norms-group" data-id="${specId}">
+    <div class="norms-group" data-id="${specName}">
         <div class="norms-title">
             <select class="js-example-theme-single js-states form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true" style="width: 100px;">
-                <option>${specName}</option>
+	            {{each(i, spec) specArr}}
+	                <div class="norms-detail">
+	                    <option value="${spec.name}" {{if spec.name==specName}}selected="selected"{{/if}}>${spec.name}</option>
+	                </div>
+	            {{/each}}
             </select>
             <span class="delete-norms">×</span>
         </div>
@@ -159,8 +163,11 @@
     <script type="text/javascript" charset="utf-8" src="${base}/js/manager/mall/SpecMgr.js"></script>
 <script type="text/javascript" >
 
+
 	// 保存数据
 	function onSave(){
+
+
 		var productParams = {
 			basicId: ${product.basicId},
 			basicTitle: $('#basicTitle').val(),
@@ -172,7 +179,8 @@
 			productStock: $("[name='productStock']").val(),
 			productCode: $('#productCode').val(),
 			basicThumbnails: $('#basicThumbnails').val(),
-			productShelf: $("[name='productShelf'][checked='checked']").val()
+			//productShelf: {code: $("[name='productShelf'][checked='checked']").val()},
+			productContent:''
 		};
 
 		var params = SpecMgr.buildSpecSvrData();
@@ -188,8 +196,14 @@
 			}
 
 			var reditUrl = '${managerPath}/mall/product2/list.do?${params}';
-			alert(123);
 		});
+
+		function getShelfStr(shelf){
+			switch(Number(shelf)){
+				case 1: return 'ON_SHELF';
+				case 2: return 'DEPOT_SHELF';
+			}
+		}
 	}
 
 	/**
@@ -248,8 +262,6 @@
         });
     }
 
-    var TEST_DATA_STR = '{"productSpecDetails":[{"code":"SB1234","createBy":0,"delFlag":0,"detailId":5,"order":true,"price":20.23,"productId":220,"sale":1234,"sort":42,"specValues":"1:1寸,2:白色","stock":"123","updateBy":0},{"code":"SB1234","createBy":0,"delFlag":0,"detailId":6,"order":true,"price":20.23,"productId":220,"sale":1234,"sort":42,"specValues":"1:1寸,2:黑色","stock":"123","updateBy":0},{"code":"SB1234","createBy":0,"delFlag":0,"detailId":7,"order":true,"price":20.23,"productId":220,"sale":1234,"sort":42,"specValues":"1:2寸,2:白色","stock":"123","updateBy":0},{"code":"SB1234","createBy":0,"delFlag":0,"detailId":8,"order":true,"price":20.23,"productId":220,"sale":1234,"sort":42,"specValues":"1:2寸,2:黑色","stock":"123","updateBy":0}],"productSpecs":[{"createBy":0,"delFlag":0,"img":"test.jpg","order":true,"productId":220,"psId":23,"specId":1,"specValue":"1寸","updateBy":0},{"createBy":0,"delFlag":0,"img":"test.jpg","order":true,"productId":220,"psId":24,"specId":1,"specValue":"2寸","updateBy":0},{"createBy":0,"delFlag":0,"img":"test.jpg","order":true,"productId":220,"psId":25,"specId":2,"specValue":"白色","updateBy":0},{"createBy":0,"delFlag":0,"img":"test.jpg","order":true,"productId":220,"psId":26,"specId":2,"specValue":"黑色","updateBy":0}],"specs":[{"createBy":0,"defaultFields":"","delFlag":0,"name":"尺寸","order":true,"specificationId":1,"updateBy":0},{"createBy":0,"defaultFields":"","delFlag":0,"name":"颜色","order":true,"specificationId":2,"updateBy":0}]}';
-
     // 初始加载数据
     $(function () {
 
@@ -275,8 +287,6 @@
     // 请求规格数据返回
     function specDataCallback(data, status){
 
-    	alert(data);
-
     	var result = SpecMgr.init(${product.basicId}, data);
         if (!result){
             alert('规格数据解析失败!');
@@ -284,9 +294,10 @@
         }
 
         // 显示商品规格数据
-        for (var specId in SpecMgr.productSpecs){
-            var arr = SpecMgr.productSpecs[specId];
-            var tmplObj = {specId:specId, specName:SpecMgr.getSpecConfigById(specId).name, specValues:arr};
+        for (var specName in SpecMgr.productSpecs){
+            var psArr = SpecMgr.productSpecs[specName];
+            var specArr = SpecMgr.getSpecArr();
+            var tmplObj = {specName:specName, specValues:psArr, specArr:specArr};
 
             $("#addNormsBtn").before($("#showNormsGroup").tmpl(tmplObj));
         }
@@ -341,9 +352,18 @@
             setAddBtnVisible($(this).parent().parent(), value);
             if (!value) return;
 
-            var oldSpecId = $(this).parent().parent().attr('data-id');
-            // 新加的规格没有 具体数据的时候不管
-            if (!oldSpecId) return;
+            var oldSpecName = $(this).parent().parent().attr('data-id');
+            // 新加的规格没有具体数据的时候不管
+            if (!oldSpecName) return;
+            // 没有改变值的时候跳出
+            if (oldSpecName == value) return;
+
+            // 现有规格名字重复则不允许设置
+            if (SpecMgr.productSpecs[value]){
+            	$(this).val(oldSpecName).trigger('change');
+            	alert('不允许设置两个相同的规格!');
+            	return;
+            }
 
             var spec = SpecMgr.getSpecConfigByName(value);
 
@@ -353,13 +373,13 @@
             }
 
             // 商品规格数据修改修改id
-            var specId = spec.specificationId;
-            SpecMgr.productSpecs[specId] = SpecMgr.productSpecs[oldSpecId];
-            delete SpecMgr.productSpecs[oldSpecId];
+            var specName = spec.name;
+            SpecMgr.productSpecs[specName] = SpecMgr.productSpecs[oldSpecName];
+            delete SpecMgr.productSpecs[oldSpecName];
 
-            for (var i in SpecMgr.productSpecs[specId]){
-                var psData = SpecMgr.productSpecs[specId][i];
-                psData.specId = specId;
+            for (var i in SpecMgr.productSpecs[specName]){
+                var psData = SpecMgr.productSpecs[specName][i];
+                psData.specName = specName;
             }
 
             // 商品规格明细数据修改id
@@ -368,11 +388,11 @@
                 var detail = SpecMgr.specDetails[detailId];
                 var values = detail.specValues;
 
-                for (var spId in values){
+                for (var spName in values){
 
-                    if (spId != oldSpecId) continue;
-                    values[specId] = values[spId];
-                    delete values[spId];
+                    if (spName != oldSpecName) continue;
+                    values[specName] = values[spName];
+                    delete values[spName];
                 }
             }
 
@@ -381,7 +401,7 @@
             console.log(SpecMgr.detailMap);
 
             // 修改表格的标识id
-            $(this).parent().parent().attr('data-id', specId);
+            $(this).parent().parent().attr('data-id', specName);
 
             refreshTable();
         });
@@ -439,16 +459,15 @@
 
                 var spec = SpecMgr.getSpecConfigByName(specName);
                 spec = spec || SpecMgr.addSpec(specName);       // 规格不存在则新增规格
-                var specId = spec.specificationId;
 
-                detailUi.parent().parent().attr('data-id', specId); // 添加id
+                detailUi.parent().parent().attr('data-id', specName); // 添加名字
 
                 var psArr = [];
-                SpecMgr.productSpecs[specId] = psArr;
+                SpecMgr.productSpecs[specName] = psArr;
 
                 for (var i in inputValues.val())
                 {
-                    psArr.push({specValue:inputValues.val()[i], img:"", productId:SpecMgr.productId, specId:specId});
+                    psArr.push({specValue:inputValues.val()[i], img:"", productId:SpecMgr.productId, specName:specName});
 
                     detailUi.before(
                         $('<div class="norms-detail"><span class="norms-text">'+inputValues.val()[i]+'</span><span class="delete-norms">×</span></div>')
@@ -461,9 +480,8 @@
                     if($.inArray(inputValues.val()[i], arrText) == -1){
 
                         var spec = SpecMgr.getSpecConfigByName(specName);
-                        var specId = spec.specificationId;
-                        var productSpec = SpecMgr.productSpecs[specId];
-                        productSpec.push({specValue:inputValues.val()[i], img:"", productId:SpecMgr.productId, specId:specId});
+                        var productSpec = SpecMgr.productSpecs[specName];
+                        productSpec.push({specValue:inputValues.val()[i], img:"", productId:SpecMgr.productId, specName:specName});
 
                         detailUi.before(
                             $('<div class="norms-detail"><span class="norms-text">'+inputValues.val()[i]+'</span><span class="delete-norms">×</span></div>')
@@ -488,14 +506,14 @@
     //删除某个规格数据
     $(".goods-norms").delegate(".norms-title .delete-norms", "click", function(){
 
-        var specId = $(this).parent().parent().attr('data-id');
-        var psArr = SpecMgr.productSpecs[specId];
+        var specName = $(this).parent().parent().attr('data-id');
+        var psArr = SpecMgr.productSpecs[specName];
         if (!psArr || !psArr.length) {
             $(this).parent().parent(".norms-group").remove();
             return;
         }
 
-        SpecMgr.deleteProductSpecBySpecId(specId);
+        SpecMgr.deleteProductSpecBySpecName(specName);
 
         refreshTable();
         $(this).parent().parent(".norms-group").remove();
@@ -505,9 +523,9 @@
     $(".goods-norms").delegate(".norms-detail .delete-norms", "click", function(){
 
         var specValue = $(this).parent().find(".norms-text").html();
-        var specId = $(this).parent().parent().parent().attr('data-id');
+        var specName = $(this).parent().parent().parent().attr('data-id');
 
-        SpecMgr.deleteProductSpecBySpecId(specId, specValue);
+        SpecMgr.deleteProductSpecBySpecName(specName, specValue);
 
         refreshTable();
 
@@ -571,15 +589,14 @@
     function showAll(productSpecs, detailMap, parent) {
 
         // 写表头
-        for (var specId in productSpecs){
+        for (var specName in productSpecs){
 
-            var specValues = productSpecs[specId];
+            var specValues = productSpecs[specName];
 
             if (!specValues.length) continue;
-            var specName = SpecMgr.getSpecConfigById(specId).name;
 
             // 添加表头
-            $(".base-nav-th").before('<th data-normsId='+specId+'>'+specName+'</th>');
+            $(".base-nav-th").before('<th data-normsId='+specName+'>'+specName+'</th>');
         }
 
         // 绘制格子
@@ -601,7 +618,7 @@
         for (var key in map){
 
             var arr = key.split(':');
-            var specId = arr[0];
+            var specName = arr[0];
             var specValue = arr[1];
 
             var dKey = fullKey + (fullKey ? ',' : '') + key;
@@ -626,14 +643,14 @@
                 var baseThWithValue = BASE_TH.format(price, stock, code, sale);
 
                 var tr = $('<tr key="'+dKey+'"></tr>');
-                var _tr = $(tr).append("<td class='norms-td' spec-id="+specId+">"+specValue+"</td>"+baseThWithValue);
+                var _tr = $(tr).append("<td class='norms-td' spec-id="+specName+">"+specValue+"</td>"+baseThWithValue);
                 //将父节点的内容加到最终子节点的行内，并追加到表格中
                 parent.children("td").prependTo(_tr);
                 _tr.appendTo(parent);
             }
             else {
                 var rowSpan = getDataCount(map[key]);    // 表格跨行数
-                $('<td rowspan='+rowSpan+' class="norms-td" spec-id='+specId+'>'+specValue+"</td>").appendTo(parent);
+                $('<td rowspan='+rowSpan+' class="norms-td" spec-id='+specName+'>'+specValue+"</td>").appendTo(parent);
                 drawGrid(dKey, map[key], parent);
             }
         }

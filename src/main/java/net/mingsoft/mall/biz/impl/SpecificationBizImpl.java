@@ -3,6 +3,7 @@ package net.mingsoft.mall.biz.impl;
 import java.util.List;
 
 import org.aspectj.weaver.ast.Var;
+import org.hamcrest.core.IsNot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,5 +87,23 @@ public class SpecificationBizImpl extends BaseBizImpl implements ISpecificationB
 		
 		List<SpecificationEntity> list = specDao.queryByProductId(productId);
 		return list;
+	}
+	
+	@Override
+	public void saveSpecificationEntities (List<SpecificationEntity> list) {
+		List<SpecificationEntity> dbList = specDao.queryAll();
+		
+		for (SpecificationEntity se : list){
+			boolean isInDb = false;
+			for (SpecificationEntity dbSe : dbList){
+				if (dbSe.getName().equals(se.getName())){
+					isInDb = true;
+					break;
+				}
+			}
+			if (isInDb) continue;
+			// 不在DB中 插入数据
+			specDao.saveEntity(se);
+		}
 	}
 }

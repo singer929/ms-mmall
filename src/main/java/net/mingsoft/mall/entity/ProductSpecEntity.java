@@ -49,9 +49,9 @@ public class ProductSpecEntity extends BaseEntity{
 	private int productId;
 	
 	/**
-	 * 规格id, 对应规格表
+	 * 规格名称, 规格表 主键
 	 */
-	private int specId;
+	private String specName;
 	
 	/**
 	 * 规格的值, 比如颜色规格下 白色
@@ -80,12 +80,12 @@ public class ProductSpecEntity extends BaseEntity{
 		this.productId = productId;
 	}
 
-	public int getSpecId() {
-		return specId;
+	public String getSpecName() {
+		return specName;
 	}
 
-	public void setSpecId(int specId) {
-		this.specId = specId;
+	public void setSpecName(String specName) {
+		this.specName = specName;
 	}
 
 	public String getSpecValue() {

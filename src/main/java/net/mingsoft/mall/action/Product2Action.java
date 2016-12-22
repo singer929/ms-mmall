@@ -14,16 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.druid.sql.ast.expr.SQLSequenceExpr.Function;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.base.entity.ListJson;
 import com.mingsoft.basic.biz.ICategoryBiz;
@@ -37,8 +33,6 @@ import com.mingsoft.mdiy.biz.IContentModelFieldBiz;
 import com.mingsoft.mdiy.entity.ContentModelEntity;
 import com.mingsoft.mdiy.entity.ContentModelFieldEntity;
 import com.mingsoft.parser.IParserRegexConstant;
-import com.mingsoft.util.JsonUtil;
-import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
 
 import net.mingsoft.basic.util.BasicUtil;
@@ -55,7 +49,6 @@ import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.mall.entity.ProductSpecDetailEntity;
 import net.mingsoft.mall.entity.ProductSpecEntity;
 import net.mingsoft.mall.entity.SpecificationEntity;
-import net.mingsoft.mall.entity.SpecificationsEntity;
 
 /**
  * 
@@ -165,8 +158,7 @@ public class Product2Action extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public String list(@ModelAttribute ProductEntity product, HttpServletRequest request, ModelMap model,
-			HttpServletResponse response) {
+	public String list(@ModelAttribute ProductEntity product, HttpServletRequest request, ModelMap model, HttpServletResponse response) {
 		// 获取modelId
 		int appId = this.getAppId(request);
 		int modelId = this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
@@ -202,16 +194,18 @@ public class Product2Action extends BaseAction {
 		// 获取当前app下的栏目列表信息
 		product.setProductShelf(ProductEnum.ON_SHELF);
 		int modelId = this.getModelCodeId(request, ModelCode.MALL_CATEGORY);
-		List<ColumnEntity> columnList = columnBiz.queryAll(this.getAppId(request), modelId);
+		int appId = BasicUtil.getAppId();
+		List<ColumnEntity> columnList = columnBiz.queryAll(appId, modelId);
 		
-		List<SpecificationEntity> specList = specBiz.queryPageByAppId(this.getAppId(request),null);
+//		List<SpecificationEntity> specList = specBiz.queryPageByAppId(appId,null);
+//		List<SpecificationEntity> specList = specBiz.queryAll();
 		
-		List brands = categoryBiz.query(new CategoryEntity(BasicUtil.getAppId(),BasicUtil.getModelCodeId(ModelCode.MALL_BRAND)));
+		List brands = categoryBiz.query(new CategoryEntity(appId, BasicUtil.getModelCodeId(ModelCode.MALL_BRAND)));
 		
 		model.addAttribute("brands", JSONArray.toJSONString(brands));
 		model.addAttribute("appId",BasicUtil.getAppId());
 		model.addAttribute("columnList", JSONArray.toJSONString(columnList));
-		model.addAttribute("specificationsJson",JSONObject.toJSONString(new ListJson(specList.size(), specList)));
+		//model.addAttribute("specificationsJson",JSONObject.toJSONString(new ListJson(specList.size(), specList)));
 		model.addAttribute("categoryId", request.getParameter("categoryId"));
 		model.addAttribute("categoryTitle", request.getParameter("categoryTitle"));
 		model.addAttribute("product", product);
@@ -219,7 +213,7 @@ public class Product2Action extends BaseAction {
 	}
 
 	/**
-	 * 对产品实体实现保存
+	 * 添加新的商品 保存新数据
 	 * @param product：要保存的产品实体对象
 	 * @param request：请求对象
 	 * @param response：响应对象
@@ -281,6 +275,7 @@ public class Product2Action extends BaseAction {
 		productBiz.updateBasic(product);
 		
 		// 保存商品规格数据 和规格明细数据
+		specBiz.saveSpecificationEntities(data.getSpecList());
 		productSpecBiz.saveEntitiesByProductId(productId, data.getProductSpecList());
 		specDeitalBiz.saveEntitiesByProductId(productId, data.getDetailList());
 		
@@ -316,10 +311,7 @@ public class Product2Action extends BaseAction {
 	@RequestMapping("/edit")
 	public String edit(@ModelAttribute ProductEntity product, HttpServletRequest request, ModelMap model) {
 		
-		product = new ProductEntity();
-		product.setBasicId(220);
-		
-		int appId = this.getAppId(request);
+		int appId = BasicUtil.getAppId();
 
 		// 根据商品id查找产品实体
 		ProductEntity _product = (ProductEntity) productBiz.getEntity(product.getBasicId());
@@ -329,7 +321,7 @@ public class Product2Action extends BaseAction {
 		List<ColumnEntity> columnList = columnBiz.queryAll(appId, modelId);
 		model.addAttribute("columnList", JSONArray.toJSONString(columnList));
 		model.addAttribute("product", _product);
-		model.addAttribute("appId", BasicUtil.getAppId());
+		model.addAttribute("appId", appId);
 		return view("/mall/product/product_form1");
 	}
 
@@ -371,21 +363,33 @@ public class Product2Action extends BaseAction {
 
 	/**
 	 * 更新商品信息
-	 * 
-	 * @param product
-	 *            商品实体信息
+	 * @param jsonStr	参数的json字符串
 	 * @param request
 	 * @param response
 	 */
 	@RequestMapping("/update")
-	public void update(@ModelAttribute ProductEntity product, HttpServletRequest request,
-			HttpServletResponse response) {
+	public void update(String jsonStr, HttpServletRequest request, HttpServletResponse response) {
+		
+		if (StringUtil.isBlank(jsonStr)){
+			this.outJson(response, ModelCode.MALL_PRODUCT, false, "参数字符串为空");
+			return;
+		}
+		
+		SaveData data = JSON.parseObject(jsonStr, SaveData.class);
+		if (data == null){
+			this.outJson(response, ModelCode.MALL_PRODUCT, false, "参数解析错误");
+			return;
+		}
+		
+		ProductEntity product = data.getProduct();
+		
 		// 判断提交数据是否符合规范
 		if (!checkForm(product, response)) {
 			return;
 		}
+		
 		// 获取appid
-		int appId = getManagerBySession(request).getBasicId();
+		int appId = BasicUtil.getAppId();
 		// //查询网站实体信息
 		// AppEntity website = (AppEntity) appBiz.getEntity(appId);
 		// 获取更新前的商品实体
@@ -439,12 +443,12 @@ public class Product2Action extends BaseAction {
 				// 更新商品信息
 				productBiz.updateBasic(product);
 			}
-			// 更新商品规格
-			// 添加商品规格
-			String specificationsJson = request.getParameter("specificationsJson");
-			if (!StringUtil.isBlank(specificationsJson)) {
-				this.productSpecificationsBiz.updateEntityByProduct(specificationsJson, product.getBasicId());
-			}
+
+			// 保存商品规格数据 和规格明细数据
+			int productId = product.getBasicId();
+			specBiz.saveSpecificationEntities(data.getSpecList());
+			productSpecBiz.saveEntitiesByProductId(productId, data.getProductSpecList());
+			specDeitalBiz.saveEntitiesByProductId(productId, data.getDetailList());
 
 			// 判断该文章所属栏目是否存在新的内容模型
 			if (column.getColumnContentModelId() != 0) {
@@ -533,6 +537,7 @@ class SaveData{
 	private ProductEntity product;
 	private List<ProductSpecEntity> productSpecList;
 	private List<ProductSpecDetailEntity> detailList;
+	private List<SpecificationEntity> specList;
 	
 	public ProductEntity getProduct() {
 		return product;
@@ -552,4 +557,11 @@ class SaveData{
 	public void setDetailList(List<ProductSpecDetailEntity> detailList) {
 		this.detailList = detailList;
 	}
+	public List<SpecificationEntity> getSpecList() {
+		return specList;
+	}
+	public void setSpecList(List<SpecificationEntity> specList) {
+		this.specList = specList;
+	}
+	
 }

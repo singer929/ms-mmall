@@ -3,7 +3,7 @@
  */
 
 var SpecMgr = {
-    productId: -1,
+    productId: 0,
     specs: null,
     productSpecs: null,
     specDetails: null,
@@ -33,8 +33,17 @@ var SpecMgr = {
 
         for (var i in arr){
             var spec = arr[i];
-            this.specs[spec.specificationId] = spec;
+            this.specs[spec.name] = spec;
         }
+    },
+    
+    getSpecArr: function (){
+    	var arr = [];
+    	for (var name in this.specs){
+    		arr.push(this.specs[name]);
+    	}
+    	
+    	return arr;
     },
 
     // 初始化商品规格数据
@@ -44,13 +53,13 @@ var SpecMgr = {
 
         for (var i in specArr){
             var specData = specArr[i];
-            var specId = specData.specId
+            var specName = specData.specName;
 
-            if (!this.productSpecs[specId]){
-                this.productSpecs[specId] = [];
+            if (!this.productSpecs[specName]){
+                this.productSpecs[specName] = [];
             }
 
-            this.productSpecs[specId].push(specData);
+            this.productSpecs[specName].push(specData);
         }
     },
 
@@ -67,9 +76,9 @@ var SpecMgr = {
 
                 var valueStr = valueArr[j];
                 var data = valueStr.split(':');
-                var specId = data[0];
+                var specName = data[0];
                 var specValue = data[1];
-                valuesObj[specId] = specValue;
+                valuesObj[specName] = specValue;
             }
             // obj数据覆盖字符串数据
             detail.specValues = valuesObj;
@@ -92,10 +101,10 @@ var SpecMgr = {
 
             var tmpObj = this.detailMap;
             var index = 0;
-            for (var specId in detail.specValues){
-                var specValue = detail.specValues[specId];
+            for (var specName in detail.specValues){
+                var specValue = detail.specValues[specName];
 
-                var key = specId + ':' + specValue;
+                var key = specName + ':' + specValue;
 
                 tmpObj = tmpObj || {};
                 if (index == len - 1) {
@@ -152,8 +161,8 @@ var SpecMgr = {
         return null;
     },
 
-    // 根据specId和specValue 删除明细数据
-    deleteDetailData: function (specId, specValue) {
+    // 根据specName和specValue 删除明细数据
+    deleteDetailData: function (specName, specValue) {
 
         //var specValue = arguments[1];
 
@@ -161,9 +170,9 @@ var SpecMgr = {
         for (var i in this.specDetails){
             var specDetail = this.specDetails[i];
             var find = false;
-            for (var spcId in specDetail.specValues){
-                if (spcId != specId) continue;
-                if (specDetail.specValues[spcId] == specValue){
+            for (var spName in specDetail.specValues){
+                if (spName != specName) continue;
+                if (specDetail.specValues[spName] == specValue){
                     find = true;
                     break;
                 }
@@ -190,9 +199,9 @@ var SpecMgr = {
 
     objToKeys: function(obj){
         var keys = '';
-        for (var specId in obj){
-            var specValue = obj[specId];
-            keys += (keys ? ',' : '') + specId + ':' + specValue
+        for (var specName in obj){
+            var specValue = obj[specName];
+            keys += (keys ? ',' : '') + specName + ':' + specValue
         }
 
         return keys;
@@ -202,8 +211,8 @@ var SpecMgr = {
     buildSpecSvrData: function () {
         // 构建服务器产品规格数据
         var productSpecArr = [];
-        for (var specId in this.productSpecs){
-            var psArr = this.productSpecs[specId];
+        for (var specName in this.productSpecs){
+            var psArr = this.productSpecs[specName];
             for (var i in psArr){
                 productSpecArr.push(psArr[i]);
             }
@@ -214,8 +223,8 @@ var SpecMgr = {
             var ps = productSpecArr[i];
             svrProductSpecArr.push({
                 img: ps.img,
-                productId: ps.productId,
-                specId: ps.specId,
+                productId: this.productId,
+                specName: ps.specName,
                 specValue: ps.specValue
             });
         }
@@ -225,7 +234,7 @@ var SpecMgr = {
         for (var i in this.specDetails){
             var detail = this.specDetails[i];
             svrSpecDetailArr.push({
-                productId: detail.productId,
+                productId: this.productId,
                 specValues: this.objToKeys(detail.specValues),
                 stock: detail.stock,
                 price: detail.price,
@@ -234,8 +243,17 @@ var SpecMgr = {
                 sort: 0
             });
         }
+        
+        //构建规格配置数据
+        var svrSpecArr = [];
+        for (var i in this.specs){
+        	var spec = this.specs[i];
+        	svrSpecArr.push({
+        		name: spec.name,
+        	});
+        }
 
-        return {productSpecList:svrProductSpecArr, detailList:svrSpecDetailArr};
+        return {productSpecList:svrProductSpecArr, detailList:svrSpecDetailArr, specList:svrSpecArr};
     },
 
     // 计算Object的长度 有多少个key
@@ -249,11 +267,24 @@ var SpecMgr = {
     },
 
     // 规格配置
-    addSpec: function(name, id) {
-        id = id || new Date().getTime();
-        var spec = {name: name, specificationId: id};
-        this.specs[id] = spec;
-        return spec;
+    addSpec: function(name) {
+        
+    	if (!this.specs[name]){
+    		var spec = {name: name};
+            this.specs[name] = spec;
+            return spec;
+    	}
+    },
+    
+    // 随机创建规格Id
+    createSpecId: function(){
+    	var id = Math.floor(Math.random() * 10000);
+    	if (!this.specs[id]){
+    		return id;
+    	}
+    	else{
+    		return this.createSpecId();
+    	}
     },
 
     // 添加商品规格
@@ -262,29 +293,29 @@ var SpecMgr = {
     },
 
     // 删除产品规格数据
-    deleteProductSpecBySpecId: function (specId){
+    deleteProductSpecBySpecName: function (specName){
         var specValue = arguments[1];
 
         if (!specValue){
-            for (var spId in this.productSpecs){
-                if (specId != spId) continue;
-                delete this.productSpecs[spId];
+            for (var spName in this.productSpecs){
+                if (specName != spName) continue;
+                delete this.productSpecs[spName];
                 this.rebuildDetails();
                 break;
             }
         }
         else {
-            for (var spId in this.productSpecs){
-                if (specId != spId) continue;
-                var psArr = this.productSpecs[spId];
+            for (var spName in this.productSpecs){
+                if (specName != spName) continue;
+                var psArr = this.productSpecs[spName];
                 for (var i in psArr){
                     if (psArr[i].specValue == specValue){
                         psArr.splice(i, 1);
                         if (psArr.length) {
-                            this.deleteDetailData(specId, specValue);
+                            this.deleteDetailData(specName, specValue);
                         }
                         else{
-                            delete this.productSpecs[spId];
+                            delete this.productSpecs[spName];
                             this.rebuildDetails();
                         }
 
@@ -299,8 +330,8 @@ var SpecMgr = {
     // 是否有此规格名
     hasSpec: function (name) {
 
-        for (var specId in this.specs) {
-            var spec = this.specs[specId];
+        for (var specName in this.specs) {
+            var spec = this.specs[specName];
             if (spec.name == name) return true;
         }
 
@@ -359,7 +390,7 @@ var SpecMgr = {
             if (i < arr.length){
 
                 for (var j in arr[i]){
-                    datas[arr[i][j].specId] = arr[i][j].specValue;
+                    datas[arr[i][j].specName] = arr[i][j].specValue;
                     setData(datas, arr, i+1);
                 }
             }

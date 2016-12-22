@@ -112,7 +112,14 @@ public class ProductSpecDetailBizImpl extends BaseBizImpl implements IProductSpe
 		
 		// 删除原来数据
 		detailDao.deleteEntityByProductIds(new int[]{productId});
-		// 保存新数据
-		detailDao.saveBatch(list);
+		
+		for (ProductSpecDetailEntity pse : list){
+			pse.setProductId(productId);
+		}
+		
+		if (list != null && list.size() > 0){
+			// 保存新数据
+			detailDao.saveBatch(list);
+		}
 	}
 }

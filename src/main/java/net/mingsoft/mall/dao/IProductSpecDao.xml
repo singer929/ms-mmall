@@ -5,7 +5,7 @@
 	<sql id="column_list">
 		ps.ps_id, 
 		ps.ps_product_id, 
-		ps.ps_spec_id, 
+		ps.ps_spec_name, 
 		ps.ps_spec_value,
 		ps.ps_img
 	</sql>
@@ -14,7 +14,7 @@
 	<resultMap type="net.mingsoft.mall.entity.ProductSpecEntity" id="resultMap">
 		<id column="ps_id" property="psId" />
 		<result column="ps_product_id" property="productId" />
-		<result column="ps_spec_id" property="specId" />
+		<result column="ps_spec_name" property="specName" />
 		<result column="ps_spec_value" property="specValue" />
 		<result column="ps_img" property="img" />
 	</resultMap>
@@ -22,7 +22,7 @@
 	<resultMap id="resultMapList" type="net.mingsoft.mall.entity.ProductSpecEntity">
 		<id column="ps_id" property="psId" />
 		<result column="ps_product_id" property="productId" />
-		<result column="ps_spec_id" property="specId" />
+		<result column="ps_spec_name" property="specName" />
 		<result column="ps_spec_value" property="specValue" />
 		<result column="ps_img" property="img" />
 		
@@ -59,14 +59,14 @@
 		<!-- 添加表字段 -->
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="productId != null">ps_product_id,</if>
-			<if test="specId != null">ps_spec_id,</if>
+			<if test="specName != null">ps_spec_name,</if>
 			<if test="specValue !=null">ps_spec_value,</if>
 			<if test="img !=null">ps_img,</if>
 		</trim>
 		<!-- 注入控制层字段 -->
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="productId != null">#{productId},</if>
-			<if test="specId != null">#{specId},</if>
+			<if test="specName != null">#{specName},</if>
 			<if test="specValue !=null">#{specValue},</if>
 			<if test="img !=null">#{img},</if>
 		</trim>
@@ -78,7 +78,7 @@
 		update mall_product_specification
 		<set>
 			<if test="productId != null">ps_product_id = #{productId},</if>
-			<if test="specId != null">ps_spec_id = #{specId},</if>
+			<if test="specName != null">ps_spec_name = #{specName},</if>
 			<if test="specValue != null">ps_spec_value = #{specValue},</if>
 			<if test="img != null">ps_img = #{img}, </if>
 		</set>
@@ -162,13 +162,13 @@
 	<insert id="saveBatch" useGeneratedKeys="true" parameterType="java.util.List">  
 	    insert into mall_product_specification (
 	    	ps_product_id, 
-			ps_spec_id, 
+			ps_spec_name, 
 			ps_spec_value,
 			ps_img
 		)   
 	    values  
 	    <foreach collection="list" item="item" index="index" separator="," > 
-	        (#{item.productId}, #{item.specId}, #{item.specValue}, #{item.img})
+	        (#{item.productId}, #{item.specName}, #{item.specValue}, #{item.img})
 	    </foreach>  
 	</insert>  
 </mapper>

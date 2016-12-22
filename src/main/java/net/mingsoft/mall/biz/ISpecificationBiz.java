@@ -65,4 +65,10 @@ public interface ISpecificationBiz extends IBaseBiz{
 	 * @return 规格总数
 	 */
 	public int countByAppId(int appId);
+	
+	/**
+	 * 将列表中新的规格添加进数据库, 其他的不操作
+	 * @param list
+	 */
+	public void saveSpecificationEntities (List<SpecificationEntity> list);
 }

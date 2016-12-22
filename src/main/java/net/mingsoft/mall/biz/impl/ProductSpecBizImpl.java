@@ -247,12 +247,18 @@ public class ProductSpecBizImpl extends BaseBizImpl implements IProductSpecBiz {
 		// 清空当前productId的规格数据
 		productSpecDao.deleteEntityByProductIds(new int[]{productId});
 		
-		// 添加新数据
-		productSpecDao.saveBatch(list);
+		// 将productId 赋值给实体
+		for (ProductSpecEntity ps : list){
+			ps.setProductId(productId);
+		}
+		
+		if (list != null && list.size() > 0){
+			// 添加新数据
+			productSpecDao.saveBatch(list);
+		}
 		
 		return true;
 	}
-
 	
 	/**
 	 * 根据产品ID 获取客户端需要的产品规格信息 json 数据字符串
