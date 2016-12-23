@@ -17,7 +17,7 @@
 	</body>
 </html>
 </#macro>
-<#macro nav title="板块名称" back=true>
+<#macro nav title="板块名称" back=false>
     <div class="ms-content-body-title">
         <strong>${title}</strong>
         <#nested/>

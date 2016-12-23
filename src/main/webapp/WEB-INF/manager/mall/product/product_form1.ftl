@@ -184,8 +184,10 @@
 
 	// 保存数据
 	function onSave(){
-
+		// 规格数据
+		var params = SpecMgr.buildSpecSvrData();
 		
+		// 产品数据
 		var productParams = {
 			basicId: ${product.basicId},
 			basicTitle: $('#basicTitle').val(),
@@ -200,12 +202,18 @@
 			//productShelf: {code: $("[name='productShelf'][checked='checked']").val()},
 			productContent: UE.getEditor('editor_productContent').getContent()
 		};
-
-		var params = SpecMgr.buildSpecSvrData();
-
 		params.product = productParams;
-		var paramStr = JSON.stringify(params);
+		
+		// 自定义模型数据
+		var customParams = {};
+		$('#contentModelFiled').find('[name]').each(function(){
+			var name = $(this).attr('name');
+			customParams[name] = $(this).val();
+		});
 
+		var svrParams = {productParams:params, customParams:customParams};
+		
+		var paramStr = JSON.stringify(svrParams);
 		$.post('${managerPath}/mall/product2/${autoCURD}.do', {jsonStr:paramStr}, function(data, status){
 			if (status != 'success') return;
 			if (data.result == false){

@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.Feature;
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.base.entity.ListJson;
 import com.mingsoft.basic.biz.ICategoryBiz;
@@ -228,7 +230,10 @@ public class Product2Action extends BaseAction {
 			return;
 		}
 		
-		SaveData data = JSON.parseObject(jsonStr, SaveData.class);
+		JSONObject obj = JSON.parseObject(jsonStr);
+		SaveData data = obj.getObject("productParams", SaveData.class);
+		JSONObject customParams = obj.getJSONObject("customParams");
+		
 		// 数据解析有问题
 		if (data == null) {
 			this.outJson(response, ModelCode.MALL_PRODUCT, false, "传入参数有误");
@@ -291,7 +296,7 @@ public class Product2Action extends BaseAction {
 				return;
 			}
 			// 保存新增字段的信息
-			Map<String, Object> param = this.checkField(listField, request, productId);
+			Map<String, Object> param = this.checkField(listField, customParams, productId);
 			LOG.debug("商品保存自定义模型编号:" + product.getBasicId());
 			// 向新增内容模型表中插入数据
 			fieldBiz.insertBySQL(contentModel.getCmTableName(), param);
@@ -375,7 +380,10 @@ public class Product2Action extends BaseAction {
 			return;
 		}
 		
-		SaveData data = JSON.parseObject(jsonStr, SaveData.class);
+		JSONObject obj = JSON.parseObject(jsonStr);
+		SaveData data = obj.getObject("productParams", SaveData.class);
+		JSONObject customParams = obj.getJSONObject("customParams");
+		
 		if (data == null){
 			this.outJson(response, ModelCode.MALL_PRODUCT, false, "参数解析错误");
 			return;
@@ -418,7 +426,7 @@ public class Product2Action extends BaseAction {
 					ContentModelEntity newContentModel = (ContentModelEntity) contentModelBiz
 							.getEntity(column.getColumnContentModelId());
 					if (newContentModel != null) {
-						Map param = this.checkField(listField, request, product.getBasicId());
+						Map param = this.checkField(listField, customParams, product.getBasicId());
 						fieldBiz.insertBySQL(newContentModel.getCmTableName(), param);
 					}
 				}
@@ -459,7 +467,7 @@ public class Product2Action extends BaseAction {
 				// 压入默认的basicId字段
 				where.put("basicId", product.getBasicId());
 				// 遍历字段的信息
-				Map param = this.checkField(listField, request, product.getBasicId());
+				Map param = this.checkField(listField, customParams, product.getBasicId());
 				ContentModelEntity contentModel = (ContentModelEntity) contentModelBiz
 						.getEntity(column.getColumnContentModelId());
 				if (contentModel != null) {
@@ -497,32 +505,32 @@ public class Product2Action extends BaseAction {
 	 *            文章id
 	 * @return 字段信息
 	 */
-	private Map<String, Object> checkField(List<BaseEntity> listField, HttpServletRequest request, int basicId) {
+	private Map<String, Object> checkField(List<BaseEntity> listField, JSONObject customParams, int basicId) {
 		Map<String, Object> mapParams = new HashMap<String, Object>();
 		// 压入默认的basicId字段
 		mapParams.put("basicId", basicId);
 		LOG.debug("保存规格编号:" + basicId);
+		
 		// 遍历字段名
 		for (int i = 0; i < listField.size(); i++) {
 			ContentModelFieldEntity field = (ContentModelFieldEntity) listField.get(i);
-			// 判断字段类型是否为checkbox类型
+			String fieldName = field.getFieldFieldName();
+			
+			//TODO 待测试
 			if (field.getFieldType() == CHECKBOX) {
-				String langtyp[] = request.getParameterValues(field.getFieldFieldName());
+				String[] langtyp = customParams.getJSONArray(fieldName).toArray(new String[0]);
 				if (langtyp != null) {
 					StringBuffer sb = new StringBuffer();
 					for (int j = 0; j < langtyp.length; j++) {
 						sb.append(langtyp[j] + ",");
 					}
-					mapParams.put(field.getFieldFieldName(), sb.toString());
+					mapParams.put(fieldName, sb.toString());
 				} else {
-					mapParams.put(field.getFieldFieldName(), langtyp);
+					mapParams.put(fieldName, langtyp);
 				}
 			} else {
-				if (StringUtil.isBlank(request.getParameter(field.getFieldFieldName()))) {
-					mapParams.put(field.getFieldFieldName(), null);
-				} else {
-					mapParams.put(field.getFieldFieldName(), request.getParameter(field.getFieldFieldName()));
-				}
+				String fieldValue = customParams.getString(fieldName);
+				mapParams.put(fieldName, StringUtil.isBlank(fieldValue) ? null : fieldValue);
 			}
 		}
 		return mapParams;

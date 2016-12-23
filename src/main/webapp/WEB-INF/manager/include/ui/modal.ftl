@@ -67,8 +67,8 @@
 	</script>
 </#macro>
 
-<#--模态框内容-->
-<#macro modalBody style="">
+<#--模态框内容 height属性废弃, 直接在style里面修改-->
+<#macro modalBody style="" height="">
 	      <div class="modal-body" style="${style}">
 	      	<#nested/>
 	      </div>
