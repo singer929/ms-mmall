@@ -377,7 +377,7 @@
         // 规格名字改变 可能是新增,可能是改变 (规格表新增规格, 商品规格表删除原规格, 添加新增规格)
         $(".goods-norms").delegate(".js-example-theme-single", "change", function () {
 
-            var value = $(this).val();
+            var value = $(this).val().trim();
             // 有值则显示添加按钮
             setAddBtnVisible($(this).parent().parent(), value);
             if (!value) return;
@@ -393,7 +393,7 @@
             	alert('不允许设置两个相同的规格!');
             	return;
             }
-
+            
             // 新加的规格没有具体数据的时候不管
             if (!oldSpecName) return;
 
@@ -430,9 +430,7 @@
 
             SpecMgr.setGridMap(SpecMgr.specDetails);
 
-            console.log(SpecMgr.detailMap);
-
-            // 修改表格的标识id
+			// 修改表格的标识id
             $(this).parent().parent().attr('data-id', specName);
 
             refreshTable();
@@ -483,8 +481,9 @@
             arrText[i] = $(this).find(".norms-text").text();
         });
 
-        // 规格配置名
-        var specName = detailUi.parent().parent().find(".norms-title select option:selected").text();
+        // 规格配置名读取id中的
+        //var specName = detailUi.parent().attr('data-id');
+        var specName = detailUi.parent().parent().find(".norms-title select option:selected").text().trim();
 
         // 追加的属性必须不能为空
         if(inputValues.val() != null){

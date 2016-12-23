@@ -84,7 +84,7 @@ method:提交方式
         
         //初始化顶住筛选部分的空白div
         $(".search-form-div").height(searchFormheight + 60);
-        var _height = parseInt(searchFormheight)-25;
+        var _height = parseInt(searchFormheight)-46;
         
         $("#searchForm").find(".close").click(function(){
             var obj = $(this);
