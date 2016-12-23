@@ -3,8 +3,7 @@
 <head>
 <#include "${managerViewPath}/include/meta.ftl"/> <!--调用head内样式信息-->
 </head>
-<body>
-
+<body class="over-hide">
 	<@ms.content>
 			<@ms.contentMenu>
 					<div class="col-md-2 categoryTree">

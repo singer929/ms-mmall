@@ -1,7 +1,11 @@
 <@ms.html5>
-    <@ms.nav title="商品管理"></@ms.nav>
-    <@ms.panel> 
-        <@ms.searchForm name="searchForm" action="${managerPath}/mall/product2/list.do">
+    <@ms.nav title="商品管理" back=false>
+	    <@ms.buttonGroup>
+			<@ms.addButton url="${managerPath}/mall/product2/add.do?basicCategoryId=${product.basicCategoryId?default(0)}&column.categoryTitle=${product.column.categoryTitle?default('请选择商品分类')}"/>
+			<@ms.delButton id="delWebsiteBtn" fieldName="ids" url="${managerPath}/mall/product/delete.do"/>
+		</@ms.buttonGroup>
+	</@ms.nav>
+    <@ms.searchForm name="searchForm" action="${managerPath}/mall/product2/list.do">
         	<@ms.select 
 			    name="productShelf" 
 			    label="状态" 
@@ -14,11 +18,8 @@
 				 <@ms.queryButton form="searchForm"/> 
 			</@ms.searchFormButton>			
 		</@ms.searchForm>
+    <@ms.panel> 
 		<@ms.panelNav>
-			<@ms.buttonGroup>
-				<@ms.addButton url="${managerPath}/mall/product2/add.do?basicCategoryId=${product.basicCategoryId?default(0)}&column.categoryTitle=${product.column.categoryTitle?default('请选择商品分类')}"/>
-				<@ms.delButton id="delWebsiteBtn" fieldName="ids" url="${managerPath}/mall/product/delete.do"/>
-			</@ms.buttonGroup>
 			<!--@ms.menuButton links=[{"click":"on","name":"上架"},{"click":"off","name":"下架"}] name="批量操作"/-->		
 		</@ms.panelNav>
 		

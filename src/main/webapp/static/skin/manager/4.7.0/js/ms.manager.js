@@ -34,17 +34,17 @@ $(function(){
     })
 
     //点击左侧菜单添加选项卡
-    $(".ms-menu").delegate(".ms-menu-child a","click",function(){
+    $(".ms-menu").delegate(".ms-menu-child li a","click",function(){
         $(".easyui-tabs").show();
         $(".wellcome").hide();
         $(".ms-menu-child a").removeClass("active");
         $(this).addClass("active");
-        var title=$(this).data("title");
-        var content=$(this).data("url");
+        var title = $(this).data("title");
+        var content = $(this).data("url");
         if (!$('.easyui-tabs').tabs('exists', title)) {
             $('.easyui-tabs').tabs('add', {
                 title: title,
-                content: '<iframe src='+content+' frameborder="0" height="100%" width="100%" id="mainFrame" name="mainFrame"></iframe>',
+                content: '<iframe src=' + content + ' frameborder="0" height="100%" width="100%" id="mainFrame" name="mainFrame"></iframe>',
                 closable: true,
             });
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
- <head>
+<head>
 <#include "${managerViewPath}/include/macro.ftl"/>
 <#include "${managerViewPath}/include/meta.ftl"/>
 </head>

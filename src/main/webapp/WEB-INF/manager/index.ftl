@@ -18,28 +18,28 @@
         //当头部菜单超过5个时，点击展开头部菜单
         $(".openMenu").click(function(){
             manager.topMenu.topMenuOpen($(this),"menu-show");
-        })
+        });
         //点击头部菜单从左侧显示当前菜单子菜单
         $(".ms-menu-list").delegate(".ms-menu-detail","click",function(){
             manager.topMenu.showChildMenu($(this),menuJson);
-        })
+        });
         //点击展开左侧菜单子菜单
         $(".ms-menu").delegate(".ms-menu-parent-title","click",function(){
             var menu = $(this).parent().siblings(".ms-menu-child");
             manager.leftMenu.leftMenuOpen($(this),menu);
-        })
+        });
 
         //移除左侧菜单
         $(".ms-menu").delegate(".ms-menu-parent","mouseover",function(){
             $(".closeMenu").hide();
             $(this).find(".closeMenu").show();
-        })
+        });
         $(document).bind("mouseover",function(e){
             var target = $(e.target);
             if(target.closest(".ms-menu-parent").length == 0){
                 $(".closeMenu").hide();
             }
-        })
+        });
         //关闭左侧菜单
         $(".ms-menu").delegate(".closeMenu","click",function(){
             $(this).parent().parent().hide();
@@ -60,9 +60,57 @@
                     }
                 }
             })
-        })
+        });
         
-    })
+        //获取管理员帐号
+		$("#editLoginPassword").click(function() {
+			$.ajax({
+				type: "post",
+				dataType: "json",
+				url:  "${managerPath}/editPassword.do",
+				success: function(msg){
+					var json =JSON.parse(msg.resultMsg);
+					$(".editLoginPassword input[name='managerName']").val(json);
+					$(".editLoginPassword").modal();
+				}
+			});
+		});
+		
+		
+		//修改密码
+		$("#editLoginPasswordButton").click(function() {		
+			var vobj = $("#updatePasswordFrom").data('bootstrapValidator').validate();
+			if(vobj.isValid()){
+				$(this).postForm("#updatePasswordFrom",{func:function(data) {
+					if(data.result){
+						alert("密码修改成功!");
+						location.reload();
+					}else{
+						alert(data.resultMsg);
+					}
+		 			
+				}});	
+			} else {
+				alert("表单验证失败");
+			}	
+			
+		});
+		
+		 //退出系统
+		$("#loginOutBtn").click(function() {	
+			$(this).request({func:function(data) {
+		 			location.reload();
+			}});	
+		});
+	
+		$(".ms-menu-child li a").each(function() {
+			var tag = "?";
+			if ($(this).data("url").indexOf("?") > 0) {
+				tag="&";
+			}
+			$(this).data("url", "${managerPath}/"+$(this).data("url")+tag+"modelId="+$(this).data("id")+"&modelTitle="+encodeURI($(this).data("title")));
+		});
+    });
 </script>
 
 <body class="over-hide" style="height: 100%;background: #3497db">
@@ -102,8 +150,8 @@
                     <span class="caret"></span>
                 </div>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                    <li role="presentation" data-toggle="modal" data-target="#myModal"><a role="menuitem" tabindex="-1"><span class="glyphicon glyphicon-cog"></span> 修改密码</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1"><span class="glyphicon glyphicon-off"></span> 退出</a></a></li>
+                    <li role="presentation" data-toggle="modal" data-target="#editLoginPassword"><a role="menuitem" tabindex="-1"><span class="glyphicon glyphicon-cog"></span> 修改密码</a></li>
+                    <li role="presentation" data-toggle="modal" data-target="#loginOut"><a role="menuitem" tabindex="-1"><span class="glyphicon glyphicon-off"></span> 退出</a></a></li>
                 </ul>
             </div>
 
@@ -131,7 +179,7 @@
     {{/if}}
     </script>
     <script id="ms-menu-child-tmpl" type="text/x-jquery-tmpl">
-        <li><a href="javascript:void(0)" data-title='${modelTitle}' data-url='${modelUrl}'><!--span class="caret"></span-->${modelTitle}</a></li>
+        <li><a href="javascript:void(0)" data-title='${modelTitle}' data-url='${modelUrl}' data-id='${modelId}'><!--span class="caret"></span-->${modelTitle}</a></li>
     </script>
     </#noparse>
     
@@ -157,53 +205,28 @@
         
     </div>
     <!--右边结束-->
-    <!-- 弹框 -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="margin-top: 15%">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">修改密码</h4>
-                </div>
-                <div class="modal-body">
-                    <form role="form" method="post" action="/m-admin/updatePassword.do" target="_self" id="updatePasswordFrom" name="updatePasswordFrom" class="form-horizontal bv-form" style="width: 100%; background-color: white;" novalidate="novalidate"><button type="submit" class="bv-hidden-submit" style="display: none; width: 0px; height: 0px;"></button>
-                        <input type="hidden" name="redirect">
-                        <div class="form-group ms-form-group has-feedback"> 
-                            <label for="managerName" class="col-sm-3  control-label ">
-                            账号:
-                            </label>
-                            <div class="col-sm-8 ms-from-group-input ms-form-input">       
-                                <input type="text" readonly="readonly" name="managerName" class="form-control" title="managerName">
-                            </div>
-                        </div>
-                        <div class="form-group ms-form-group has-feedback"> 
-                            <label for="oldManagerPassword" class="col-sm-3  control-label ">
-                            旧密码:
-                            </label>
-                            <div class="ms-form-control ms-from-group-input col-sm-8">      
-                                <input type="password" autocomplete="off" name="oldManagerPassword" class="form-control" title="managerPassword">
-                            </div>
-                        </div>
-                        <div class="form-group ms-form-group has-feedback"> 
-                            <label for="newManagerPassword" class="col-sm-3  control-label ">
-                            新密码:
-                            </label>
-                            <div class="ms-form-control ms-from-group-input col-sm-8">      
-                                <input type="password" autocomplete="off" name="newManagerPassword" class="form-control" title="managerPassword">
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-success">保存</button>
-                </div>
-            </div>
-        </div>
-        
-        
-    </div>
-
+    
+    <!--修改登录密码模态框-->
+	<@ms.modal id="editLoginPassword" title="修改密码" style="margin-top:15%">
+		  <@ms.modalBody>
+		  		<@ms.form  isvalidation=true name="updatePasswordFrom"  action="${managerPath}/updatePassword.do">
+		    		<@ms.text name="managerName" width="200" label="账号:" title="managerName" value="" readonly="readonly" validation={"required":"true", "data-bv-notempty-message":"必填项目"} />
+		    		<@ms.password name="oldManagerPassword" label="旧密码:" title="managerPassword" validation={"required":"true", "data-bv-notempty-message":"必填项目"}/>
+		    		<@ms.password name="newManagerPassword" label="新密码:" title="managerPassword" validation={"required":"true", "data-bv-notempty-message":"必填项目"}/>
+		    	</@ms.form>	
+	     </@ms.modalBody>
+		 <@ms.modalButton>
+		 	<@ms.savebutton value="更新密码" id="editLoginPasswordButton"/>
+		 </@ms.modalButton>
+	</@ms.modal>
+	
+	<@ms.modal id="loginOut" title="退出提示!">
+		  <@ms.modalBody>
+		  		确认退出？？
+	     </@ms.modalBody>
+		 <@ms.modalButton>
+		 	<@ms.button value="确认退出" id="loginOutBtn" url="${managerPath}/loginOut.do"/>
+		 </@ms.modalButton>
+	</@ms.modal>
 </body>
 </html>

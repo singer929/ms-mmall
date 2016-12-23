@@ -40,7 +40,6 @@ body {
   background: #fcfcfc;
   line-height: 21px;
   color: #555;
-
   /*弹出框*/
   /*内容超出部分隐藏*/
   /*清除padding值*/
@@ -150,9 +149,6 @@ body .ms-top {
   width: 100%;
   min-width: 900px;
   background: none;
-  position: fixed;
-  top: 0px;
-  left: 0px;
   z-index: 10000;
   font-family: arial, 'hiragino sans gb', 'microsoft yahei', Simsun;
   /*顶部左边样式*/
@@ -417,7 +413,6 @@ body .ms-content {
   height: 100%;
   overflow: hidden;
   padding: 0px;
-  padding-top: 50px;
   background: none;
 }
 body .ms-content #mainFrame {
@@ -539,6 +534,11 @@ body .ms-content-body-panel .goods-norms .norms-group .norms-title {
   padding: 5px;
   position: relative;
 }
+body .ms-content-body-panel .goods-norms .norms-group .norms-title .norms-addpic {
+  margin-left: 20px;
+  font-size: 14px;
+  font-weight: normal;
+}
 body .ms-content-body-panel .goods-norms .norms-group .norms-title .delete-norms {
   position: absolute;
   top: 12px;
@@ -614,7 +614,6 @@ body .ms-content-body-panel .goods-norms .norms-group .norms-list .norms-detail 
   display: inline-block;
   margin: 5px 10px 5px 0px;
   line-height: 13px;
-  height: 25px;
   width: 80px;
   vertical-align: middle;
   text-align: center;
@@ -645,6 +644,22 @@ body .ms-content-body-panel .goods-norms .norms-group .norms-list .norms-detail 
   border-radius: 10px;
   text-indent: 0;
   display: none;
+}
+body .ms-content-body-panel .goods-norms .norms-group .norms-list .norms-detail .norms-pic {
+  position: relative;
+  top: 4px;
+  left: -5px;
+  border-top: 1px #ddd solid;
+  width: 80px;
+  text-align: center;
+  height: 80px;
+  line-height: 80px;
+  cursor: pointer;
+  display: none;
+}
+body .ms-content-body-panel .goods-norms .norms-group .norms-list .norms-detail .norms-pic img {
+  width: 74px;
+  height: 74px;
 }
 body .ms-content-menu {
   width: 15%;
@@ -877,7 +892,8 @@ body .ms-content-body .searchForm {
   margin-bottom: 10px;
   padding: 10px 0px;
   position: fixed;
-  width: 85%;
+  top: 46px;
+  width: 100%;
   background-color: #ffffff;
   box-shadow: 2px 1px 5px #A1A1A1;
 }
