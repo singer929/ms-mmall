@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.aspectj.weaver.ast.Var;
+import org.h2.util.New;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -251,7 +252,7 @@ public class ProductSpecBizImpl extends BaseBizImpl implements IProductSpecBiz {
 		for (ProductSpecEntity ps : list){
 			ps.setProductId(productId);
 		}
-		
+
 		if (list != null && list.size() > 0){
 			// 添加新数据
 			productSpecDao.saveBatch(list);

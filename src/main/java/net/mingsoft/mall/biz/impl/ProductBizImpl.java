@@ -201,6 +201,9 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 				orderBy=null;
 			}
 		}
+		if (basicCategoryIds.length == 0) {
+			basicCategoryIds = null;
+		}
 		return productDao.queryList(appId, basicCategoryIds,  orderBy, order, productShelf>=0?productShelf:null,flag==null?null:flag.split(","),noFlag==null?null:noFlag.split(","));
 	}
 

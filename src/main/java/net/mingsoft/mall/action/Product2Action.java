@@ -171,10 +171,11 @@ public class Product2Action extends BaseAction {
 		// int recordCount = productBiz.getCountByColumnId(appId, childColumnId,
 		/// product.getProductShelf(), null, null);
 
+		int shelf = product.getProductShelf();
+		
 		// 当前页面
 		BasicUtil.startPage();
-		List<ProductEntity> listProduct = this.productBiz.queryList(appId, childColumnId, null, true,
-				product.getProductShelf(), null, null);
+		List<ProductEntity> listProduct = this.productBiz.queryList(appId, childColumnId, null, true, shelf, null, null);
 		BasicUtil.endPage(listProduct);
 
 		// 压入返回的url地址
