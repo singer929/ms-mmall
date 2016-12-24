@@ -71,7 +71,7 @@
 				success: function(msg){
 					var json =JSON.parse(msg.resultMsg);
 					$(".editLoginPassword input[name='managerName']").val(json);
-					$(".editLoginPassword").modal();
+					//$(".editLoginPassword").modal();
 				}
 			});
 		});
@@ -113,7 +113,7 @@
     });
 </script>
 
-<body class="over-hide" style="height: 100%;background: #3497db">
+<body class="over-hide theme-index" >
     <!--顶部开始 -->
     <div class="ms-top">
         <!--头部LOGO-->
@@ -150,8 +150,12 @@
                     <span class="caret"></span>
                 </div>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                    <li role="presentation" data-toggle="modal" data-target="#editLoginPassword"><a role="menuitem" tabindex="-1"><span class="glyphicon glyphicon-cog"></span> 修改密码</a></li>
-                    <li role="presentation" data-toggle="modal" data-target="#loginOut"><a role="menuitem" tabindex="-1"><span class="glyphicon glyphicon-off"></span> 退出</a></a></li>
+                	<li role="presentation" data-toggle="modal" data-target="#editLoginPassword">
+                    	<a role="menuitem" tabindex="-1"><span class="glyphicon glyphicon-cog"></span> 修改密码</a>
+                    </li>
+                	<li role="presentation" data-toggle="modal" data-target="#loginOut">
+                    	<a role="menuitem" tabindex="-1"><span class="glyphicon glyphicon-off"></span> 退出</a>
+                    </li>
                 </ul>
             </div>
 
@@ -193,7 +197,7 @@
 
     <!--右边开始-->
     <div class="ms-content">
-        <div class="wellcome" style="text-align: center;color: #555;background: #FCFCFC;height: 300px;padding-top: 200px;vertical-align: middle;border-top-left-radius:5px;height: 100%;">
+        <div class="wellcome">
             <h2>欢迎进入MS系统</h2>
             <p>欢迎加群： 221335098 或到
                 <a href="http://ms.mingsoft.net/mbbs/main.do" target="_blank" style="text-decoration: none;">官方论坛进行技术交流</a>
@@ -207,12 +211,12 @@
     <!--右边结束-->
     
     <!--修改登录密码模态框-->
-	<@ms.modal id="editLoginPassword" title="修改密码" style="margin-top:15%">
+	<@ms.modal id="editLoginPassword" title="修改密码">
 		  <@ms.modalBody>
 		  		<@ms.form  isvalidation=true name="updatePasswordFrom"  action="${managerPath}/updatePassword.do">
-		    		<@ms.text name="managerName" width="200" label="账号:" title="managerName" value="" readonly="readonly" validation={"required":"true", "data-bv-notempty-message":"必填项目"} />
-		    		<@ms.password name="oldManagerPassword" label="旧密码:" title="managerPassword" validation={"required":"true", "data-bv-notempty-message":"必填项目"}/>
-		    		<@ms.password name="newManagerPassword" label="新密码:" title="managerPassword" validation={"required":"true", "data-bv-notempty-message":"必填项目"}/>
+		    		<@ms.text name="managerName" width="280" label="账号:" title="managerName" value="" readonly="readonly" validation={"required":"true", "data-bv-notempty-message":"必填项目"} />
+		    		<@ms.password width="280" name="oldManagerPassword" label="旧密码:" title="managerPassword" validation={"required":"true", "data-bv-notempty-message":"必填项目"}/>
+		    		<@ms.password width="280" name="newManagerPassword" label="新密码:" title="managerPassword" validation={"required":"true", "data-bv-notempty-message":"必填项目"}/>
 		    	</@ms.form>	
 	     </@ms.modalBody>
 		 <@ms.modalButton>

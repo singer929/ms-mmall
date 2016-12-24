@@ -341,7 +341,7 @@ var SpecMgr = {
     // 根据产品规格数据 生成 明细数据的结构
     rebuildDetails :function () {
 
-        var clean = arguments[0] || true;
+        var clean = arguments[0] == undefined ? true : arguments[0];
 
         // 保存临时数据
         if (!clean){

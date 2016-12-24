@@ -5,6 +5,14 @@ $(document).bind("click",function(e){
         manager.topMenu.initTop();
     }
 })
+//浏览器窗口调整事件
+$(window).resize(function () {  
+     $('.easyui-tabs').tabs({  
+        width: $('.easyui-tabs').parent().width(),
+        fit:true,
+        scrollDuration:1000
+     });  
+ }) 
 $(function(){
     //收缩左侧菜单
     $(".slideMenu").click(function(){
@@ -34,17 +42,17 @@ $(function(){
     })
 
     //点击左侧菜单添加选项卡
-    $(".ms-menu").delegate(".ms-menu-child li a","click",function(){
+    $(".ms-menu").delegate(".ms-menu-child a","click",function(){
         $(".easyui-tabs").show();
         $(".wellcome").hide();
         $(".ms-menu-child a").removeClass("active");
         $(this).addClass("active");
-        var title = $(this).data("title");
-        var content = $(this).data("url");
+        var title=$(this).data("title");
+        var content=$(this).data("url");
         if (!$('.easyui-tabs').tabs('exists', title)) {
             $('.easyui-tabs').tabs('add', {
                 title: title,
-                content: '<iframe src=' + content + ' frameborder="0" height="100%" width="100%" id="mainFrame" name="mainFrame"></iframe>',
+                content: '<iframe src='+content+' frameborder="0" height="100%" width="100%" id="mainFrame" name="mainFrame"></iframe>',
                 closable: true,
             });
 

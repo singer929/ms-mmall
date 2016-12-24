@@ -1,5 +1,5 @@
 <@ms.html5>
-    <@ms.nav back=false title="商品编辑"><@ms.saveButton onclick="onSave()" /> </@ms.nav>
+    <@ms.nav back=true title="商品编辑"><@ms.saveButton onclick="onSave()" /> </@ms.nav>
     <@ms.panel>
     	<@ms.form name="productForm" action="${managerPath}/mall/product/${autoCURD}.do" isvalidation=true redirect="${managerPath}/mall/product/list.do?${params}">
 			<input type="hidden" name="basicId" value="${product.basicId}"/>
@@ -40,98 +40,83 @@
 			</@ms.formRow>
 			<div id="contentModelFiled"></div>
 			<@ms.radio label="开售时间" direction=true name="productShelf" list=[{"id":"1","text":"立刻"},{"id":"2","text":"放入仓库"}] listKey="id" listValue="text" value="${product.productShelf}"/>
-			<div id="contentModelFiled"></div>
-			<div class="ms-content-body">
-				<div class="ms-content-body-panel">
-
-		            <form role="form" method="post" action="/m-admin/mall/product/update.do" target="_self" id="productForm" name="productForm" class="form-horizontal bv-form" style="width: 100%; background-color: white;" novalidate="novalidate">          
-		                <!--规格设置-->
-		                <div class="form-group ms-form-group has-feedback"> 
-		                    <label for="basicSort" class="col-sm-3  control-label ">
-		                        规格
-		                    </label>
-		                    <div class="col-sm-8 ms-from-group-input ms-form-input">       
-		                        <div class="goods-norms">
-		                            <div class="norms-group" id="addNormsBtn">
-		                                <div class="norms-title">
-		                                    <button type="button" class="btn btn-default add-norms-group">添加规格项目</button>
-		                                </div>
-		                            </div>
-		                            <#noparse>
-		                            <script type="text/x-jquery-tmpl" id="addNormsGroup">
-		                                <div class="norms-group" data-id="">
-		                                    <div class="norms-title">
-		                                        <select class="js-example-theme-single js-states form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true" style="width: 100px;">
-		                                        	
-		                                            <option value="" selected="selected">请输入规格</option>
-		                                            {{each(i, spec) specArr}}
-									                    <option value="${spec.name}"> ${spec.name} </option>
-									            	{{/each}}
-		                                        </select>
-		                                        <span class="delete-norms">×</span>
-	                                        <label class="norms-addpic">
-	                                            <input type="checkbox"/><span>添加规格图片</span>
-	                                        </label>
-		                                    </div>
-		                                    <div class="norms-list">
-		                                        <span class="add-norms" style="display:none">
-		                                            <span class="add-norm-btn">+添加</span>
-		                                            <div class="add-norms-content">
-		                                                <div class="norms-select">
-		                                                    <select class="sel_menu2" multiple="multiple">
-		                                                    </select>
-		                                                    <button type="button" class="btn btn-primary save-norms">确定</button>
-		                                                    <button type="button" class="btn btn-default cancel-save">取消</button>
-		                                                </div>
-		                                                <div class="arrow"></div>
-		                                            </div>
-		                                        </span>
-		                                    </div>
-		                                </div>
-		                            </script>
-		                            </#noparse>
-		                        </div>
-		                    </div>
-		                </div>
-
-		                <div class="form-group ms-form-group has-feedback"> 
-		                    <label for="basicSort" class="col-sm-3  control-label ">
-		                        商品库存
-		                    </label>
-		                    <div class="col-sm-8 ms-from-group-input ms-form-input">  
-		                        <div style="padding:7px;font-size: 12px;border:1px #ddd solid;">批量设置：<a>价格</a> <a>库存</a></div>
-		                        <table class="table table-bordered norms-table">
-		                            <thead>
-		                                <tr class="base-nav">
-		                                    <!--th data-id="1">颜色</th-->
-		                                    <th style="width:130px;" class="base-nav-th">价格(元)</th>
-		                                    <th style="width:120px;">库存</th>
-		                                    <th style="width:150px;">商品编码</th>
-		                                    <th>销量</th>
-		                                </tr>
-		                            </thead>
-		                            <tbody class="norms-table-tr">
-
-		                            </tbody>
-		                        </table>
-		                    </div>
-		                </div>
-
-		                <div class="form-group ms-form-group has-feedback"> 
-		                    <label for="basicSort" class="col-sm-3  control-label ">
-		                        总库存
-		                    </label>
-		                    <div class="col-sm-9 ms-from-group-input ms-form-input" style="width:150px;">       
-		                        <input type="text" autocomplete="off" maxlength="10" name="basicSort" class="form-control">
-		                    </div>
-		                </div>
-		            </form>
-		        </div>
-	        </div>
 			
+                <!--规格设置-->
+                <div class="form-group ms-form-group has-feedback"> 
+                    <label for="basicSort" class="col-sm-2  control-label ">规格</label>
+                    <div class="col-sm-9 ms-from-group-input ms-form-input">       
+                        <div class="goods-norms">
+                            <div class="norms-group" id="addNormsBtn">
+                                <div class="norms-title">
+                                    <button type="button" class="btn btn-default add-norms-group">添加规格项目</button>
+                                </div>
+                            </div>
+                            <#noparse>
+                            <script type="text/x-jquery-tmpl" id="addNormsGroup">
+                                <div class="norms-group" data-id="">
+                                    <div class="norms-title">
+                                        <select class="js-example-theme-single js-states form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true" style="width: 100px;">
+                                        	
+                                            <option value="" selected="selected">请输入规格</option>
+                                            {{each(i, spec) specArr}}
+							                    <option value="${spec.name}"> ${spec.name} </option>
+							            	{{/each}}
+                                        </select>
+                                        <span class="delete-norms">×</span>
+                                    <label class="norms-addpic">
+                                        <input type="checkbox"/><span>添加规格图片</span>
+                                    </label>
+                                    </div>
+                                    <div class="norms-list">
+                                        <span class="add-norms" style="display:none">
+                                            <span class="add-norm-btn">+添加</span>
+                                            <div class="add-norms-content">
+                                                <div class="norms-select">
+                                                    <select class="sel_menu2" multiple="multiple">
+                                                    </select>
+                                                    <button type="button" class="btn btn-primary save-norms">确定</button>
+                                                    <button type="button" class="btn btn-default cancel-save">取消</button>
+                                                </div>
+                                                <div class="arrow"></div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </script>
+                            </#noparse>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group ms-form-group has-feedback"> 
+                    <label for="basicSort" class="col-sm-2  control-label ">商品库存</label>
+                    <div class="col-sm-9 ms-from-group-input ms-form-input">  
+                        <div style="padding:7px;font-size: 12px;border:1px #ddd solid;">批量设置：<a>价格</a> <a>库存</a></div>
+                        <table class="table table-bordered norms-table">
+                            <thead>
+                                <tr class="base-nav">
+                                    <!--th data-id="1">颜色</th-->
+                                    <th style="width:130px;" class="base-nav-th">价格(元)</th>
+                                    <th style="width:120px;">库存</th>
+                                    <th style="width:150px;">商品编码</th>
+                                    <th>销量</th>
+                                </tr>
+                            </thead>
+                            <tbody class="norms-table-tr">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-group ms-form-group has-feedback"> 
+                    <label for="basicSort" class="col-sm-2  control-label ">总库存</label>
+                    <div class="col-sm-9 ms-from-group-input ms-form-input" style="width:150px;">       
+                        <input type="text" autocomplete="off" maxlength="10" name="basicSort" class="form-control">
+                    </div>
+                </div>
 			<@ms.editor name="productContent" label="商品详情" content="${product.productContent?default('')}" />
     	</@ms.form>
-    	
     </@ms.panel>
 </@ms.html5>
 <#noparse>
@@ -714,7 +699,7 @@
         var detailData = SpecMgr.getDetailDataByKeys(keys);
 
         // 空字符串直接保存
-        if (trim(value) == '') {
+        if (value.trim() == '') {
 			delete detailData[key];
 			return;
         }

@@ -83,8 +83,8 @@ method:提交方式
         var searchFormheight = $("#searchForm").height();
         
         //初始化顶住筛选部分的空白div
-        $(".search-form-div").height(searchFormheight + 60);
-        var _height = parseInt(searchFormheight)-46;
+        $(".search-form-div").height(searchFormheight + 15);
+        var _height = parseInt(searchFormheight)-26;
         
         $("#searchForm").find(".close").click(function(){
             var obj = $(this);
@@ -96,7 +96,7 @@ method:提交方式
             } else {
             
                 //空白div与筛选同时展开
-                $(".search-form-div").animate({height:searchFormheight+60+"px"},"slow");
+                $(".search-form-div").animate({height:searchFormheight+15+"px"},"slow");
                 $("#searchForm").animate({top:"46px"},"slow");
                 obj.find("span").removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
             }
@@ -116,15 +116,13 @@ method:提交方式
 </#macro>
 
 <#--自定义行-->
-<#macro formRow label=" " 
- 	class="form-control" 	 	
- 	 width=""  groupClass="form-group"   labelStyle="" help="" style="">
-<div class="${groupClass}">	
-	<#include "control.ftl"/><#rt/>
-	<div class="col-sm-9 ms-from-group-input" style="line-height:30px;<#if width!=""> width:${width}px;</#if>${style}"<#rt/>>
-		<#nested/>
+<#macro formRow label=" " class="form-control" colSm="" groupClass="form-group" width="" labelStyle="" help="" style="" >
+	<div class="${groupClass}">	
+		<#include "control.ftl"/><#rt/>
+		<div class="col-sm-9 ms-from-group-input" style="line-height:30px;<#if width!=""> width:${width}px;</#if>${style}"<#rt/>>
+			<#nested/>
+		</div>
 	</div>
-</div>
 </#macro>
 
 <#--

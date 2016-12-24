@@ -1,12 +1,11 @@
 <@ms.html5>
-	<@ms.nav title="自定义模型管理" back=true></@ms.nav>
-	<@ms.panel>
-		<@ms.panelNav>
-			<@ms.panelNavBtnGroup>
+	<@ms.nav title="自定义模型字段管理" back=true>
+		<@ms.panelNavBtnGroup>
 				<@ms.addButton openModal="contentModelField" openModalBefor="resetForm"/>
 				<@ms.delButton fieldName="fieldId" onclick="deleteForm"/>
-			</@ms.panelNavBtnGroup>
-		</@ms.panelNav>
+		</@ms.panelNavBtnGroup>
+	</@ms.nav>
+	<@ms.panel>
 		<@ms.table head=['描述,100','字段名,100',"类型,100","允许空,60","支持搜索,80","默认值"] checkbox="fieldId">
 			<#if contentModelFieldList?has_content>
 				<#list contentModelFieldList as item>

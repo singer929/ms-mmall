@@ -56,8 +56,8 @@
   <!--<script type="text/javascript" src="${static}/skin/manager/${manager_ui}/js/ms.manager.min.js"></script> -->
   <!-- <link rel="stylesheet" type="text/css" href="${static}/skin/manager/${manager_ui}/css/ms.manager.min.css" media="all" /> -->
   
-  <script type="text/javascript" src="${temp_home}/skin/manager/${manager_ui_tmp}/js/ms.manager.js"></script>
-  <link rel="stylesheet" type="text/css" href="${temp_home}/skin/manager/${manager_ui_tmp}/css/ms.manager.css" media="all" />
+  <script type="text/javascript" src="http://mb.mstore.mingsoft.net/cdn/skin/manager/${manager_ui_tmp}/js/ms.manager.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://mb.mstore.mingsoft.net/cdn/skin/manager/${manager_ui_tmp}/css/ms.manager.css" media="all" />
   
   <#assign skin_manager_logo="${temp_home}/skin/manager/${manager_ui_tmp}/images/logo.png"/>  
   <#assign skin_manager_loadding="${temp_home}/skin/manager/${manager_ui_tmp}/images/loading.gif"/>  

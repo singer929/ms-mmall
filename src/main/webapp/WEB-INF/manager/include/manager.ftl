@@ -52,7 +52,7 @@
 <#--button:格式为map 例如:button={"text":标题,"link":默认返回}-->
 <#macro contentNav title="板块名称">
     <div class="ms-content-body-title">
-        <span>${title}</span>
+        <strong>${title}</strong>
         <#nested/>
     </div>
 </#macro>
