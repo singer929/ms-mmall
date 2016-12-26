@@ -14,17 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.mingsoft.base.entity.BaseEntity;
-import com.mingsoft.base.entity.ListJson;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.biz.IColumnBiz;
 import com.mingsoft.basic.constant.e.CookieConstEnum;
@@ -36,16 +32,12 @@ import com.mingsoft.mdiy.biz.IContentModelFieldBiz;
 import com.mingsoft.mdiy.entity.ContentModelEntity;
 import com.mingsoft.mdiy.entity.ContentModelFieldEntity;
 import com.mingsoft.parser.IParserRegexConstant;
-import com.mingsoft.util.JsonUtil;
-import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
 
 import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.biz.IProductBiz;
 import net.mingsoft.mall.biz.IProductSpecificationBiz;
 import net.mingsoft.mall.biz.IProductSpecificationDetailBiz;
-import net.mingsoft.mall.biz.IProductSpecificationsBiz;
-import net.mingsoft.mall.biz.IProductSpecificationsInventoryBiz;
 import net.mingsoft.mall.biz.ISpecificationBiz;
 import net.mingsoft.mall.biz.ISpecificationsBiz;
 import net.mingsoft.mall.constant.ModelCode;
@@ -100,12 +92,6 @@ public class ProductAction extends BaseAction {
 	
 	@Autowired
 	private ISpecificationBiz specBiz;
-
-	/**
-	 * 注入规格商品关联业务层
-	 */
-	@Autowired
-	private IProductSpecificationsBiz productSpecificationsBiz;
 	
 	/**
 	 * 新版商品规格业务
@@ -118,12 +104,6 @@ public class ProductAction extends BaseAction {
 	 */
 	@Autowired
 	private IProductSpecificationDetailBiz specDeitalBiz;
-
-	/**
-	 * 注入产品库存信息业务层
-	 */
-	@Autowired
-	private IProductSpecificationsInventoryBiz productSpecificationsInventoryBiz;
 
 	/**
 	 * 判断是否为checkbox类型

@@ -400,7 +400,7 @@ var SpecMgr = {
     },
     
     // 批量设置规格数据
-    setBatchValue: function(key, value){
+    batchSetValue: function(key, value){
     	
         for (var i in this.specDetails){
             var detail = arr[i];

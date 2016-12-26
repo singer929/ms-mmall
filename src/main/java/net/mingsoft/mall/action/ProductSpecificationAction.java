@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,8 +16,6 @@ import com.mingsoft.util.StringUtil;
 
 import net.mingsoft.mall.biz.IProductSpecificationBiz;
 import net.mingsoft.mall.biz.IProductSpecificationDetailBiz;
-import net.mingsoft.mall.biz.IProductSpecificationsBiz;
-import net.mingsoft.mall.constant.ModelCode;
 
 /**
  * 

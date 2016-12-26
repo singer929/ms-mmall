@@ -92,7 +92,12 @@
                 <div class="form-group ms-form-group has-feedback"> 
                     <label for="basicSort" class="col-sm-2  control-label ">商品库存</label>
                     <div class="col-sm-9 ms-from-group-input ms-form-input">  
-                        <div style="padding:7px;font-size: 12px;border:1px #ddd solid;">批量设置：<a>价格</a> <a>库存</a></div>
+                        <div class="batch-set">
+                            批量设置：
+                            <span>价格<input type="text" placeholder="请输入价格" id="allPriceTxt"/><button class="btn btn-default all-price">保存</button></span> 
+                            <span>库存<input type="text" placeholder="请输入库存" id="allStockTxt"/><button class="btn btn-default all-stock">保存</button></span>
+                        </div>
+
                         <table class="table table-bordered norms-table">
                             <thead>
                                 <tr class="base-nav">
@@ -272,7 +277,17 @@
     $("body").delegate(".norms-pic", "click", function(){
 		var specValue = $(this).parent().data('value');
 		var specName = $(this).parent().parent().parent().data('id');
-    });
+    });                                                                                                                                                                                       
+   
+    // 批量设置
+    function batchSet(key, value){
+
+    	if (!validateValue(key, value)) return;
+
+    	SpecMgr.batchSetValue(key, value);
+    }
+
+    // 批量设置库存
     
     String.prototype.format = function(){
         var args = arguments;
@@ -370,6 +385,14 @@
             $(this).siblings("select").empty();
             $(this).parent().parent().hide();
         });
+
+        // 批量设置价格和库存
+	    $(".batch-set").find(".all-price").click(function(){
+	    	batchSet('price', $('#allPriceTxt').val());
+		});
+	    $(".batch-set").find(".all-stock").click(function(){
+	    	batchSet('stock', $('#allStockTxt').val());
+	    });
 
         // 规格名字改变 可能是新增,可能是改变 (规格表新增规格, 商品规格表删除原规格, 添加新增规格)
         $(".goods-norms").delegate(".js-example-theme-single", "change", function () {
@@ -710,26 +733,37 @@
 			return;
         }
 
-         //判断库存必须为整数
+        var result = validateValue(key, value);
+        if (!result){
+        	$(input).val(detailData[key]);
+        	return;
+        }
+
+
+        detailData[key] = value;
+    }
+
+    // 校验文字
+    function validateValue(key, value){
+
+    	 //判断库存必须为整数
         if(key=="stock" && !validator.isInt(value)){
             alert("请输入整数");
-            $(input).val(detailData[key]);
-            return;
+            
+            return false;
         }
         //判断价格必须为数字，且只有一个小数点
         if(key=="price" && !validator.isCurrency(value)){
             alert("请输入正确价格")
-            $(input).val(detailData[key]);
-            return;
+            return false;
         }
         //判断编号值不能为特殊字符
         if(key=="code" && !validator.isAlphanumeric(value)){
             alert("不能输入特殊字符")
-            $(input).val(detailData[key]);
-            return;
+            return false;
         }
 
-        detailData[key] = value;
+        return true;
     }
 
     // 深度克隆
