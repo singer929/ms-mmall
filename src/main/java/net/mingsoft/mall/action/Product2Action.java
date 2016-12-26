@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,9 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.parser.Feature;
 import com.mingsoft.base.entity.BaseEntity;
-import com.mingsoft.base.entity.ListJson;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.biz.IColumnBiz;
 import com.mingsoft.basic.constant.e.CookieConstEnum;
@@ -164,9 +161,15 @@ public class Product2Action extends BaseAction {
 		// 获取modelId
 		int appId = BasicUtil.getAppId();
 		int modelId = this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
+		int categoryId = product.getBasicCategoryId();
 		
 		// 查询当前分类的所有子分类
-		int[] childColumnId = this.categoryBiz.queryChildrenCategoryIds(product.getBasicCategoryId(), appId, modelId);
+		int[] childColumnId = this.categoryBiz.queryChildrenCategoryIds(categoryId, appId, modelId);
+		
+		// 若没有子分类, 则把自己装进分类id中, 以便查询具体商品
+		if (childColumnId.length == 0){
+			childColumnId = new int[]{categoryId};
+		}
 		/// 查询的总数
 		// int recordCount = productBiz.getCountByColumnId(appId, childColumnId,
 		/// product.getProductShelf(), null, null);
