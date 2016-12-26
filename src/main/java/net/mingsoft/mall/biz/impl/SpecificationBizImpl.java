@@ -78,8 +78,8 @@ public class SpecificationBizImpl extends BaseBizImpl implements ISpecificationB
 	 */
 	@Override
 	public int countByAppId(int appId) {
-		// TODO Auto-generated method stub
-		return 0;
+		int count = specDao.countByAppId(appId);
+		return count;
 	}
 
 	@Override

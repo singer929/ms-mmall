@@ -61,7 +61,6 @@
 		        		</td>
 		        	</tr>
 			        <tr>
-			            <th class="col-md-1 col-xs-2 text-center">规格编号</th>
 			            <th class="col-md-3 col-xs-3 text-center">规格名称</th>
 			            <th class="col-md-6 col-xs-5 text-center">规格型号</th>
 			            <th class="col-md-2 col-xs-2 text-center">操作</th>
@@ -69,16 +68,15 @@
 		        </thead>
 		        <tbody>
 		        	<#if list?has_content>
-		        		<#list list as specifications>
-				        	<tr data-id="${specifications.specificationsId?c?default(0)}">
-					        	<td class="text-center">${specifications.specificationsId?c?default(0)}</td>
-					        	<td class="text-center name">${specifications.specificationsName?default("暂无")}</td>
-					        	<td class="field">${specifications.specificationsField?default("暂无")}</td>
+		        		<#list list as spec>
+				        	<tr data-id="${spec.name?default("")}">
+					        	<td class="text-center name">${spec.name?default("暂无")}</td>
+					        	<td class="field">${spec.defaultFields?default("暂无")}</td>
 					        	<td class="text-center">
-				                    <a class="btn btn-xs red tooltips edit-btn" data-id="${specifications.specificationsId?c?default(0)}" data-toggle="tooltip"  data-original-title="编辑商品">
+				                    <a class="btn btn-xs red tooltips edit-btn" data-id="${spec.name?default("")}" data-toggle="tooltip"  data-original-title="编辑商品">
 			                     		<i class="glyphicon glyphicon-pencil"></i>
 			                    	</a>
-			                    	 <a class="btn btn-xs red tooltips del-btn" data-id="${specifications.specificationsId?c?default(0)}" data-toggle="tooltip" data-original-title="删除商品">
+			                    	 <a class="btn btn-xs red tooltips del-btn" data-id="${spec.name?default("")}" data-toggle="tooltip" data-original-title="删除商品">
 			                     		<i class="glyphicon glyphicon-trash"></i>
 			                    	</a>			        	
 					        	</td>
@@ -117,14 +115,13 @@
 							<div class="form-group">
 								<label class="col-md-3 col-xs-2 control-label" >规格名称:</label>
 								<div class="col-md-5  col-xs-5">
-									<input type="text" class="form-control"  name="specificationsName" placeholder="请输入规格名称">
-									<input type="hidden" value="0" name="specificationsId">
+									<input type="text" class="form-control"  name="name" placeholder="请输入规格名称">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-md-3 col-xs-2 control-label" >规格型号:</label>
 								<div class="col-md-8  col-xs-8">
-									<textarea rows="3" class="form-control" name="specificationsField" placeholder="请输入规格型号,多个用','号隔开"></textarea>
+									<textarea rows="3" class="form-control" name="defaultFields" placeholder="请输入规格型号,多个用','号隔开"></textarea>
 									<br>
 									<p class="alert alert-info" role="alert" style="margin:0">
 						            	<span class="glyphicon glyphicon-pushpin text-lef "></span>
@@ -201,13 +198,13 @@
 		
 		//点击更新
 		$(".edit-btn").on("click",function(){
-			var id = $(this).attr("data-id");
-			var specificationsName = $("table tbody tr[data-id='"+id+"'] .name").text();
-			var specificationsField = $("table tbody tr[data-id='"+id+"'] .field").text();
+		
+			var name = $(this).attr("data-id");
+			var defaultFields = $("table tbody tr[data-id='"+name+"'] .field").text();
+			
 			//加载弹出框默认数据
-			$("#modalFrom input[name='specificationsName']").val(specificationsName);
-			$("#modalFrom textarea[name='specificationsField']").val(specificationsField);
-			$("#modalFrom input[name='specificationsId']").val(id);	
+			$("#modalFrom input[name='name']").val(name);
+			$("#modalFrom textarea[name='defaultFields']").val(defaultFields);
 			//加载默认显示值
 			$("#saveOrUpdateBtn").text("更新");
 			$("modal modal-title").text("更新商品规格");

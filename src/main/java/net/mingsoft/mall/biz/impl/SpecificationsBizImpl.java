@@ -63,8 +63,8 @@ public class SpecificationsBizImpl extends BaseBizImpl implements ISpecification
 	 * @param page 分页
 	 * @return 规格列表
 	 */
-	public List<SpecificationsEntity> queryPageByAppId(Integer appId,PageUtil page){
-		return this.specificationsDao.query(appId,null,null);
+	public List<SpecificationsEntity> queryPageByAppId(Integer appId, PageUtil page){
+		return this.specificationsDao.query(appId, null, null);
 	}
 	
 	/**

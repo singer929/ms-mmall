@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
-import com.mingsoft.basic.constant.Const;
 import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
 
+import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.biz.ISpecificationBiz;
 import net.mingsoft.mall.biz.ISpecificationsBiz;
 import net.mingsoft.mall.constant.ModelCode;
+import net.mingsoft.mall.entity.SpecificationEntity;
 import net.mingsoft.mall.entity.SpecificationsEntity;
 
 /**
@@ -67,16 +68,19 @@ public class SpecificationAction extends BaseAction{
 	 */
 	@RequestMapping("/list")
 	public String list(ModelMap model,HttpServletRequest request){
-		int appId = this.getAppId(request);
+		
+		int appId = BasicUtil.getAppId();
 		String pageNo = request.getParameter("pageNo");
 		if(StringUtil.isBlank(pageNo)){
 			pageNo = "1";
 		}
-		int count = this.specificationsBiz.queryCountByAppId(appId);
-		PageUtil page = new PageUtil(StringUtil.string2Int(pageNo),count,this.getUrl(request)+"/manager/mall/specifications/list.do");
-		List<SpecificationsEntity> list = this.specificationsBiz.queryPageByAppId(appId, page);
+		
+		int count = specBiz.countByAppId(appId);
+		PageUtil page = new PageUtil(StringUtil.string2Int(pageNo), count, this.getUrl(request)+"/manager/mall/specifications/list.do");
+		List<SpecificationEntity> list = specBiz.queryPageByAppId(appId, page);
 		model.addAttribute("list", list);
 		model.addAttribute("page", page);
+		
 		return view("/mall/specifications/specifications_list");
 	}
 	
@@ -86,24 +90,26 @@ public class SpecificationAction extends BaseAction{
 	 * @param response
 	 */
 	@RequestMapping("/save")
-	public void save(@ModelAttribute SpecificationsEntity specifications,HttpServletRequest request,HttpServletResponse response){
-		if(specifications == null){
+	public void save(@ModelAttribute SpecificationEntity spec,HttpServletRequest request,HttpServletResponse response){
+		
+		if(spec == null){
 			this.outJson(response,ModelCode.MALL_SPECIFICATIONS, false);
 			return ;
 		}
+		
 		//验证前端提交数据
-		if(!this.checkForm(specifications, response)){
+		if(!this.checkForm(spec, response)){
 			return ;
 		};
 		
 		//获取加载APPid
-		int appId = this.getAppId(request);
-		specifications.setSpecificationsAppId(appId);
+		int appId = BasicUtil.getAppId();
+		spec.setAppId(appId);
 		
-		this.specificationsBiz.saveEntity(specifications);
-		if(specifications.getSpecificationsId() > 0){
+		specBiz.saveEntity(spec);
+		if(true){
 			//新增成功
-			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, true,JSONObject.toJSONString(specifications));
+			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, true, JSONObject.toJSONString(spec));
 		}else{
 			//新增失败
 			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false);
@@ -117,23 +123,24 @@ public class SpecificationAction extends BaseAction{
 	 * @param response
 	 */
 	@RequestMapping("/update")
-	public void update(@ModelAttribute SpecificationsEntity specifications,HttpServletRequest request,HttpServletResponse response){
-		if(specifications == null){
+	public void update(@ModelAttribute SpecificationEntity spec, HttpServletRequest request,HttpServletResponse response){
+		
+		if(spec == null){
 			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false);
-			return ;
+			return;
 		}	
 		//验证前端提交数据
-		if(!this.checkForm(specifications, response)){
-			return ;
-		};
+		if(!this.checkForm(spec, response)){
+			return;
+		}
 		
-		if(!(specifications.getSpecificationsId() > 0)){
+		if(StringUtil.isBlank(spec.getName())){
 			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false);
-			return ;
+			return;
 		}
 		
 		//执行更新
-		this.specificationsBiz.updateEntity(specifications);
+		specBiz.updateEntity(spec);
 		this.outJson(response, ModelCode.MALL_SPECIFICATIONS,true);
 	}
 	
@@ -159,8 +166,10 @@ public class SpecificationAction extends BaseAction{
 	 */
 	@RequestMapping("/listByAjax")
 	public void listByAjax(HttpServletRequest request,HttpServletResponse response){
-		int appId = this.getAppId(request);
+		
+		int appId = BasicUtil.getAppId();
 		List<SpecificationsEntity> list = this.specificationsBiz.queryPageByAppId(appId,null);
+		
 		if(list != null && list.size() > 0){
 			this.outJson(response, ModelCode.MALL_SPECIFICATIONS,true,JSONObject.toJSONString(list));
 		}else{
@@ -174,15 +183,16 @@ public class SpecificationAction extends BaseAction{
 	 * @param response
 	 * @return
 	 */
-	public boolean checkForm(SpecificationsEntity specifications, HttpServletResponse response){
-		//判断产品规格的标题是否介于1-300之间
-		if(!StringUtil.checkLength(specifications.getSpecificationsName(), 1, 12)){
-			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, getResString("err.length","SpecificationsName","1","12"));
+	private boolean checkForm(SpecificationEntity spec, HttpServletResponse response){
+		//判断产品规格的标题是否介于1-12之间
+		if(!StringUtil.checkLength(spec.getName(), 1, 12)){
+			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, getResString("err.length", "SpecificationsName", "1","12"));
 			return false;
 		}
 		//判断产品规格型号的长度不能超过200
-		if(specifications.getSpecificationsField() != null && specifications.getSpecificationsField().length() > 200){
-			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, getResString("err.length","specificationsName","0","200"));
+		String fieldsStr = spec.getDefaultFields();
+		if(fieldsStr != null && fieldsStr.length() > 200){
+			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, getResString("err.length", "specificationsName","0","200"));
 			return false;			
 		}
 		return true;

@@ -1,4 +1,4 @@
-package net.mingsoft.mall.entity;
+  package net.mingsoft.mall.entity;
 
 import com.mingsoft.base.entity.BaseEntity;
 

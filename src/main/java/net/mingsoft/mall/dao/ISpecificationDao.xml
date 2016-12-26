@@ -47,15 +47,14 @@
 	<select id="getEntity" resultMap="resultMap" parameterType="int">
 		select 
 		<include refid="column_list" />
-		from mall_specification s where s.s_id = #{specId}
+		from mall_specification s where s.specification_name = #{name}
 	</select>
 	<!-- 根据ID查询结束-->
 	
 	<!-- 删除商品规格开始 -->
-	<delete id="deleteEntity" parameterType="int">
+	<delete id="deleteEntity" parameterType="String">
 		delete from mall_specification
-		where
-		s_id = #{specId}
+		where specification_name = #{name}
 	</delete>
 	<!-- 删除商品规格结束 -->
 	
@@ -68,13 +67,12 @@
 	<!-- 根据APPID获取规格列表(带分页)-->
 	<select id="queryByAppId" resultMap="resultMap">
 		select <include refid="column_list"/> from mall_specification s
-		where 1=1
+		where 1 = 1
 		<if test="appId != null">and s.specification_app_id = #{appId}</if>
-		order by s.s_id desc
-		<if test=" begin != null">
+		<if test=" begin != 0">
 			limit #{begin}
 		</if>
-		<if test=" end != null">
+		<if test=" end != 0">
 			, #{end}
 		</if>
 	</select>
@@ -87,22 +85,22 @@
 	</select>
 	
 	<!-- 查找与某商品有关的规格 -->
-	<select id="queryByProductId" resultMap="resultMap">
-	 	select 
-			ms.specification_name,
-			ms.specification_default_fields,
-			ms.specification_app_id
-	 	from 
-	 		mall_specification ms, 
-	 		basic b, basic_category bc, 
-	 		category c, 
-	 		mall_product_specification mps
-	 	where 1 = 1
-		 	and b.BASIC_ID = bc.bc_basic_id
-		 	and c.CATEGORY_ID = bc.bc_category_id 
-		 	and b.BASIC_ID = #{productId}
-		 	and mps.ps_spec_id = ms.s_id
-		 	and mps.ps_product_id = b.BASIC_ID
-		 group by ms.s_id
-	</select>
+<!-- 	<select id="queryByProductId" resultMap="resultMap"> -->
+<!-- 	 	select  -->
+<!-- 			ms.specification_name, -->
+<!-- 			ms.specification_default_fields, -->
+<!-- 			ms.specification_app_id -->
+<!-- 	 	from  -->
+<!-- 	 		mall_specification ms,  -->
+<!-- 	 		basic b, basic_category bc,  -->
+<!-- 	 		category c,  -->
+<!-- 	 		mall_product_specification mps -->
+<!-- 	 	where 1 = 1 -->
+<!-- 		 	and b.BASIC_ID = bc.bc_basic_id -->
+<!-- 		 	and c.CATEGORY_ID = bc.bc_category_id  -->
+<!-- 		 	and b.BASIC_ID = #{productId} -->
+<!-- 		 	and mps.ps_spec_id = ms.specification_id -->
+<!-- 		 	and mps.ps_product_id = b.BASIC_ID -->
+<!-- 		 group by ms.specification_id -->
+<!-- 	</select> -->
 </mapper>

@@ -5,7 +5,6 @@ import java.util.List;
 import com.mingsoft.base.biz.IBaseBiz;
 
 import net.mingsoft.mall.entity.ProductSpecificationEntity;
-import net.mingsoft.mall.entity.ProductSpecificationsEntity;
 
 /**
  * 

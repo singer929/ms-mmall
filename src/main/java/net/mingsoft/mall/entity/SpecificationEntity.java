@@ -53,6 +53,14 @@ public class SpecificationEntity extends BaseEntity{
 	 */
 	private int appId;
 
+	public int getAppId() {
+		return appId;
+	}
+
+	public void setAppId(int appId) {
+		this.appId = appId;
+	}
+
 	public String getName() {
 		return name;
 	}
