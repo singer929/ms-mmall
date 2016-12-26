@@ -1,7 +1,6 @@
 package net.mingsoft.mall.entity;
 
 import com.mingsoft.base.entity.BaseEntity;
-import com.mingsoft.basic.entity.ColumnEntity;
 
 /**
  * 
@@ -37,7 +36,7 @@ import com.mingsoft.basic.entity.ColumnEntity;
  * <p>
  * </p>
  */
-public class ProductSpecDetailEntity extends BaseEntity{
+public class ProductSpecificationDetailEntity extends BaseEntity{
 	
 	/**
 	 * 产品规格关联id

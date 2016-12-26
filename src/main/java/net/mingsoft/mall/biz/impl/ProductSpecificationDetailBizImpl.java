@@ -1,7 +1,6 @@
 package net.mingsoft.mall.biz.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,15 +8,10 @@ import org.springframework.stereotype.Service;
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.basic.dao.IModelDao;
-import com.mingsoft.util.PageUtil;
 
-import net.mingsoft.mall.biz.IProductSpecDetailBiz;
-import net.mingsoft.mall.biz.IProductSpecificationsInventoryBiz;
-import net.mingsoft.mall.constant.ModelCode;
-import net.mingsoft.mall.dao.IProductSpecDetailDao;
-import net.mingsoft.mall.dao.IProductSpecificationsInventoryDao;
-import net.mingsoft.mall.entity.ProductSpecDetailEntity;
-import net.mingsoft.mall.entity.ProductSpecificationsInventoryEntity;
+import net.mingsoft.mall.biz.IProductSpecificationDetailBiz;
+import net.mingsoft.mall.dao.IProductSpecificationDetailDao;
+import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
 
 
 /**
@@ -55,14 +49,14 @@ import net.mingsoft.mall.entity.ProductSpecificationsInventoryEntity;
  *          Modification history:
  *          </p>
  */
-@Service("ProductSpecDetailBizImpl")
-public class ProductSpecDetailBizImpl extends BaseBizImpl implements IProductSpecDetailBiz{
+@Service("ProductSpecificationDetailBizImpl")
+public class ProductSpecificationDetailBizImpl extends BaseBizImpl implements IProductSpecificationDetailBiz{
 	
 	/**
 	 * 产品库存数据处理层
 	 */
 	@Autowired
-	private IProductSpecDetailDao detailDao;
+	private IProductSpecificationDetailDao detailDao;
 	
 	/**
 	 * 模块编码
@@ -89,15 +83,15 @@ public class ProductSpecDetailBizImpl extends BaseBizImpl implements IProductSpe
 	 * 批量更新排序
 	 */
 	@Override
-	public void updateSort(List<ProductSpecDetailEntity> list) {
+	public void updateSort(List<ProductSpecificationDetailEntity> list) {
 		
 	}
 
 	/**
-	 * 根据商品ID, 来查询它所拥有个规格
+	 * 根据商品ID, 来查询它所拥有的规格
 	 */
 	@Override
-	public List<ProductSpecDetailEntity> queryDetailsByProductId(int productId) {
+	public List<ProductSpecificationDetailEntity> queryDetailsByProductId(int productId) {
 		
 		return null;
 	}
@@ -108,12 +102,12 @@ public class ProductSpecDetailBizImpl extends BaseBizImpl implements IProductSpe
 	 * @param list			数据集合
 	 */
 	@Override
-	public void saveEntitiesByProductId(int productId, List<ProductSpecDetailEntity> list) {
+	public void saveEntitiesByProductId(int productId, List<ProductSpecificationDetailEntity> list) {
 		
 		// 删除原来数据
 		detailDao.deleteEntityByProductIds(new int[]{productId});
 		
-		for (ProductSpecDetailEntity pse : list){
+		for (ProductSpecificationDetailEntity pse : list){
 			pse.setProductId(productId);
 		}
 		

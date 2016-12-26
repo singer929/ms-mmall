@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mingsoft.base.biz.IBaseBiz;
 
-import net.mingsoft.mall.entity.ProductSpecDetailEntity;
+import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
 
 
 /**
@@ -42,7 +42,7 @@ import net.mingsoft.mall.entity.ProductSpecDetailEntity;
  *          Modification history:
  *          </p>
  */
-public interface IProductSpecDetailBiz extends IBaseBiz{
+public interface IProductSpecificationDetailBiz extends IBaseBiz{
 	
 	/**
 	 * 更具产品ID删除产品信息
@@ -55,14 +55,14 @@ public interface IProductSpecDetailBiz extends IBaseBiz{
 	 * 更新排序
 	 * @param list 商品规格数据明细
 	 */
-	public void updateSort(List<ProductSpecDetailEntity> list);
+	public void updateSort(List<ProductSpecificationDetailEntity> list);
 	
 	/**
 	 * 保存某商品的规格明细数据
 	 * @param productId		商品id
 	 * @param list			数据集合
 	 */
-	public void saveEntitiesByProductId(int productId, List<ProductSpecDetailEntity> list);
+	public void saveEntitiesByProductId(int productId, List<ProductSpecificationDetailEntity> list);
 	
 	
 	/**
@@ -89,5 +89,5 @@ public interface IProductSpecDetailBiz extends IBaseBiz{
 	 * @param productId 产品id
 	 * @return 商品规格产品列表
 	 */
-	public List<ProductSpecDetailEntity> queryDetailsByProductId(int productId);
+	public List<ProductSpecificationDetailEntity> queryDetailsByProductId(int productId);
 }

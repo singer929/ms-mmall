@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mingsoft.util.StringUtil;
 
+import net.mingsoft.mall.biz.IProductSpecificationBiz;
+import net.mingsoft.mall.biz.IProductSpecificationDetailBiz;
 import net.mingsoft.mall.biz.IProductSpecificationsBiz;
 import net.mingsoft.mall.constant.ModelCode;
 
@@ -45,31 +47,39 @@ import net.mingsoft.mall.constant.ModelCode;
  * Modification history:
  * </p>
  */
-@Controller("productSpecifications")
-@RequestMapping("/${managerPath}/mall/productSpecifications")
+@Controller("productSpecification")
+@RequestMapping("/${managerPath}/mall/productSpecification")
 public class ProductSpecificationAction extends BaseAction{
 
 	/**
 	 * 产品规格关联业务层
 	 */
 	@Autowired
-	private IProductSpecificationsBiz productSpecificationBiz;
-	
+	private IProductSpecificationBiz productSpecBiz;
 	
 	/**
-	 * 当前商品规格集合
+	 * 产品规格明细关联业务层
+	 */
+	@Autowired
+	private IProductSpecificationDetailBiz detailBiz;
+	
+	/**
+	 * 删除当前商品的规格(设置规格页面)
 	 */
 	@RequestMapping("/delete")
 	@ResponseBody
-	public void list(HttpServletRequest request,HttpServletResponse response){
-		String[] productIds = request.getParameterValues("productId");
-		int[] _productIds = null;
-		if (StringUtil.isIntegers(productIds)) {
-			_productIds = StringUtil.stringsToInts(productIds);
-		}
-		this.productSpecificationBiz.deleteEntityByProductId(_productIds);
+	public void list(HttpServletRequest request, HttpServletResponse response){
+		
+		String[] productIdStr = request.getParameterValues("productId");
+		
+		// 参数类型不匹配直接退出
+		if (!StringUtil.isIntegers(productIdStr)) return;
+		
+		int[] productIds = StringUtil.stringsToInts(productIdStr);
+		
+		// 删除产品规格表中的数据
+		productSpecBiz.deleteEntityByProductIds(productIds);
+		// 删除产品规格明细表中的数据
+		detailBiz.deleteByProductIds(productIds);
 	}
-	
-	
-	
 }

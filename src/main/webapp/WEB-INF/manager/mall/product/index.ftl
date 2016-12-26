@@ -12,7 +12,7 @@
 			</@ms.contentMenu>
   			<@ms.contentBody width="85%" style="overflow-y: hidden;">
 				<@ms.contentPanel  style="margin:0;padding:0;overflow-y: hidden;">
-                   <iframe src="${managerPath}/mall/product2/list.do?basicCategoryId=0" style="width:100%;maring:0;padding:0;border:none;height:100%;background-image: url(${skin_manager_loadding});  background-repeat: no-repeat;  background-position: center;" id="listFrame" target="listFrame" ></iframe>
+                   <iframe src="${managerPath}/mall/product/list.do?basicCategoryId=0" style="width:100%;maring:0;padding:0;border:none;height:100%;background-image: url(${skin_manager_loadding});  background-repeat: no-repeat;  background-position: center;" id="listFrame" target="listFrame" ></iframe>
 				</@ms.contentPanel>	
 			</@ms.contentBody>          
 	</@ms.content>
@@ -28,9 +28,9 @@
 				callback: {
 					onClick: function(event, treeId, treeNode) {
 						if (treeNode.type==1) {
-								$("#listFrame").attr("src","${managerPath}/mall/product2/list.do?basicCategoryId="+treeNode.id+"&column.categoryTitle="+encodeURIComponent(treeNode.name));
+								$("#listFrame").attr("src","${managerPath}/mall/product/list.do?basicCategoryId="+treeNode.id+"&column.categoryTitle="+encodeURIComponent(treeNode.name));
 						} else {
-								$("#listFrame").attr("src","${managerPath}/mall/product2/edit.do?basicCategoryId="+treeNode.id+"&column.categoryTitle="+encodeURIComponent(treeNode.name));
+								$("#listFrame").attr("src","${managerPath}/mall/product/edit.do?basicCategoryId="+treeNode.id+"&column.categoryTitle="+encodeURIComponent(treeNode.name));
 						}
 					}
 				},

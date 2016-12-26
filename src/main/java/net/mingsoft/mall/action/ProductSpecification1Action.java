@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mingsoft.util.StringUtil;
 
-import net.mingsoft.mall.biz.IProductSpecBiz;
-import net.mingsoft.mall.biz.IProductSpecDetailBiz;
+import net.mingsoft.mall.biz.IProductSpecificationBiz;
+import net.mingsoft.mall.biz.IProductSpecificationDetailBiz;
 import net.mingsoft.mall.biz.IProductSpecificationsBiz;
 import net.mingsoft.mall.constant.ModelCode;
 
@@ -49,19 +49,19 @@ import net.mingsoft.mall.constant.ModelCode;
  */
 @Controller("productSpec")
 @RequestMapping("/${managerPath}/mall/productSpec")
-public class ProductSpecAction extends BaseAction{
+public class ProductSpecification1Action extends BaseAction{
 
 	/**
 	 * 产品规格关联业务层
 	 */
 	@Autowired
-	private IProductSpecBiz productSpecBiz;
+	private IProductSpecificationBiz productSpecBiz;
 	
 	/**
 	 * 产品规格明细关联业务层
 	 */
 	@Autowired
-	private IProductSpecDetailBiz detailBiz;
+	private IProductSpecificationDetailBiz detailBiz;
 	
 	/**
 	 * 删除当前商品的规格(设置规格页面)

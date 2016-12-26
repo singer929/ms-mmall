@@ -373,7 +373,6 @@ var SpecMgr = {
                for (var j in this.specDetails){
                    var detail = this.specDetails[j];
                    if (objEqual(detail.specValues, oldDetail.specValues)){
-
                        for (var key in oldDetail){
                            detail[key] = oldDetail[key];
                        }
@@ -398,5 +397,17 @@ var SpecMgr = {
                 details.push({specValues:deepClone(datas)});
             }
         }
+    },
+    
+    // 批量设置规格数据
+    setBatchValue: function(key, value){
+    	
+        for (var i in this.specDetails){
+            var detail = arr[i];
+            if (!detail[key]) continue;
+            detail[key] = value;
+        }
+        
+        this.setGridMap(this.specDetails);
     }
 }

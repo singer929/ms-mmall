@@ -48,6 +48,7 @@
   <script type="text/javascript" src="${static}/plugins/jquery.swfupload/1.0.0/swfupload.js"></script>
   <script type="text/javascript" src="${static}/plugins/jquery.swfupload/1.0.0/jquery.swfupload.js"></script>
   <script type="text/javascript" src="${static}/plugins/jquery.swfupload/1.0.0/fileprogress.js"></script>
+  <script type="text/javascript" src="${static}/plugins/plupload/2.2.1/plupload.full.min.js"></script>
   
   <!--后台UI-->
   <script type="text/javascript" src="${static}/skin/manager/${manager_ui}/js/ms.validate.js"></script>

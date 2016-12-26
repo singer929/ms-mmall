@@ -130,9 +130,9 @@ onclick="" click="" url="" toggle="tooltip" target="bottom" icon="" title="" pla
 					var params = ""; 
 					var count = 0;
 					$('input[name="${fieldName}"]:checked').each(function(){    
-					   ids+=$(this).val()+",";
-					   params+="${fieldName}="+$(this).val()+"&";
-					   count++;
+					   ids += $(this).val() + ",";
+					   params += "${fieldName}=" + $(this).val() + "&";
+					   count ++;
 					});   
 					if (count == 0) {
 						 <@ms.notify msg="请选择要删除的数据！"/>			

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.mingsoft.mall.dao.IProductSpecDao">
+<mapper namespace="net.mingsoft.mall.dao.IProductSpecificationDao">
 
 	<sql id="column_list">
 		ps.ps_id, 
@@ -11,7 +11,7 @@
 	</sql>
 
 	<!-- 获取表字段开始 -->
-	<resultMap type="net.mingsoft.mall.entity.ProductSpecEntity" id="resultMap">
+	<resultMap type="net.mingsoft.mall.entity.ProductSpecificationEntity" id="resultMap">
 		<id column="ps_id" property="psId" />
 		<result column="ps_product_id" property="productId" />
 		<result column="ps_spec_name" property="specName" />
@@ -19,7 +19,7 @@
 		<result column="ps_img" property="img" />
 	</resultMap>
 
-	<resultMap id="resultMapList" type="net.mingsoft.mall.entity.ProductSpecEntity">
+	<resultMap id="resultMapList" type="net.mingsoft.mall.entity.ProductSpecificationEntity">
 		<id column="ps_id" property="psId" />
 		<result column="ps_product_id" property="productId" />
 		<result column="ps_spec_name" property="specName" />
@@ -54,7 +54,7 @@
 
 	<!-- 新增产品规格关联信息开始 -->
 	<insert id="saveEntity" useGeneratedKeys="true"
-		keyProperty="psId" parameterType="net.mingsoft.mall.entity.ProductSpecEntity">
+		keyProperty="psId" parameterType="net.mingsoft.mall.entity.ProductSpecificationEntity">
 		insert into mall_product_specification
 		<!-- 添加表字段 -->
 		<trim prefix="(" suffix=")" suffixOverrides=",">

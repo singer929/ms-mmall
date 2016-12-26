@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.mingsoft.base.dao.IBaseDao;
 
-import net.mingsoft.mall.entity.ProductSpecDetailEntity;
+import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
 
 /**
  * 
@@ -42,7 +42,7 @@ import net.mingsoft.mall.entity.ProductSpecDetailEntity;
  * <p>
  * </p>
  */
-public interface IProductSpecDetailDao extends IBaseDao{
+public interface IProductSpecificationDetailDao extends IBaseDao{
 
 	/**
 	 * 更具产品ID删除产品信息
@@ -54,7 +54,7 @@ public interface IProductSpecDetailDao extends IBaseDao{
 	 * 批量进行更新操作
 	 * @param data
 	 */
-	public void updateSort(ProductSpecDetailEntity data);
+	public void updateSort(ProductSpecificationDetailEntity data);
 	
 	/**
 	 * 根据分类id和模块id查询商品规格产品的总数
@@ -81,12 +81,12 @@ public interface IProductSpecDetailDao extends IBaseDao{
 	 * @param productId 产品id
 	 * @return 商品规格库存列表
 	 */
-	public List<ProductSpecDetailEntity> queryByAppAndProductId(@Param("appId")int appId, @Param("productId")int productId);
+	public List<ProductSpecificationDetailEntity> queryByAppAndProductId(@Param("appId")int appId, @Param("productId")int productId);
 	
 	/**
 	 * 根据商品id查询商品规格库存列表信息
 	 * @param productId 产品id
 	 * @return 商品规格库存列表
 	 */
-	public List<ProductSpecDetailEntity> queryEntitiesByProductId(@Param("productId") int productId);
+	public List<ProductSpecificationDetailEntity> queryEntitiesByProductId(@Param("productId") int productId);
 }

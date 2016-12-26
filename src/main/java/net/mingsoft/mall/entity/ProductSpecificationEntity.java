@@ -36,7 +36,7 @@ import com.mingsoft.base.entity.BaseEntity;
  * <p>
  * </p>
  */
-public class ProductSpecEntity extends BaseEntity{
+public class ProductSpecificationEntity extends BaseEntity{
 
 	/**
 	 * 产品规格id 主键

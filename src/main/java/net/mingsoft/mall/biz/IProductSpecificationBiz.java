@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mingsoft.base.biz.IBaseBiz;
 
-import net.mingsoft.mall.entity.ProductSpecEntity;
+import net.mingsoft.mall.entity.ProductSpecificationEntity;
 import net.mingsoft.mall.entity.ProductSpecificationsEntity;
 
 /**
@@ -42,14 +42,7 @@ import net.mingsoft.mall.entity.ProductSpecificationsEntity;
  *          Modification history:
  *          </p>
  */
-public interface IProductSpecBiz extends IBaseBiz{
-	
-	/**
-	 * 关联查询商品规格已经该规格对应的商品详情
-	 * @param productId 商品ID
-	 * @return 商品规格列表
-	 */
-	//public List<ProductSpecEntity> queryListJsonByProduct(int productId);
+public interface IProductSpecificationBiz extends IBaseBiz{
 	
 	/**
 	 * 根据产品ID 获取客户端需要的产品规格信息 json 数据字符串
@@ -64,7 +57,7 @@ public interface IProductSpecBiz extends IBaseBiz{
 	 * @param list 需要保存的商品规格数据列表
  	 * @return 结果是否成功
 	 */
-	public Boolean saveEntitiesByProductId(int productId, List<ProductSpecEntity> list);
+	public Boolean saveEntitiesByProductId(int productId, List<ProductSpecificationEntity> list);
 	
 	/**
 	 * 根据产品ID删除该产品对应的规格
@@ -77,5 +70,5 @@ public interface IProductSpecBiz extends IBaseBiz{
 	 * @param ProductSpecificationsId 产品规格关联id
 	 * @return  产品规格关联列表
 	 */
-	public List<ProductSpecEntity> queryListByPsId(int id);
+	public List<ProductSpecificationEntity> queryListByPsId(int id);
 }

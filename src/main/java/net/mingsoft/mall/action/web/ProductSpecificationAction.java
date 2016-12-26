@@ -3,8 +3,6 @@
  */
 package net.mingsoft.mall.action.web;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,13 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
 import com.mingsoft.base.action.BaseAction;
 import com.mingsoft.util.StringUtil;
 
-import net.mingsoft.mall.biz.IProductSpecificationsBiz;
+import net.mingsoft.mall.biz.IProductSpecificationBiz;
 import net.mingsoft.mall.constant.ModelCode;
-import net.mingsoft.mall.entity.ProductSpecificationsEntity;
 
 /**
  * 
@@ -47,46 +43,48 @@ import net.mingsoft.mall.entity.ProductSpecificationsEntity;
  * Modification history:
  * </p>
  */
-@Controller("webproductSpecifications")
-@RequestMapping("/mall/productSpecifications")
+@Controller("webProductSpecification")
+@RequestMapping("/mall/productSpecification")
 public class ProductSpecificationAction extends BaseAction{
 
 	/**
 	 * 产品规格关联业务层
 	 */
 	@Autowired
-	private IProductSpecificationsBiz productSpecificationBiz;
+	private IProductSpecificationBiz specBiz;
 	
 	/**
 	 * 当前商品规格集合
 	 */
 	@RequestMapping("/{productId}/list")
 	@ResponseBody
-	public void list(@PathVariable("productId")Integer productId,HttpServletRequest request,HttpServletResponse response){
-		//验证传入的商品ID
+	public void list(@PathVariable("productId")int productId, HttpServletRequest request, HttpServletResponse response){
+		
 		if(!StringUtil.isInteger(productId)){
-			this.outJson(response, ModelCode.MALL_SPECIFICATIONS,false,null);
-			return ;
+			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, null);
+			return;
 		}
+		
 		//根据商品Id查询当前商品的规格数据
-		List<ProductSpecificationsEntity> psList = this.productSpecificationBiz.queryListJsonByProduct(productId);
-		this.outJson(response, JSONObject.toJSONString(psList));
+		String str = specBiz.getDataStrByProductId(productId);
+		this.outString(response, str);
 	}
 	
 	/**
-	 * 当前商品规格集合
+	 * 根据商品规格获取上平规格数据
 	 */
-	@RequestMapping("/{productSpecificationsId}/queryByProductSpecificationsId")
+	@RequestMapping("/{psId}/prodcutSpecList")
 	@ResponseBody
-	public void queryByProductSpecificationsId(@PathVariable("productSpecificationsId")Integer productSpecificationsId,HttpServletRequest request,HttpServletResponse response){
-		//验证传入的商品ID
-		if(!StringUtil.isInteger(productSpecificationsId)){
-			this.outJson(response, ModelCode.MALL_SPECIFICATIONS,false,null);
+	@Deprecated
+	public void queryByProductSpecificationsId(@PathVariable("psId")int psId, HttpServletRequest request, HttpServletResponse response){
+
+		if(!StringUtil.isInteger(psId)){
+			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, "产品规格id不是整数");
 			return ;
 		}
 		//根据商品Id查询当前商品的规格数据
-		List<ProductSpecificationsEntity> psList = this.productSpecificationBiz.queryListByProductSpecificationsId(productSpecificationsId);
-		this.outJson(response, JSONObject.toJSONString(psList));
+//		List<ProductSpecificationsEntity> psList = this.productSpecificationBiz.queryListByProductSpecificationsId(productSpecificationsId);
+//		this.outJson(response, JSONObject.toJSONString(psList));
 	}
 	
 }

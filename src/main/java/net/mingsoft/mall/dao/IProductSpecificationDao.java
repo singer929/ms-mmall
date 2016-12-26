@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.mingsoft.base.dao.IBaseDao;
 
-import net.mingsoft.mall.entity.ProductSpecEntity;
+import net.mingsoft.mall.entity.ProductSpecificationEntity;
 /**
  * 
  * 
@@ -41,14 +41,15 @@ import net.mingsoft.mall.entity.ProductSpecEntity;
  * <p>
  * </p>
  */
-public interface IProductSpecDao extends IBaseDao {
+public interface IProductSpecificationDao extends IBaseDao {
 	
 	/**
 	 * 关联查询商品规格已经该规格对应的商品详情
 	 * @param productId 商品ID
 	 * @return 商品规格列表
 	 */
-	//public List<ProductSpecEntity> queryListJsonByProduct(@Param("productId")int productId); 
+	@Deprecated
+	public List<ProductSpecificationEntity> queryListJsonByProduct(@Param("productId")int productId); 
 	
 	/**
 	 * 根据产品ID删除该产品对应的规格
@@ -61,14 +62,14 @@ public interface IProductSpecDao extends IBaseDao {
 	 * @param productSpecificationsId 商品规格编号
 	 * @return 规格详情
 	 */
-	public ProductSpecEntity getEntityById(@Param("psId")int psId);
+	public ProductSpecificationEntity getEntityById(@Param("psId")int psId);
 	
 	/**
 	 * 根据商品 获取所有的数据
 	 * @param productId
 	 * @return
 	 */
-	public List<ProductSpecEntity> queryByProductId(@Param("productId")int productId);
+	public List<ProductSpecificationEntity> queryByProductId(@Param("productId")int productId);
 	
 	/**
 	 * 根据商品编号、规格编号、规格值，查询商品绑定的规格数据
