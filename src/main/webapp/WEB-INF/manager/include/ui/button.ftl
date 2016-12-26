@@ -161,9 +161,8 @@ onclick="" click="" url="" toggle="tooltip" target="bottom" icon="" title="" pla
 		</script>
 	</#if>	
 	<@ms.isPanelNavBtn id="${id}" _id="delButton" class="${class}" _class="danger"/>
-	<@ms.button icon="${icon}" value="${value} " icon="${icon}" id="${id}" class="btn btn-${_class}"  onclick="${onclick}" title="${title}"/>
 	
-	<!--删除版主-->    
+	<!--删除提示-->    
 	<@ms.modal modalName="deleteModal${id}" title="删除提示!">
 		  <@ms.modalBody>
 		  		确认删除<span style="color: red; font-size: 20px;" id="deleteModal${id}Num"></span>条记录？
@@ -172,6 +171,8 @@ onclick="" click="" url="" toggle="tooltip" target="bottom" icon="" title="" pla
 	 		<@ms.button class="btn btn-danger deleteBtn${id}" value="确定删除"/>
 	 	</@ms.modalButton>
 	</@ms.modal>	
+	
+	<@ms.button icon="${icon}" value="${value} " icon="${icon}" id="${id}" class="btn btn-${_class}"  onclick="${onclick}" title="${title}"/>
 </#macro>
 
 <#macro editButton value="" icon="edit" class="warning" id="editButton${.now?date?string('yyyyMMddhhmmss')}" onclick="" title="编辑">

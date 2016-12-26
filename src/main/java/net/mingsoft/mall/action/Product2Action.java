@@ -181,7 +181,7 @@ public class Product2Action extends BaseAction {
 		// 压入返回的url地址
 		model.addAttribute("listProduct", listProduct);
 		model.addAttribute("product", product);
-		this.removeUrlParams(request, new String[] { "basicID" });
+		this.removeUrlParams(request, new String[] { "basicId" });
 
 		return view("/mall/product/product_list");
 	}
