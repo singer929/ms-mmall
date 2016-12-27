@@ -45,7 +45,7 @@
 				<@ms.form isvalidation=true name="addEditForm"  action="" method="post"  >
 					<@ms.text name="modelTemplateTitle" label="标题" labelStyle="width:25%" width="250" title="标题" placeholder="请输入标题" value="" validation={"maxlength":"20","required":"true", "data-bv-notempty-message":"标题不能为空","data-bv-stringlength-message":"标题在20个字符以内!"}/>
 					<@ms.text name="modelTemplateKey"  label="访问路径" labelStyle="width:25%" width="250" title="访问路径" placeholder="请输入访问路径" value="" validation={"maxlength":"100","required":"true", "data-bv-notempty-message":"访问路径不能为空","data-bv-stringlength-message":"访问路径在100个字符以内!"}/>
-					<@ms.formRow label="选择模板" labelStyle="width:25%" width="250">			    	
+					<@ms.formRow label="选择模板" labelStyle="width:25%" width="300" >			    	
 					 	<select class="form-control template templateSelect" name="modelTemplatePath"></select>
 					</@ms.formRow>
 				</@ms.form>
@@ -82,7 +82,7 @@ $(function(){
    			$(".templateSelect").append("<option>暂无文件</option>");
    		}
    		//使用select2插件
-		$(".templateSelect").select2()
+		$(".templateSelect").select2({width: "220px"});
 	}});
 		
 	

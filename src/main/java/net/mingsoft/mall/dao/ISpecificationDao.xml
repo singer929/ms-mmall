@@ -33,18 +33,17 @@
 	<!-- 增加产品规格结束 -->
 	
 	<!-- 更新产品规格开始 -->
-<!-- 	<update id="updateEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
+	<update id="updateEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
 		update mall_specification
 		<set>
-			<if test="name != null">specification_name=#{name},</if>
-			<if test="defaultFields != null">specification_default_fields=#{defaultFields},</if>
+			<if test="defaultFields != null">specification_default_fields=#{defaultFields}</if>
 		</set>
-		where  specification_name = #{name}
-	</update> -->
+		where specification_name = #{name}
+	</update>
 	<!-- 更新产品规格结束 -->
 	
 	<!-- 根据ID查询开始 -->
-	<select id="getEntity" resultMap="resultMap" parameterType="int">
+	<select id="getEntity" resultMap="resultMap" parameterType="String">
 		select 
 		<include refid="column_list" />
 		from mall_specification s where s.specification_name = #{name}
@@ -52,11 +51,19 @@
 	<!-- 根据ID查询结束-->
 	
 	<!-- 删除商品规格开始 -->
-	<delete id="deleteEntity" parameterType="String">
+	<delete id="deleteEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
+		<if test="name != null">
+			delete from mall_specification
+			where specification_name = #{name}
+		</if>
+	</delete>
+	<!-- 删除商品规格结束 -->
+	
+	<!-- 依据商品名称删除规格 -->
+	<delete id="deleteByName" parameterType="String">
 		delete from mall_specification
 		where specification_name = #{name}
 	</delete>
-	<!-- 删除商品规格结束 -->
 	
 	<!-- 查询所有数据 -->
 	<select id="queryAll" resultMap="resultMap">

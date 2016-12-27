@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,7 +37,7 @@ public class BrandAction extends BaseAction {
 	/**
 	 * 业务层的注入
 	 */
-	@Autowired
+	@Resource(name="categoryBiz")
 	private ICategoryBiz categoryBiz;
 
 	/**

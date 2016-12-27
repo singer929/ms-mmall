@@ -68,4 +68,11 @@ public interface ISpecificationDao extends IBaseDao {
 	 * @return 规格总数
 	 */
 	public int countByAppId(@Param("appId") int appId);
+	
+	/**
+	 * 依据规格名删除规格
+	 * @param name
+	 * @return
+	 */
+	public int deleteByName(@Param("name") String name);
 }

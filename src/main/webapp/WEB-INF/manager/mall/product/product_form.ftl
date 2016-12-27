@@ -114,13 +114,6 @@
                         </table>
                     </div>
                 </div>
-
-                <div class="form-group ms-form-group has-feedback"> 
-                    <label for="basicSort" class="col-sm-2  control-label ">总库存</label>
-                    <div class="col-sm-9 ms-from-group-input ms-form-input" style="width:150px;">       
-                        <input type="text" autocomplete="off" maxlength="10" name="basicSort" class="form-control">
-                    </div>
-                </div>
 			<@ms.editor name="productContent" label="商品详情" content="${product.productContent?default('')}" />
     	</@ms.form>
     </@ms.panel>
@@ -225,7 +218,7 @@
 	/**
 	*品牌级联
 	*/
-	function brand(categoryId,brandId)  {
+	function brand(categoryId, brandId)  {
 		$("#treeLabelbrandTree").request({url:"${base}/mall/brand/list.do",data:{"categoryCategoryId":categoryId},func:function(data) {
 			if (data.length==0) {
 				$("#treeLabelbrandTree").text("无品牌数据");
@@ -285,6 +278,8 @@
     	if (!validateValue(key, value)) return;
 
     	SpecMgr.batchSetValue(key, value);
+    	
+    	refreshTable();
     }
 
     // 批量设置库存

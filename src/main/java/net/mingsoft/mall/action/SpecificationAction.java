@@ -106,8 +106,8 @@ public class SpecificationAction extends BaseAction{
 		int appId = BasicUtil.getAppId();
 		spec.setAppId(appId);
 		
-		specBiz.saveEntity(spec);
-		if(true){
+		int result = specBiz.saveEntity(spec);
+		if(result == 1){
 			//新增成功
 			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, true, JSONObject.toJSONString(spec));
 		}else{
@@ -141,7 +141,7 @@ public class SpecificationAction extends BaseAction{
 		
 		//执行更新
 		specBiz.updateEntity(spec);
-		this.outJson(response, ModelCode.MALL_SPECIFICATIONS,true);
+		this.outJson(response, ModelCode.MALL_SPECIFICATIONS, true);
 	}
 	
 	/**
@@ -149,13 +149,17 @@ public class SpecificationAction extends BaseAction{
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping("/{specificationsId}/delete")
-	public void delete(@PathVariable("specificationsId")Integer specificationsId,HttpServletRequest request,HttpServletResponse response){
-		if(!StringUtil.isInteger(specificationsId)){
-			this.outJson(response, ModelCode.MALL_SPECIFICATIONS,false);
+	@RequestMapping("/{specName}/delete")
+	public void delete(@PathVariable("specName")String specName, HttpServletRequest request,HttpServletResponse response){
+		
+		if(!StringUtil.isBlank(specName)){
+			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false);
 			return ;
 		}
-		this.specificationsBiz.deleteEntity(specificationsId);
+		
+		// 删除规格数据相关逻辑
+		specBiz.deleteBySpecificationName(specName);
+		
 		this.outJson(response, ModelCode.MALL_SPECIFICATIONS,true);
 	}
 	
@@ -185,12 +189,12 @@ public class SpecificationAction extends BaseAction{
 	 */
 	private boolean checkForm(SpecificationEntity spec, HttpServletResponse response){
 		//判断产品规格的标题是否介于1-12之间
-		if(!StringUtil.checkLength(spec.getName(), 1, 12)){
+		if(!StringUtil.checkLength(spec.getName().trim(), 1, 12)){
 			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, getResString("err.length", "SpecificationsName", "1","12"));
 			return false;
 		}
 		//判断产品规格型号的长度不能超过200
-		String fieldsStr = spec.getDefaultFields();
+		String fieldsStr = spec.getDefaultFields().trim();
 		if(fieldsStr != null && fieldsStr.length() > 200){
 			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, getResString("err.length", "specificationsName","0","200"));
 			return false;			

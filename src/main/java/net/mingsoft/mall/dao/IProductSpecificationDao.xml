@@ -111,7 +111,7 @@
 		</where>
 	</delete>
 	<!-- 根据产品ID删除关联信息结束 -->
-
+	
 	<!-- 根据商品ID关联查询产品规格/产品信息开始 -->
 	<select id="queryListJsonByProduct" parameterType="int"
 		resultMap="resultMapList">
@@ -148,7 +148,12 @@
 				#{id}
 			</foreach>
 		</if>
-
+	</select>
+	
+	<!-- 根据规格名称删除数据 -->
+	<select id="deleteBySpecificationName" parameterType="String">
+		delete from mall_product_specification 
+		 where ps_spec_name = #{specName};
 	</select>
 	
 	<!-- 根据产品Id查询数据 -->

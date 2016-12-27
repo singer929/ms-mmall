@@ -12,7 +12,8 @@ import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.util.PageUtil;
 
 import net.mingsoft.mall.biz.ISpecificationBiz;
-
+import net.mingsoft.mall.dao.IProductSpecificationDao;
+import net.mingsoft.mall.dao.IProductSpecificationDetailDao;
 import net.mingsoft.mall.dao.ISpecificationDao;
 import net.mingsoft.mall.entity.SpecificationEntity;
 
@@ -60,6 +61,12 @@ public class SpecificationBizImpl extends BaseBizImpl implements ISpecificationB
 	@Autowired
 	private ISpecificationDao specDao;
 	
+	@Autowired
+	private IProductSpecificationDao productSpecDao;
+	
+	@Autowired
+	private IProductSpecificationDetailDao detailDao;
+	
 	@Override
 	protected IBaseDao getDao() {
 		return specDao;
@@ -105,5 +112,16 @@ public class SpecificationBizImpl extends BaseBizImpl implements ISpecificationB
 			// 不在DB中 插入数据
 			specDao.saveEntity(se);
 		}
+	}
+
+	@Override
+	public void deleteBySpecificationName(String specName) {
+		
+		// 删除规格
+		specDao.deleteByName(specName);
+		// 删除相关的产品规格数据
+		productSpecDao.deleteBySpecificationName(specName);
+		// 删除相关的产品规格明细数据
+		detailDao.deleteBySpecificationName(specName);
 	}
 }

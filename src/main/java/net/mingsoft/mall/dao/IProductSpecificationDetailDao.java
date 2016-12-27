@@ -89,4 +89,10 @@ public interface IProductSpecificationDetailDao extends IBaseDao{
 	 * @return 商品规格库存列表
 	 */
 	public List<ProductSpecificationDetailEntity> queryEntitiesByProductId(@Param("productId") int productId);
+	
+	/**
+	 * 根据规格名称删除规格明细数据
+	 * @param specName
+	 */
+	public void deleteBySpecificationName(@Param("specName") String specName);
 }

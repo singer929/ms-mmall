@@ -3,15 +3,18 @@ package net.mingsoft.mall.action.web;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.entity.CategoryEntity;
@@ -36,7 +39,7 @@ public class BrandAction extends BaseAction {
 	/**
 	 * 业务层的注入
 	 */
-	@Autowired
+	@Resource(name="categoryBiz")
 	private ICategoryBiz categoryBiz;
 
 	/**
@@ -51,7 +54,7 @@ public class BrandAction extends BaseAction {
 	 * "categoryCategoryId": 6053, <br/>
 	 * "categorySort": 0, <br/>
 	 * "categorySmallImg": "", <br/>
-	 * }]<br/>
+	 * }]<br/> 
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
@@ -61,7 +64,9 @@ public class BrandAction extends BaseAction {
 		category.setCategoryAppId(BasicUtil.getAppId());
 		category.setCategoryModelId(BasicUtil.getModelCodeId(ModelCode.MALL_BRAND));
 		List list = categoryBiz.query(category);
-		this.outJson(response, JSONArray.toJSON(list));
+		String jsonStr = JSON.toJSONString(list);
+		
+		this.outJson(response, jsonStr);
 	}
 
 }

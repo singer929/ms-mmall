@@ -130,6 +130,13 @@
 	</select>
 	<!-- 获取产品规格库存信息结束 -->
 
+
+	<delete id="deleteBySpecificationName" parameterType="String">
+		delete from
+		mall_product_specification_detail where
+		psd_spec_name = #{specName}
+	</delete>
+
 	<!-- 删除 产品规格库存信息开始 -->
 	<delete id="deleteEntity" parameterType="int">
 		delete from

@@ -178,22 +178,25 @@
 		     });
 		}
 
+	var isAdd;
+
 	$(function(){
 		//点击新增
 		$("#addSpecifications").bind("click",function(){
 			//清空弹出框中输入框的数据 
-			$("#modalFrom input[name='specificationsName']").val('');
-			$("#modalFrom textarea[name='specificationsField']").val('');
-			$("#modalFrom input[name='specificationsId']").val(0);
+			$("#modalFrom input[name='name']").val('');
+			$("#modalFrom textarea[name='defaultFields']").val('');
 			//重置验证数据
-			$("#modalFrom input[name='specificationsName']").removeAttr("data-bv-field");
-			$("#modalFrom textarea[name='specificationsField']").removeAttr("data-bv-field");
+			$("#modalFrom input[name='name']").removeAttr("data-bv-field");
+			$("#modalFrom textarea[name='defaultFields']").removeAttr("data-bv-field");
 			//加载默认显示值
 			$("#saveOrUpdateBtn").text("保存");
 			$("modal modal-title").text("新增商品规格");
 			//加载默认请求URL
-			$("#modalFrom").attr("action",base+"${baseManager}/mall/specifications/save.do");
+			$("#modalFrom").attr("action", base+"${baseManager}/mall/specifications/save.do");
 			$("#modal").modal();
+			
+			isAdd = true;
 		});
 		
 		//点击更新
@@ -211,6 +214,8 @@
 			//加载默认请求URL
 			$("#modalFrom").attr("action",base+"${baseManager}/mall/specifications/update.do");			
 			$("#modal").modal();	
+			
+			isAdd = false;
 		});
 		
 		//点击弹出框保存按钮
@@ -219,15 +224,13 @@
 			bindValidate();
 			if(bootstrapValidator.data('bootstrapValidator').validate().isValid()){
 				//获取用户输入的规格型号
-				var specificationsField = $("#modalFrom textarea[name='specificationsField']").val();
+				var defaultFields = $("#modalFrom textarea[name='defaultFields']").val();
 				//判断用户是否输入规格型号
-				if(specificationsField != null && specificationsField != ""){
+				if(!defaultFields){
 					//将规格型号中的全角转换成半角
-					specificationsField = changeDBC(specificationsField);
-					$("#modalFrom textarea[name='specificationsField']").val(specificationsField);
+					defaultFields = changeDBC(defaultFields);
+					$("#modalFrom textarea[name='defaultFields']").val(defaultFields);
 				}
-				//获取规格ID
-				var specificationsId = $("#modalFrom input[name='specificationsId']").val();
 			
 				//改变按钮样式,移除点击事件
 				$(this).attr("class","btn btn-info");
@@ -243,19 +246,12 @@
 					dataType:"json",
 					url:url,
 					success:function(msg){
-						if(msg.result == true){
-							if(specificationsId>0){
-								alert("更新成功!");
-							}else{
-								alert("新增成功!");
-							}
+						var optStr = isAdd ? "新增" : "更新";
+						if(msg.result){
+							alert(optStr + "成功!");
 							location.href=base+"${baseManager}/mall/specifications/list.do";
 						}else{
-							if(specificationsId>0){
-								alert("更新失败!");
-							}else{
-								alert("新增失败!");
-							}
+							alert(optStr + "失败!");
 							$("#saveOrUpdateBtn").attr("class","btn btn-info");
 						}
 					},
@@ -265,11 +261,11 @@
 		
 		//删除规格
 		$(".del-btn").bind("click",function(){
-			var specificatiosId = $(this).attr("data-id");
-			if(!(specificatiosId>0)){
-				alert("删除失败!");
+			var name = $(this).attr("data-id");
+			if(!(name>0)){
+				//alert("删除失败!");
 			}
-	  		warnModel("确定要删除该规格？","删除规格","deleteSpecificatios("+specificatiosId+")");
+	  		warnModel("确定要删除该规格？","删除规格","deleteSpecificatios("+name+")");
 		});
 		
 	});

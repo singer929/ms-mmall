@@ -71,4 +71,10 @@ public interface ISpecificationBiz extends IBaseBiz{
 	 * @param list
 	 */
 	public void saveSpecificationEntities (List<SpecificationEntity> list);
+	
+	/**
+	 * 删除规格实体
+	 * @param spec
+	 */
+	public void deleteBySpecificationName(String specName);
 }

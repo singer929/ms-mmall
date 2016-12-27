@@ -71,7 +71,7 @@ public class ProductSpecificationAction extends BaseAction{
 	}
 	
 	/**
-	 * 根据商品规格获取上平规格数据
+	 * 根据商品规格获取商品规格数据
 	 */
 	@RequestMapping("/{psId}/prodcutSpecList")
 	@ResponseBody

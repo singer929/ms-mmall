@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -84,11 +85,6 @@ public class ProductAction extends BaseAction {
 	@Autowired
 	private IContentModelBiz contentModelBiz;
 
-	/**
-	 * 注入规格业务层
-	 */
-	@Autowired
-	private ISpecificationsBiz specificationsBiz;
 	
 	@Autowired
 	private ISpecificationBiz specBiz;
@@ -113,7 +109,7 @@ public class ProductAction extends BaseAction {
 	/**
 	 * 商品属性分类的业务层
 	 */
-	@Autowired
+	@Resource(name="categoryBiz")
 	private ICategoryBiz categoryBiz;
 
 	/**
@@ -151,16 +147,16 @@ public class ProductAction extends BaseAction {
 		int modelId = this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
 		int categoryId = product.getBasicCategoryId();
 		
+		int[] childColumnId = new int[]{};
 		// 查询当前分类的所有子分类
-		int[] childColumnId = this.categoryBiz.queryChildrenCategoryIds(categoryId, appId, modelId);
-		
-		// 若没有子分类, 则把自己装进分类id中, 以便查询具体商品
-		if (childColumnId.length == 0){
-			childColumnId = new int[]{categoryId};
+
+		if (categoryId != 0){
+			childColumnId = this.categoryBiz.queryChildrenCategoryIds(categoryId, appId, modelId);
+			// 若没有子分类, 则把自己装进分类id中, 以便查询具体商品
+			if (childColumnId.length == 0){
+				childColumnId = new int[]{categoryId};
+			}
 		}
-		/// 查询的总数
-		// int recordCount = productBiz.getCountByColumnId(appId, childColumnId,
-		/// product.getProductShelf(), null, null);
 
 		int shelf = product.getProductShelf();
 		
@@ -193,9 +189,9 @@ public class ProductAction extends BaseAction {
 		//List<SpecificationsEntity> specificationsList = this.specificationsBiz.queryPageByAppId(this.getAppId(request),null);
 		
 		List brands = categoryBiz.query(new CategoryEntity(appId, BasicUtil.getModelCodeId(ModelCode.MALL_BRAND)));
-		
+
 		model.addAttribute("brands", JSONArray.toJSONString(brands));
-		model.addAttribute("appId",BasicUtil.getAppId());
+		model.addAttribute("appId", BasicUtil.getAppId());
 		model.addAttribute("columnList", JSONArray.toJSONString(columnList));
 		//model.addAttribute("specificationsJson",JSONObject.toJSONString(new ListJson(specList.size(), specList)));
 		model.addAttribute("categoryId", request.getParameter("categoryId"));
@@ -471,7 +467,6 @@ public class ProductAction extends BaseAction {
 					} else {
 						fieldBiz.insertBySQL(contentModel.getCmTableName(), param);
 					}
-
 				}
 			}
 		}
@@ -558,5 +553,4 @@ class SaveData{
 	public List<SpecificationEntity> getSpecList() {
 		return specList;
 	}
-
 }

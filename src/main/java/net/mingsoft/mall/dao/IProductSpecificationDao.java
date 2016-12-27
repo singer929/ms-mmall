@@ -2,6 +2,8 @@ package net.mingsoft.mall.dao;
 
 import java.util.List;
 
+import javax.ws.rs.DELETE;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.mingsoft.base.dao.IBaseDao;
@@ -84,5 +86,11 @@ public interface IProductSpecificationDao extends IBaseDao {
 	 * @param ids 编号集合
 	 * @param productId商品编号
 	 */
-	void deleteBatch(@Param("ids") List ids,@Param("productId")int productId);
+	public void deleteBatch(@Param("ids") List ids, @Param("productId")int productId);
+	
+	/**
+	 * 依据规格名称删除产品规格数据(例如规格删除之后需要清理产品规格数据)
+	 * @param specName
+	 */
+	public void deleteBySpecificationName(@Param("specName") String specName);
 }

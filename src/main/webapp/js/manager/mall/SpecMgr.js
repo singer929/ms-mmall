@@ -403,8 +403,7 @@ var SpecMgr = {
     batchSetValue: function(key, value){
     	
         for (var i in this.specDetails){
-            var detail = arr[i];
-            if (!detail[key]) continue;
+            var detail = this.specDetails[i];
             detail[key] = value;
         }
         
