@@ -152,7 +152,7 @@ public class SpecificationAction extends BaseAction{
 	@RequestMapping("/{specName}/delete")
 	public void delete(@PathVariable("specName")String specName, HttpServletRequest request,HttpServletResponse response){
 		
-		if(!StringUtil.isBlank(specName)){
+		if(StringUtil.isBlank(specName)){
 			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false);
 			return ;
 		}

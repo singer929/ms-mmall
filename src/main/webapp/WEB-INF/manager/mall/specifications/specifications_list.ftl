@@ -265,7 +265,7 @@
 			if(!(name>0)){
 				//alert("删除失败!");
 			}
-	  		warnModel("确定要删除该规格？","删除规格","deleteSpecificatios("+name+")");
+	  		warnModel("确定要删除该规格？","删除规格","deleteSpecificatios('"+name+"')");
 		});
 		
 	});

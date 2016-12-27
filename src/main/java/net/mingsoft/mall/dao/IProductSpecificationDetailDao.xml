@@ -130,11 +130,10 @@
 	</select>
 	<!-- 获取产品规格库存信息结束 -->
 
-
+	<!-- 根据规格名字 删除产品规格明细信息  -->
 	<delete id="deleteBySpecificationName" parameterType="String">
-		delete from
-		mall_product_specification_detail where
-		psd_spec_name = #{specName}
+		delete from mall_product_specification_detail 
+		where locate(concat(#{specName}, ':'), psd_spec_values) > 0;
 	</delete>
 
 	<!-- 删除 产品规格库存信息开始 -->
