@@ -67,7 +67,7 @@ public class ProductAction extends BaseAction{
 	private IBasicCategoryBiz basicCategoryBiz;
 	
 	@RequestMapping("/{productId}/getEntity")
-	public void getEntity(@PathVariable("productId")Integer productId,HttpServletRequest request,HttpServletResponse response){
+	public void getEntity(@PathVariable("productId")Integer productId, HttpServletRequest request, HttpServletResponse response){
 		if(!StringUtil.isInteger(productId)){
 			this.outJson(response, ModelCode.MALL_PRODUCT,false,this.getResString("err"));
 			return ;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mingsoft.base.biz.IBaseBiz;
 
+import net.mingsoft.mall.bean.ProductSaveData;
 import net.mingsoft.mall.entity.ProductSpecificationEntity;
 
 /**
@@ -51,14 +52,6 @@ public interface IProductSpecificationBiz extends IBaseBiz{
 	public String getDataStrByProductId(int productId);
 	
 	/**
-	 * 保存商品的规格数据(先删除然后再更新)
-	 * @param productId 商品Id
-	 * @param list 需要保存的商品规格数据列表
- 	 * @return 结果是否成功
-	 */
-	public Boolean saveEntitiesByProductId(int productId, List<ProductSpecificationEntity> list);
-	
-	/**
 	 * 根据产品ID删除该产品对应的规格
 	 * @param productIds 产品Id
 	 */
@@ -70,4 +63,12 @@ public interface IProductSpecificationBiz extends IBaseBiz{
 	 * @return  产品规格关联列表
 	 */
 	public List<ProductSpecificationEntity> queryListByPsId(int id);
+	
+	/**
+	 * 保存产品规格数据
+	 * @param productId		产品ID
+	 * @param data			产品规格数据集合
+	 * @param appId			appId
+	 */
+	public void saveProductSpecification(int productId, ProductSaveData data, int appId);
 }

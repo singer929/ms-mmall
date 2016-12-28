@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSON;
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
 
+import net.mingsoft.mall.bean.ProductSaveData;
 import net.mingsoft.mall.biz.IProductSpecificationBiz;
 import net.mingsoft.mall.dao.IProductSpecificationDao;
 import net.mingsoft.mall.dao.IProductSpecificationDetailDao;
@@ -96,28 +97,80 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	}
 
 	/**
-	 * 保存商品的规格数据 (先删除然后再更新)
-	 * @param productId 商品Id
-	 * @param list 需要保存的商品规格数据列表
- 	 * @return 结果是否成功
+	 * 保存产品规格数据(包括规格, 产品规格, 产品规格明细)
+	 * @param productId
+	 * @param data
+	 * @param appId
 	 */
 	@Override
-	public Boolean saveEntitiesByProductId(int productId, List<ProductSpecificationEntity> list) {
+	public void saveProductSpecification(int productId, ProductSaveData data, int appId){
+		
+		saveSpecs(data.getSpecList(), appId);
+		saveProductSpecs(productId, data.getProductSpecList());
+		saveProductSpecDetails(productId, data.getDetailList());
+	}
+	
+	/**
+	 * 保存规格数据, 有添加则添加, 否则不做处理
+	 * @param list
+	 */
+	private void saveSpecs (List<SpecificationEntity> list, int appId) {
+		
+		List<SpecificationEntity> dbList = specDao.queryAll();
+		for (SpecificationEntity se : list){
+			
+			se.setAppId(appId);
+			
+			boolean isInDb = false;
+			for (SpecificationEntity dbSe : dbList){
+				if (dbSe.getName().equals(se.getName())){
+					isInDb = true;
+					break;
+				}
+			}
+			if (isInDb) continue;
+			// 不在DB中则插入数据
+			specDao.saveEntity(se); 
+		}
+	}
+	
+	/**
+	 * 保存商品规格数据
+	 * @param productId
+	 * @param list
+	 */
+	private void saveProductSpecs(int productId, List<ProductSpecificationEntity> list) {
 		
 		// 清空当前productId的规格数据
 		productSpecDao.deleteEntityByProductIds(new int[]{productId});
-		
 		// 将productId 赋值给实体
 		for (ProductSpecificationEntity ps : list){
 			ps.setProductId(productId);
 		}
-
 		if (list != null && list.size() > 0){
 			// 添加新数据
 			productSpecDao.saveBatch(list);
 		}
+	}
+	
+	/**
+	 * 保存产品规格明细数据
+	 * @param productId
+	 * @param list
+	 */
+	public void saveProductSpecDetails(int productId, List<ProductSpecificationDetailEntity> list) {
 		
-		return true;
+		// 删除原来数据
+		detailDao.deleteEntityByProductIds(new int[]{productId});
+		
+		for (ProductSpecificationDetailEntity pse : list){
+			pse.setProductId(productId);
+		}
+		
+		if (list != null && list.size() > 0){
+			// 保存新数据
+			detailDao.saveBatch(list);
+		}
 	}
 	
 	/**

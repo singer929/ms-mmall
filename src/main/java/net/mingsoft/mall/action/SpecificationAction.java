@@ -18,10 +18,8 @@ import com.mingsoft.util.StringUtil;
 
 import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.biz.ISpecificationBiz;
-import net.mingsoft.mall.biz.ISpecificationsBiz;
 import net.mingsoft.mall.constant.ModelCode;
 import net.mingsoft.mall.entity.SpecificationEntity;
-import net.mingsoft.mall.entity.SpecificationsEntity;
 
 /**
  * 
@@ -51,12 +49,6 @@ import net.mingsoft.mall.entity.SpecificationsEntity;
 @Controller
 @RequestMapping("/${managerPath}/mall/specifications")
 public class SpecificationAction extends BaseAction{
-	
-	/**
-	 * 注入规格业务层
-	 */
-	@Autowired
-	private ISpecificationsBiz specificationsBiz;
 	
 	@Autowired 
 	private ISpecificationBiz specBiz;
@@ -149,18 +141,18 @@ public class SpecificationAction extends BaseAction{
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping("/{specName}/delete")
-	public void delete(@PathVariable("specName")String specName, HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("/{specId}/delete")
+	public void delete(@PathVariable("specId")int specId, HttpServletRequest request,HttpServletResponse response){
 		
-		if(StringUtil.isBlank(specName)){
+		if(specId <= 0){
 			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false);
 			return ;
 		}
 		
 		// 删除规格数据相关逻辑
-		specBiz.deleteBySpecificationName(specName);
+		specBiz.deleteSpecificationById(specId);
 		
-		this.outJson(response, ModelCode.MALL_SPECIFICATIONS,true);
+		outJson(response, ModelCode.MALL_SPECIFICATIONS, true);
 	}
 	
 	/**
@@ -172,12 +164,12 @@ public class SpecificationAction extends BaseAction{
 	public void listByAjax(HttpServletRequest request,HttpServletResponse response){
 		
 		int appId = BasicUtil.getAppId();
-		List<SpecificationsEntity> list = this.specificationsBiz.queryPageByAppId(appId,null);
+		List<SpecificationEntity> list = specBiz.queryPageByAppId(appId, null);
 		
 		if(list != null && list.size() > 0){
-			this.outJson(response, ModelCode.MALL_SPECIFICATIONS,true,JSONObject.toJSONString(list));
+			this.outJson(response, ModelCode.MALL_SPECIFICATIONS,true, JSONObject.toJSONString(list));
 		}else{
-			this.outJson(response, ModelCode.MALL_SPECIFICATIONS,false);
+			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false);
 		}
 	}
 	
@@ -188,6 +180,7 @@ public class SpecificationAction extends BaseAction{
 	 * @return
 	 */
 	private boolean checkForm(SpecificationEntity spec, HttpServletResponse response){
+		
 		//判断产品规格的标题是否介于1-12之间
 		if(!StringUtil.checkLength(spec.getName().trim(), 1, 12)){
 			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, getResString("err.length", "SpecificationsName", "1","12"));

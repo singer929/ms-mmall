@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mingsoft.base.biz.IBaseBiz;
 import com.mingsoft.util.PageUtil;
+import com.sun.tools.jdi.VoidTypeImpl;
 
 import net.mingsoft.mall.entity.SpecificationEntity;
 
@@ -67,14 +68,14 @@ public interface ISpecificationBiz extends IBaseBiz{
 	public int countByAppId(int appId);
 	
 	/**
-	 * 将列表中新的规格添加进数据库, 其他的不操作
-	 * @param list
-	 */
-	public void saveSpecificationEntities (List<SpecificationEntity> list);
-	
-	/**
-	 * 删除规格实体
-	 * @param spec
+	 * 依据名字删除规格实体和相关表的关联数据
+	 * @param specName	规格名称
 	 */
 	public void deleteBySpecificationName(String specName);
+	
+	/**
+	 * 依据ID删除规格实体和相关表的关联数据
+	 * @param specId
+	 */
+	public void deleteSpecificationById(int specId);
 }

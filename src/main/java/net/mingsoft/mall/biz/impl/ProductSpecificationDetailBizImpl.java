@@ -95,25 +95,4 @@ public class ProductSpecificationDetailBizImpl extends BaseBizImpl implements IP
 		
 		return null;
 	}
-
-	/**
-	 * 保存某商品的规格明细数据
-	 * @param productId		商品id
-	 * @param list			数据集合
-	 */
-	@Override
-	public void saveEntitiesByProductId(int productId, List<ProductSpecificationDetailEntity> list) {
-		
-		// 删除原来数据
-		detailDao.deleteEntityByProductIds(new int[]{productId});
-		
-		for (ProductSpecificationDetailEntity pse : list){
-			pse.setProductId(productId);
-		}
-		
-		if (list != null && list.size() > 0){
-			// 保存新数据
-			detailDao.saveBatch(list);
-		}
-	}
 }

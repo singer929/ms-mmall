@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.aspectj.weaver.ast.Var;
 import org.hamcrest.core.IsNot;
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -95,33 +96,25 @@ public class SpecificationBizImpl extends BaseBizImpl implements ISpecificationB
 		List<SpecificationEntity> list = specDao.queryByProductId(productId);
 		return list;
 	}
-	
-	@Override
-	public void saveSpecificationEntities (List<SpecificationEntity> list) {
-		List<SpecificationEntity> dbList = specDao.queryAll();
-		
-		for (SpecificationEntity se : list){
-			boolean isInDb = false;
-			for (SpecificationEntity dbSe : dbList){
-				if (dbSe.getName().equals(se.getName())){
-					isInDb = true;
-					break;
-				}
-			}
-			if (isInDb) continue;
-			// 不在DB中 插入数据
-			specDao.saveEntity(se);
-		}
-	}
 
 	@Override
 	public void deleteBySpecificationName(String specName) {
 		
 		// 删除规格
-		specDao.deleteByName(specName);
+		specDao.deleteEntityByName(specName);
 		// 删除相关的产品规格数据
 		productSpecDao.deleteBySpecificationName(specName);
 		// 删除相关的产品规格明细数据
 		detailDao.deleteBySpecificationName(specName);
+	}
+
+	@Override
+	public void deleteSpecificationById(int specId) {
+		
+		Integer id = Integer.valueOf(specId);
+		SpecificationEntity spec = (SpecificationEntity)specDao.getEntity(id);
+		String name = spec.getName();
+		
+		deleteBySpecificationName(name);
 	}
 }

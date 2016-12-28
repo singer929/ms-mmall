@@ -37,7 +37,7 @@
 			<@ms.number label="库存"  name="productStock" value="${product.productStock}" min=1 max=9999999/>
     		<@ms.text id="productCode" label="编码" name="productCode" value="${product.productCode?default('')}" width="300"  placeholder="" validation={"maxlength":"30","required":"true", "data-bv-notempty-message":"必填项目","data-bv-stringlength-message":"网站标题在50个字符以内!"}/>
 			<@ms.formRow label="商品缩略图" width="400">
-					<@ms.uploadImg path="upload/mall/product/${appId}/" imgs="${product.basicThumbnails?default('')}" inputName="basicThumbnails" size="30" msg="提示：产品缩略图,最多可上传30张"  maxSize="2"   />
+				<@ms.uploadImg path="upload/mall/product/${appId}/" imgs="${product.basicThumbnails?default('')}" inputName="basicThumbnails" size="30" msg="提示：产品缩略图,最多可上传30张"  maxSize="2"   />
 			</@ms.formRow>
 			<!-- 装自定义模型数据的地方 -->
 			<div id="contentModelFiled"></div>

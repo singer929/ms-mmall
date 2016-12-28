@@ -5,10 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.mingsoft.base.dao.IBaseDao;
-import com.mingsoft.util.PageUtil;
 
 import net.mingsoft.mall.entity.SpecificationEntity;
-import net.mingsoft.mall.entity.SpecificationsEntity;
 
 /**
  * 
@@ -74,5 +72,5 @@ public interface ISpecificationDao extends IBaseDao {
 	 * @param name
 	 * @return
 	 */
-	public int deleteByName(@Param("name") String name);
+	public int deleteEntityByName(@Param("name") String name);
 }

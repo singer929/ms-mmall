@@ -58,14 +58,6 @@ public interface IProductSpecificationDetailBiz extends IBaseBiz{
 	public void updateSort(List<ProductSpecificationDetailEntity> list);
 	
 	/**
-	 * 保存某商品的规格明细数据
-	 * @param productId		商品id
-	 * @param list			数据集合
-	 */
-	public void saveEntitiesByProductId(int productId, List<ProductSpecificationDetailEntity> list);
-	
-	
-	/**
 	 * 根据分类id和模块id查询商品规格产品的总数
 	 * @param appId 应用id
 	 * @param modelId 模块id

@@ -2,15 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace = "net.mingsoft.mall.dao.ISpecificationDao">
 	<sql id="column_list">
+		s.specification_id,
 		s.specification_name,
 		s.specification_default_fields,
 		s.specification_app_id
 	</sql>
 	<!-- 获取表字段开始 -->
 	<resultMap type="net.mingsoft.mall.entity.SpecificationEntity" id="resultMap">
-			<id column="specification_name" property="name" />	<!-- 与规格名绑定 -->
-			<result column="specification_default_fields" property="defaultFields" />	<!-- 与字段义字段名称绑定-->
-			<result column="specification_app_id" property="appId" />	<!-- 与appId绑定-->
+			<id column="specification_id" property="specId" />	
+			<result column="specification_name" property="name" />	
+			<result column="specification_category_id" property="specCateId" />	
+			<result column="specification_default_fields" property="defaultFields" />	
+			<result column="specification_app_id" property="appId" />
+			<result column="specification_type" property="type" />
 	</resultMap>
 	<!-- 获取表字段结束-->
 	
@@ -20,47 +24,38 @@
 		<!-- 添加表字段 -->
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test = "name != null">specification_name,</if>
-			<if test = "defaultFields !=null">specification_default_fields,</if>
-			<if test = "appId !=null">specification_app_id,</if>
+			<if test = "specCateId != null">specification_category_id,</if>
+			<if test = "defaultFields != null">specification_default_fields,</if>
+			<if test = "appId != null">specification_app_id,</if>
+			<if test = "type != null">specification_type,</if>
 		</trim>
 		<!-- 注入控制层字段 -->
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test = "name != null">#{name},</if>
-			<if test = "defaultFields !=null">#{defaultFields},</if>
-			<if test = "appId !=null">#{appId},</if>
+			<if test = "specCateId != null">#{specCateId},</if>
+			<if test = "defaultFields != null">#{defaultFields},</if>
+			<if test = "appId != null">#{appId},</if>
+			<if test = "type != null">#{type},</if>
 		</trim>
 	</insert>
 	<!-- 增加产品规格结束 -->
 	
-	<!-- 更新产品规格开始 -->
-	<update id="updateEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
-		update mall_specification
-		<set>
-			<if test="defaultFields != null">specification_default_fields=#{defaultFields}</if>
-		</set>
-		where specification_name = #{name}
-	</update>
-	<!-- 更新产品规格结束 -->
+	<select id="getEntity" resultMap="resultMap" parameterType="int">
+		select 
+		<include refid="column_list" />
+		from mall_specification s where s.specification_id = #{specId}
+	</select>
 	
 	<!-- 根据ID查询开始 -->
-	<select id="getEntity" resultMap="resultMap" parameterType="String">
+	<select id="getEntityByName" resultMap="resultMap" parameterType="String">
 		select 
 		<include refid="column_list" />
 		from mall_specification s where s.specification_name = #{name}
 	</select>
 	<!-- 根据ID查询结束-->
 	
-	<!-- 删除商品规格开始 -->
-	<delete id="deleteEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
-		<if test="name != null">
-			delete from mall_specification
-			where specification_name = #{name}
-		</if>
-	</delete>
-	<!-- 删除商品规格结束 -->
-	
 	<!-- 依据商品名称删除规格 -->
-	<delete id="deleteByName" parameterType="String">
+	<delete id="deleteEntityByName" parameterType="String">
 		delete from mall_specification
 		where specification_name = #{name}
 	</delete>
@@ -69,7 +64,6 @@
 	<select id="queryAll" resultMap="resultMap">
 		select <include refid="column_list" /> from mall_specification s
 	</select>
-	
 	
 	<!-- 根据APPID获取规格列表(带分页)-->
 	<select id="queryByAppId" resultMap="resultMap">

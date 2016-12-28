@@ -20,10 +20,6 @@ var SpecMgr = {
 
         this.initSpecDetails(data.productSpecDetails);
 
-        console.log(this.specs);
-        console.log(this.productSpecs);
-        console.log(this.specDetails);
-
         return true;
     },
 

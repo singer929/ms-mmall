@@ -61,6 +61,7 @@
 		        		</td>
 		        	</tr>
 			        <tr>
+			        	<th class="col-md-1 col-xs-2 text-center">规格编号</th>
 			            <th class="col-md-3 col-xs-3 text-center">规格名称</th>
 			            <th class="col-md-6 col-xs-5 text-center">规格型号</th>
 			            <th class="col-md-2 col-xs-2 text-center">操作</th>
@@ -69,14 +70,15 @@
 		        <tbody>
 		        	<#if list?has_content>
 		        		<#list list as spec>
-				        	<tr data-id="${spec.name?default("")}">
+				        	<tr data-id="${spec.specId?c?default(0)}">
+				        		<td class="text-center">${spec.specId?c?default(0)}</td>
 					        	<td class="text-center name">${spec.name?default("暂无")}</td>
 					        	<td class="field">${spec.defaultFields?default("暂无")}</td>
 					        	<td class="text-center">
-				                    <a class="btn btn-xs red tooltips edit-btn" data-id="${spec.name?default("")}" data-toggle="tooltip"  data-original-title="编辑商品">
+				                    <a class="btn btn-xs red tooltips edit-btn" data-id="${spec.specId?c?default(0)}" data-toggle="tooltip"  data-original-title="编辑商品">
 			                     		<i class="glyphicon glyphicon-pencil"></i>
 			                    	</a>
-			                    	 <a class="btn btn-xs red tooltips del-btn" data-id="${spec.name?default("")}" data-toggle="tooltip" data-original-title="删除商品">
+			                    	 <a class="btn btn-xs red tooltips del-btn" data-id="${spec.specId?c?default(0)}" data-toggle="tooltip" data-original-title="删除商品">
 			                     		<i class="glyphicon glyphicon-trash"></i>
 			                    	</a>			        	
 					        	</td>
@@ -115,7 +117,8 @@
 							<div class="form-group">
 								<label class="col-md-3 col-xs-2 control-label" >规格名称:</label>
 								<div class="col-md-5  col-xs-5">
-									<input type="text" class="form-control"  name="name" placeholder="请输入规格名称">
+									<input type="text" class="form-control" name="name" placeholder="请输入规格名称">
+									<input type="hidden" value="0" name="specId">
 								</div>
 							</div>
 							<div class="form-group">
@@ -186,6 +189,7 @@
 			//清空弹出框中输入框的数据 
 			$("#modalFrom input[name='name']").val('');
 			$("#modalFrom textarea[name='defaultFields']").val('');
+			$("#modalFrom input[name='specId']").val('');
 			//重置验证数据
 			$("#modalFrom input[name='name']").removeAttr("data-bv-field");
 			$("#modalFrom textarea[name='defaultFields']").removeAttr("data-bv-field");
@@ -231,6 +235,9 @@
 					defaultFields = changeDBC(defaultFields);
 					$("#modalFrom textarea[name='defaultFields']").val(defaultFields);
 				}
+				
+				//获取规格ID
+				var specId = $("#modalFrom input[name='specId']").val();
 			
 				//改变按钮样式,移除点击事件
 				$(this).attr("class","btn btn-info");
@@ -249,7 +256,7 @@
 						var optStr = isAdd ? "新增" : "更新";
 						if(msg.result){
 							alert(optStr + "成功!");
-							location.href=base+"${baseManager}/mall/specifications/list.do";
+							location.href = base+"${baseManager}/mall/specifications/list.do";
 						}else{
 							alert(optStr + "失败!");
 							$("#saveOrUpdateBtn").attr("class","btn btn-info");
@@ -261,11 +268,10 @@
 		
 		//删除规格
 		$(".del-btn").bind("click",function(){
-			var name = $(this).attr("data-id");
-			if(!(name>0)){
-				//alert("删除失败!");
-			}
-	  		warnModel("确定要删除该规格？","删除规格","deleteSpecificatios('"+name+"')");
+		
+			var specId = $(this).attr("data-id");
+			if(specId <= 0) return;
+	  		warnModel("确定要删除该规格？", "删除规格", "deleteSpecificatios("+specId+")");
 		});
 		
 	});
