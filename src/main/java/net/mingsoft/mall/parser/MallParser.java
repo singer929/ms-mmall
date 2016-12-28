@@ -364,14 +364,23 @@ public class MallParser extends IGeneralParser {
 			String order = property.get(ListParser.LIST_ORDER);
 			// 取出当前栏目下的子栏目Id
 			if (columnId != 0) {
+				
 				columnIds = columnBiz.queryChildrenCategoryIds(columnId, app.getAppId(), modelId);
-			} else {
+				if (columnIds.length == 0){
+					columnIds = new int[]{columnId};
+				}
+			} 
+			else {
 				columnId = this.curColumnId;
 				// 如果没有栏目id，则取所有的栏目信息，否则去取栏目的子栏目
 				if (columnId == 0) {
 					columnIds = columnBiz.queryCategoryIdsByModelIdAndAppId(app.getAppId(), modelId);
 				} else {
+					
 					columnIds = columnBiz.queryChildrenCategoryIds(columnId, app.getAppId(), modelId);
+					if (columnIds.length == 0){
+						columnIds = new int[]{columnId};
+					}
 				}
 			}
 			if (columnIds == null || columnIds.length <= 0) {
