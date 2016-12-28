@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.mingsoft.base.biz.IBaseBiz;
 import com.mingsoft.util.PageUtil;
-import com.sun.tools.jdi.VoidTypeImpl;
 
 import net.mingsoft.mall.entity.SpecificationEntity;
 
