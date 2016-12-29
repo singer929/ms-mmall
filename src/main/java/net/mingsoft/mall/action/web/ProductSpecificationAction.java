@@ -3,6 +3,7 @@
  */
 package net.mingsoft.mall.action.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.util.StringUtil;
 
 import net.mingsoft.basic.util.BasicUtil;
@@ -22,6 +24,7 @@ import net.mingsoft.mall.action.BaseAction;
 import net.mingsoft.mall.biz.IProductSpecificationBiz;
 import net.mingsoft.mall.constant.ModelCode;
 import net.mingsoft.mall.entity.ProductSpecificationEntity;
+import net.mingsoft.mall.entity.SpecificationEntity;
 
 /**
  * 
@@ -80,11 +83,15 @@ public class ProductSpecificationAction extends BaseAction{
 	 * @param request
 	 * @param response
 	 */
-//	@RequestMapping("/query")
-//	@ResponseBody
-//	public void query(@ModelAttribute , HttpServletRequest request, HttpServletResponse response){
-//		
-//	}
+	@RequestMapping("/queryBySpecifications")
+	@ResponseBody
+	public void queryBySpecifications(String jsonStr, HttpServletRequest request, HttpServletResponse response){
+		
+		JSONArray array = JSONArray.parseArray(jsonStr);
+		ProductSpecificationEntity ps = array.getObject(0, ProductSpecificationEntity.class);
+		
+		this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, "产品规格id不是整数");
+	}
 	
 	/**
 	 * 根据商品规格获取商品规格数据
@@ -104,6 +111,20 @@ public class ProductSpecificationAction extends BaseAction{
 	}
 	
 
+}
+
+class QueryParam {
+	private List<ProductSpecificationEntity> list;
+
+	public List<ProductSpecificationEntity> getList() {
+		return list;
+	}
+
+	public void setList(List<ProductSpecificationEntity> list) {
+		this.list = list;
+	}
+	
+	
 }
 
 

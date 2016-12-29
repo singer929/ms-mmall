@@ -40,6 +40,28 @@
 	function sel(){
 		$("#sel").val('3');
 	}
+	
+	var arr = [
+		{
+			productId: 123,
+			specName: "颜色",
+			specValue: "白" 
+		},
+		
+		{
+			productId: 124,
+			specName: "尺寸",
+			specValue: "1寸" 
+		}
+	];
+	
+	var str = JSON.stringify(arr);
+	
+	function onTest(){
+		$.post('http://localhost:8080/ms-mmall/mall/productSpecification/queryBySpecifications.do', {jsonStr:str}, function(data, status){
+			alert(data);
+		});
+	}
 </script>
 
 </html>

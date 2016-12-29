@@ -51,7 +51,7 @@ public class SpecificationEntity extends BaseEntity{
 	/**
 	 * 规格分类ID
 	 */
-	private int specCateId;
+	private int specCateId = 0;
 	
 	/**
 	 * 默认的字段名

@@ -6,8 +6,10 @@ import javax.ws.rs.DELETE;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.base.dao.IBaseDao;
 
+import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.mall.entity.ProductSpecificationEntity;
 /**
  * 
@@ -93,4 +95,10 @@ public interface IProductSpecificationDao extends IBaseDao {
 	 * @param specName
 	 */
 	public void deleteBySpecificationName(@Param("specName") String specName);
+	
+	/**
+	 * 根据产品的规格值获取符合条件的产品
+	 * @param specName
+	 */
+	public List<ProductEntity> queryByProductSpec(@Param("productSpecList") List productSpecList);
 }
