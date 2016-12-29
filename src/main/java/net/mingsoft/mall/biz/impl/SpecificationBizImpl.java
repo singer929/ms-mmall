@@ -117,4 +117,12 @@ public class SpecificationBizImpl extends BaseBizImpl implements ISpecificationB
 		
 		deleteBySpecificationName(name);
 	}
+	
+	@Override
+	public List<SpecificationEntity> queryBySpecCateId(int specCateId, int appId){
+		
+		List<SpecificationEntity> list = specDao.queryBySpecCateId(specCateId, appId);
+		
+		return list;
+	}
 }

@@ -78,10 +78,17 @@
 		</if>
 	</select>
 	
+	<select id="queryBySpecCateId" resultMap="resultMap">
+		select <include refid="column_list"/> from mall_specification s
+		where 1 = 1
+		<if test="appId != null">and s.specification_app_id = #{appId}</if>
+		<if test="specCateId != null">and s.specification_category_id = #{specCateId}</if>
+	</select>
+	
 	<!-- 根据appId获得规格总数 -->
 	<select id="countByAppId" resultType="int">
 	 	select count(*) from mall_specification
-	 	where 1=1
+	 	where 1 = 1
 	 	<if test="appId != null">and specification_app_id = #{appId}</if>
 	</select>
 	

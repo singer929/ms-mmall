@@ -53,14 +53,14 @@
                                     <button type="button" class="btn btn-default add-norms-group">添加规格项目</button>
                                 </div>
                             </div>
-                            <#noparse>
+                            
                             <script type="text/x-jquery-tmpl" id="addNormsGroup">
                                 <div class="norms-group" data-id="">
                                     <div class="norms-title">
                                         <select class="js-example-theme-single js-states form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true" style="width: 100px;">
                                             <option value="" selected="selected">请输入规格</option>
                                             {{each(i, spec) specArr}}
-							                    <option value="${spec.name}"> ${spec.name} </option>
+							                 <#noparse> <option value="${spec.name}"> ${spec.name} </option>  </#noparse>
 							            	{{/each}}
                                         </select>
                                         <span class="delete-norms">×</span>
@@ -84,7 +84,6 @@
                                     </div>
                                 </div>
                             </script>
-                            </#noparse>
                         </div>
                     </div>
                 </div>
@@ -93,7 +92,7 @@
                     <label for="basicSort" class="col-sm-2  control-label ">商品库存</label>
                     <div class="col-sm-9 ms-from-group-input ms-form-input">  
                         <div class="batch-set">
-                            批量设置：
+                        	批量设置：
                             <span>价格<input type="text" placeholder="请输入价格" id="allPriceTxt"/><button class="btn btn-default all-price">保存</button></span> 
                             <span>库存<input type="text" placeholder="请输入库存" id="allStockTxt"/><button class="btn btn-default all-stock">保存</button></span>
                         </div>
@@ -118,8 +117,10 @@
     	</@ms.form>
     </@ms.panel>
 </@ms.html5>
-<#noparse>
+
+
 <script type="text/x-jquery-tmpl" id="showNormsGroup">
+<#noparse>
     <div class="norms-group" data-id="${specName}">
         <div class="norms-title">
             <select class="js-example-theme-single js-states form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true" style="width: 100px;">
@@ -132,15 +133,18 @@
                 <input type="checkbox"/><span>添加规格图片</span>
             </label>
         </div>
+</#noparse> 
         <div class="norms-list">
             {{each(i, specValue) specValues}}
                 <div class="norms-detail" data-value="">
-                    <span class="norms-text">${specValue}</span>
+<#noparse>          
+				<span class="norms-text">${specValue}</span> 	
                     <span class="delete-norms">×</span>
-                    <div class="norms-pic">
-                        +
+                    <div id="normPic${seed}" class="norms-pic">
+                        + <img id="normImg${seed}" src="" />
                     </div>
                 </div>
+</#noparse> 
             {{/each}}
             <span class="add-norms">
                 <span class="add-norm-btn">+添加</span>
@@ -157,12 +161,11 @@
         </div>
     </div>
 </script>
-</#noparse> 
+
 
 <script src=" http://cdn.mingsoft.net/plugins/validator/5.5.0/validator.js"></script>
 <script type="text/javascript" charset="utf-8" src="${base}/js/manager/mall/SpecMgr.js"></script>
 <script type="text/javascript" >
-
 
 	// 保存数据
 	function onSave(){
@@ -270,6 +273,9 @@
     $("body").delegate(".norms-pic", "click", function(){
 		var specValue = $(this).parent().data('value');
 		var specName = $(this).parent().parent().parent().data('id');
+		
+		
+		
     });                                                                                                                                                                                       
    
     // 批量设置
@@ -332,9 +338,10 @@
 
         // 显示商品规格数据
         for (var specName in SpecMgr.productSpecs){
+        	var randSeed = new Date().getTime() + Math.floor(Math.random() * 1000);
             var psArr = SpecMgr.productSpecs[specName];
             var specArr = SpecMgr.getSpecArr();
-            var tmplObj = {specName:specName, specValues:psArr, specArr:specArr};
+            var tmplObj = {specName:specName, specValues:psArr, specArr:specArr, seed:randSeed};
 
             $("#addNormsBtn").before($("#showNormsGroup").tmpl(tmplObj));
         }

@@ -3,20 +3,25 @@
  */
 package net.mingsoft.mall.action.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.mingsoft.base.action.BaseAction;
 import com.mingsoft.util.StringUtil;
 
+import net.mingsoft.basic.util.BasicUtil;
+import net.mingsoft.mall.action.BaseAction;
 import net.mingsoft.mall.biz.IProductSpecificationBiz;
 import net.mingsoft.mall.constant.ModelCode;
+import net.mingsoft.mall.entity.ProductSpecificationEntity;
 
 /**
  * 
@@ -71,6 +76,17 @@ public class ProductSpecificationAction extends BaseAction{
 	}
 	
 	/**
+	 * 根据规格值查询对应的商品
+	 * @param request
+	 * @param response
+	 */
+//	@RequestMapping("/query")
+//	@ResponseBody
+//	public void query(@ModelAttribute , HttpServletRequest request, HttpServletResponse response){
+//		
+//	}
+	
+	/**
 	 * 根据商品规格获取商品规格数据
 	 */
 	@RequestMapping("/{psId}/prodcutSpecList")
@@ -87,4 +103,7 @@ public class ProductSpecificationAction extends BaseAction{
 //		this.outJson(response, JSONObject.toJSONString(psList));
 	}
 	
+
 }
+
+

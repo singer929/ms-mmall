@@ -39,8 +39,6 @@ import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.bean.ProductSaveData;
 import net.mingsoft.mall.biz.IProductBiz;
 import net.mingsoft.mall.biz.IProductSpecificationBiz;
-import net.mingsoft.mall.biz.IProductSpecificationDetailBiz;
-import net.mingsoft.mall.biz.ISpecificationBiz;
 import net.mingsoft.mall.constant.ModelCode;
 import net.mingsoft.mall.constant.e.ProductEnum;
 import net.mingsoft.mall.entity.ProductEntity;
@@ -81,22 +79,12 @@ public class ProductAction extends BaseAction {
 	 */
 	@Autowired
 	private IContentModelBiz contentModelBiz;
-
-	
-	@Autowired
-	private ISpecificationBiz specBiz;
 	
 	/**
 	 * 新版商品规格业务
 	 */
 	@Autowired
 	private IProductSpecificationBiz productSpecBiz;
-	
-	/**
-	 * 新版商品规格明细业务
-	 */
-	@Autowired
-	private IProductSpecificationDetailBiz specDeitalBiz;
 
 	/**
 	 * 判断是否为checkbox类型
@@ -171,9 +159,7 @@ public class ProductAction extends BaseAction {
 	}
 
 	/**
-	 * 
 	 * 跳转到产品保存页面
-	 * 
 	 * @return 站点保存页面
 	 */
 	@RequestMapping("/add")
@@ -287,7 +273,6 @@ public class ProductAction extends BaseAction {
 
 	/**
 	 * 跳转到编辑页面
-	 * 
 	 * @param request
 	 * @param model
 	 * @param basicId
@@ -513,5 +498,15 @@ public class ProductAction extends BaseAction {
 			}
 		}
 		return mapParams;
+	}
+	
+	/**
+	 * 测试
+	 * @return
+	 */
+	@RequestMapping("/test")
+	public String test(){
+		
+		return view("/test");
 	}
 }
