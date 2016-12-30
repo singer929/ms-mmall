@@ -6,6 +6,8 @@ var PluploaderMgr = {
 	
 	instances: {},
 	
+	idMap:{},
+	
 	url: "",
 	basePath: "",
 	path: "",
@@ -43,6 +45,7 @@ var PluploaderMgr = {
 		});
 		
 		this.instances[triggerId] = uploader;
+		this.idMap[uploader.id] = {triggerId: triggerId, imgId: imgId};
 		
 		uploader.init();
 		//初始化触发
@@ -77,6 +80,9 @@ var PluploaderMgr = {
 			}
 			
 			if (successCallback != null){
+				
+				result.triggerId = PluploaderMgr.idMap[up.id].triggerId;
+				result.imgId = PluploaderMgr.idMap[up.id].imgId;
 				successCallback(result);
 			}
 		});

@@ -1,3 +1,4 @@
+<#assign defaultSpecImg = base + "/images/upload.png">
 <@ms.html5>
     <@ms.nav back=true title="商品编辑"><@ms.saveButton onclick="onSave()" /> </@ms.nav>
     <@ms.panel>
@@ -128,24 +129,25 @@
                     <option value="${spec.name}" {{if spec.name==specName}}selected="selected"{{/if}}>${spec.name}</option>
 	            {{/each}}
             </select>
+</#noparse>
             <span class="delete-norms">×</span>
             <label class="norms-addpic">
-                <input type="checkbox"/><span>添加规格图片</span>
+                <input type="checkbox" {{if showPic }}checked="checked"{{/if}} /><span>添加规格图片</span>
             </label>
         </div>
-</#noparse> 
         <div class="norms-list">
-            {{each(i, specValue) specValues}}
-                <div class="norms-detail" data-value="">
-<#noparse>          
-				<span class="norms-text">${specValue}</span> 	
+            {{each(i, proSpec) proSpecArr}}
+<#noparse>
+                <div class="norms-detail" data-value="${proSpec.specValue}">        
+				<span class="norms-text">${proSpec.specValue}</span> 	
                     <span class="delete-norms">×</span>
-                    <div id="normPic${seed}" class="norms-pic">
-                        + <img id="normImg${seed}" src="" />
+                    <div id="normPic${proSpec.seed}" class="norms-pic" {{if showPic }} style="display:block" {{/if}}>
+
+                    	<img id="normImg${proSpec.seed}" src="{{if proSpec.img!='' }}${proSpec.img}{{else}}</#noparse> ${defaultSpecImg} <#noparse>{{/if}}" />
                     </div>
                 </div>
-</#noparse> 
             {{/each}}
+</#noparse> 
             <span class="add-norms">
                 <span class="add-norm-btn">+添加</span>
                 <div class="add-norms-content">
@@ -167,6 +169,8 @@
 <script type="text/javascript" charset="utf-8" src="${base}/js/manager/mall/SpecMgr.js"></script>
 <script type="text/javascript" charset="utf-8" src="${base}/js/manager/mall/PluploaderMgr.js"></script>
 <script type="text/javascript" >
+
+	const DEFAULT_SPEC_IMG = '${defaultSpecImg}';
 
 	// 保存数据
 	function onSave(){
@@ -271,10 +275,29 @@
     
     //判断是否勾选了选择商品图片勾选框，选中则出现商品规格图片上传
     $("body").delegate(".norms-addpic>input[type=checkbox]","change",function(){
+    	var normsPic = $(this).parent().parent().siblings().find(".norms-pic")
+    	var specName = $(this).parent().parent().parent().data('id');
+
         if($(this).is(":checked")){
-            $(this).parent().parent().siblings().find(".norms-pic").show();
+            normsPic.show();     
+
+            $(this).parent().parent().parent().find(".norms-list .norms-detail").each(function(){
+            	 var specValue = $(this).data('value');
+
+            	 var imgUrl = $(this).find('img').attr('src');
+            	 var psData = SpecMgr.getProductSpecData(specName, specValue);
+            	 if (psData){
+            	 	psData.img = imgUrl;
+            	 }
+            });
         }else{
-            $(this).parent().parent().siblings().find(".norms-pic").hide();
+            normsPic.hide();
+
+            // 逻辑上清空当前规格下所有值的图片, 显示上隐藏
+            var psArr = SpecMgr.productSpecs[specName];
+            for (var i in psArr){
+            	psArr[i].img = "";
+            }
         }
     });
 
@@ -282,8 +305,6 @@
     $("body").delegate(".norms-pic", "click", function(){
 		var specValue = $(this).parent().data('value');
 		var specName = $(this).parent().parent().parent().data('id');
-		
-		
     });                                                                                                                                                                                       
    
     // 批量设置
@@ -296,8 +317,7 @@
     	refreshTable();
     }
 
-    // 批量设置库存
-    
+
     String.prototype.format = function(){
         var args = arguments;
         return this.replace(/\{(\d+)\}/g,function(s,i){
@@ -332,7 +352,8 @@
         brand(${product.basicCategoryId},${product.productBrand});
 
         $.post('${base}/mall/productSpecification/${product.basicId}/list.do', {}, specDataCallback);
-        
+
+
     });
 
     // 请求规格数据返回
@@ -352,19 +373,31 @@
 
         // 显示商品规格数据
         for (var specName in SpecMgr.productSpecs){
-        	var randSeed = new Date().getTime() + Math.floor(Math.random() * 1000);
 
             var psArr = SpecMgr.productSpecs[specName];
-            var specArr = SpecMgr.getSpecArr();
-            var tmplObj = {specName:specName, specValues:psArr, specArr:specArr, seed:randSeed};
 
-            // 唯一的ID
-            var triggerId = 'normPic' + randSeed;
-            var imgId = 'normImg' + randSeed;
+            var showPic = false;
+            for (var i in psArr){
+            	
+            	var randSeed = new Date().getTime() + Math.floor(Math.random() * 1000);
+	            psArr[i].seed = randSeed;
+
+	            if (psArr[i].img) {
+            		showPic = true;
+            	}
+            }
+
+            var specArr = SpecMgr.getSpecArr();
+            var tmplObj = {specName:specName, proSpecArr:psArr, specArr:specArr, showPic:showPic};
 
             $("#addNormsBtn").before($("#showNormsGroup").tmpl(tmplObj));
 
-            PluploaderMgr.createInstance(triggerId, imgId);
+            // 创建上传控件实例
+            for (var i in psArr){
+	            var triggerId = 'normPic' + psArr[i].seed;
+	            var imgId = 'normImg' + psArr[i].seed;
+            	PluploaderMgr.createInstance(triggerId, imgId, successCallback);
+            }
         }
 
         setTimeout(initSelect2, 500);
@@ -374,6 +407,24 @@
         refreshTable(SpecMgr.specDetails);
     }
 
+    function successCallback(result){
+
+    	var triggerId = result.triggerId;
+    	var imgId = result.imgId;
+
+    	var specValue = $('#'+triggerId).parent().data('value');
+    	var specName = $('#'+triggerId).parent().parent().parent().data('id');
+
+    	// 修改缓存数据值
+    	var productData = SpecMgr.getProductSpecData(specName, specValue);
+    	if (!productData) {
+    		console.log('图片上传成功时,未找到规格数据：'+specName + '-' + specValue);
+    		return;
+    	}
+
+    	var imgUrl = '${basePath}/' + result.response;
+    	productData.img = imgUrl;
+    }
 
     function initSelect2()
     {
@@ -537,7 +588,7 @@
                 var spec = SpecMgr.getSpecConfigByName(specName);
                 spec = spec || SpecMgr.addSpec(specName);       // 规格不存在则新增规格
 
-                detailUi.parent().parent().data('id', specName); // 添加名字
+                detailUi.parent().parent().data('id', specName); // 添加名字<p></p>
 
                 var psArr = [];
                 SpecMgr.productSpecs[specName] = psArr;
@@ -553,13 +604,13 @@
                     psArr.push({specValue:specValue, img:"", productId:SpecMgr.productId, specName:specName});
 
                     detailUi.before(
-                        $('<div class="norms-detail" data-value="' + specValue + '"><span class="norms-text">' + specValue + '</span><span class="delete-norms">×</span><div id="'+ triggerId +'" class="norms-pic">+<img src="" id="'+ imgId +'"></div></div>')
+                        $('<div class="norms-detail" data-value="' + specValue + '"><span class="norms-text">' + specValue + '</span><span class="delete-norms">×</span><div id="'+ triggerId +'" class="norms-pic"><img src="'+DEFAULT_SPEC_IMG + '" id="'+ imgId +'"></div></div>')
                     );
                     if(detailUi.parent().siblings().find(".norms-addpic>input[type=checkbox]").is(":checked")){
                         detailUi.siblings().find(".norms-pic").show();
                     }
 
-                    PluploaderMgr.createInstance(triggerId, imgId);
+                    PluploaderMgr.createInstance(triggerId, imgId, successCallback);
                 }
             }
             else{
@@ -576,13 +627,13 @@
                         productSpec.push({specValue:inputValues.val()[i], img:"", productId:SpecMgr.productId, specName:specName});
 
                         detailUi.before(
-                            $('<div class="norms-detail"><span class="norms-text">'+inputValues.val()[i]+'</span><span class="delete-norms">×</span><div id="'+ triggerId +'" class="norms-pic">+<img src="" id="'+ imgId +'"></div></div>')
+                            $('<div class="norms-detail"><span class="norms-text">'+inputValues.val()[i]+'</span><span class="delete-norms">×</span><div id="'+ triggerId +'" class="norms-pic"><img src="' + DEFAULT_SPEC_IMG +'" id="'+ imgId +'"></div></div>')
                         );
                         if(detailUi.parent().siblings().find(".norms-addpic>input[type=checkbox]").is(":checked")){
                             detailUi.siblings().find(".norms-pic").show()
                         }
 
-                        PluploaderMgr.createInstance(triggerId, imgId);
+                        PluploaderMgr.createInstance(triggerId, imgId, successCallback);
                     }
                     else {
                         alert("该属性已存在");

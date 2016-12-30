@@ -130,6 +130,20 @@ var SpecMgr = {
         }
         return null;
     },
+    
+    // 根据规格名称和规格值 获取规格数据
+    getProductSpecData: function(specName, specValue) {
+    	var arr = this.productSpecs[specName];
+    	if (!arr || !arr.length) return null;
+    	
+    	for (var i in arr){
+    		var data = arr[i];
+    		if (data.specValue == specValue){
+    			return data;
+    		}
+    	}
+    	return null;
+    },
 
     // 根据id获取规格明细数据
     getDetailData: function (id) {

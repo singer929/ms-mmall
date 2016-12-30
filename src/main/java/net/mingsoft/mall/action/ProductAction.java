@@ -373,7 +373,7 @@ public class ProductAction extends BaseAction {
 
 			int productId = product.getBasicId();
 			// 保存商品数据
-			//productSpecBiz.saveProductSpecification(productId, data, appId);
+			productSpecBiz.saveProductSpecification(productId, data, appId);
 
 			// 判断该文章所属栏目是否存在新的内容模型
 			if (column.getColumnContentModelId() != 0) {
