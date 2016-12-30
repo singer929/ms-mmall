@@ -5,6 +5,7 @@ import java.util.List;
 import com.mingsoft.base.biz.IBaseBiz;
 
 import net.mingsoft.mall.bean.ProductSaveData;
+import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.mall.entity.ProductSpecificationEntity;
 
 /**
@@ -71,4 +72,11 @@ public interface IProductSpecificationBiz extends IBaseBiz{
 	 * @param appId			appId
 	 */
 	public void saveProductSpecification(int productId, ProductSaveData data, int appId);
+	
+	/**
+	 * 根据规格值查询产品实体
+	 * @param list	规格值条件, 可以多个
+	 * @return
+	 */
+	public List<ProductEntity> queryBySpecValues(List<ProductSpecificationEntity> list);
 }

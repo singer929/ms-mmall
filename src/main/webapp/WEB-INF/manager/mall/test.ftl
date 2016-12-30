@@ -43,25 +43,26 @@
 	
 	var arr = [
 		{
-			productId: 123,
-			specName: "颜色",
-			specValue: "白" 
-		},
-		
-		{
-			productId: 124,
 			specName: "尺寸",
-			specValue: "1寸" 
+			specValue: "2" 
 		}
 	];
-	
 	var str = JSON.stringify(arr);
+	//function onTest(){
+		//$.post('${base}/mall/productSpecification/queryBySpecifications.do', {jsonStr:str}, function(data, status){
+		//	alert(data);
+		//});
+	//}
 	
+	var updateStr = '{"productParams":{"productSpecList":[],"detailList":[],"specList":[],"product":{"basicId":224,"basicTitle":"新茶 雨后茗品 半手工野生信阳毛尖 罐装 125g","basicCategoryId":"155","productBrand":"163","basicSort":"0","productPrice":"99.12","productCostPrice":"128.6","productStock":"99","productCode":"ECS000018","basicThumbnails":"/upload/mall/product/1/1468566174350.jpg","productContent":"asdfsadf"}},"customParams":{}}';
+					
 	function onTest(){
-		$.post('http://localhost:8080/ms-mmall/mall/productSpecification/queryBySpecifications.do', {jsonStr:str}, function(data, status){
+		$.post('${managerPath}/mall/product/update.do', {jsonStr: updateStr}, function(data, status){
 			alert(data);
 		});
 	}
+	
+	
 </script>
 
 </html>

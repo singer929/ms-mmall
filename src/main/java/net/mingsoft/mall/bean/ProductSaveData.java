@@ -39,4 +39,7 @@ public class ProductSaveData {
 	public List<SpecificationEntity> getSpecList() {
 		return specList;
 	}
+	public void setSpecList(List<SpecificationEntity> specList) {
+		this.specList = specList;
+	}
 }

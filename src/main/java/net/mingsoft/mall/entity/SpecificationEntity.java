@@ -67,23 +67,6 @@ public class SpecificationEntity extends BaseEntity{
 	 * 规格所属的appId
 	 */
 	private int appId;
-	
-
-	public int getAppId() {
-		return appId;
-	}
-
-	public void setAppId(int appId) {
-		this.appId = appId;
-	}
-	
-	public int getSpecCateId() {
-		return specCateId;
-	}
-
-	public void setSpecCateId(int specCateId) {
-		this.specCateId = specCateId;
-	}
 
 	public int getSpecId() {
 		return specId;
@@ -101,12 +84,12 @@ public class SpecificationEntity extends BaseEntity{
 		this.name = name;
 	}
 
-	public int getType() {
-		return type;
+	public int getSpecCateId() {
+		return specCateId;
 	}
 
-	public void setType(int type) {
-		this.type = type;
+	public void setSpecCateId(int specCateId) {
+		this.specCateId = specCateId;
 	}
 
 	public String getDefaultFields() {
@@ -116,4 +99,21 @@ public class SpecificationEntity extends BaseEntity{
 	public void setDefaultFields(String defaultFields) {
 		this.defaultFields = defaultFields;
 	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public int getAppId() {
+		return appId;
+	}
+
+	public void setAppId(int appId) {
+		this.appId = appId;
+	}
+	
 }

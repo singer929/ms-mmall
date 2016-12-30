@@ -1,5 +1,6 @@
 package net.mingsoft.mall.biz.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,11 @@ import com.mingsoft.base.dao.IBaseDao;
 
 import net.mingsoft.mall.bean.ProductSaveData;
 import net.mingsoft.mall.biz.IProductSpecificationBiz;
+import net.mingsoft.mall.dao.IProductDao;
 import net.mingsoft.mall.dao.IProductSpecificationDao;
 import net.mingsoft.mall.dao.IProductSpecificationDetailDao;
 import net.mingsoft.mall.dao.ISpecificationDao;
+import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
 import net.mingsoft.mall.entity.ProductSpecificationEntity;
 import net.mingsoft.mall.entity.SpecificationEntity;
@@ -61,6 +64,12 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	 */
 	@Autowired
 	private ISpecificationDao specDao;
+	
+	/**
+	 * 商品数据层
+	 */
+	@Autowired
+	private IProductDao productDao;
 
 	/**
 	 * 根据产品ID删除该产品对应的规格
@@ -196,6 +205,51 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 		LOG.debug("前端获取的JSON:" +  str);
 		
 		return str;
+	}
+
+	@Override
+	public List<ProductEntity> queryBySpecValues(List<ProductSpecificationEntity> list) {
+		
+		// 先查询所有id
+		List<Integer> ids = productSpecDao.queryByProductSpec(new ProductSpecificationEntity());
+		
+		for (int i = 0; i < list.size(); i ++){
+			ProductSpecificationEntity productSpec = list.get(i);
+			if (i == 0){
+				ids = productSpecDao.queryByProductSpec(productSpec);
+			}
+			else{
+				List<Integer> tmpIds = productSpecDao.queryByProductSpec(productSpec);
+				for (Integer id : ids){
+					
+					Boolean find = false;
+					for (Integer tmpId: tmpIds){
+						if (id == tmpId) {
+							find = true;
+							break;
+						}
+					}
+					
+					// 如果在新查询的id中没找到现有的产品id, 则移除现有队列
+					if (!find){
+						ids.remove(id);
+					}
+				}
+			}
+			
+			if (ids.size() == 0) break;
+		}
+		
+		// 根据id查找商城数据
+		List<ProductEntity> productList = null;
+		if (ids.size() == 0){
+			productList = new ArrayList<ProductEntity>();
+		}
+		else{
+			productList = productDao.queryByBasicIds(1, null, ids, null, null, false, null);
+		}
+		
+		return productList;
 	}
 }
 

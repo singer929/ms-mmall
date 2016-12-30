@@ -97,8 +97,8 @@ public interface IProductSpecificationDao extends IBaseDao {
 	public void deleteBySpecificationName(@Param("specName") String specName);
 	
 	/**
-	 * 根据产品的规格值获取符合条件的产品
+	 * 根据产品的规格值获取符合条件的 产品id
 	 * @param specName
 	 */
-	public List<ProductEntity> queryByProductSpec(@Param("productSpecList") List productSpecList);
+	public List<Integer> queryByProductSpec(ProductSpecificationEntity productSpec);
 }

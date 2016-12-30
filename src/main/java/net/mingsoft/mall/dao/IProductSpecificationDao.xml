@@ -51,8 +51,7 @@
 		</association> -->
 	</resultMap>
 	<!-- 获取表字段结束 -->
-	
-	<resultMap>
+
 
 	<!-- 新增产品规格关联信息开始 -->
 	<insert id="saveEntity" useGeneratedKeys="true"
@@ -180,9 +179,12 @@
 	</insert>  
 	
 	<!-- 根据产品规格查询对应的产品 -->
-	<select id="queryByProductSpec" parameterType="java.util.List" resultMap="resultMap">
-		select <include refid="column_list" /> 
-		  from mall_product_specification ps
-		 where ps.ps_product_id = #{productId}
+	<select id="queryByProductSpec" parameterType="net.mingsoft.mall.entity.ProductSpecificationEntity" resultType="java.lang.Integer">
+		select ps_product_id 
+		  from mall_product_specification
+		 where 1 = 1
+		 <if test="specName != null">and ps_spec_name = #{specName} </if>
+		  <if test="specValue != null">and ps_spec_value = #{specValue} </if>
+		  group by ps_product_id
 	</select>
 </mapper>

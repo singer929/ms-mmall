@@ -3,7 +3,6 @@
  */
 package net.mingsoft.mall.action.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,20 +10,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.util.StringUtil;
 
-import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.action.BaseAction;
 import net.mingsoft.mall.biz.IProductSpecificationBiz;
 import net.mingsoft.mall.constant.ModelCode;
+import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.mall.entity.ProductSpecificationEntity;
-import net.mingsoft.mall.entity.SpecificationEntity;
 
 /**
  * 
@@ -87,10 +85,19 @@ public class ProductSpecificationAction extends BaseAction{
 	@ResponseBody
 	public void queryBySpecifications(String jsonStr, HttpServletRequest request, HttpServletResponse response){
 		
-		JSONArray array = JSONArray.parseArray(jsonStr);
-		ProductSpecificationEntity ps = array.getObject(0, ProductSpecificationEntity.class);
+		// 传进来的产品规格列表 为查询条件
+		List<ProductSpecificationEntity> list = JSONArray.parseArray(jsonStr, ProductSpecificationEntity.class);
+		// 根据条件获得产品实体
+		List<ProductEntity> productList = specBiz.queryBySpecValues(list);
 		
-		this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, "产品规格id不是整数");
+		String resultStr = JSON.toJSONString(productList);
+		
+		if (StringUtil.isBlank(resultStr)){
+			outJson(response, ModelCode.MALL_SPECIFICATIONS, false);
+		}
+		else{
+			outJson(response, ModelCode.MALL_SPECIFICATIONS, true, resultStr);
+		}
 	}
 	
 	/**

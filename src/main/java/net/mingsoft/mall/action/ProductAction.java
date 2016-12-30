@@ -42,9 +42,6 @@ import net.mingsoft.mall.biz.IProductSpecificationBiz;
 import net.mingsoft.mall.constant.ModelCode;
 import net.mingsoft.mall.constant.e.ProductEnum;
 import net.mingsoft.mall.entity.ProductEntity;
-import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
-import net.mingsoft.mall.entity.ProductSpecificationEntity;
-import net.mingsoft.mall.entity.SpecificationEntity;
 
 /**
  * 
@@ -288,7 +285,7 @@ public class ProductAction extends BaseAction {
 	}
 	
 	/**
-	 * 测试
+	 * 更新商品内容
 	 * @return
 	 */
 	@RequestMapping("/update")
@@ -301,7 +298,7 @@ public class ProductAction extends BaseAction {
 		
 		JSONObject obj = JSON.parseObject(jsonStr);
 		JSONObject customParams = obj.getJSONObject("customParams");
-		SaveData data = obj.getObject("productParams", SaveData.class);
+		ProductSaveData data = obj.getObject("productParams", ProductSaveData.class);
 		
 		if (data == null){
 			this.outJson(response, ModelCode.MALL_PRODUCT, false, "参数解析错误");
@@ -507,35 +504,5 @@ public class ProductAction extends BaseAction {
 	public String test(){
 		
 		return view("/mall/test"); 
-	}
-}
-
-class SaveData {
-
-	private ProductEntity product;
-	private List<ProductSpecificationEntity> productSpecList;
-	private List<ProductSpecificationDetailEntity> detailList;
-	private List<SpecificationEntity> specList;
-	
-	public ProductEntity getProduct() {
-		return product;
-	}
-	public void setProduct(ProductEntity product) {
-		this.product = product;
-	}
-	public List<ProductSpecificationEntity> getProductSpecList() {
-		return productSpecList;
-	}
-	public void setProductSpecList(List<ProductSpecificationEntity> productSpecList) {
-		this.productSpecList = productSpecList;
-	}
-	public List<ProductSpecificationDetailEntity> getDetailList() {
-		return detailList;
-	}
-	public void setDetailList(List<ProductSpecificationDetailEntity> detailList) {
-		this.detailList = detailList;
-	}
-	public List<SpecificationEntity> getSpecList() {
-		return specList;
 	}
 }
