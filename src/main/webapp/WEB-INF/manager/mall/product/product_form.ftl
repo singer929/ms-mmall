@@ -93,8 +93,8 @@
                     <div class="col-sm-9 ms-from-group-input ms-form-input">  
                         <div class="batch-set">
                         	批量设置：
-                            <span>价格<input type="text" placeholder="请输入价格" id="allPriceTxt"/><span class="btn btn-default all-price">设置</span></span> 
-                            <span>库存<input type="text" placeholder="请输入库存" id="allStockTxt"/><span class="btn btn-default all-stock">设置</span></span>
+                            <span>价格<input type="text" placeholder="请输入价格" id="allPriceTxt"/><span class="btn btn-success all-price">设置</span></span> 
+                            <span>库存<input type="text" placeholder="请输入库存" id="allStockTxt"/><span class="btn btn-success all-stock">设置</span></span>
                         </div>
 
                         <table class="table table-bordered norms-table">
@@ -162,9 +162,10 @@
     </div>
 </script>
 
-
-<script src=" http://cdn.mingsoft.net/plugins/validator/5.5.0/validator.js"></script>
+<script type="text/javascript" src="http://cdn.mingsoft.net/plugins/plupload/2.2.1/plupload.full.min.js"></script>
+<script src="http://cdn.mingsoft.net/plugins/validator/5.5.0/validator.js"></script>
 <script type="text/javascript" charset="utf-8" src="${base}/js/manager/mall/SpecMgr.js"></script>
+<script type="text/javascript" charset="utf-8" src="${base}/js/manager/mall/PluploaderMgr.js"></script>
 <script type="text/javascript" >
 
 	// 保存数据
@@ -263,7 +264,7 @@
             $("#contentModelFiled").html("");
             $("#contentModelFiled").html(data);
             $("select").select2();
-        }});    
+        }});   
     }
 
     // =================================以下为商品规格部分逻辑=====================================
@@ -281,7 +282,6 @@
     $("body").delegate(".norms-pic", "click", function(){
 		var specValue = $(this).parent().data('value');
 		var specName = $(this).parent().parent().parent().data('id');
-		
 		
 		
     });                                                                                                                                                                                       
@@ -344,14 +344,27 @@
             return;
         }
 
+        PluploaderMgr.init({
+			url: "${basePath}/upload",
+			path: "/upload/mall/product/${appId}/",
+			basePath: "${basePath}"
+		});
+
         // 显示商品规格数据
         for (var specName in SpecMgr.productSpecs){
         	var randSeed = new Date().getTime() + Math.floor(Math.random() * 1000);
+
             var psArr = SpecMgr.productSpecs[specName];
             var specArr = SpecMgr.getSpecArr();
             var tmplObj = {specName:specName, specValues:psArr, specArr:specArr, seed:randSeed};
 
+            // 唯一的ID
+            var triggerId = 'normPic' + randSeed;
+            var imgId = 'normImg' + randSeed;
+
             $("#addNormsBtn").before($("#showNormsGroup").tmpl(tmplObj));
+
+            PluploaderMgr.createInstance(triggerId, imgId);
         }
 
         setTimeout(initSelect2, 500);
@@ -530,17 +543,23 @@
                 SpecMgr.productSpecs[specName] = psArr;
 				
 				var specValues = inputValues.val();
-                for (var i in inputValues.val())
-                {
+                for (var i in inputValues.val()){
+
+                	var seed = new Date().getTime() + Math.floor(Math.random() * 1000);
+                	var triggerId = 'normPic' + seed;
+                	var imgId = 'normImg' + seed;
+
                 	var specValue = specValues[i];
                     psArr.push({specValue:specValue, img:"", productId:SpecMgr.productId, specName:specName});
 
                     detailUi.before(
-                        $('<div class="norms-detail" data-value="' + specValue + '"><span class="norms-text">' + specValue + '</span><span class="delete-norms">×</span><div class="norms-pic">+</div></div>')
+                        $('<div class="norms-detail" data-value="' + specValue + '"><span class="norms-text">' + specValue + '</span><span class="delete-norms">×</span><div id="'+ triggerId +'" class="norms-pic">+<img src="" id="'+ imgId +'"></div></div>')
                     );
                     if(detailUi.parent().siblings().find(".norms-addpic>input[type=checkbox]").is(":checked")){
                         detailUi.siblings().find(".norms-pic").show();
                     }
+
+                    PluploaderMgr.createInstance(triggerId, imgId);
                 }
             }
             else{
@@ -548,16 +567,22 @@
                     //判断是否已有属性
                     if($.inArray(inputValues.val()[i], arrText) == -1){
 
+                    	var seed = new Date().getTime() + Math.floor(Math.random()  * 1000);
+	                	var triggerId = 'normPic' + seed;
+	                	var imgId = 'normImg' + seed;
+
                         var spec = SpecMgr.getSpecConfigByName(specName);
                         var productSpec = SpecMgr.productSpecs[specName];
                         productSpec.push({specValue:inputValues.val()[i], img:"", productId:SpecMgr.productId, specName:specName});
 
                         detailUi.before(
-                            $('<div class="norms-detail"><span class="norms-text">'+inputValues.val()[i]+'</span><span class="delete-norms">×</span><div class="norms-pic">+</div></div>')
+                            $('<div class="norms-detail"><span class="norms-text">'+inputValues.val()[i]+'</span><span class="delete-norms">×</span><div id="'+ triggerId +'" class="norms-pic">+<img src="" id="'+ imgId +'"></div></div>')
                         );
                         if(detailUi.parent().siblings().find(".norms-addpic>input[type=checkbox]").is(":checked")){
                             detailUi.siblings().find(".norms-pic").show()
                         }
+
+                        PluploaderMgr.createInstance(triggerId, imgId);
                     }
                     else {
                         alert("该属性已存在");
