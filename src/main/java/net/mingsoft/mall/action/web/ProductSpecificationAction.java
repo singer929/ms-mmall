@@ -120,18 +120,4 @@ public class ProductSpecificationAction extends BaseAction{
 
 }
 
-class QueryParam {
-	private List<ProductSpecificationEntity> list;
-
-	public List<ProductSpecificationEntity> getList() {
-		return list;
-	}
-
-	public void setList(List<ProductSpecificationEntity> list) {
-		this.list = list;
-	}
-	
-	
-}
-
 

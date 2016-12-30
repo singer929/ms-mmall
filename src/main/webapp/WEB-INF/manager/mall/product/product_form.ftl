@@ -4,7 +4,7 @@
     	<@ms.form name="productForm" action="${managerPath}/mall/product/${autoCURD}.do" isvalidation=true redirect="${managerPath}/mall/product/list.do?${params}">
 			<input type="hidden" name="basicId" value="${product.basicId}"/>
     		<@ms.text id="basicTitle" label="商品名称" name="basicTitle" value="${product.basicTitle?default('')}" width="500"  placeholder="请输入商品标题" 
-    		validation={"maxlength":"50","required":"true", "data-bv-notempty-message":"必填项目","data-bv-stringlength-message":"网站标题在50个字符以内!"}/>
+    		validation={"maxlength":"50","required":"true", "data-bv-notempty-message":"必填项目","data-bv-stringlength-message":"商品名称在50个字符以内!"}/>
     		<@ms.formRow label="所属栏目" width="300">
 	            	<@ms.inputTree  
 	            		treeId="inputTree" 
@@ -93,8 +93,8 @@
                     <div class="col-sm-9 ms-from-group-input ms-form-input">  
                         <div class="batch-set">
                         	批量设置：
-                            <span>价格<input type="text" placeholder="请输入价格" id="allPriceTxt"/><button class="btn btn-default all-price">保存</button></span> 
-                            <span>库存<input type="text" placeholder="请输入库存" id="allStockTxt"/><button class="btn btn-default all-stock">保存</button></span>
+                            <span>价格<input type="text" placeholder="请输入价格" id="allPriceTxt"/><span class="btn btn-default all-price">设置</span></span> 
+                            <span>库存<input type="text" placeholder="请输入库存" id="allStockTxt"/><span class="btn btn-default all-stock">设置</span></span>
                         </div>
 
                         <table class="table table-bordered norms-table">
@@ -169,6 +169,14 @@
 
 	// 保存数据
 	function onSave(){
+	
+		$('#productForm').data('bootstrapValidator').validate();
+		var isValid = $('#productForm').data('bootstrapValidator').isValid();
+		if (!isValid){
+			alert('数据提交失败：请检查输入的数据!');
+			return;
+		}
+	
 		// 规格数据
 		var params = SpecMgr.buildSpecSvrData();
 		
