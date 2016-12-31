@@ -143,7 +143,7 @@
                     <span class="delete-norms">×</span>
                     <div id="normPic${proSpec.seed}" class="norms-pic" {{if showPic }} style="display:block" {{/if}}>
 
-                    	<img id="normImg${proSpec.seed}" src="{{if proSpec.img!='' }}${proSpec.img}{{else}}</#noparse> ${defaultSpecImg} <#noparse>{{/if}}" />
+                    	<img title="点击上传或更改图片" id="normImg${proSpec.seed}" src="{{if proSpec.img!='' }}${proSpec.img}{{else}}</#noparse> ${defaultSpecImg} <#noparse>{{/if}}" />
                     </div>
                 </div>
             {{/each}}
@@ -604,7 +604,7 @@
                     psArr.push({specValue:specValue, img:"", productId:SpecMgr.productId, specName:specName});
 
                     detailUi.before(
-                        $('<div class="norms-detail" data-value="' + specValue + '"><span class="norms-text">' + specValue + '</span><span class="delete-norms">×</span><div id="'+ triggerId +'" class="norms-pic"><img src="'+DEFAULT_SPEC_IMG + '" id="'+ imgId +'"></div></div>')
+                        $('<div class="norms-detail" data-value="' + specValue + '"><span class="norms-text">' + specValue + '</span><span class="delete-norms">×</span><div id="'+ triggerId +'" class="norms-pic"><img title="点击上传或更改图片" src="'+DEFAULT_SPEC_IMG + '" id="'+ imgId +'"></div></div>')
                     );
                     if(detailUi.parent().siblings().find(".norms-addpic>input[type=checkbox]").is(":checked")){
                         detailUi.siblings().find(".norms-pic").show();
@@ -627,7 +627,7 @@
                         productSpec.push({specValue:inputValues.val()[i], img:"", productId:SpecMgr.productId, specName:specName});
 
                         detailUi.before(
-                            $('<div class="norms-detail"><span class="norms-text">'+inputValues.val()[i]+'</span><span class="delete-norms">×</span><div id="'+ triggerId +'" class="norms-pic"><img src="' + DEFAULT_SPEC_IMG +'" id="'+ imgId +'"></div></div>')
+                            $('<div class="norms-detail"><span class="norms-text">'+inputValues.val()[i]+'</span><span class="delete-norms">×</span><div id="'+ triggerId +'" class="norms-pic"><img title="点击上传或更改图片" src="' + DEFAULT_SPEC_IMG +'" id="'+ imgId +'"></div></div>')
                         );
                         if(detailUi.parent().siblings().find(".norms-addpic>input[type=checkbox]").is(":checked")){
                             detailUi.siblings().find(".norms-pic").show()

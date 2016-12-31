@@ -499,10 +499,10 @@ public class ProductAction extends BaseAction {
 
 		this.outJson(response, ModelCode.MALL_PRODUCT, true, String.valueOf(product.getBasicId()));
 	}
-	
-	@RequestMapping("/test")
-	public String test(){
-		
-		return view("/mall/test"); 
-	}
+//	
+//	@RequestMapping("/test")
+//	public String test(){
+//		
+//		return view("/mall/test"); 
+//	}
 }
