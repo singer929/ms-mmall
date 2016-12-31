@@ -47,6 +47,7 @@ import net.mingsoft.mall.parser.impl.ProductCollectParser;
 import net.mingsoft.mall.parser.impl.ProductCommentParser;
 import net.mingsoft.mall.parser.impl.ProductContentParser;
 import net.mingsoft.mall.parser.impl.ProductCostPriceParser;
+import net.mingsoft.mall.parser.impl.ProductDescriptionParser;
 import net.mingsoft.mall.parser.impl.ProductIdParser;
 import net.mingsoft.mall.parser.impl.ProductLinkParser;
 import net.mingsoft.mall.parser.impl.ProductLitpicParser;
@@ -281,11 +282,13 @@ public class MallParser extends IGeneralParser {
 		htmlContent = new ProductStockParser(htmlContent, productStock).parse();
 		// 替换商品id{ms:field.id/}
 		htmlContent = new ProductIdParser(htmlContent, product.getProductId() + "").parse();
+		// 替换商品描述{ms:field.descrip/}
+		htmlContent = new ProductDescriptionParser(htmlContent, product.getBasicDescription()).parse();
 		// 获取商品所属的栏目实体
 		ColumnEntity column = (ColumnEntity) columnBiz.getEntity(product.getBasicCategoryId());
 		// 替换商品栏目id标签{ms:filed.typeid/}
 		htmlContent = new ProductTypeIdParser(htmlContent, column.getCategoryId() + "").parse();
-
+		
 		htmlContent = new ProductLitpicParser(htmlContent, product.getBasicThumbnails()).parse();
 		// 替换商品的栏目标题标签{ms:filed.typetitle/}
 		ProductTypeTitleParser ptp = new ProductTypeTitleParser(htmlContent, column.getCategoryTitle());
