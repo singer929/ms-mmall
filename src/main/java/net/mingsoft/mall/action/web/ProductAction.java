@@ -7,6 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.aspectj.weaver.ast.Var;
+import org.codehaus.groovy.transform.tailrec.VariableAccessReplacer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +20,7 @@ import com.mingsoft.basic.biz.IBasicCategoryBiz;
 import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
 
+import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.action.BaseAction;
 import net.mingsoft.mall.biz.IProductBiz;
 import net.mingsoft.mall.constant.ModelCode;
@@ -59,7 +62,6 @@ public class ProductAction extends BaseAction{
 	@Autowired
 	private IProductBiz productBiz;	
 	
-	
 	/**
 	 * 基础分类关联业务层
 	 */
@@ -87,11 +89,11 @@ public class ProductAction extends BaseAction{
 	 * @param response
 	 */
 	@RequestMapping("/{categoryId}/queryByCategory")
-	public void queryByCategory(@PathVariable("categoryId")Integer categoryId,HttpServletRequest request,HttpServletResponse response){
+	public void queryByCategory(@PathVariable("categoryId")Integer categoryId, HttpServletRequest request,HttpServletResponse response){
 		//分页
-		Integer pageNo = this.getInt(request, "pageNo",1);
+		Integer pageNo = this.getInt(request, "pageNo", 1);
 		//分页数量
-		Integer pageSize = this.getInt(request, "pageSize",10);
+		Integer pageSize = this.getInt(request, "pageSize", 10);
 		
 		//获取依据排序字段
 		String orderBy = request.getParameter("orderBy");
@@ -124,11 +126,10 @@ public class ProductAction extends BaseAction{
 				
 			//获取符合条件的商品id集合
 			basicIds = basicCategoryBiz.queryBasicIdsByCategoryId(ids);
-			
 		}
 		
-		if(basicIds.size()<=0){
-			basicIds=null;
+		if(basicIds.size() <= 0){
+			basicIds = null;
 			//this.outJson(response, null);
 			//this.outJson(response, JSONObject.toJSONStringWithDateFormat(json,"yyyy-MM-dd HH:mm:ss"));
 		}
@@ -140,4 +141,57 @@ public class ProductAction extends BaseAction{
 		this.outJson(response, JSONObject.toJSONStringWithDateFormat(json,"yyyy-MM-dd HH:mm:ss"));
 	}
 	
+	/**
+	 * 根据品牌id查询对应的商品
+	 * @param brandId 品牌
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/{brandId}/queryByBrand")
+	public void queryByBrand(@PathVariable("brandId")Integer brandId, HttpServletRequest request,HttpServletResponse response){
+		//分页
+		Integer pageNo = this.getInt(request, "pageNo", 1);
+		//分页数量
+		Integer pageSize = this.getInt(request, "pageSize", 10);
+//		//获取依据排序字段
+//		String orderBy = request.getParameter("orderBy");
+//		//是否降序
+//		String order = request.getParameter("order");
+		int appId = BasicUtil.getAppId();
+				
+		//判断文章列表的orderby属性
+//		if (StringUtil.isBlank(order)) {
+//			order = "desc";
+//		}
+		
+	}
+	
+	
+	/**
+	 * 商城搜索功能 search.do
+	 * 主要实现名称和名称和属性值得搜索, ID的搜索有其他接口
+	 * 
+	 * 关键字如下表示:
+	 * 
+	 * 品牌: brandName=阿迪    (模糊查询)
+	 * 价格: price=23.00  间于:price=12-34  大于:price=123- 小于:price=-234
+	 * 规格: spec=颜色:白,尺寸:1寸
+	 * 产品名称: name=三路奶粉      (模糊查询)
+	 * 分类名称: cateName=手机    (模糊查询)
+	 * 
+	 * 排序:
+	 * sort=price 默认是desc降序 升序为: sort=price-asc
+	 * 支持字段:
+	 * 		价格:price
+	 * 		销量:sale
+	 * 		    .....
+	 *
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/search")
+	public void search(String condition, HttpServletRequest request, HttpServletResponse response) {
+		
+		
+	}
 }

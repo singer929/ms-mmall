@@ -60,7 +60,7 @@ public class SpecificationAction extends BaseAction{
 	 * @param response
 	 */
 	@RequestMapping("/listByAjax")
-	public void listByAjax(HttpServletRequest request,HttpServletResponse response){
+	public void listByAjax(HttpServletRequest request, HttpServletResponse response){
 		
 		Integer tmp = BasicUtil.getInt("specCateId");
 		int specCateId = (tmp == null) ? 0 : tmp.intValue();

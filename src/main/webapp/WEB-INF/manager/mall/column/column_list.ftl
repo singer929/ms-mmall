@@ -7,13 +7,12 @@
 <body>	
 <@ms.content>
 <@ms.contentBody >
-	<@ms.contentNav title="栏目管理" ></@ms.contentNav >
+	<@ms.contentNav title="栏目管理" >
+		<@ms.panelNavBtnGroup>
+			<@ms.panelNavBtnAdd title=""/>
+		</@ms.panelNavBtnGroup>
+	</@ms.contentNav >
 	<@ms.contentPanel>
-		<@ms.panelNav>
-			<@ms.panelNavBtnGroup>
-				<@ms.panelNavBtnAdd title=""/>
-			</@ms.panelNavBtnGroup>
-		</@ms.panelNav> 
 		<@ms.table head=["编号,60",'标题',"属性,50",'链接地址','列表模版','内容模版',"<th style='text-align:center;width:10%;'>操作</th>"] id="tableConterent">
 			<#if listColumn?has_content && listColumn!="[]">
 	        	<@ms.treeTable treeId="clumnTree"  style="width:15%" tbodyId="tableConterent" json="${listColumn?default('')}" jsonName="categoryTitle" jsonId="categoryId" jsonPid="categoryCategoryId"/>

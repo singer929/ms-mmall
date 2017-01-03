@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -299,6 +300,9 @@ public class ProductAction extends BaseAction {
 		JSONObject obj = JSON.parseObject(jsonStr);
 		JSONObject customParams = obj.getJSONObject("customParams");
 		ProductSaveData data = obj.getObject("productParams", ProductSaveData.class);
+		
+//		String customParamStr = BasicUtil.getString("customParams");
+//		JSONObject customParams = JSONObject.parseObject(customParamStr);
 		
 		if (data == null){
 			this.outJson(response, ModelCode.MALL_PRODUCT, false, "参数解析错误");

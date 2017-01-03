@@ -46,6 +46,7 @@ import net.mingsoft.mall.parser.MallParser;
  */
 @Controller("mallDynamicPageAction")
 @RequestMapping("/mall")
+@Deprecated
 public class DynamicPageAction extends com.mingsoft.mdiy.action.BaseAction{
 	private String date = "{date/}";
 	private String host = "{host/}";
