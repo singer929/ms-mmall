@@ -987,7 +987,7 @@
 		LEFT JOIN
 		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
 		<if test="tableName!=null">left join ${tableName} on
-			${tableName}.basicId=p.product_basicID
+			${tableName}.basicId = p.product_basicID
 		</if>
 		<where>
 			<if test="appId!=null">
@@ -1294,4 +1294,22 @@
 		</where>
 	</select>
 	<!-- 根据商品id集合和分类id,以及商品的上下架状态查询商品总数结束 -->
+	
+	<select id="search" resultMap="resultMap" >
+		select <include refid="column_list" />
+		from basic b 
+		JOIN mall_product p ON b.basic_id = p.product_basicID
+		LEFT JOIN category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		<if test="specSql != null">
+		JOIN ${specSql} on b.basic_id = tmpSpec.ps_product_id
+		</if>
+		where 1 = 1 and p.product_price between #{minPrice} and #{maxPrice}
+		<if test="categoryId != null"> and b.BASIC_CATEGORYID = #{categoryId}</if>
+		<if test="brands != null"> 
+			and p.product_brand in 
+			<foreach collection="brands" item="brand" open="(" separator="," close=")">
+				#{brand}
+			</foreach>
+		</if>
+	</select>
 </mapper>

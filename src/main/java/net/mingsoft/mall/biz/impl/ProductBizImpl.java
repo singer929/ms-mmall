@@ -1,9 +1,13 @@
 package net.mingsoft.mall.biz.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.scripting.xmltags.WhereSqlNode;
+import org.aspectj.weaver.ast.Var;
+import org.codehaus.groovy.ast.expr.ElvisOperatorExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +28,7 @@ import com.mingsoft.mdiy.entity.ContentModelEntity;
 import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
 
+import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.biz.IProductBiz;
 import net.mingsoft.mall.constant.e.ProductEnum;
 import net.mingsoft.mall.dao.IProductDao;
@@ -73,6 +78,10 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	@Autowired
 	private IProductDao productDao;
 	
+	@Override
+	protected IBaseDao getDao() {
+		return productDao;
+	}
 	
 	/**
 	 * 
@@ -393,7 +402,7 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 
 	@Override
 	public void updateProduct(ProductEntity product, List<BasicCategoryEntity> basicCategoryList) {
-		// TODO Auto-generated method stub
+		
 		this.updateBasic(product);
 		if(basicCategoryList==null || basicCategoryList.size()<=0){
 			return;
@@ -402,7 +411,6 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 			this.basicCategoryBiz.deleteEntity(product.getBasicId());
 			this.basicCategoryBiz.saveBatch(basicCategoryList);
 		}
-		
 	}
 
 	@Override
@@ -431,20 +439,108 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 
 	@Override
 	public int getCountByBasicIds(int appId, Integer categoryId, List<Integer> basicIds, Integer productShelf) {
-		// TODO Auto-generated method stub
 		return this.productDao.getCountByBasicIds(appId, categoryId, basicIds, productShelf);
 	}
 
 	@Override
 	public void delete(int appId, int[] ids) {
-		// TODO Auto-generated method stub
 		
 	}
-	
+
+	/**
+	 * 商城的搜索接口
+	 * @param appId		应用ID
+	 * @param category	分类ID
+	 * @param brand		品牌ID
+	 * @param price		字符串
+	 * @param specs		规格值字符串       颜色:白|黑,尺寸:1寸
+	 */
 	@Override
-	protected IBaseDao getDao() {
-		// TODO Auto-generated method stub
-		return productDao;
+	public List<ProductEntity> search(int appId, Integer category, int[] brands, String price, String specs) {
+		
+		if (brands.length == 0) brands = null;
+		if (category == 0) category = null;
+		
+		// 解析价格数据
+		double minPrice = 0;
+		double maxPrice = Double.MAX_VALUE;
+		if (!StringUtil.isBlank(price)){
+			String[] priceArr = price.split("-");
+			int index = price.indexOf("-");
+			if (index == -1){
+				minPrice = maxPrice = Double.parseDouble(price);
+			}
+			else if (priceArr.length == 2){
+				minPrice = Double.parseDouble(priceArr[0]);
+				maxPrice = Double.parseDouble(priceArr[1]);
+			}
+			else if (priceArr.length == 1) {
+				if (index == 0) {
+					maxPrice = Double.parseDouble(priceArr[0]);
+				}
+				else if(index == price.length() - 1){
+					minPrice = Double.parseDouble(priceArr[0]);
+				}
+			}
+		}
+		
+		String specSql = "select tmp0.ps_product_id from ";
+		String conSql = "";
+		
+		// 解析规格数据, 拼接成sql传入myBatis
+		if (!StringUtil.isBlank(specs)){
+			
+			String[] specsArr = specs.split(",");
+			int specLen = specsArr.length;
+			for (int j = 0; j < specLen; j ++){
+				
+				String spec = specsArr[j];
+				String[] specArr = spec.split(":");
+				String specName = specArr[0];
+				String specValues = specArr[1];
+				
+				String[] specValueArr = null;
+				if (specValues.indexOf("@") == -1){
+					specValueArr = new String[]{specValues};
+				}
+				else{
+					specValueArr = specValues.split("@");
+				}
+				 
+				conSql += "(select ps_product_id from mall_product_specification where ps_spec_name = '"+ specName +"' and ps_spec_value in (";
+				
+				for (int i = 0; i < specValueArr.length; i ++){
+					String specValue = specValueArr[i];
+					if (i != 0){
+						conSql += ",";
+					}
+					
+					conSql += "'"+ specValue +"'";
+					
+				}
+				conSql += ")) as tmp" + j + (j == specLen - 1 ? " " : ", ");
+			}
+			
+			specSql += conSql;
+			
+			// 规格条件不为1的时候 需要添加 where条件
+			if (specLen != 1){
+				specSql += " where 1 = 1 ";
+				for (int j = 1; j < specLen; j ++){
+					specSql += "and tmp0.ps_product_id = tmp" + j + ".ps_product_id ";  
+				}
+			}
+			specSql += " group by ps_product_id";
+			specSql = "("+specSql+") as tmpSpec ";
+			
+			LOG.debug("规格拼接sql:" + specSql);
+		}
+		else {
+			specSql = null;
+		}
+		
+		List<ProductEntity> list = productDao.search(appId, category, brands, minPrice, maxPrice, specSql);
+		
+		return list;
 	}
-	
 }

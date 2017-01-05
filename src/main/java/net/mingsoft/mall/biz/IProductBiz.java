@@ -325,5 +325,15 @@ public interface IProductBiz extends IBasicBiz {
 	 * @param appId 应用编号
 	 * @param ids 商品编号
 	 */
-	void delete(int appId,int[] ids);
+	void delete(int appId, int[] ids);
+	
+	/**
+	 * 规格搜索功能接口
+	 * @param appId		应用ID
+	 * @param category	分类id
+	 * @param brands	品牌id集合
+	 * @param price		价格id
+	 * @param specs		规格数据字符串
+	 */
+	public List<ProductEntity> search(int appId, Integer category, int[] brands, String price, String specs);
 }

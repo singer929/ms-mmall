@@ -399,4 +399,23 @@ public interface IProductDao extends IBaseDao {
 	@Deprecated
 	int getCountByBasicIds(@Param("appId") int appId, @Param("categoryId") Integer categoryId,
 			@Param("basicIds") List<Integer> basicIds, @Param("productShelf") Integer productShelf);
+	
+	/**
+	 * 商品查询模块
+	 * @param appId
+	 * @param categoryId
+	 * @param brands
+	 * @param minPrice
+	 * @param maxPrice
+	 * @param specMap
+	 * @return
+	 */
+	public List<ProductEntity> search(
+		@Param("appId") int appId, 
+		@Param("categoryId") Integer categoryId, 
+		@Param("brands") int[] brands,
+		@Param("minPrice") double minPrice,
+		@Param("maxPrice") double maxPrice,
+		@Param("specSql") String specSql
+	);
 }
