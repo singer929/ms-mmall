@@ -416,6 +416,8 @@ public interface IProductDao extends IBaseDao {
 		@Param("brands") int[] brands,
 		@Param("minPrice") double minPrice,
 		@Param("maxPrice") double maxPrice,
-		@Param("specSql") String specSql
+		@Param("specSql") String specSql,
+		@Param("orderBy") String orderBy,
+		@Param("orderByType") String orderByType
 	);
 }

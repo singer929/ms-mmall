@@ -148,8 +148,7 @@ public class ProductAction extends BaseAction{
 	 * 
 	 * 品牌: brand=123
 	 * 价格: price=23.00  间于:price=12-34  大于:price=123- 小于:price=-234
-	 * 规格: spec=颜色:白,尺寸:1寸
-	 * 产品名称: name=三路奶粉  (模糊)
+	 * 规格: spec=颜色:白,尺寸:1寸@2寸  (@ 表示或的关系)
 	 * 分类名称: category=123   
 	 * 
 	 * 排序:
@@ -168,11 +167,12 @@ public class ProductAction extends BaseAction{
 		int[] brands = BasicUtil.getInts("brand");
 		String price = BasicUtil.getString("price");
 		String spec = BasicUtil.getString("spec");
+		String sort = BasicUtil.getString("sort");
 		Integer category = BasicUtil.getInt("category");
 		int appId = BasicUtil.getAppId();
 		
 		BasicUtil.startPage();
-		List<ProductEntity> list = productBiz.search(appId, category, brands, price, spec);
+		List<ProductEntity> list = productBiz.search(appId, category, brands, price, spec, sort);
 		BasicUtil.endPage(list);
 		
 		String jsonStr = JSONObject.toJSONString(list);

@@ -456,7 +456,7 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	 * @param specs		规格值字符串       颜色:白|黑,尺寸:1寸
 	 */
 	@Override
-	public List<ProductEntity> search(int appId, Integer category, int[] brands, String price, String specs) {
+	public List<ProductEntity> search(int appId, Integer category, int[] brands, String price, String specs, String sort) {
 		
 		if (brands.length == 0) brands = null;
 		if (category == 0) category = null;
@@ -539,7 +539,24 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 			specSql = null;
 		}
 		
-		List<ProductEntity> list = productDao.search(appId, category, brands, minPrice, maxPrice, specSql);
+		String orderBy = null;
+		String orderByType = "desc";
+		
+		// 解析排序数据
+		if (!StringUtil.isBlank(sort)){
+			
+			int index = sort.indexOf("-");
+			if (index == -1){
+				orderBy = sort;
+			}
+			else {
+				String[] arr = sort.split("-");
+				orderBy = arr[0];
+				orderByType = arr[1];
+			}
+		}
+		
+		List<ProductEntity> list = productDao.search(appId, category, brands, minPrice, maxPrice, specSql, orderBy, orderByType);
 		
 		return list;
 	}

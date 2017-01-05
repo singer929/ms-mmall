@@ -1296,7 +1296,7 @@
 	<!-- 根据商品id集合和分类id,以及商品的上下架状态查询商品总数结束 -->
 	
 	<select id="search" resultMap="resultMap" >
-		select <include refid="column_list" />
+		select <include refid="column_list" /> 
 		from basic b 
 		JOIN mall_product p ON b.basic_id = p.product_basicID
 		LEFT JOIN category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
@@ -1310,6 +1310,9 @@
 			<foreach collection="brands" item="brand" open="(" separator="," close=")">
 				#{brand}
 			</foreach>
+		</if>
+		<if test="orderBy != null">
+			order by #{orderBy} #{orderByType}
 		</if>
 	</select>
 </mapper>
