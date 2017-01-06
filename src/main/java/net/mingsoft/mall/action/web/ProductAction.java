@@ -98,7 +98,7 @@ public class ProductAction extends BaseAction{
 		
 		//是否降序
 		String order = request.getParameter("order");
-		int appId = getAppId(request);
+		int appId = BasicUtil.getAppId();
 		
 		/**
 		 * 判断文章列表的orderby属性
