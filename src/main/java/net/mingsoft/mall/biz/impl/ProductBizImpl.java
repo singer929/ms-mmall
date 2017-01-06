@@ -314,7 +314,7 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 		if (conntentModel!=null) {
 			tableName = conntentModel.getCmTableName();
 		}
-		return this.productDao.queryProducntSpecificationForSearch(tableName, map, appId, ids, sortMap, page,orderBy,order,flag,noFlag);
+		return this.productDao.queryProductSpecificationForSearch(tableName, map, appId, ids, sortMap, page,orderBy,order,flag,noFlag);
 	}
 	
 	@Override

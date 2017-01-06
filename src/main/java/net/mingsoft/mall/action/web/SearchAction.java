@@ -75,7 +75,7 @@ public class SearchAction extends BaseAction {
 	
 	private final static String PRODUCT_FIELD_PRICE = "product_price";
 	
-	private final static String PRODUCT_FIELD_SPECIFICATION_PRICE = "psi_price";
+	private final static String PRODUCT_FIELD_SPECIFICATION_PRICE = "psd_price";
 	
 	/**
 	 * 注入商品业务层
@@ -282,10 +282,10 @@ public class SearchAction extends BaseAction {
 			//移动端与pc端分离
 			if (isMobileDevice(request) && !StringUtil.isBlank(app.getAppMobileStyle())) {
 				// 对模板内容进行解析
-				htmlContent = mallParser.parse(htmlContent,app,column,procductList,page,map);//generaterFactory.buildSearch(app, htmlContent, webSiteTmpPath, no, articleList,null, column, page,app.getAppMobileStyle());				
+				htmlContent = mallParser.parse(htmlContent,app,column, procductList, page, map);//generaterFactory.buildSearch(app, htmlContent, webSiteTmpPath, no, articleList,null, column, page,app.getAppMobileStyle());				
 			} else {
 				// 对模板内容进行解析
-				htmlContent = mallParser.parse(htmlContent,app,column,procductList,page,map);// generaterFactory.buildSearch(app, htmlContent, webSiteTmpPath, no, articleList, null,column, page);				
+				htmlContent = mallParser.parse(htmlContent, app, column, procductList, page, map);// generaterFactory.buildSearch(app, htmlContent, webSiteTmpPath, no, articleList, null,column, page);				
 			}
 			this.outString(response, htmlContent);
 		}else{

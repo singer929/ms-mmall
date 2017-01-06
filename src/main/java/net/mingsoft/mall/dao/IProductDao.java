@@ -280,7 +280,7 @@ public interface IProductDao extends IBaseDao {
 	 *            分页对象
 	 * @return 产品实体列表
 	 */
-	public List<ProductEntity> queryProducntSpecificationForSearch(@Param("tableName") String tableName,
+	public List<ProductEntity> queryProductSpecificationForSearch(@Param("tableName") String tableName,
 			@Param("map") Map<String, List> map, @Param("appId") int appId, @Param("ids") List ids,
 			@Param("sortMap") Map sortMap, @Param("page") PageUtil page, @Param("orderBy") String orderBy,
 			@Param("order") boolean order, @Param("flag") String flag, @Param("noFlag") String noFlag);

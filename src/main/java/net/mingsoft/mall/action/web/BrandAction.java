@@ -55,6 +55,7 @@ public class BrandAction extends BaseAction {
 	@ResponseBody
 	public void list(@ModelAttribute CategoryEntity category, HttpServletRequest request,
 			HttpServletResponse response) {
+		
 		// 查询指定的appId下的分类
 		category.setCategoryAppId(BasicUtil.getAppId());
 		category.setCategoryModelId(BasicUtil.getModelCodeId(ModelCode.MALL_BRAND));

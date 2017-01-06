@@ -1,9 +1,13 @@
 
 package net.mingsoft.mall.action.web;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.alibaba.fastjson.JSONObject;
 import com.mingsoft.base.entity.ListJson;
 import com.mingsoft.basic.biz.IBasicCategoryBiz;
+import com.mingsoft.basic.biz.ICategoryBiz;
+import com.mingsoft.basic.biz.IColumnBiz;
+import com.mingsoft.basic.entity.AppEntity;
+import com.mingsoft.basic.entity.CategoryEntity;
+import com.mingsoft.basic.entity.ColumnEntity;
+import com.mingsoft.parser.IParserRegexConstant;
+import com.mingsoft.util.FileUtil;
 import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
 
@@ -24,6 +35,7 @@ import net.mingsoft.mall.biz.IProductBiz;
 import net.mingsoft.mall.constant.ModelCode;
 import net.mingsoft.mall.constant.e.ProductEnum;
 import net.mingsoft.mall.entity.ProductEntity;
+import net.mingsoft.mall.parser.MallParser;
 
 /**
  * 
@@ -59,6 +71,15 @@ public class ProductAction extends BaseAction{
 	 */
 	@Autowired
 	private IProductBiz productBiz;	
+	
+	@Autowired
+	private IColumnBiz columnBiz;	
+	
+	@Autowired
+	private MallParser mallParser;
+	
+	@Resource(name="categoryBiz")
+	private ICategoryBiz categoryBiz;
 	
 	/**
 	 * 基础分类关联业务层
@@ -164,23 +185,61 @@ public class ProductAction extends BaseAction{
 	@RequestMapping("/search")
 	public void search(HttpServletRequest request, HttpServletResponse response) {
 		
+		String dataType = BasicUtil.getString("dataType");
 		int[] brands = BasicUtil.getInts("brand");
 		String price = BasicUtil.getString("price");
 		String spec = BasicUtil.getString("spec");
 		String sort = BasicUtil.getString("sort");
 		Integer category = BasicUtil.getInt("category");
 		int appId = BasicUtil.getAppId();
-		
-		BasicUtil.startPage();
+
+		//BasicUtil.startPage();
 		List<ProductEntity> list = productBiz.search(appId, category, brands, price, spec, sort);
-		BasicUtil.endPage(list);
+		//BasicUtil.endPage(list);
 		
-		String jsonStr = JSONObject.toJSONString(list);
-		
-		outJson(response, jsonStr);
-	}
-	
-	public void searchByName(HttpServletRequest request, HttpServletResponse response) {
-		
+		// 数据类型是 json 则ajax方式返回json数据, 否则返回跳转html
+		if (dataType == "json"){
+			String jsonStr = JSONObject.toJSONString(list);
+			outJson(response, jsonStr);
+		}
+		else {
+			
+			String webSiteTmpPath = "";
+			String tmpPath = getRealPath(request, IParserRegexConstant.REGEX_SAVE_TEMPLATE);
+			AppEntity app = BasicUtil.getApp();
+			// 获取模版名称
+			String tmpName = app.getAppStyle();
+			
+			webSiteTmpPath = tmpPath + File.separator + app.getAppId() + File.separator + tmpName;
+			String templatePath = "";
+			
+			// 没有分类数据根据品牌寻找模板
+			if (category == null || category == 0){
+				if (brands == null || brands.length == 0){
+					outString(response, "栏目或品牌必须有一项数据");
+					return;
+				}
+				
+				CategoryEntity cate = categoryBiz.getCategory(brands[0]);
+				ColumnEntity col = (ColumnEntity) columnBiz.getEntity(cate.getCategoryCategoryId());
+				templatePath = col.getColumnListUrl();
+			}
+			// 有分类根据分类查找模板
+			else{
+				ColumnEntity col = (ColumnEntity) columnBiz.getEntity(category);
+				templatePath = col.getColumnListUrl();
+			}
+			
+			// 读取模板内容
+			String htmlContent = FileUtil.readFile(webSiteTmpPath + File.separator + templatePath);
+			
+			Map map  = new HashMap();                          
+			map.put(MallParser.PRODUCT_SEARCH_LIST_ARTICLE, list);
+			
+			// 对模板内容进行解析
+			htmlContent = mallParser.parse(htmlContent, app, list, map);// generaterFactory.buildSearch(app, htmlContent, webSiteTmpPath, no, articleList, null,column, page);				
+			
+			outString(response, htmlContent);
+		}
 	}
 }

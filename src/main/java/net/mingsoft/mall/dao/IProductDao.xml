@@ -59,10 +59,10 @@
 		<result column="product_cost_price" property="productCostPrice" />		<!-- 产品原价 -->
 		<result column="product_brand" property="productBrand" />
 		<result column="product_shelf" property="productShelf" />		<!-- 产品是否下架 -->
-		<result column="psi_product_specifications_id" property="productSpecificationId" />		<!-- 产品的规格id -->
-		<result column="psi_price" property="productSpecificationPrice" />		<!-- 产品的规格价格 -->
-		<result column="psi_invertory" property="productSpecificationStock" />		<!-- 产品的规格库存 -->
-		<result column="psi_code" property="productSpecificationCode" />		<!-- 产品的规格编码 -->
+		<result column="psd_product_spec_id" property="productSpecificationId" />		<!-- 产品的规格id -->
+		<result column="psd_price" property="productSpecificationPrice" />		<!-- 产品的规格价格 -->
+		<result column="psd_stock" property="productSpecificationStock" />		<!-- 产品的规格库存 -->
+		<result column="psd_code" property="productSpecificationCode" />		<!-- 产品的规格编码 -->
 		<result column="product_specification_title" property="productSpecificationTitle" />		<!-- 产品的规格编码 -->
 		<result column="product_specification_img" property="productSpecificationImg" />		<!-- 产品属性 -->
 		<result column="BASIC_TITLE" property="basicTitle" />			<!-- 标题 -->
@@ -746,42 +746,31 @@
 	<!-- 根据产品id查询该商品的所有规格商品结束 -->
 
 	<!-- 根据字段条件查找商品的所有规格商品列表实体开始 -->
-	<select id="queryProducntSpecificationForSearch" resultMap="resultPsMap">
-		select
-		*,CONCAT(basic_title,func_parent_specifications_field(psi_product_specifications_id))
-		as product_specification_title,
-		CONCAT(BASIC_THUMBNAILS,func_parent_specifications_img(psi_product_specifications_id))
-		as product_specification_img
-		from mall_product p left join
-		mall_product_specifications_inventory mpsi
-		on mpsi.psi_productID =
-		p.product_basicID
-		left join basic b on
-		b.basic_id=p.product_basicID
-		LEFT
-		JOIN
-		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
-		LEFT JOIN
-		cms_column
-		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
-		<if test="tableName!=null">left join ${tableName} d on d.basicId=p.product_basicID
+	<select id="queryProductSpecificationForSearch" resultMap="resultPsMap">
+		select *
+<!--	CONCAT(basic_title, func_parent_specifications_field(psi_product_specifications_id)) as product_specification_title, 
+		CONCAT(BASIC_THUMBNAILS, func_parent_specifications_img(psi_product_specifications_id)) as product_specification_img  -->
+		from mall_product p 
+		left join mall_product_specification_detail mpsd on mpsd.psd_product_id = p.product_basicID
+		left join basic b on b.basic_id = p.product_basicID
+		LEFT JOIN category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		LEFT JOIN cms_column cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		<if test="tableName!=null">
+		left join ${tableName} d on d.basicId = p.product_basicID 
 		</if>
-		where p.product_appID = #{appId} and p.product_shelf=1
+		where p.product_appID = #{appId} and p.product_shelf = 1
 		<if test="ids!=null">
-			and
-			b.BASIC_CATEGORYID in
+			and b.BASIC_CATEGORYID in
 			<foreach item="id" index="key" collection="ids" open="("
 				separator="," close=")">
 				#{id.categoryId}
 			</foreach>
 		</if>
 		<if test="flag!= null">
-			and
-			p.product_type =#{flag}
+			and p.product_type = #{flag}
 		</if>
 		<if test="noFlag!= null">
-			and
-			p.product_type !=#{noFlag}
+			and p.product_type != #{noFlag}
 		</if>
 		<foreach item="item" index="key" collection="map" open=""
 			separator="" close="">
@@ -833,7 +822,7 @@
 					<if test="order == false">asc</if>
 				</if>
 				<if test="orderBy=='sort'">
-					, mpsi.psi_sort
+					, mpsd.psd_sort
 					<if test="order == true">desc</if>
 					<if test="order == false">asc</if>
 					,
@@ -866,7 +855,7 @@
 					<if test="order == false">asc</if>
 				</if>
 				<if test="orderBy=='sort'">
-					order by mpsi.psi_sort
+					order by mpsd.psd_sort
 					<if test="order == true">desc</if>
 					<if test="order == false">asc</if>
 					,
@@ -900,36 +889,26 @@
 	<!-- 查询搜索的产品规格总数开始 -->
 	<select id="getProducntSpecificationSearchCount" resultType="int">
 		select count(*)
-		from mall_product p left join
-		mall_product_specifications_inventory mpsi
-		on mpsi.psi_productID =
-		p.product_basicID
-		left join basic b on
-		b.basic_id=p.product_basicID
-		LEFT
-		JOIN
-		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
-		LEFT JOIN
-		cms_column
-		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
-		<if test="tableName!=null">left join ${tableName} d on d.basicId=p.product_basicID
-		</if>
-		where p.product_appID = #{appId} and p.product_shelf=1
+		from mall_product p 
+		left join mall_product_specification_detail mpsd on mpsd.psd_product_id = p.product_basicID
+		left join basic b on b.basic_id = p.product_basicID
+		LEFT JOIN category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
+		LEFT JOIN cms_column cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		<if test="tableName!=null">left join ${tableName} d on d.basicId = p.product_basicID </if>
+		where p.product_appID = #{appId} and p.product_shelf = 1
+		
 		<if test="ids!=null">
-			and
-			b.BASIC_CATEGORYID in
+			and b.BASIC_CATEGORYID in
 			<foreach item="id" index="key" collection="ids" open="("
 				separator="," close=")">
 				#{id.categoryId}
 			</foreach>
 		</if>
 		<if test="flag!= null">
-			and
-			p.product_type =#{flag}
+			and p.product_type = #{flag}
 		</if>
 		<if test="noFlag!= null">
-			and
-			p.product_type !=#{noFlag}
+			and p.product_type != #{noFlag}
 		</if>
 		<foreach item="item" index="key" collection="map" open=""
 			separator="" close="">
@@ -969,7 +948,6 @@
 					=
 					<foreach item="val" index="index" collection="item[3]">#{val}
 					</foreach>
-
 				</if>
 			</if>
 		</foreach>
