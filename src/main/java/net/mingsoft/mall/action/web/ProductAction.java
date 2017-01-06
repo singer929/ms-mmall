@@ -132,7 +132,7 @@ public class ProductAction extends BaseAction{
 			//this.outJson(response, JSONObject.toJSONStringWithDateFormat(json,"yyyy-MM-dd HH:mm:ss"));
 		}
 		int count = productBiz.getCountByBasicIds(appId, categoryId, basicIds,ProductEnum.ON_SHELF.toInt());
-		PageUtil page=new PageUtil(pageNo,pageSize,count,getUrl(request)+"/queryByCategory/list.do");
+		PageUtil page = new PageUtil(pageNo,pageSize,count,getUrl(request)+"/queryByCategory/list.do");
 		
 		List<ProductEntity> list = productBiz.queryByBasicIds(appId,categoryId,basicIds, page, orderBy, order.equals("desc") ? true : false,ProductEnum.ON_SHELF.toInt());
 		ListJson json = new ListJson(count,list);
@@ -178,5 +178,9 @@ public class ProductAction extends BaseAction{
 		String jsonStr = JSONObject.toJSONString(list);
 		
 		outJson(response, jsonStr);
+	}
+	
+	public void searchByName(HttpServletRequest request, HttpServletResponse response) {
+		
 	}
 }

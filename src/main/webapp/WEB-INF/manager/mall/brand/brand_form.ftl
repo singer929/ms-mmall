@@ -1,5 +1,5 @@
 <@ms.html5>
-    <@ms.nav title="品牌编辑">
+    <@ms.nav back=true title="品牌编辑">
 		<@ms.saveButton id="saveFormButton" postForm="categoryForm"/>
     </@ms.nav>
     <@ms.panel>

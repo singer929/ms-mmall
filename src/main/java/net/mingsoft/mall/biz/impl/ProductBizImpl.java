@@ -458,7 +458,7 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	@Override
 	public List<ProductEntity> search(int appId, Integer category, int[] brands, String price, String specs, String sort) {
 		
-		if (brands.length == 0) brands = null;
+		if (brands != null && brands.length == 0) brands = null;
 		if (category == 0) category = null;
 		
 		// 解析价格数据

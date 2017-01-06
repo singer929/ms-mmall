@@ -57,7 +57,7 @@ import net.mingsoft.mall.parser.MallParser;
  * @author killfen
  * 
  * <p>
- * Comments: 搜索，根据搜索结果生成html页面
+ * Comments: 自定义搜索，根据搜索结果生成html页面
  * </p>
  * 
  * <p>
@@ -73,9 +73,9 @@ import net.mingsoft.mall.parser.MallParser;
 public class SearchAction extends BaseAction {
 	
 	
-	private final static String PRODUCT_FIELD_PRICE="product_price";
+	private final static String PRODUCT_FIELD_PRICE = "product_price";
 	
-	private final static String PRODUCT_FIELD_SPECIFICATION_PRICE="psi_price";
+	private final static String PRODUCT_FIELD_SPECIFICATION_PRICE = "psi_price";
 	
 	/**
 	 * 注入商品业务层
@@ -122,6 +122,13 @@ public class SearchAction extends BaseAction {
 	
 	@Autowired
 	private ICategoryBiz categoryBiz;
+	
+	/**
+	 * 自定义搜索接口
+	 * @param request
+	 * @param searchId
+	 * @param response
+	 */
 	@RequestMapping(value = "/{searchId}/search")
 	@ResponseBody
 	public void searchProduct(HttpServletRequest request, @PathVariable int searchId, HttpServletResponse response){
