@@ -442,6 +442,9 @@ public class MallParser extends IGeneralParser {
 			}
 			// 查询当前栏目的子栏目id
 			int[] columnIds = columnBiz.queryChildrenCategoryIds(curColumnId, app.getAppId(), modelId);
+			if (columnIds.length == 0){
+				columnIds = new int[]{curColumnId};
+			}
 			// 列表每页显示的数量
 			int size = StringUtil.string2Int(property.get(ListParser.LIST_SIZE));
 			// 排序

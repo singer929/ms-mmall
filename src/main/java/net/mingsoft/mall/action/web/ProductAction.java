@@ -176,8 +176,6 @@ public class ProductAction extends BaseAction{
 	 * sort=price 默认是desc降序 升序为: sort=price-asc
 	 * 支持字段:
 	 * 		价格:price
-	 * 		销量:sale
-	 * 		    .....
 	 *
 	 * @param request
 	 * @param response

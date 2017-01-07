@@ -181,6 +181,12 @@
 			alert('数据提交失败：请检查输入的数据!');
 			return;
 		}
+		
+		var isSpecDetailValid = checkSpecDetail();
+		if (!isSpecDetailValid) {
+			alert('商品规格下的价格和库存不能为空!');
+			return;
+		}
 	
 		// 规格数据
 		var params = SpecMgr.buildSpecSvrData();
@@ -229,6 +235,17 @@
 				case 2: return 'DEPOT_SHELF';
 			}
 		}
+	}
+	
+	// 检测规格明细数据
+	function checkSpecDetail() {
+		for (var i in SpecMgr.specDetails){
+			var detailData = SpecMgr.specDetails[i];
+			if (!detailData.price) return false;
+			if (!detailData.stock) return false;
+		}
+		
+		return true;
 	}
 
 	/**
