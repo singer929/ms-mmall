@@ -150,7 +150,6 @@ public class ProductAction extends BaseAction {
 		BasicUtil.startPage();
 		List<ProductEntity> listProduct = this.productBiz.queryList(appId, childColumnId, null, true, shelf, null, null);
 		BasicUtil.endPage(listProduct);
-
 		// 压入返回的url地址
 		model.addAttribute("listProduct", listProduct);
 		model.addAttribute("product", product);

@@ -211,7 +211,7 @@ public class ProductAction extends BaseAction{
 			// 没有分类数据根据品牌寻找模板
 			if (category == null || category == 0){
 				if (brands == null || brands.length == 0){
-					outString(response, "栏目或品牌必须有一项数据");
+					outJson(response, false);
 					return;
 				}
 				
