@@ -165,19 +165,16 @@ public class ProductAction extends BaseAction{
 	 * 商城搜索功能 search.do
 	 * 主要实现明确ID或者值的搜索, 名称关键字的搜索有其他接口
 	 * 
-	 * 关键字如下表示:
-	 * 
-	 * 品牌: brand=123
-	 * 价格: price=23.00  间于:price=12-34  大于:price=123- 小于:price=-234
-	 * 规格: spec=颜色:白,尺寸:1寸@2寸  (@ 表示或的关系)
-	 * 分类名称: category=123   
-	 * 
-	 * 排序:
-	 * sort=price 默认是desc降序 升序为: sort=price-asc
-	 * 支持字段:
-	 * 		价格:price
-	 *
 	 * @param request
+	 * <i>请求参数包含字段信息参考：</i><br/>
+	 * <br/>{
+	 * <br/>	*brand: 品牌id可以为数组 (与category至少有一个必填)
+	 * <br/>	*category: 分类ID, (与brand至少有一个必填)
+	 * <br/>	price: 商品价格, 可以是区间值 用 "-"分隔, 例如: "23.66", "12-45", "-324", "123-" 
+	 * <br/>	spec:  规格筛选的字符串, 规格名:规格值,规格名:规格值@规格值 , 例如:  "颜色:白,尺寸:1寸@2寸" (@ 表示或的关系)  
+	 * <br/> 	sort:  排序方式, 字段-方式, 例如: "price-asc"  (方式默认为desc)
+	 * <br/> 	dataType: 数据类型: "json" 表示json格式数据返回, "html" 表示返回数据解析后的html页面, 模板取分类下的列表模板
+	 * <br/>} 
 	 * @param response
 	 */
 	@RequestMapping("/search")
@@ -196,7 +193,7 @@ public class ProductAction extends BaseAction{
 		//BasicUtil.endPage(list);
 		
 		// 数据类型是 json 则ajax方式返回json数据, 否则返回跳转html
-		if (dataType == "json"){
+		if (dataType.equals("json")){
 			String jsonStr = JSONObject.toJSONString(list);
 			outJson(response, jsonStr);
 		}
