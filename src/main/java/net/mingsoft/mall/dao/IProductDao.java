@@ -412,7 +412,8 @@ public interface IProductDao extends IBaseDao {
 	 */
 	public List<ProductEntity> search(
 		@Param("appId") int appId, 
-		@Param("categoryId") Integer categoryId, 
+		@Param("modelId") int modelId,
+		@Param("categories") int[] categories, 
 		@Param("brands") int[] brands,
 		@Param("minPrice") double minPrice,
 		@Param("maxPrice") double maxPrice,

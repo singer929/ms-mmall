@@ -1282,7 +1282,12 @@
 		JOIN ${specSql} on b.basic_id = tmpSpec.ps_product_id
 		</if>
 		where 1 = 1 and p.product_price between #{minPrice} and #{maxPrice}
-		<if test="categoryId != null"> and b.BASIC_CATEGORYID = #{categoryId}</if>
+		<if test="categories != null"> 
+			and b.BASIC_CATEGORYID in
+			<foreach collection="categories" item="cate" open="(" separator="," close=")">
+				#{cate}
+			</foreach>
+		</if>
 		<if test="brands != null"> 
 			and p.product_brand in 
 			<foreach collection="brands" item="brand" open="(" separator="," close=")">

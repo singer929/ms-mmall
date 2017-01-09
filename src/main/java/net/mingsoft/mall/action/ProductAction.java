@@ -309,6 +309,7 @@ public class ProductAction extends BaseAction {
 		}
 		
 		ProductEntity product = data.getProduct();
+		product.setProductShelf(ProductEnum.ON_SHELF);		// 强制写死上架
 		
 		// 判断提交数据是否符合规范
 		if (!checkForm(product, response)) {
@@ -443,6 +444,7 @@ public class ProductAction extends BaseAction {
 		
 		// 商品数据
 		ProductEntity product = data.getProduct();
+		product.setProductShelf(ProductEnum.ON_SHELF);		// 强制写死上架
 		
 		// 判断提交数据是否符合规范
 		if (!checkForm(product, response)) {

@@ -29,6 +29,7 @@ import com.mingsoft.util.FileUtil;
 import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
 
+import groovy.lang.Category;
 import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.action.BaseAction;
 import net.mingsoft.mall.biz.IProductBiz;
@@ -187,9 +188,10 @@ public class ProductAction extends BaseAction{
 		String sort = BasicUtil.getString("sort");
 		Integer category = BasicUtil.getInt("category");
 		int appId = BasicUtil.getAppId();
-
+		int modelId = this.getModelCodeId(request, ModelCode.MALL_CATEGORY);
+		
 		//BasicUtil.startPage();
-		List<ProductEntity> list = productBiz.search(appId, category, brands, price, spec, sort);
+		List<ProductEntity> list = productBiz.search(appId, modelId, category, brands, price, spec, sort);
 		//BasicUtil.endPage(list);
 		
 		// 数据类型是 json 则ajax方式返回json数据, 否则返回跳转html

@@ -450,16 +450,25 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	/**
 	 * 商城的搜索接口
 	 * @param appId		应用ID
+	 * @param modelId	模块ID
 	 * @param category	分类ID
 	 * @param brand		品牌ID
 	 * @param price		字符串
 	 * @param specs		规格值字符串       颜色:白|黑,尺寸:1寸
 	 */
 	@Override
-	public List<ProductEntity> search(int appId, Integer category, int[] brands, String price, String specs, String sort) {
+	public List<ProductEntity> search(int appId, int modelId, Integer category, int[] brands, String price, String specs, String sort) {
 		
 		if (brands != null && brands.length == 0) brands = null;
-		if (category == 0) category = null;
+		
+		int[] categories = null;
+		if (category == 0) {
+			category = null;
+		}
+		else {
+			categories = categoryBiz.queryChildrenCategoryIds(category, appId, modelId);
+			if (categories.length == 0) categories = new int[]{category};
+		}
 		
 		// 解析价格数据
 		double minPrice = 0;
@@ -556,7 +565,7 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 			}
 		}
 		
-		List<ProductEntity> list = productDao.search(appId, category, brands, minPrice, maxPrice, specSql, orderBy, orderByType);
+		List<ProductEntity> list = productDao.search(appId, modelId, categories, brands, minPrice, maxPrice, specSql, orderBy, orderByType);
 		
 		return list;
 	}
