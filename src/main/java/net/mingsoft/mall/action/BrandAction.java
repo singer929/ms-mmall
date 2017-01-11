@@ -80,7 +80,12 @@ public class BrandAction extends BaseAction {
 					getResString("err.length", this.getResString("categoryTitle"), "1", "30"));
 			return false;
 		}
-
+		// 品牌描述长度验证
+		if (!StringUtil.checkLength(category.getCategoryDescription(), 0, 45)) {
+			this.outJson(response, ModelCode.MALL_BRAND, false,
+					getResString("err.length", this.getResString("columnDescrip"), "0", "45"));
+			return false;
+		}
 		return true;
 	}
 

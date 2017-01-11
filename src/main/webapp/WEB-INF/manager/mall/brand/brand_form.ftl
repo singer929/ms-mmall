@@ -22,7 +22,7 @@
 					    	</@ms.formRow>	
 				    		<@ms.text name="categoryTitle" width="300" label="名称:" title="类别名称" maxlength="30"  placeholder="类别名称"  
 				    		validation={"required":"true", "data-bv-notempty-message":"请填写栏目类别"} value="${category.categoryTitle?default('')}"/>
-				    		<@ms.textarea id="description"  name="categoryDescription" label="描述:"  title="栏目描述" placeholder="类别描述" maxlength="150" value="${category.categoryDescription?default('')}"/>
+				    		<@ms.textarea id="description"  name="categoryDescription" label="描述:"  title="栏目描述" placeholder="类别描述" maxlength="45" value="${category.categoryDescription?default('')}"/>
 				    		
 				    		<@ms.formRow label="缩略图">
 								<@ms.uploadImg path="upload/${appId?default('0')}/mall/brand/" inputName="categorySmallImg" size="15" filetype="" msg=""  maxSize="1" imgs="${category.categorySmallImg?default('')}" />
