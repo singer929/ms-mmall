@@ -292,7 +292,8 @@ public class ProductAction extends BaseAction {
 	public void update1(String jsonStr, HttpServletRequest request, HttpServletResponse response){
 		
 		if (StringUtil.isBlank(jsonStr)){
-			this.outJson(response, ModelCode.MALL_PRODUCT, false, "参数字符串为空");
+			this.outJson(response, ModelCode.MALL_PRODUCT, false, getResString("err.empty", getResString("param.string")));
+			//this.outJson(response, ModelCode.MALL_PRODUCT, false, "参数字符串为空");
 			return;
 		}
 		
@@ -302,9 +303,10 @@ public class ProductAction extends BaseAction {
 		
 //		String customParamStr = BasicUtil.getString("customParams");
 //		JSONObject customParams = JSONObject.parseObject(customParamStr);
-		
+		data = null;
 		if (data == null){
-			this.outJson(response, ModelCode.MALL_PRODUCT, false, "参数解析错误");
+			this.outJson(response, ModelCode.MALL_PRODUCT, false, getResString("err.editor", getResString("param.string")));
+			//this.outJson(response, ModelCode.MALL_PRODUCT, false, "参数解析错误");
 			return;
 		}
 		
@@ -428,7 +430,8 @@ public class ProductAction extends BaseAction {
 		
 		// 字符串为空
 		if (StringUtil.isBlank(jsonStr)) {
-			this.outJson(response, ModelCode.MALL_PRODUCT, false, "传入参数为空");
+			this.outJson(response, ModelCode.MALL_PRODUCT, false, getResString("err.empty", getResString("param.string")));
+			//this.outJson(response, ModelCode.MALL_PRODUCT, false, "传入参数为空");
 			return;
 		}
 		
@@ -438,7 +441,8 @@ public class ProductAction extends BaseAction {
 		
 		// 数据解析有问题
 		if (data == null) {
-			this.outJson(response, ModelCode.MALL_PRODUCT, false, "传入参数有误");
+			this.outJson(response, ModelCode.MALL_PRODUCT, false, getResString("err.editor", getResString("param.string")));
+			//this.outJson(response, ModelCode.MALL_PRODUCT, false, "传入参数有误");
 			return;
 		}
 		
