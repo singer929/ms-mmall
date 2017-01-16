@@ -109,7 +109,7 @@ public class ProductSpecificationAction extends BaseAction{
 	public void queryByProductSpecificationsId(@PathVariable("psId")int psId, HttpServletRequest request, HttpServletResponse response){
 
 		if(!StringUtil.isInteger(psId)){
-			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, "产品规格id不是整数");
+			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false, getResString("mall.err.data.type", getResString("ps_id")));//产品规格id数据类型错误
 			return ;
 		}
 		//根据商品Id查询当前商品的规格数据
