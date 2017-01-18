@@ -191,11 +191,17 @@
 		// 规格数据
 		var params = SpecMgr.buildSpecSvrData();
 		
+		var basicTypes =[];    
+		$('input[name="basicType"]:checked').each(function(){    
+			basicTypes.push($(this).val());    
+		});
+		
 		// 产品数据
 		var productParams = {
 			basicId: ${product.basicId},
 			basicTitle: $('#basicTitle').val(),
 			basicCategoryId:$("#inputTree input[name='basicCategoryId']").val(),
+			basicType: basicTypes.join(','),
 			productBrand:$('#productBrand').val(),
 			basicSort: $("[name='basicSort']").val(),
 			productPrice: $("[name='productPrice']").val(),
