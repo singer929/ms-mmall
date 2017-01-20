@@ -1,28 +1,24 @@
 package net.mingsoft.mall.action.web;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
-import com.mingsoft.util.PageUtil;
-import com.mingsoft.util.StringUtil;
 
-import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.action.BaseAction;
+import net.mingsoft.mall.biz.IProductBiz;
 import net.mingsoft.mall.biz.IProductSpecificationDetailBiz;
-import net.mingsoft.mall.biz.ISpecificationBiz;
 import net.mingsoft.mall.constant.ModelCode;
+import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
-import net.mingsoft.mall.entity.SpecificationEntity;
 
 /**
  * 
@@ -55,6 +51,9 @@ public class ProductSpecificationDetailAction extends BaseAction{
 	@Autowired 
 	private IProductSpecificationDetailBiz detailBiz;
 	
+	@Autowired 
+	private IProductBiz productBiz;
+	
 	/**
 	 * 获取规格列表,返回JSON数据
 	 * @param request
@@ -63,15 +62,16 @@ public class ProductSpecificationDetailAction extends BaseAction{
 	@RequestMapping("/{detailId}/get")
 	public void get(@PathVariable int detailId, HttpServletRequest request, HttpServletResponse response){
 		
-		//int appId = BasicUtil.getAppId();
 		ProductSpecificationDetailEntity detail = (ProductSpecificationDetailEntity) detailBiz.getEntity(detailId);
+		int productId = detail.getProductId();
+		ProductEntity product = (ProductEntity) productBiz.getEntity(productId);
 		
-		String jsonStr = JSONObject.toJSONString(detail);
-		if(detail != null){
-			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, true, jsonStr);
-		}
-		else{
-			this.outJson(response, ModelCode.MALL_SPECIFICATIONS, false);
-		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("product", product);
+		map.put("detail", detail);
+		
+		String jsonStr = JSONObject.toJSONString(map);
+		
+		this.outJson(response, ModelCode.MALL_SPECIFICATIONS, true, jsonStr);
 	}
 }
