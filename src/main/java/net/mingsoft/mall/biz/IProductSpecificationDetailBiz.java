@@ -82,4 +82,6 @@ public interface IProductSpecificationDetailBiz extends IBaseBiz{
 	 * @return 商品规格产品列表
 	 */
 	public List<ProductSpecificationDetailEntity> queryDetailsByProductId(int productId);
+	
+	
 }

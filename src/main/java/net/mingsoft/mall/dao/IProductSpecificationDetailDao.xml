@@ -125,8 +125,7 @@
 		select
 		<include refid="column_list" />
 		from mall_product_specification_detail psd
-		where
-		psi.psd_id = #{detailId}
+		where psd.psd_id = #{detailId}
 	</select>
 	<!-- 获取产品规格库存信息结束 -->
 
