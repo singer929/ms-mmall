@@ -560,12 +560,25 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 			}
 			else {
 				String[] arr = sort.split("-");
-				orderBy = arr[0];
+				orderBy = "product_" + arr[0];
 				orderByType = arr[1];
 			}
 		}
 		
 		List<ProductEntity> list = productDao.search(appId, modelId, categories, brands, minPrice, maxPrice, specSql, orderBy, orderByType);
+		
+		return list;
+	}
+
+	@Override
+	public List<ProductEntity> getOthersPurchase(int appId, int productId, int categoryId, int num) {
+		
+		int[] peopleIds = productDao.getPeopleIdsByProductId(appId, productId);
+		if (peopleIds != null && peopleIds.length == 0){
+			peopleIds = null;
+		}
+		
+		List<ProductEntity> list = productDao.getProductsByPeopleIds(appId, categoryId, peopleIds, num);
 		
 		return list;
 	}

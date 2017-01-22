@@ -1273,6 +1273,7 @@
 	</select>
 	<!-- 根据商品id集合和分类id,以及商品的上下架状态查询商品总数结束 -->
 	
+	<!-- 功能强大的查询接口 -->
 	<select id="search" resultMap="resultMap" >
 		select <include refid="column_list" /> 
 		from basic b 
@@ -1298,4 +1299,34 @@
 			order by #{orderBy} #{orderByType}
 		</if>
 	</select>
+	
+	<!-- 获取其他人购买 -->
+	<select id="getPeopleIdsByProductId" resultType="int" >
+		select o.`ORDER_PEOPLEID` from `order` o
+		join order_goods og  ON o.`ORDER_ID` = og.`GOODS_ORDERID` AND o.`ORDER_APPID` = og.`GOODS_APP_ID`
+		join mall_product mp on mp.`product_basicID` = og.goods_basicid
+		WHERE mp.`product_basicID` = #{productId}
+		GROUP BY o.`ORDER_PEOPLEID`
+	</select>
+	
+	<!-- 获取某些用户所购买过的商品 -->
+	<select id="getProductsByPeopleIds" resultMap="resultMap" >
+		select * from mall_product p
+		join basic b on b.`BASIC_ID` = p.`product_basicID` and b.BASIC_APPID = p.product_appID
+		join order_goods og on og.`GOODS_BASICID` = p.`product_basicID` and og.goods_appid = p.product_appID
+		join `order` o on o.`ORDER_ID` = og.`GOODS_ORDERID` and o.order_appid = og.goods_appid
+		where p.product_appID = #{appId}
+		<if test="categoryId &gt; 0"> and b.basic_categoryid = #{categoryId}</if>
+		<if test="peopleIds != null"> 
+			and o.ORDER_PEOPLEID in 
+			<foreach collection="peopleIds" item="peopleId" open="(" separator="," close=")">
+				#{peopleId}
+			</foreach>
+		</if>
+		group by mp.`product_basicID`
+		<if test="num != null"> 
+		limit #{num}
+		</if>
+	</select>
+	
 </mapper>

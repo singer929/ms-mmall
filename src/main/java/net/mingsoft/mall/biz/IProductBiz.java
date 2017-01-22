@@ -336,4 +336,14 @@ public interface IProductBiz extends IBasicBiz {
 	 * @param specs		规格数据字符串
 	 */
 	public List<ProductEntity> search(int appId, int modelId, Integer category, int[] brands, String price, String specs, String sort);
+	
+	
+	/**
+	 * 获取其他用户购买了其他此商品的同类商品
+	 * @param appId
+	 * @param productId
+	 * @param num
+	 * @return
+	 */
+	public List<ProductEntity> getOthersPurchase(int appId, int productId, int categoryId, int num);
 }

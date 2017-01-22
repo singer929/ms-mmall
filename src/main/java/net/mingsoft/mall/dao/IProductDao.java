@@ -421,4 +421,23 @@ public interface IProductDao extends IBaseDao {
 		@Param("orderBy") String orderBy,
 		@Param("orderByType") String orderByType
 	);
+	
+	/**
+	 * 查询用某些用户购买过哪些商品
+	 * @param appId
+	 * @param productId
+	 * @param num
+	 * @return
+	 */
+	public List<ProductEntity> getProductsByPeopleIds(
+		@Param("appId") int appId, 
+		@Param("categoryId") int categoryId,
+		@Param("peopleIds") int[] peopleIds,
+		@Param("num") int num
+	);
+	
+	public int[] getPeopleIdsByProductId(
+		@Param("appId") int appId, 
+		@Param("productId") int productId
+	);
 }

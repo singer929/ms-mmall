@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingsoft.base.entity.ListJson;
 import com.mingsoft.basic.biz.IBasicCategoryBiz;
@@ -29,7 +31,6 @@ import com.mingsoft.util.FileUtil;
 import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
 
-import groovy.lang.Category;
 import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.action.BaseAction;
 import net.mingsoft.mall.biz.IProductBiz;
@@ -99,6 +100,31 @@ public class ProductAction extends BaseAction{
 			this.outJson(response, ModelCode.MALL_PRODUCT,true,JSONObject.toJSONString(product));
 		}else{
 			this.outJson(response, ModelCode.MALL_PRODUCT,false,this.getResString("err"));
+		}
+	}
+
+	/**
+	 * 根据商品 查询购买过此商品的用户还购买了同类的哪些其他商品
+	 * @param productId	商品id
+	 * @param num		查询数量
+	 * @param request	
+	 * @param response
+	 */
+	@RequestMapping("/getOthersPurchase")
+	public void getOthersPurchase(@RequestParam("productId") int productId, HttpServletRequest request, HttpServletResponse response) {
+		
+		int num = BasicUtil.getInt("num");
+		int categoryId = BasicUtil.getInt("categoryId");
+		int appId = BasicUtil.getAppId();
+		
+		List<ProductEntity> list = productBiz.getOthersPurchase(appId, productId, categoryId, num);
+		
+		if (list == null){
+			outJson(response, ModelCode.MALL_PRODUCT, false, getResString("err"));
+		}
+		else {
+			String jsonStr = JSONArray.toJSONString(list);
+			outJson(response, ModelCode.MALL_PRODUCT, true, jsonStr);
 		}
 	}
 	
@@ -173,7 +199,7 @@ public class ProductAction extends BaseAction{
 	 * <br/>	*category: 分类ID, (与brand至少有一个必填)
 	 * <br/>	price: 商品价格, 可以是区间值 用 "-"分隔, 例如: "23.66", "12-45", "-324", "123-" 
 	 * <br/>	spec:  规格筛选的字符串, 规格名:规格值,规格名:规格值@规格值 , 例如:  "颜色:白,尺寸:1寸@2寸" (@ 表示或的关系)  
-	 * <br/> 	sort:  排序方式, 字段-方式, 例如: "price-asc"  (方式默认为desc)
+	 * <br/> 	sort:  排序方式, 字段-方式, 例如: "price-asc"  (方式默认为desc)，支持字段：price（价格）sale（销量）inventory（库存）
 	 * <br/> 	dataType: 数据类型: "json" 表示json格式数据返回, "html" 表示返回数据解析后的html页面, 模板取分类下的列表模板
 	 * <br/>} 
 	 * @param response
