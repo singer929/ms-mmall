@@ -573,8 +573,8 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	@Override
 	public List<ProductEntity> getOthersPurchase(int appId, int productId, int categoryId, int num) {
 		
-		int[] peopleIds = productDao.getPeopleIdsByProductId(appId, productId);
-		if (peopleIds != null && peopleIds.length == 0){
+		List<Integer> peopleIds = productDao.getPeopleIdsByProductId(appId, productId);
+		if (peopleIds != null && peopleIds.size() == 0){
 			peopleIds = null;
 		}
 		

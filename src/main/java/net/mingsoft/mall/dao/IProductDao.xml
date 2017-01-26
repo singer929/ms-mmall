@@ -1311,10 +1311,11 @@
 	
 	<!-- 获取某些用户所购买过的商品 -->
 	<select id="getProductsByPeopleIds" resultMap="resultMap" >
-		select * from mall_product p
+		select <include refid="column_list" />
+		from mall_product p
 		join basic b on b.`BASIC_ID` = p.`product_basicID` and b.BASIC_APPID = p.product_appID
-		join order_goods og on og.`GOODS_BASICID` = p.`product_basicID` and og.goods_appid = p.product_appID
-		join `order` o on o.`ORDER_ID` = og.`GOODS_ORDERID` and o.order_appid = og.goods_appid
+		join order_goods og on og.`GOODS_BASICID` = p.`product_basicID` and og.GOODS_APP_ID = p.product_appID
+		join `order` o on o.`ORDER_ID` = og.`GOODS_ORDERID` and o.order_appid = og.GOODS_APP_ID
 		where p.product_appID = #{appId}
 		<if test="categoryId &gt; 0"> and b.basic_categoryid = #{categoryId}</if>
 		<if test="peopleIds != null"> 
@@ -1323,8 +1324,8 @@
 				#{peopleId}
 			</foreach>
 		</if>
-		group by mp.`product_basicID`
-		<if test="num != null"> 
+		group by p.`product_basicID`
+		<if test="num &gt; 0"> 
 		limit #{num}
 		</if>
 	</select>

@@ -432,11 +432,11 @@ public interface IProductDao extends IBaseDao {
 	public List<ProductEntity> getProductsByPeopleIds(
 		@Param("appId") int appId, 
 		@Param("categoryId") int categoryId,
-		@Param("peopleIds") int[] peopleIds,
+		@Param("peopleIds") List<Integer> peopleIds,
 		@Param("num") int num
 	);
 	
-	public int[] getPeopleIdsByProductId(
+	public List<Integer> getPeopleIdsByProductId(
 		@Param("appId") int appId, 
 		@Param("productId") int productId
 	);
