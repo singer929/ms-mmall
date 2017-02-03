@@ -104,9 +104,10 @@ public class ProductAction extends BaseAction{
 	}
 
 	/**
-	 * 根据商品 查询购买过此商品的用户还购买了同类的哪些其他商品
-	 * @param productId	商品id
-	 * @param num		查询数量
+	 * 根据商品 查询购买过此商品的用户还购买过哪些其他商品
+	 * @param productId		商品id，必须字段
+	 * @param num			返回数据个数，不足则全部，不传默认全部
+	 * @param categoryId 	类型id，所需要查询商品的类别，不传默认所有类别
 	 * @param request	
 	 * @param response
 	 */
