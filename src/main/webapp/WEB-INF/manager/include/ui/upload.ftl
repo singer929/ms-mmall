@@ -95,8 +95,6 @@
 				    	 $('#${inputName}').val(serverData )
 				    }
 				    
-				    
-				    
 				    $('#ms__uploadPic_${inputName} ul li#' + file.id + ' span.front-cover').bind('click', function () {
 				        $('#ms__uploadPic_${inputName} ul li#' + file.id + '').slideUp('fast');
 				        var swfu = $.swfupload.getInstance('#ms__uploadPic_${inputName}');
@@ -110,41 +108,54 @@
 				        }else{
 				        	 $('#${inputName}').val($('#${inputName}').val().replace(serverData+"|", ""));
 				        }
-				        //获取最后一张图片的路径
-				        var obj=$("#ms__uploadPic_${inputName}").find("ul li:last");
-				        var imgSrcPath = obj.find(".displayimg img").attr("src").replace("${basePath}/","");;
-				        //判断是否删除的是最后一张,如果是则删除时不含"|"
-				        if(imgSrcPath==serverData.replace("|","")){
-				        	$('#${inputName}').val($('#${inputName}').val().replace("|"+serverData.replace("|",""), ""));
-				        }
-				       
+				      
 				        $('#ms__uploadPic_${inputName} ul li#' + file.id).remove();
+				        
+				        setInputValue${inputName}();
 				    });
 				})
 				.bind('uploadComplete', function (event, file) {
 				    $(this).swfupload('startUpload');
 				})
 		    });
+		    
+		    // 设置文本框的值 用于提交数据
+		    function setInputValue${inputName}(){
+		    	var value = "";
+		        // 设置文本的值
+		        $("#ms__uploadPic_${inputName}").find("ul li .displayimg img").each(function(){
+		      		var src = $(this).attr('src').replace('${basePath}/', '');
+		        	value += src + '|';
+		        });
+		        // 删除最后一个"|"
+		        value = value.slice(0, -1);
+		      	$('#${inputName}').val(value);
+		    }
+		     
 		    function removePreview${inputName}(uid,imgPath) {
 		        var swfu = $.swfupload.getInstance('#ms__uploadPic_${inputName}');
 		        var stats = swfu.getStats();
 		        stats.successful_uploads--;
 		        swfu.setStats(stats);
-		        imgPath=imgPath.replace("|","")
+		        //imgPath=imgPath.replace("|","")
+		        
 				//判断保存图片的输入框中是否存在"|"如果存在则表示图片至少要两张
-				if ($('#${inputName}').val().indexOf("|")<0) {
-				     $('#${inputName}').val($('#${inputName}').val().replace(imgPath, ""));
-				 }else{
-				     $('#${inputName}').val($('#${inputName}').val().replace(imgPath+"|", ""));
-				 }
-				 var obj=$("#ms__uploadPic_${inputName}").find("ul li:last");
-				var imgSrcPath = obj.find(".displayimg img").attr("src").replace("${basePath}/","");
+				//if ($('#${inputName}').val().indexOf("|")<0) {
+				     //$('#${inputName}').val($('#${inputName}').val().replace(imgPath, ""));
+				// }else{
+				     //$('#${inputName}').val($('#${inputName}').val().replace(imgPath+"|", ""));
+				// }
+				
+				//var obj=$("#ms__uploadPic_${inputName}").find("ul li:last");
+				//var imgSrcPath = obj.find(".displayimg img").attr("src").replace("${basePath}/","");
 				//判断是否删除的是最后一张,如果是则删除时不含"|"
-				if(imgSrcPath==imgPath.replace("|","")){
-				    $('#${inputName}').val($('#${inputName}').val().replace("|"+imgPath.replace("|",""), ""));
-				}
+				//if(imgSrcPath==imgPath.replace("|","")){
+				    //$('#${inputName}').val($('#${inputName}').val().replace("|"+imgPath.replace("|",""), ""));
+				//}
+				
 		        $('#ms__uploadPic_${inputName} ul li#' + uid.parentNode.id).slideUp('fast',function() {
 		        	$(this).remove();
+		        	setInputValue${inputName}();
 		        });
 		    }
 		    
@@ -264,64 +275,63 @@
 
 <#assign onlyId = triggerBtnId />
 	<script type="text/javascript">
-	$(function(){
-		var ms__uploader_${onlyId} = new plupload.Uploader({
-			runtimes: 'html5',
-			browse_button: '${triggerBtnId}',
-			url: "${basePath}/upload",			// 接收上传请求的servlet地址
-			multi_selection: false,				// 只能选择1个文件
-			filters : {
-		        max_file_size : '${maxSize}mb',
-		        mime_types: [{title:"ImageFiles", extensions:"jpg,gif,png,bmp,jpeg"}]
-		    },
-		    // 上传服务器数据 post
-		    multipart_params: {
-		    	"uploadPath": "/${path}", 
-		    	"isRename": "${isRename?default("true")}",
-		    	"maxSize": ${maxSize},
-		    	"allowedFile": "${filetype?default('*.jpg;*.png;*.gif;*.bmp;*.jpeg')}"
-		    }
-		});
-		
-		//在实例对象上调用init()方法进行初始化
-    	ms__uploader_${onlyId}.init();
-		
-		// 初始化方法
-		ms__uploader_${onlyId}.bind('Init', function(loader){
-		
-		});
-		
-		// 用户添加文件, 开始的时候立即添加
-		ms__uploader_${onlyId}.bind('FilesAdded', function(up, files){
-			uploader.start();
-		});
-		
-		// 队列中所有文件被上传完
-		ms__uploader_${onlyId}.bind('UploadComplete', function(up, file){
-			
-		});
-		
-		// 当一个文件开始上传的时候触发
-		ms__uploader_${onlyId}.bind('UploadFile', function(up, file){
-			
-		});
-		
-		// 文件上传成功的时候触发
-		ms__uploader_${onlyId}.bind('FileUploaded', function(uploader, file, result){
-		
-			if (result.status == 200){
-				// 图片的服务器路径
-				var imgUrl = result.response;
-				$('#${imgId}').attr('src', '${basePath}/' + imgUrl);
-			}
-			else{
-				alert('上传失败，请求返回码:' + result.status);
-			}
-			
-			<#if callback != "" > 
-				eval("${callBack}(result)");
-			</#if>
-		});
+	var ms__uploader_${onlyId} = new plupload.Uploader({
+		runtimes: 'html5',
+		browse_button: '${triggerBtnId}',
+		url: "${basePath}/upload",			// 接收上传请求的servlet地址
+		multi_selection: false,				// 只能选择1个文件
+		filters : {
+	        max_file_size : '${maxSize}mb',
+	        mime_types: [{title:"ImageFiles", extensions:"jpg,gif,png,bmp,jpeg"}]
+	    },
+	    // 上传服务器数据 post
+	    multipart_params: {
+	    	"uploadPath": "/${path}", 
+	    	"isRename": "${isRename?default("true")}",
+	    	"maxSize": ${maxSize},
+	    	"allowedFile": "${filetype?default('*.jpg;*.png;*.gif;*.bmp;*.jpeg')}"
+	    }
 	});
+	
+	//在实例对象上调用init()方法进行初始化
+	ms__uploader_${onlyId}.init();
+	
+	// 初始化方法
+	ms__uploader_${onlyId}.bind('Init', function(loader){
+	
+	});
+	
+	// 用户添加文件, 开始的时候立即添加
+	ms__uploader_${onlyId}.bind('FilesAdded', function(up, files){
+		uploader.start();
+	});
+	
+	// 队列中所有文件被上传完
+	ms__uploader_${onlyId}.bind('UploadComplete', function(up, file){
+		
+	});
+	
+	// 当一个文件开始上传的时候触发
+	ms__uploader_${onlyId}.bind('UploadFile', function(up, file){
+		
+	});
+	
+	// 文件上传成功的时候触发
+	ms__uploader_${onlyId}.bind('FileUploaded', function(uploader, file, result){
+	
+		if (result.status == 200){
+			// 图片的服务器路径
+			var imgUrl = result.response;
+			$('#${imgId}').attr('src', '${basePath}/' + imgUrl);
+		}
+		else{
+			alert('上传失败，请求返回码:' + result.status);
+		}
+		
+		<#if callback != "" > 
+			eval("${callBack}(result)");
+		</#if>
+	});
+
 </script>
 </#macro>
