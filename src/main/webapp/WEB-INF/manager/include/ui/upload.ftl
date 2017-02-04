@@ -128,7 +128,10 @@
 		        	value += src + '|';
 		        });
 		        // 删除最后一个"|"
-		        value = value.slice(0, -1);
+		        if (value){
+		        	value = value.slice(0, -1);
+		        }
+		        
 		      	$('#${inputName}').val(value);
 		    }
 		     
