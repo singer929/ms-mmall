@@ -574,11 +574,12 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	public List<ProductEntity> getOthersPurchase(int appId, int productId, int categoryId, int num) {
 		
 		List<Integer> peopleIds = productDao.getPeopleIdsByProductId(appId, productId);
+		List<ProductEntity> list = null;
 		if (peopleIds != null && peopleIds.size() == 0){
-			peopleIds = null;
+			return new ArrayList<ProductEntity>();
 		}
 		
-		List<ProductEntity> list = productDao.getProductsByPeopleIds(appId, categoryId, peopleIds, num);
+		list = productDao.getProductsByPeopleIds(appId, categoryId, peopleIds, num);
 		
 		return list;
 	}
