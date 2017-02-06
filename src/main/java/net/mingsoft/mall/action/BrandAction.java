@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mingsoft.basic.biz.ICategoryBiz;
@@ -53,6 +54,12 @@ public class BrandAction extends BaseAction {
 		pc.setCategoryModelId(BasicUtil.getModelCodeId(ModelCode.MALL_CATEGORY));
 		pc.setCategoryAppId(BasicUtil.getAppId());
 		List productCategorys = categoryBiz.query(pc);
+		
+		// 把子节点数据置空 这里用不到，如果有的话会导致json数据转换异常
+		for (CategoryEntity c : (List<CategoryEntity>) productCategorys){
+			c.setChildrenCategoryList(null);
+		}
+		
 		request.setAttribute("productCategorys", JSONArray.toJSONString(productCategorys));
 		request.setAttribute("category", category);
 		request.setAttribute("appId", BasicUtil.getAppId());
@@ -125,7 +132,14 @@ public class BrandAction extends BaseAction {
 		pc.setCategoryModelId(BasicUtil.getModelCodeId(ModelCode.MALL_CATEGORY));
 		pc.setCategoryAppId(BasicUtil.getAppId());
 		List productCategorys = categoryBiz.query(pc);
-		request.setAttribute("productCategorys", JSONArray.toJSONString(productCategorys));
+		
+		// 把子节点数据置空 这里用不到，如果有的话会导致json数据转换异常
+		for (CategoryEntity c : (List<CategoryEntity>) productCategorys){
+			c.setChildrenCategoryList(null);
+		}
+		
+		String jsonStr = JSONArray.toJSONString(productCategorys);
+		request.setAttribute("productCategorys", jsonStr);
 		
 		request.setAttribute("appId", BasicUtil.getAppId());
 		return view("/mall/brand/brand_form");
@@ -151,8 +165,6 @@ public class BrandAction extends BaseAction {
 		return view("/mall/brand/brand_list");
 	}
 	
-	
-
 	/**
 	 * 添加栏目
 	 * 

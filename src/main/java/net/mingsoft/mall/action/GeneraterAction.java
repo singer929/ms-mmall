@@ -197,11 +197,22 @@ public class GeneraterAction extends BaseAction{
 		String tmpPath = getRealPath(request, IParserRegexConstant.REGEX_SAVE_TEMPLATE) + File.separator + appId + File.separator + app.getAppStyle();
 		List<ColumnEntity> columns = new ArrayList<ColumnEntity>();
 		int modelId = this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
+		
 		// 如果栏目id小于0则更新所有的栏目，否则只更新选中的栏目
 		if (columnId > 0) {
 			List<CategoryEntity> categorys = columnBiz.queryChildrenCategory(columnId, app.getAppId(),modelId);
-			for (CategoryEntity c : categorys) {
-						columns.add((ColumnEntity) columnBiz.getEntity(c.getCategoryId()));
+			if (categorys == null || categorys.size() == 0){
+				ColumnEntity c = (ColumnEntity) columnBiz.getEntity(columnId);
+				columns.add(c);
+			}
+			else{
+				ColumnEntity pe = (ColumnEntity) columnBiz.getEntity(columnId);
+				columns.add(pe);
+				
+				for (CategoryEntity c : categorys) {
+					ColumnEntity ce = (ColumnEntity) columnBiz.getEntity(c.getCategoryId());
+					columns.add(ce);
+				}
 			}
 		} else {
 			//获取所有的商品分类
@@ -407,7 +418,7 @@ public class GeneraterAction extends BaseAction{
 	 * @return 商品更新页面
 	 */
 	@RequestMapping("/product")
-	public String product(HttpServletRequest request,ModelMap model){
+	public String product(HttpServletRequest request, ModelMap model){
 
 		// 该站点ID有session提供
 		int appId =  BasicUtil.getAppId();

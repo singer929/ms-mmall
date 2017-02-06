@@ -828,8 +828,8 @@
     }
 
     // 表格中的数据改变, 修改保存的数据
-    function onChangeData(input)
-    {
+    function onChangeData(input) {
+    
         var value = $(input).val();
         var key = $(input).data('type');
         var tr = $(input).parent().parent();
@@ -847,7 +847,6 @@
         	$(input).val(detailData[key]);
         	return;
         }
-
 
         detailData[key] = value;
     }
