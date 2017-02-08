@@ -16,7 +16,8 @@
 		<result column="CART_TITLE" property="cartTitle" />
 		<result column="CART_THUMBNAIL" property="cartThumbnail" />
 		<result column="CART_URL" property="cartUrl" />
-		
+		<result column="OP_PRODUCT_DETAIL_ID" property="cartProductDetailId" />
+
 		<!-- 如果存在规格信息就返回规格数据 -->
 		<result column="OP_TITLE" property="cartProductDetailText" />
 		<result column="OP_THUMBNAIL" property="cartThumbnail" />
@@ -24,10 +25,31 @@
 		<result column="OP_NUM" property="cartNum" />
 	</resultMap>
 
-	<select id="query" parameterType="net.mingsoft.mall.entity.CartEntity"
-		resultMap="resultMap">
-		SELECT  * FROM  mall_order_product LEFT JOIN order_cart on OP_PRODUCT_ID=CART_BASICID  
-		WHERE CART_PEOPLEID = OP_PEOPLE_ID AND CART_PEOPLEID=#{cartPeopleId} AND CART_APPID=#{cartAppId}
+	<select id="query" resultMap="resultMap">
+		SELECT * FROM mall_order_product LEFT JOIN order_cart on
+		OP_PRODUCT_ID=CART_BASICID
+		<where>
+			CART_PEOPLEID = OP_PEOPLE_ID AND CART_PEOPLEID=#{peopleId} AND
+			CART_APPID=#{appId}
+			<trim prefix="AND (" suffix=")" prefixOverrides="OR">
+				<if test="cartIds != null">
+					CART_ID IN
+					<foreach collection="cartIds" item="cartId" index="index"
+						open="(" close=")" separator=",">
+						#{cartId}
+					</foreach>
+				</if>
+				<if test="cartProductDetailIds != null">
+					OR
+					OP_PRODUCT_DETAIL_ID IN
+					<foreach collection="cartProductDetailIds" item="cartProductDetailId" index="index"
+						open="(" close=")" separator=",">
+						#{cartProductDetailId}
+					</foreach>
+				</if>
+			</trim>
+		</where>
+
 		group by OP_TITLE
 	</select>
 

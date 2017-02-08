@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
 
+import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.biz.ICartBiz;
 import net.mingsoft.mall.dao.ICartDao;
 import net.mingsoft.mall.entity.ProductEntity;
@@ -33,12 +34,13 @@ public class CartBizImpl extends BaseBizImpl implements ICartBiz{
 	protected IBaseDao getDao() {
 		return this.cartDao;
 	}
-	
-	
+
 	@Override
-	public List<ProductEntity> query(CartEntity cart) {
-		return this.cartDao.query(cart);
+	public List<net.mingsoft.mall.entity.CartEntity> query(int[] cartIds, int[] cartProductDetailIds, int peopleId,
+			int appId) {
+		return cartDao.query(cartIds,cartProductDetailIds,peopleId,BasicUtil.getAppId());
 	}
+	
 	
 
 	

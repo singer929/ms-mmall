@@ -12,6 +12,7 @@ import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.util.PageUtil;
 
 import net.mingsoft.attention.entity.BasicAttentionEntity;
+import net.mingsoft.mall.entity.CartEntity;
 
 /**
  * 铭飞商城－购物车
@@ -23,5 +24,15 @@ import net.mingsoft.attention.entity.BasicAttentionEntity;
  */
 @Component("mallCartDao")
 public interface ICartDao extends IBaseDao {
+
+	/**
+	 * 购物车查询
+	 * @param cartIds 购物车编号
+	 * @param cartProductDetailIds 规格编号
+	 * @param peopleId 用户编号
+	 * @param appId 应用编号
+	 * @return
+	 */
+	List<CartEntity> query(@Param("cartIds")int[] cartIds, @Param("cartProductDetailIds")int[] cartProductDetailIds, @Param("peopleId")int peopleId, @Param("appId")int appId);
 	
 }

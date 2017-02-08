@@ -74,15 +74,14 @@ public class OrderProductEntity extends BaseEntity {
 
 	public OrderProductEntity() {
 	}
+	
+	public OrderProductEntity(int opProductDetailId,int opPeopleId) {
+		this.opProductDetailId = opProductDetailId;
+		this.opPeopleId = opPeopleId;
+	}
 
 	public OrderProductEntity(int opProductId) {
 		this.opProductId = opProductId;
-
-	}
-
-	public OrderProductEntity(int opProductId, int opProductDetailId) {
-		this.opProductId = opProductId;
-		this.opProductDetailId = opProductDetailId;
 
 	}
 

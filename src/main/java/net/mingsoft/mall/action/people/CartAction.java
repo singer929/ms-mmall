@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.mingsoft.base.filter.DateValueFilter;
 import com.mingsoft.base.filter.DoubleValueFilter;
 import com.mingsoft.people.entity.PeopleEntity;
@@ -22,7 +21,7 @@ import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.biz.ICartBiz;
 import net.mingsoft.mall.biz.IOrderProductBiz;
 import net.mingsoft.mall.biz.IProductBiz;
-import net.mingsoft.mall.entity.ProductEntity;
+import net.mingsoft.mall.entity.OrderProductEntity;
 import net.mingsoft.order.constant.ModelCode;
 import net.mingsoft.order.entity.CartEntity;
 
@@ -57,6 +56,9 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 	private IProductBiz productBiz;
 	/**
 	 * 购物车列表 <br/>
+	 *            <i>参数：</i><br/>
+	 *            cartIds 购物车编号，多个用逗号隔开<br/>
+	 *            cartProductDetailIds 规格编号，多个用逗号隔开<br/>
 	 * <dt><span class="strong">返回</span></dt><br/>
 	 * [<br/>
 	 * { <br/>
@@ -74,9 +76,43 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 	 */
 	@RequestMapping("/list")
 	public void list(HttpServletRequest request, HttpServletResponse response) {
-		List list = cartBiz.query(new CartEntity(this.getPeopleBySession(request).getPeopleId(), BasicUtil.getAppId()));
+		int[] cartIds = BasicUtil.getInts("cartIds",",");
+		int[] cartProductDetailIds = BasicUtil.getInts("cartProductDetailIds",",");
+		List list = cartBiz.query(cartIds, cartProductDetailIds, this.getPeopleBySession().getPeopleId(),1);
 		this.outJson(response, net.mingsoft.base.util.JSONArray.toJSONString(list,new DoubleValueFilter(),new DateValueFilter("yyyy-MM-dd")));
 	}
+	
+	/**
+	 * 删除购物车中的商品</br>
+	 * 当执行单个删除时直接在地址中传入ID即可</br>
+	 * 当执行批量删除时多个cartIds直接用逗号隔开,cartIds=1,2,3,4，cartProductDetailIds用逗号隔开，位置个数与cartId一直
+	 *
+	 *            <i>参数：</i><br/>
+	 *            cartIds 购物车编号，多个用逗号隔开<br/>
+	 *            cartProductDetailIds 规格编号，多个用逗号隔开<br/>
+	 *            <dt><span class="strong">返回</span></dt><br/>
+	 *            {code:"错误编码",<br/>
+	 *            result:"true｜false",<br/>
+	 *            resultMsg:"错误信息"<br/>
+	 *            }
+	 */
+	@RequestMapping("/delete")
+	public void delete(HttpServletRequest request, HttpServletResponse response) {
+		PeopleEntity people = this.getPeopleBySession();
+		int[] cartIds = BasicUtil.getInts("cartIds",",");
+		int[] cartProductDetailIds = BasicUtil.getInts("cartProductDetailIds",",");
+		int appId = BasicUtil.getAppId();
+		int i=0;
+		for (int id : cartIds) {
+			if (id > 0) {
+				cartBiz.deleteEntity(new CartEntity(id, people.getPeopleId(), appId,-1));
+				orderProductBiz.deleteEntity(new OrderProductEntity(cartProductDetailIds[i],people.getPeopleId()));
+			}
+			i++;
+		}
+		this.outJson(response, ModelCode.ORDER_CART, true);
+	}
+	
 	
 	/**
 	 * 添加到购物车，如果购物车内已经存在一样的信息，系统会只更新相同信息的数量

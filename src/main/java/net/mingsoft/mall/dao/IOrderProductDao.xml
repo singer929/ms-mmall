@@ -71,5 +71,7 @@
 			and OP_STATUS = #{opStatus}
 		</where>
 	</select>
-
+	<delete id="deleteByEntity" parameterType="net.mingsoft.mall.entity.OrderProductEntity">
+		delete from mall_order_product WHERE  OP_PRODUCT_DETAIL_ID= #{opProductDetailId} AND  OP_PEOPLE_ID = #{opPeopleId}
+	</delete>
 </mapper>
