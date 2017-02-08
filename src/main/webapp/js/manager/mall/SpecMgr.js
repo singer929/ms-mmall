@@ -206,12 +206,16 @@ var SpecMgr = {
         }
         return obj;
     },
-
-    objToKeys: function(obj){
+    
+    // 规格数据转化成字符串
+    specValuesToStr: function(obj){
         var keys = '';
         for (var specName in obj){
             var specValue = obj[specName];
-            keys += (keys ? ',' : '') + specName + ':' + specValue
+            var psData = this.getProductSpecData(specName, specValue);
+            var img = (psData && psData.img) ? psData.img : "";
+            
+            keys += (keys ? ',' : '') + specName + ':' + specValue + ":" + img;
         }
 
         return keys;
@@ -243,9 +247,10 @@ var SpecMgr = {
         var svrSpecDetailArr = [];
         for (var i in this.specDetails){
             var detail = this.specDetails[i];
+            
             svrSpecDetailArr.push({
                 productId: this.productId,
-                specValues: this.objToKeys(detail.specValues),
+                specValues: this.specValuesToStr(detail.specValues),
                 stock: detail.stock,
                 price: detail.price,
                 sale: detail.sale,

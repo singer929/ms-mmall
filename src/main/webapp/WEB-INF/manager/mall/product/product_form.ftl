@@ -143,7 +143,7 @@
                     <span class="delete-norms">×</span>
                     <div id="normPic${proSpec.seed}" class="norms-pic" {{if showPic }} style="display:block" {{/if}}>
 
-                    	<img title="点击上传或更改图片" id="normImg${proSpec.seed}" src="{{if proSpec.img!='' }}${proSpec.img}{{else}}</#noparse> ${defaultSpecImg} <#noparse>{{/if}}" />
+                    	<img title="点击上传或更改图片" id="normImg${proSpec.seed}" src="{{if proSpec.img!='' }}${proSpec.imgPath}{{else}}</#noparse> ${defaultSpecImg} <#noparse>{{/if}}" />
                     </div>
                 </div>
             {{/each}}
@@ -406,6 +406,7 @@
 	            psArr[i].seed = randSeed;
 
 	            if (psArr[i].img) {
+	            	psArr[i].imgPath = "${basePath}/" + psArr[i].img; 
             		showPic = true;
             	}
             }
@@ -445,7 +446,7 @@
     		return;
     	}
 
-    	var imgUrl = '${basePath}/' + result.response;
+    	var imgUrl = result.response;
     	productData.img = imgUrl;
     }
 
