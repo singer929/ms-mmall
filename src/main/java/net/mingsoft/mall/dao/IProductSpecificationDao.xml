@@ -112,21 +112,6 @@
 		</where>
 	</delete>
 	<!-- 根据产品ID删除关联信息结束 -->
-	
-	<!-- 根据商品ID关联查询产品规格/产品信息开始 -->
-	<select id="queryListJsonByProduct" parameterType="int"
-		resultMap="resultMapList">
-		select * from mall_product_specification ps
-		left join
-		mall_specifications s on ps.ps_specificationsID =
-		s.specifications_id
-		left join mall_product_specification_inventory psd
-		on ps.ps_id =
-		psd.psd_id
-		where ps.ps_product_id =
-		#{productId}
-	</select>
-	<!-- 根据商品ID关联查询产品规格/产品信息结束 -->
 
 	<!-- 根据商品ID关联查询产品规格/产品信息开始 -->
 	<select id="getEntityById" parameterType="int"

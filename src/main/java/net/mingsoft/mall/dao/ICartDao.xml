@@ -16,17 +16,19 @@
 		<result column="CART_TITLE" property="cartTitle" />
 		<result column="CART_THUMBNAIL" property="cartThumbnail" />
 		<result column="CART_URL" property="cartUrl" />
+		
+		<!-- 如果存在规格信息就返回规格数据 -->
+		<result column="OP_TITLE" property="cartProductDetailText" />
+		<result column="OP_THUMBNAIL" property="cartThumbnail" />
+		<result column="OP_PRICE" property="cartPrice" />
+		<result column="OP_NUM" property="cartNum" />
 	</resultMap>
 
 	<select id="query" parameterType="net.mingsoft.mall.entity.CartEntity"
 		resultMap="resultMap">
-		select
-		CART_ID,CART_BASICID,CART_TIME,CART_PEOPLEID,CART_APPID,CART_NUM,CART_PRICE,CART_DISCOUNT,CART_THUMBNAIL,CART_TITLE,CART_URL
-		from order_cart
-		left join basic on CART_BASICID=basic_id
-		left join mall_product on cart_id = product_basicID
-		where
-		CART_PEOPLEID=#{cartPeopleId}
+		SELECT  * FROM  mall_order_product LEFT JOIN order_cart on OP_PRODUCT_ID=CART_BASICID  
+		WHERE CART_PEOPLEID = OP_PEOPLE_ID AND CART_PEOPLEID=#{cartPeopleId} AND CART_APPID=#{cartAppId}
+		group by OP_TITLE
 	</select>
 
 

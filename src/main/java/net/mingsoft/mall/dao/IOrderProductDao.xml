@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.mingsoft.mall.dao.IOrderProductDao">
+
+	<sql id="column_list">
+		<trim suffixOverrides=",">
+			OP_PRODUCT_ID,
+			OP_PRODUCT_DETAIL_ID,
+			OP_TITLE,
+			OP_THUMBNAIL,
+			OP_PRICE,
+			OP_NUM,
+			OP_STATUS,
+		</trim>
+	</sql>
+
+	<resultMap id="resultMap" type="net.mingsoft.mall.entity.OrderProductEntity">
+		<result column="OP_PRODUCT_ID" property="opProductId" /><!--商品编号、对应baisc_id -->
+		<result column="OP_PRODUCT_DETAIL_ID" property="opProductDetailId" /><!--商品规格编号 -->
+		<result column="OP_TITLE" property="opTitle" /><!--标题 -->
+		<result column="OP_PRICE" property="opPrice" /><!--价格 -->
+		<result column="OP_NUM" property="opNum" /><!--数量 -->
+		<result column="OP_STATUS" property="opStatus" /><!--商品状态0购物车 1订单 -->
+	</resultMap>
+
+	<!--保存 -->
+	<insert id="saveEntity">
+		insert into mall_order_product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			OP_PEOPLE_ID,
+			OP_PRODUCT_ID,
+			<if test="opProductDetailId != null">OP_PRODUCT_DETAIL_ID,</if>
+			OP_TITLE,
+			OP_THUMBNAIL,
+			OP_PRICE,
+			OP_NUM,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{opPeopleId},
+			#{opProductId},
+			<if test="opProductDetailId != null">#{opProductDetailId},</if>
+			#{opTitle},
+			#{opThumbnail},
+			#{opPrice},
+			#{opNum},
+		</trim>
+	</insert>
+
+	<!--更新 -->
+	<update id="updateEntity" parameterType="net.mingsoft.mall.entity.OrderProductEntity">
+		update mall_order_product
+		<set>
+			<if test="opNum &gt; 0">OP_NUM=#{opNum}</if>
+		</set>
+		where OP_PRODUCT_ID=#{opProductId} and OP_PEOPLE_ID=#{opPeopleId} and OP_PRODUCT_DETAIL_ID=#{opProductDetailId} 
+	</update>
+
+	<!--查询 -->
+	<select id="query" parameterType="net.mingsoft.mall.entity.OrderProductEntity" resultMap="resultMap">
+		select * from mall_order_product
+		<where>
+			<if test="opPeopleId &gt; 0">
+				and OP_PEOPLE_ID= #{opPeopleId}
+			</if>
+			<if test="opProductId &gt; 0">
+				and OP_PRODUCT_ID= #{opProductId}
+			</if>		
+			<if test="opProductDetailId &gt; 0">
+				and OP_PRODUCT_DETAIL_ID= #{opProductDetailId}
+			</if>	
+			and OP_STATUS = #{opStatus}
+		</where>
+	</select>
+
+</mapper>
