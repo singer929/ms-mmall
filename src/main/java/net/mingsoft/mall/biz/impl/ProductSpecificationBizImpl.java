@@ -51,6 +51,7 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	/**
 	 * 产品关联规格 持久层
 	 */
+	@Autowired
 	private IProductSpecificationDao productSpecDao;
 
 	/**

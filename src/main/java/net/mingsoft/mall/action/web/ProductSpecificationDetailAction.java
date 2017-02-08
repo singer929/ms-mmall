@@ -45,7 +45,7 @@ import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
  * </p>
  */
 @Controller("webProductSpecificationDetailAction")
-@RequestMapping("/mall/specificationDetail")
+@RequestMapping("/mall/productSpecificationDetail")
 public class ProductSpecificationDetailAction extends BaseAction{
 	
 	@Autowired 

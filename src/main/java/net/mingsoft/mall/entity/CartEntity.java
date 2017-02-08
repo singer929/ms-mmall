@@ -1,6 +1,7 @@
 package net.mingsoft.mall.entity;
 import java.util.Date;
 import com.mingsoft.base.entity.BaseEntity;
+import com.mingsoft.util.StringUtil;
 /**
  * 
  * 
@@ -37,5 +38,58 @@ import com.mingsoft.base.entity.BaseEntity;
  * </p>
  */
 public class CartEntity extends net.mingsoft.order.entity.CartEntity  {
+	
+	/**
+	 * 商品规格编号
+	 */
+	private int cartProductDetailId;
+	
+	/**
+	 * 商品规格内容
+	 */
+	private String cartProductDetailText;
+
+	public int getCartProductDetailId() {
+		return cartProductDetailId;
+	}
+
+	public void setCartProductDetailId(int cartProductDetailId) {
+		this.cartProductDetailId = cartProductDetailId;
+	}
+
+	@Override
+	public void setCartPrice(double cartPrice) {
+		// TODO Auto-generated method stub
+		if(cartPrice > 0) {
+			super.setCartPrice(cartPrice);
+		}
+	}
+
+	@Override
+	public void setCartThumbnail(String cartThumbnail) {
+		// TODO Auto-generated method stub
+		if(!StringUtil.isBlank(cartThumbnail)) {
+			super.setCartThumbnail(cartThumbnail);
+		}
+	}
+
+	public String getCartProductDetailText() {
+		return cartProductDetailText;
+	}
+
+	public void setCartProductDetailText(String cartProductDetailText) {
+		this.cartProductDetailText = cartProductDetailText;
+	}
+
+	@Override
+	public void setCartNum(int cartNum) {
+		// TODO Auto-generated method stub
+		if(cartNum > 0) {
+			super.setCartNum(cartNum);
+		}
+	}
+
+	
+	
 	
 }

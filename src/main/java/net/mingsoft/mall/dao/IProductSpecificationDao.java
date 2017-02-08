@@ -48,12 +48,17 @@ import net.mingsoft.mall.entity.ProductSpecificationEntity;
 public interface IProductSpecificationDao extends IBaseDao {
 	
 	/**
-	 * 关联查询商品规格已经该规格对应的商品详情
-	 * @param productId 商品ID
-	 * @return 商品规格列表
+	 * 根据编号批量删除
+	 * @param ids 编号集合
+	 * @param productId商品编号
 	 */
-	@Deprecated
-	public List<ProductSpecificationEntity> queryListJsonByProduct(@Param("productId")int productId); 
+	public void deleteBatch(@Param("ids") List ids, @Param("productId")int productId);
+	
+	/**
+	 * 依据规格名称删除产品规格数据(例如规格删除之后需要清理产品规格数据)
+	 * @param specName
+	 */
+	public void deleteBySpecificationName(@Param("specName") String specName);
 	
 	/**
 	 * 根据产品ID删除该产品对应的规格
@@ -74,27 +79,6 @@ public interface IProductSpecificationDao extends IBaseDao {
 	 * @return
 	 */
 	public List<ProductSpecificationEntity> queryByProductId(@Param("productId")int productId);
-	
-	/**
-	 * 根据商品编号、规格编号、规格值，查询商品绑定的规格数据
-	 * @param productId 商品id
-	 * @param specificationsField 规格值
-	 * @param specificationsId 规格id
-	 */
-	//ProductSpecEntity getByProductIdAndspecificationsIdAndspecificationsField(@Param("productId")int productId, @Param("specificationsField")String specificationsField,@Param("specificationsId")int specificationsId,@Param("productSpecificationsFatherId")int productSpecificationsFatherId);
-	
-	/**
-	 * 根据编号批量删除
-	 * @param ids 编号集合
-	 * @param productId商品编号
-	 */
-	public void deleteBatch(@Param("ids") List ids, @Param("productId")int productId);
-	
-	/**
-	 * 依据规格名称删除产品规格数据(例如规格删除之后需要清理产品规格数据)
-	 * @param specName
-	 */
-	public void deleteBySpecificationName(@Param("specName") String specName);
 	
 	/**
 	 * 根据产品的规格值获取符合条件的 产品id

@@ -20,6 +20,7 @@ import com.mingsoft.people.entity.PeopleEntity;
 
 import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.biz.ICartBiz;
+import net.mingsoft.mall.biz.IOrderProductBiz;
 import net.mingsoft.mall.biz.IProductBiz;
 import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.order.constant.ModelCode;
@@ -46,6 +47,12 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 	@Autowired
 	private net.mingsoft.order.biz.ICartBiz _cartBiz;
 	
+	/**
+	 *用户已购买的商品规格数据
+	 */
+	@Autowired
+	private IOrderProductBiz orderProductBiz;
+	
 	@Autowired
 	private IProductBiz productBiz;
 	/**
@@ -60,6 +67,7 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 	 * "cartThumbnail": "缩略图", <br/>
 	 * "cartTime": "添加日期", <br/>
 	 * "cartTitle": "标题"<br/>
+	 * "cartProductDetailText": "规格内容，格式如：颜色：红,尺寸:L"<br/>
 	 * "cartUrl": "链接地址"<br/>
 	 * }<br/>
 	 * ]<br/>
@@ -86,39 +94,46 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	@ResponseBody
-	public void save(@ModelAttribute CartEntity cart, HttpServletResponse response, HttpServletRequest request) {
+	public void save(@ModelAttribute net.mingsoft.mall.entity.CartEntity cart, HttpServletResponse response, HttpServletRequest request) {
 		PeopleEntity people = (PeopleEntity) getPeopleBySession();
 		if (cart.getCartBasicId() <= 0) {
 			this.outJson(response, ModelCode.ORDER_CART, false);
 			return;
 		}
-		
 		cart.setCartPeopleId(people.getPeopleId());
-		CartEntity _cart  = (CartEntity)_cartBiz.getEntity(cart);
-		// 查询购物车中是否存在该商品
-		if (_cart != null) {
-			// 更新商品数量
-			_cart.setCartNum(_cart.getCartNum() + cart.getCartNum());
-			_cartBiz.updateEntity(_cart);
-			this.outJson(response, ModelCode.ORDER_CART, true);
-			return;
-		} else {
-			ProductEntity product = (ProductEntity)productBiz.getEntity(cart.getCartBasicId());
-			if (product == null) {
-				this.outJson(response, ModelCode.ORDER_CART, false);
-				return;
-			}
-			cart.setCartThumbnail(product.getBasicThumbnails());
-			cart.setCartTitle(product.getBasicTitle());
-			// 保存会员ID
-			cart.setCartPeopleId(people.getPeopleId());
-			cart.setCartAppId(BasicUtil.getAppId());
-			cart.setCartPrice(product.getProductPrice());
-			cart.setCartUrl(product.getProductLinkUrl());
-			_cartBiz.saveEntity(cart);
-			// 购物车添加商品成功后返回当前的购物车ID至页面
-			this.outJson(response, ModelCode.ORDER_CART, true);
-		}
+		cart.setCartAppId(BasicUtil.getAppId());
+		
+		
+		//检查是否存在规格信息
+		
+			this.outJson(response, ModelCode.ORDER_CART, orderProductBiz.saveEntity(cart)>0);
+//		} else {
+//			CartEntity _cart  = (CartEntity)_cartBiz.getEntity(cart);
+//			// 查询购物车中是否存在该商品
+//			if (_cart != null) {
+//				// 更新商品数量
+//				_cart.setCartNum(_cart.getCartNum() + cart.getCartNum());
+//				_cartBiz.updateEntity(_cart);
+//				this.outJson(response, ModelCode.ORDER_CART, true);
+//				return;
+//			} else {
+//				ProductEntity product = (ProductEntity)productBiz.getEntity(cart.getCartBasicId());
+//				if (product == null) {
+//					this.outJson(response, ModelCode.ORDER_CART, false);
+//					return;
+//				}
+//				cart.setCartThumbnail(product.getBasicThumbnails());
+//				cart.setCartTitle(product.getBasicTitle());
+//				// 保存会员ID
+//				cart.setCartPrice(product.getProductPrice());
+//				cart.setCartUrl(product.getProductLinkUrl());
+//				_cartBiz.saveEntity(cart);
+//				this.outJson(response, ModelCode.ORDER_CART, true);
+//			}
+//			
+//		}
+		
+		
 
 	}
 
