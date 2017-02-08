@@ -19,14 +19,14 @@ import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.order.entity.CartEntity;
 
 @Service("mallCartBiz")
-public class CartBizImpl extends BaseBizImpl implements ICartBiz{
-	
+public class CartBizImpl extends BaseBizImpl implements ICartBiz {
+
 	/**
 	 * 注入商品关注持久化层
 	 */
-	@Resource(name="mallCartDao")
+	@Resource(name = "mallCartDao")
 	private ICartDao cartDao;
-	
+
 	/**
 	 * 关联dao
 	 */
@@ -36,13 +36,8 @@ public class CartBizImpl extends BaseBizImpl implements ICartBiz{
 	}
 
 	@Override
-	public List<net.mingsoft.mall.entity.CartEntity> query(int[] cartIds, int[] cartProductDetailIds, int peopleId,
-			int appId) {
-		return cartDao.query(cartIds,cartProductDetailIds,peopleId,BasicUtil.getAppId());
+	public List<net.mingsoft.mall.entity.CartEntity> query(int[] cartIds, int[] cartProductDetailIds, int peopleId) {
+		return cartDao.query(cartIds, cartProductDetailIds, peopleId, BasicUtil.getAppId());
 	}
-	
-	
 
-	
-	
 }

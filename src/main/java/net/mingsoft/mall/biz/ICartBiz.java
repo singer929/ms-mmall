@@ -24,9 +24,8 @@ public interface ICartBiz extends IBaseBiz {
 	 * @param cartIds 购物车编号
 	 * @param cartProductDetailIds 规格编号
 	 * @param peopleId 用户编号
-	 * @param appId 应用编号
 	 * @return
 	 */
-	List<CartEntity> query(int[] cartIds,int[]cartProductDetailIds,int peopleId,int appId);
+	List<CartEntity> query(int[] cartIds,int[]cartProductDetailIds,int peopleId);
 
 }
