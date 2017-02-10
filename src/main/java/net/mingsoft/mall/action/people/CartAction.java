@@ -102,7 +102,7 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 		int[] cartIds = BasicUtil.getInts("cartIds",",");
 		int[] cartProductDetailIds = BasicUtil.getInts("cartProductDetailIds",",");
 		int appId = BasicUtil.getAppId();
-		int i=0;
+		int i=0; 
 		for (int id : cartIds) {
 			if (id > 0) {
 				cartBiz.deleteEntity(new CartEntity(id, people.getPeopleId(), appId,-1));

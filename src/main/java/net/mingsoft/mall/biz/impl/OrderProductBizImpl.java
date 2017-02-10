@@ -23,6 +23,7 @@ package net.mingsoft.mall.biz.impl;
 
 import java.util.List;
 
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,12 +92,20 @@ public class OrderProductBizImpl extends BaseBizImpl implements IOrderProductBiz
 		//如果存在就直接更新数量，如果不存在就进行新增操作
 		
 		List list = orderProductDao.query(op);
-		if(list != null && list.size()>0 && cart.getCartProductDetailId()>0) {
-			OrderProductEntity _op = (OrderProductEntity)list.get(0);
-			_op.setOpNum(_op.getOpNum()+op.getOpNum());
+		OrderProductEntity _op = (list != null && list.size() > 0) ? (OrderProductEntity)list.get(0) : null;
+		
+		// 商品有规格 且 有数据
+		if(list != null && list.size() > 0 && cart.getCartProductDetailId() > 0) {
+			
+			//_op = (OrderProductEntity) list.get(0);
+			_op.setOpNum(_op.getOpNum() + op.getOpNum());
 			orderProductDao.updateEntity(_op);
 			return _op.getOpProductDetailId();
-		} else {
+			
+		} 
+		// 商品无规格 或 无数据
+		else 
+		{
 			//取出当前信息的标题保存在基础购物车
 			ProductEntity product = (ProductEntity)productDao.getEntity(cart.getCartBasicId());
 			if (product == null) {
@@ -107,6 +116,12 @@ public class OrderProductBizImpl extends BaseBizImpl implements IOrderProductBiz
 			if (_cart != null && cart.getCartProductDetailId()==0) {
 				_cart.setCartNum(_cart.getCartNum() + cart.getCartNum());
 				cartDao.updateEntity(_cart);
+				
+				if (_op != null){
+					_op.setOpNum(op.getOpNum() + _op.getOpNum());
+					orderProductDao.updateEntity(_op);
+				}
+				
 			} else {
 				cart.setCartThumbnail(product.getBasicThumbnails());
 				cart.setCartTitle(product.getBasicTitle());
@@ -114,8 +129,9 @@ public class OrderProductBizImpl extends BaseBizImpl implements IOrderProductBiz
 				cart.setCartPrice(product.getProductPrice());
 				cart.setCartDiscount(product.getProductCostPrice());
 				cartDao.saveEntity(cart);
-				if(cart.getCartProductDetailId()==0) {
-					op.setOpTitle(cart.getCartTitle());
+				
+				if(cart.getCartProductDetailId() == 0) {
+					op.setOpTitle(/*cart.getCartTitle()*/"");
 					orderProductDao.saveEntity(op);
 				}
 			}
@@ -124,7 +140,7 @@ public class OrderProductBizImpl extends BaseBizImpl implements IOrderProductBiz
 			if(cart.getCartProductDetailId()>0) {
 			//根据商品规格信息取出标题与图片
 				ProductSpecificationDetailEntity detail = (ProductSpecificationDetailEntity) detailDao.getEntity(cart.getCartProductDetailId());
-				op.setOpTitle(cart.getCartTitle()+"  "+detail.getSpecValues());
+				op.setOpTitle(/*cart.getCartTitle()+"  "+*/detail.getSpecValues());		// 前端不需要商品名字
 				String[] temp = detail.getSpecValues().split(",");
 				for(String _temp:temp) {
 					if(_temp.split(":").length>2) {
