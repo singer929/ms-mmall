@@ -131,7 +131,7 @@ public class OrderProductBizImpl extends BaseBizImpl implements IOrderProductBiz
 				cartDao.saveEntity(cart);
 				
 				if(cart.getCartProductDetailId() == 0) {
-					op.setOpTitle(/*cart.getCartTitle()*/"");
+					op.setOpTitle(cart.getCartTitle());
 					orderProductDao.saveEntity(op);
 				}
 			}
@@ -140,7 +140,7 @@ public class OrderProductBizImpl extends BaseBizImpl implements IOrderProductBiz
 			if(cart.getCartProductDetailId()>0) {
 			//根据商品规格信息取出标题与图片
 				ProductSpecificationDetailEntity detail = (ProductSpecificationDetailEntity) detailDao.getEntity(cart.getCartProductDetailId());
-				op.setOpTitle(/*cart.getCartTitle()+"  "+*/detail.getSpecValues());		// 前端不需要商品名字
+				op.setOpTitle(cart.getCartTitle()+"  "+detail.getSpecValues());		// 前端不需要商品名字
 				String[] temp = detail.getSpecValues().split(",");
 				for(String _temp:temp) {
 					if(_temp.split(":").length>2) {
