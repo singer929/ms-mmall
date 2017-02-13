@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 管理员持久化层XML配置继承IRoleDao -->
+<mapper namespace="com.mingsoft.homework.dao.IHomeworkDao">
+
+	<!-- 将实体属性与表字段对接开始 -->
+	<resultMap id="resultMap" type="com.mingsoft.homework.entity.HomeworkEntity">
+		<id column="people_id" property="peopleId" />
+		<result column="people_name" property="peopleName" />
+		<result column="people_password" property="peoplePassword" />
+		<result column="people_date_time" property="peopleDateTime" />
+	</resultMap>
+	<!-- 将实体属性与表字段对接结束 -->
+	<!-- 查询用户列表开始 -->
+	<select id="query" resultMap="resultMap">
+	
+		select * from user 
+		
+		<where> 
+			<if test=" peopleName != null ">and people_name= #{peopleName}</if>
+			<if test=" peoplePassword != null ">and people_password= #{peoplePassword}</if>
+		</where>
+		
+	</select>
+	<!-- 查询用户列表结束 -->
+	
+	<!-- 新增用户开始 -->
+	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="peopleId"
+		parameterType="com.mingsoft.base.entity.BaseEntity">
+		
+		insert into user(people_name,people_password,people_date_time) values (#{peopleName},#{peoplePassword},#{peopleDateTime})
+		
+	</insert>
+	<!-- 新增用户结束 -->
+	
+	<!-- 更新用户开始 -->
+	<update id="updateEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
+		update user set people_password = #{peoplePassword}	where people_name = #{peopleName}
+		<!-- <set>
+			PEOPLE_ID=#{peopleId},
+			<if test="peopleName != null">PEOPLE_NAME=#{peopleName},</if>
+			<if test="peoplePassword != null">PEOPLE_PASSWORD=#{peoplePassword},</if>
+		</set>
+		where PEOPLE_ID = #{peopleId} -->
+	</update>
+	<!-- 更新用户结束 -->
+	<!-- 查询用户开始 -->
+	<select id="getBYEntity" resultMap="resultMap" parameterType="int">
+		select * from user 
+		
+		<where> 
+			<if test=" peopleName != null ">and people_name= #{peopleName}</if>
+			<if test=" peoplePassword != null ">and people_password= #{peoplePassword}</if>
+		</where>
+	</select>
+	<!-- 查询用户结束 -->
+</mapper>
