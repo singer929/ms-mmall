@@ -42,9 +42,8 @@ public class OrderProductEntity extends BaseEntity {
 	 * 商品用户编号
 	 */
 	private int opPeopleId;
-
 	/**
-	 * 商品编号、对应baisc_id
+	 * 商品编号
 	 */
 	private int opProductId;
 	/**
@@ -60,79 +59,24 @@ public class OrderProductEntity extends BaseEntity {
 	 */
 	private String opThumbnail;
 	/**
-	 * 价格
-	 */
-	private Double opPrice;
-	/**
-	 * 数量
-	 */
-	private int opNum;
-	/**
 	 * 商品状态0购物车 1订单
 	 */
 	private int opStatus;
+	
+	/**
+	 * 对应购物车或订单的编号
+	 */
+	private int opGoodsId;
 
 	public OrderProductEntity() {
 	}
 	
-	public OrderProductEntity(int opProductDetailId,int opPeopleId) {
-		this.opProductDetailId = opProductDetailId;
+	public OrderProductEntity(int opGoodsId,int opPeopleId,OpStatus os) {
+		this.opGoodsId = opGoodsId;
 		this.opPeopleId = opPeopleId;
+		this.opStatus = os.toInt();
 	}
 
-	public OrderProductEntity(int opProductId) {
-		this.opProductId = opProductId;
-
-	}
-
-	public OrderProductEntity(int opProductId, int opProductDetailId, String opTitle) {
-		this.opProductId = opProductId;
-		this.opProductDetailId = opProductDetailId;
-		this.opTitle = opTitle;
-
-	}
-
-	public OrderProductEntity(int opProductId, int opProductDetailId, String opTitle, Double opPrice) {
-		this.opProductId = opProductId;
-		this.opProductDetailId = opProductDetailId;
-		this.opTitle = opTitle;
-		this.opPrice = opPrice;
-
-	}
-
-	public OrderProductEntity(int opProductId, int opProductDetailId, String opTitle, Double opPrice, int opNum) {
-		this.opProductId = opProductId;
-		this.opProductDetailId = opProductDetailId;
-		this.opTitle = opTitle;
-		this.opPrice = opPrice;
-		this.opNum = opNum;
-
-	}
-
-	public OrderProductEntity(int opProductId, int opProductDetailId, String opTitle, Double opPrice, int opNum,
-			int opStatus) {
-		this.opProductId = opProductId;
-		this.opProductDetailId = opProductDetailId;
-		this.opTitle = opTitle;
-		this.opPrice = opPrice;
-		this.opNum = opNum;
-		this.opStatus = opStatus;
-
-	}
-
-	/**
-	 * 设置商品编号、对应baisc_id
-	 */
-	public void setOpProductId(int opProductId) {
-		this.opProductId = opProductId;
-	}
-
-	/**
-	 * 获取商品编号、对应baisc_id
-	 */
-	public int getOpProductId() {
-		return this.opProductId;
-	}
 
 	/**
 	 * 设置商品规格编号
@@ -162,33 +106,6 @@ public class OrderProductEntity extends BaseEntity {
 		return this.opTitle;
 	}
 
-	/**
-	 * 设置价格
-	 */
-	public void setOpPrice(Double opPrice) {
-		this.opPrice = opPrice;
-	}
-
-	/**
-	 * 获取价格
-	 */
-	public Double getOpPrice() {
-		return this.opPrice;
-	}
-
-	/**
-	 * 设置数量
-	 */
-	public void setOpNum(int opNum) {
-		this.opNum = opNum;
-	}
-
-	/**
-	 * 获取数量
-	 */
-	public int getOpNum() {
-		return this.opNum;
-	}
 
 	/**
 	 * 设置商品状态0购物车 1订单
@@ -231,6 +148,16 @@ public class OrderProductEntity extends BaseEntity {
 
 
 
+	public int getOpProductId() {
+		return opProductId;
+	}
+
+	public void setOpProductId(int opProductId) {
+		this.opProductId = opProductId;
+	}
+
+
+
 	/**
 	 * 商品状态
 	 * @author Administrator
@@ -250,4 +177,16 @@ public class OrderProductEntity extends BaseEntity {
 			return value;
 		}
 	}
+
+
+
+	public int getOpGoodsId() {
+		return opGoodsId;
+	}
+
+	public void setOpGoodsId(int opGoodsId) {
+		this.opGoodsId = opGoodsId;
+	}
+	
+	
 }

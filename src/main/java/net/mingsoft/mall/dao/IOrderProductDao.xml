@@ -32,8 +32,7 @@
 			<if test="opProductDetailId != null">OP_PRODUCT_DETAIL_ID,</if>
 			OP_TITLE,
 			OP_THUMBNAIL,
-			OP_PRICE,
-			OP_NUM,
+			OP_GOODS_ID,
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			#{opPeopleId},
@@ -41,8 +40,7 @@
 			<if test="opProductDetailId != null">#{opProductDetailId},</if>
 			#{opTitle},
 			#{opThumbnail},
-			#{opPrice},
-			#{opNum},
+			#{opGoodsId},
 		</trim>
 	</insert>
 
@@ -52,8 +50,9 @@
 		<set>
 			<if test="opNum &gt; 0">OP_NUM=#{opNum}</if>
 		</set>
-		where OP_PRODUCT_ID=#{opProductId} and OP_PEOPLE_ID=#{opPeopleId} and OP_PRODUCT_DETAIL_ID=#{opProductDetailId} 
+		where OP_PRODUCT_ID=#{opProductId} and OP_PEOPLE_ID=#{opPeopleId} and OP_GOODS_ID=#{opGoodsId} and OP_STATUS=#{opStatus}
 	</update>
+	
 
 	<!--查询 -->
 	<select id="query" parameterType="net.mingsoft.mall.entity.OrderProductEntity" resultMap="resultMap">
@@ -71,7 +70,8 @@
 			and OP_STATUS = #{opStatus}
 		</where>
 	</select>
+	
 	<delete id="deleteByEntity" parameterType="net.mingsoft.mall.entity.OrderProductEntity">
-		delete from mall_order_product WHERE  OP_PRODUCT_DETAIL_ID= #{opProductDetailId} AND  OP_PEOPLE_ID = #{opPeopleId}
+		delete from mall_order_product where  OP_PEOPLE_ID=#{opPeopleId} and OP_GOODS_ID=#{opGoodsId} and OP_STATUS=#{opStatus}
 	</delete>
 </mapper>

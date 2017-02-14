@@ -26,12 +26,12 @@
 	</resultMap>
 
 	<select id="query" resultMap="resultMap">
-		SELECT * FROM mall_order_product LEFT JOIN order_cart on
-		OP_PRODUCT_ID=CART_BASICID
+		SELECT * FROM order_cart LEFT JOIN  mall_order_product on
+		OP_GOODS_ID=CART_ID
 		<where>
-			CART_PEOPLEID = OP_PEOPLE_ID AND CART_PEOPLEID=#{peopleId} AND
+			 CART_PEOPLEID=#{peopleId} AND
 			CART_APPID=#{appId}
-			<trim prefix="AND (" suffix=")" prefixOverrides="OR">
+			<trim prefix="AND (" suffix=")" prefixOverrides="OR|AND">
 				<if test="cartIds != null">
 					CART_ID IN
 					<foreach collection="cartIds" item="cartId" index="index"
@@ -39,19 +39,29 @@
 						#{cartId}
 					</foreach>
 				</if>
-				<if test="cartProductDetailIds != null">
+
+				<if test="cartProductIds != null">
 					OR
+					OP_PRODUCT_ID IN
+					<foreach collection="cartProductIds" item="cartProductId" index="index"
+						open="(" close=")" separator=",">
+						#{cartProductId}
+					</foreach>
+					
+					<if test="cartProductDetailIds != null">
+					AND
 					OP_PRODUCT_DETAIL_ID IN
 					<foreach collection="cartProductDetailIds" item="cartProductDetailId" index="index"
 						open="(" close=")" separator=",">
 						#{cartProductDetailId}
 					</foreach>
 				</if>
+				</if>				
 			</trim>
 		</where>
-
-		group by OP_TITLE
+		 order by CART_ID desc  
 	</select>
+
 
 
 </mapper>

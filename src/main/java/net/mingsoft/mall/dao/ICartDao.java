@@ -28,11 +28,12 @@ public interface ICartDao extends IBaseDao {
 	/**
 	 * 购物车查询
 	 * @param cartIds 购物车编号
+	 * @param productIds 商品编号
 	 * @param cartProductDetailIds 规格编号
 	 * @param peopleId 用户编号
 	 * @param appId 应用编号
 	 * @return
 	 */
-	List<CartEntity> query(@Param("cartIds")int[] cartIds, @Param("cartProductDetailIds")int[] cartProductDetailIds, @Param("peopleId")int peopleId, @Param("appId")int appId);
+	List<CartEntity> query(@Param("cartIds")int[] cartIds,@Param("cartProductIds")int[] productIds, @Param("cartProductDetailIds")int[] cartProductDetailIds, @Param("peopleId")int peopleId, @Param("appId")int appId);
 	
 }

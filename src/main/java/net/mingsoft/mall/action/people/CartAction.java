@@ -41,10 +41,11 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 	 * 注入购物车信息
 	 */
 	@Resource(name = "mallCartBiz")
-	private ICartBiz cartBiz;
+	private ICartBiz mallCartBiz;
+	
 	
 	@Autowired
-	private net.mingsoft.order.biz.ICartBiz _cartBiz;
+	private net.mingsoft.order.biz.ICartBiz cartBiz;
 	
 	/**
 	 *用户已购买的商品规格数据
@@ -52,8 +53,7 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 	@Autowired
 	private IOrderProductBiz orderProductBiz;
 	
-	@Autowired
-	private IProductBiz productBiz;
+	
 	/**
 	 * 购物车列表 <br/>
 	 *            <i>参数：</i><br/>
@@ -78,7 +78,7 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 	public void list(HttpServletRequest request, HttpServletResponse response) {
 		int[] cartIds = BasicUtil.getInts("cartIds",",");
 		int[] cartProductDetailIds = BasicUtil.getInts("cartProductDetailIds",",");
-		List list = cartBiz.query(cartIds, cartProductDetailIds, this.getPeopleBySession().getPeopleId());
+		List list = mallCartBiz.query(cartIds, cartProductDetailIds, this.getPeopleBySession().getPeopleId());
 		this.outJson(response, net.mingsoft.base.util.JSONArray.toJSONString(list,new DoubleValueFilter(),new DateValueFilter("yyyy-MM-dd")));
 	}
 	
@@ -89,7 +89,6 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 	 *
 	 *            <i>参数：</i><br/>
 	 *            cartIds 购物车编号，多个用逗号隔开<br/>
-	 *            cartProductDetailIds 规格编号，多个用逗号隔开<br/>
 	 *            <dt><span class="strong">返回</span></dt><br/>
 	 *            {code:"错误编码",<br/>
 	 *            result:"true｜false",<br/>
@@ -100,13 +99,12 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 	public void delete(HttpServletRequest request, HttpServletResponse response) {
 		PeopleEntity people = this.getPeopleBySession();
 		int[] cartIds = BasicUtil.getInts("cartIds",",");
-		int[] cartProductDetailIds = BasicUtil.getInts("cartProductDetailIds",",");
 		int appId = BasicUtil.getAppId();
 		int i=0; 
 		for (int id : cartIds) {
 			if (id > 0) {
 				cartBiz.deleteEntity(new CartEntity(id, people.getPeopleId(), appId,-1));
-				orderProductBiz.deleteEntity(new OrderProductEntity(cartProductDetailIds[i],people.getPeopleId()));
+				orderProductBiz.deleteEntity(new OrderProductEntity(cartIds[i],people.getPeopleId(),OrderProductEntity.OpStatus.CART));
 			}
 			i++;
 		}
@@ -121,6 +119,7 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 	 *            <i>cart参数包含字段信息参考：</i><br/>
 	 *            cartId 购物车编号<br/>
 	 *            cartBasicId 信息编号<br/>
+	 *             cartProductDetailId 规格编号<br/>
 	 *            cartNum 数量<br/>
 	 *            <dt><span class="strong">返回</span></dt><br/>
 	 *            {code:"错误编码",<br/>
@@ -138,39 +137,35 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 		}
 		cart.setCartPeopleId(people.getPeopleId());
 		cart.setCartAppId(BasicUtil.getAppId());
-		
-		
 		//检查是否存在规格信息
-		
-			this.outJson(response, ModelCode.ORDER_CART, orderProductBiz.saveEntity(cart)>0);
-//		} else {
-//			CartEntity _cart  = (CartEntity)_cartBiz.getEntity(cart);
-//			// 查询购物车中是否存在该商品
-//			if (_cart != null) {
-//				// 更新商品数量
-//				_cart.setCartNum(_cart.getCartNum() + cart.getCartNum());
-//				_cartBiz.updateEntity(_cart);
-//				this.outJson(response, ModelCode.ORDER_CART, true);
-//				return;
-//			} else {
-//				ProductEntity product = (ProductEntity)productBiz.getEntity(cart.getCartBasicId());
-//				if (product == null) {
-//					this.outJson(response, ModelCode.ORDER_CART, false);
-//					return;
-//				}
-//				cart.setCartThumbnail(product.getBasicThumbnails());
-//				cart.setCartTitle(product.getBasicTitle());
-//				// 保存会员ID
-//				cart.setCartPrice(product.getProductPrice());
-//				cart.setCartUrl(product.getProductLinkUrl());
-//				_cartBiz.saveEntity(cart);
-//				this.outJson(response, ModelCode.ORDER_CART, true);
-//			}
-//			
-//		}
-		
-		
-
+		this.outJson(response, ModelCode.ORDER_CART, mallCartBiz.saveEntity(cart)>0);
 	}
 
+	/**
+	 * 更新购物车,只能更新购物车的数量 <br/>
+	 * 
+	 * @param cart
+	 *            <i>cart参数包含字段信息参考：</i><br/>
+	 *            cartId 购物车编号<br/>
+	 *            cartBasicId 信息编号<br/>
+	 *            cartNum 数量<br/>
+	 *            <dt><span class="strong">返回</span></dt><br/>
+	 *            {code:"错误编码",<br/>
+	 *            result:"true｜false",<br/>
+	 *            resultMsg:"错误信息"<br/>
+	 *            }
+	 */
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@ResponseBody
+	public void update(@ModelAttribute net.mingsoft.mall.entity.CartEntity cart, HttpServletResponse response, HttpServletRequest request) {
+		PeopleEntity people = (PeopleEntity) this.getPeopleBySession(request);
+		if (cart.getCartBasicId() <= 0 || cart.getCartId() <= 0 || cart.getCartNum() <= 0) {
+			this.outJson(response, ModelCode.ORDER_CART, false);
+			return;
+		}
+		cart.setCartPeopleId(people.getPeopleId());
+		cart.setCartAppId(BasicUtil.getAppId());
+		cartBiz.updateEntity(cart);
+		this.outJson(response, ModelCode.ORDER_CART, true);
+	}
 }

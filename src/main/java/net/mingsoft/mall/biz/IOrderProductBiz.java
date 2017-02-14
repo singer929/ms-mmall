@@ -44,10 +44,9 @@ public interface IOrderProductBiz extends IBaseBiz {
 	 */
 	List query(OrderProductEntity orderProduct);
 
-	/**
-	 * 通过加入购物车或立即购买方式保存
-	 * @param cart 购物车
-	 * @return
-	 */
-	int saveEntity(CartEntity cart);
+	
+	
+	
+	
+	
 }
