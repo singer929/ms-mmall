@@ -19,57 +19,14 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.entity;
+package com.mingsoft.freight.dao;
 
-import java.util.Date;
+import java.util.List;
 
+import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.base.entity.BaseEntity;
+import com.mingsoft.freight.entity.FreightAreaEntity;
 
-
-public class FreightEntity extends BaseEntity {
+public interface IFreightAreaDao extends IBaseDao {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	private int peopleId;
-	
-	private String peopleName;
-	
-	private String peoplePassword;
-	
-	private Date peopleDateTime;
-
-	public int getPeopleId() {
-		return peopleId;
-	}
-
-	public void setPeopleId(int peopleId) {
-		this.peopleId = peopleId;
-	}
-
-	public String getPeopleName() {
-		return peopleName;
-	}
-
-	public void setPeopleName(String peopleName) {
-		this.peopleName = peopleName;
-	}
-
-	public String getPeoplePassword() {
-		return peoplePassword;
-	}
-
-	public void setPeoplePassword(String peoplePassword) {
-		this.peoplePassword = peoplePassword;
-	}
-
-	public Date getPeopleDateTime() {
-		return peopleDateTime;
-	}
-
-	public void setPeopleDateTime(Date peopleDateTime) {
-		this.peopleDateTime = peopleDateTime;
-	}
 }

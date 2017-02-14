@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 管理员持久化层XML配置继承IRoleDao -->
-<mapper namespace="com.mingsoft.homework.dao.IHomeworkDao">
+<mapper namespace="com.mingsoft.freight.dao.IFreightAreaDao">
 
 	<!-- 将实体属性与表字段对接开始 -->
-	<resultMap id="resultMap" type="com.mingsoft.homework.entity.HomeworkEntity">
+	<resultMap id="resultMap" type="com.mingsoft.freight.entity.FreightAreaEntity">
 		<id column="people_id" property="peopleId" />
 		<result column="people_name" property="peopleName" />
 		<result column="people_password" property="peoplePassword" />

@@ -19,15 +19,47 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.dao;
+package com.mingsoft.freight.entity;
 
-import java.util.List;
+import java.util.Date;
 
-import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.base.entity.BaseEntity;
-import com.mingsoft.homework.entity.HomeworkEntity;
 
-public interface IFreightDao extends IBaseDao {
-	List<BaseEntity> queryById(HomeworkEntity entity);
-	BaseEntity getBYEntity(BaseEntity entity);
+
+public class FreightAreaEntity extends BaseEntity {
+	
+	
+	private static final long serialVersionUID = 1L;
+	
+	private int faId;
+	
+	private String faTitle;
+	
+	private String faCityIds;
+	
+	public int getFaId() {
+		return faId;
+	}
+
+	public void setFaId(int faId) {
+		this.faId = faId;
+	}
+
+	public String getFaTitle() {
+		return faTitle;
+	}
+
+	public void setFaTitle(String faTitle) {
+		this.faTitle = faTitle;
+	}
+
+	public String getFaCityIds() {
+		return faCityIds;
+	}
+
+	public void setFaCityIds(String faCityIds) {
+		this.faCityIds = faCityIds;
+	}
+
+	
 }

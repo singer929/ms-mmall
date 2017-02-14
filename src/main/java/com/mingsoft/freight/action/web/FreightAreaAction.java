@@ -25,20 +25,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.mingsoft.base.action.BaseAction;
-import com.mingsoft.freight.biz.IFreightBiz;
-import com.mingsoft.freight.dao.IFreightDao;
-import com.mingsoft.freight.entity.FreightEntity;
+import com.mingsoft.basic.action.BaseAction;
+import com.mingsoft.freight.biz.IFreightAreaBiz;
+import com.mingsoft.freight.dao.IFreightAreaDao;
+import com.mingsoft.freight.entity.FreightAreaEntity;
 
 @Controller()
 @RequestMapping("/${managerPath}/freight")
-public class FreightAction extends BaseAction {
+public class FreightAreaAction extends BaseAction {
 
 	/**
 	 * 注入用户基础业务层
 	 */
 	@Autowired
-	private IFreightBiz freightBiz;
+	private IFreightAreaBiz freightBiz;
 	
+	@RequestMapping("/list")
+	private  String list(){
+		return view("/freight/area");
+	}
 	
 }

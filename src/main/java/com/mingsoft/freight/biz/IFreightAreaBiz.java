@@ -25,9 +25,8 @@ import java.util.List;
 
 import com.mingsoft.base.biz.IBaseBiz;
 import com.mingsoft.base.entity.BaseEntity;
-import com.mingsoft.homework.entity.HomeworkEntity;
+import com.mingsoft.freight.entity.FreightAreaEntity;
 
-public interface IFreightBiz extends IBaseBiz {
-	List<BaseEntity> queryById(HomeworkEntity entity);
-	BaseEntity getBYEntity(BaseEntity entity);
+public interface IFreightAreaBiz extends IBaseBiz {
+	
 }

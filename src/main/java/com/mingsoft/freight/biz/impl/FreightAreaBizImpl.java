@@ -21,52 +21,31 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 
 package com.mingsoft.freight.biz.impl;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
-import com.mingsoft.base.entity.BaseEntity;
-import com.mingsoft.people.dao.IPeopleDao;
-import com.mingsoft.people.entity.PeopleEntity;
-import com.mingsoft.homework.biz.IHomeworkBiz;
-import com.mingsoft.homework.dao.IHomeworkDao;
-import com.mingsoft.homework.entity.HomeworkEntity;
-import com.mingsoft.util.PageUtil;
+import com.mingsoft.freight.biz.IFreightAreaBiz;
+import com.mingsoft.freight.dao.IFreightAreaDao;
+import com.mingsoft.freight.entity.FreightAreaEntity;
 
-@Service("testBizImpl")
-public class HomeworkBizImpl extends BaseBizImpl implements IHomeworkBiz{
+@Service("freightBizImpl")
+public class FreightAreaBizImpl extends BaseBizImpl implements IFreightAreaBiz{
 
 	/**
 	 * 用户持久化层
 	 */
 	@Autowired
-	private IHomeworkDao homeworkDao; 
+	private IFreightAreaDao freightDao; 
 	
 	/**
-	 * 获取peopleDao
+	 * 获取freightDao
 	 */
 	@Override
 	protected IBaseDao getDao() {
-		return homeworkDao;
+		return freightDao;
 	}
 	
-	public List<BaseEntity> queryById(HomeworkEntity entity) {
-		return queryById(entity);
-	}
-	
-	public BaseEntity getBYEntity(BaseEntity entity) {
-		return  homeworkDao.getBYEntity(entity);
-	}
-
 }
