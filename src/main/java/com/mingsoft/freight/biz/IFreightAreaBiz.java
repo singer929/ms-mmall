@@ -28,5 +28,6 @@ import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.freight.entity.FreightAreaEntity;
 
 public interface IFreightAreaBiz extends IBaseBiz {
-	
+	List queryAll();
+	void areaDel(FreightAreaEntity area);
 }
