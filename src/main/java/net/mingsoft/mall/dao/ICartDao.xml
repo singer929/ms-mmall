@@ -21,8 +21,6 @@
 		<!-- 如果存在规格信息就返回规格数据 -->
 		<result column="OP_TITLE" property="cartProductDetailText" />
 		<result column="OP_THUMBNAIL" property="cartThumbnail" />
-		<result column="OP_PRICE" property="cartPrice" />
-		<result column="OP_NUM" property="cartNum" />
 	</resultMap>
 
 	<select id="query" resultMap="resultMap">
@@ -42,7 +40,7 @@
 
 				<if test="cartProductIds != null">
 					OR
-					OP_PRODUCT_ID IN
+					CART_BASICID IN
 					<foreach collection="cartProductIds" item="cartProductId" index="index"
 						open="(" close=")" separator=",">
 						#{cartProductId}

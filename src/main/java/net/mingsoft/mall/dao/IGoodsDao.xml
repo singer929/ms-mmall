@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 订单中的商品持久化层XML配置继承IGoodsDao -->
+<mapper namespace="net.mingsoft.mall.dao.IGoodsDao">
+
+	<resultMap id="resultMap" type="net.mingsoft.mall.entity.GoodsEntity">
+		<id column="GOODS_ID" property="goodsId" />
+		<result column="GOODS_BASICID" property="goodsBasicId" />
+		<result column="GOODS_TITLE" property="goodsTitle" />
+		<result column="GOODS_REBATE" property="goodsRebate" />
+		<result column="GOODS_PRICE" property="goodsPrice" />
+		<result column="GOODS_NUM" property="goodsNum" />
+		<result column="GOODS_ORDERID" property="orderId" />
+		<result column="GOODS_APP_ID" property="goodsAppId" />
+		<result column="GOODS_THUMBNAIL" property="goodsThumbnail" />
+		<result column="GOODS_URL" property="goodsUrl" />
+		
+		<!-- 如果存在规格信息就返回规格数据 -->
+		<result column="OP_PRODUCT_DETAIL_ID" property="goodsProductDetailId" />
+		<result column="OP_TITLE" property="goodsProductDetailText" />
+		<result column="OP_THUMBNAIL" property="goodsThumbnail" />
+	</resultMap>
+
+	<!-- 根据订单id来查询订单里面的上面，推荐使用 -->
+	<select id="queryByOrderId" resultMap="resultMap"
+		parameterType="int">
+		SELECT * FROM order_goods LEFT JOIN  mall_order_product on OP_GOODS_ID=GOODS_ID where GOODS_ORDERID = #{orderId}
+	</select>
+
+</mapper>

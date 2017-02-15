@@ -77,8 +77,7 @@ public class CartAction extends com.mingsoft.people.action.BaseAction {
 	@RequestMapping("/list")
 	public void list(HttpServletRequest request, HttpServletResponse response) {
 		int[] cartIds = BasicUtil.getInts("cartIds",",");
-		int[] cartProductDetailIds = BasicUtil.getInts("cartProductDetailIds",",");
-		List list = mallCartBiz.query(cartIds, cartProductDetailIds, this.getPeopleBySession().getPeopleId());
+		List list = mallCartBiz.query(cartIds, null, this.getPeopleBySession().getPeopleId());
 		this.outJson(response, net.mingsoft.base.util.JSONArray.toJSONString(list,new DoubleValueFilter(),new DateValueFilter("yyyy-MM-dd")));
 	}
 	

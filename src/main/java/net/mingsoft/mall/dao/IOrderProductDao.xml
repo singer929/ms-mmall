@@ -46,11 +46,7 @@
 
 	<!--更新 -->
 	<update id="updateEntity" parameterType="net.mingsoft.mall.entity.OrderProductEntity">
-		update mall_order_product
-		<set>
-			<if test="opNum &gt; 0">OP_NUM=#{opNum}</if>
-		</set>
-		where OP_PRODUCT_ID=#{opProductId} and OP_PEOPLE_ID=#{opPeopleId} and OP_GOODS_ID=#{opGoodsId} and OP_STATUS=#{opStatus}
+		update mall_order_product set OP_GOODS_ID=#{opGoodsId},OP_STATUS=1 where OP_PEOPLE_ID=#{opPeopleId} and OP_GOODS_ID=#{cartId} and OP_STATUS=0
 	</update>
 	
 

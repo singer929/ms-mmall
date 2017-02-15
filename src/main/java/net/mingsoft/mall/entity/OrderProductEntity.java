@@ -67,6 +67,11 @@ public class OrderProductEntity extends BaseEntity {
 	 * 对应购物车或订单的编号
 	 */
 	private int opGoodsId;
+	
+	/**
+	 * 对应购物车编号-临时使用
+	 */
+	private int cartId;
 
 	public OrderProductEntity() {
 	}
@@ -76,7 +81,13 @@ public class OrderProductEntity extends BaseEntity {
 		this.opPeopleId = opPeopleId;
 		this.opStatus = os.toInt();
 	}
-
+	
+	public OrderProductEntity(int productId,int opGoodsId,int opPeopleId,OpStatus os) {
+		this.opGoodsId = opGoodsId;
+		this.opPeopleId = opPeopleId;
+		this.opStatus = os.toInt();
+		this.opProductId = productId;
+	}
 
 	/**
 	 * 设置商品规格编号
@@ -186,6 +197,14 @@ public class OrderProductEntity extends BaseEntity {
 
 	public void setOpGoodsId(int opGoodsId) {
 		this.opGoodsId = opGoodsId;
+	}
+
+	public int getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(int cartId) {
+		this.cartId = cartId;
 	}
 	
 	

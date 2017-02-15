@@ -76,8 +76,7 @@ public class CartBizImpl extends BaseBizImpl implements ICartBiz {
 		op.setOpStatus(OrderProductEntity.OpStatus.CART);
 		// 如果存在就直接更新数量，如果不存在就进行新增操作
 
-		List<net.mingsoft.mall.entity.CartEntity> list = mallCartDao.query(null, new int[] { cart.getCartBasicId() },
-				 new int[]{cart.getCartProductDetailId()}, cart.getCartPeopleId(), BasicUtil.getAppId());
+		List<net.mingsoft.mall.entity.CartEntity> list = mallCartDao.query(null, new int[] { cart.getCartBasicId() },cart.getCartProductDetailId()>0?new int[]{cart.getCartProductDetailId()}:null, cart.getCartPeopleId(), BasicUtil.getAppId());
 
 		// 商品有规格 且 有数据
 		if (list != null && list.size() > 0) {

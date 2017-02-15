@@ -19,14 +19,15 @@ import com.mingsoft.base.filter.DateValueFilter;
 import com.mingsoft.base.filter.DoubleValueFilter;
 import com.mingsoft.util.StringUtil;
 
+import net.mingsoft.basic.bean.ListBean;
 import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.biz.ICartBiz;
 import net.mingsoft.mall.entity.CartEntity;
-import net.mingsoft.order.biz.IOrderBiz;
+import net.mingsoft.mall.biz.IOrderBiz;
 import net.mingsoft.order.constant.ModelCode;
 import net.mingsoft.order.constant.e.OrderStatusEnum;
 import net.mingsoft.order.entity.GoodsEntity;
-import net.mingsoft.order.entity.OrderEntity;
+import net.mingsoft.mall.entity.OrderEntity;
 
 /**
  * 商城订单管理控制层
@@ -43,14 +44,17 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 	/**
 	 * 注入订单评价业务层
 	 */
-	@Autowired
-	private IOrderBiz orderBiz;
+	@Resource(name = "mallOrderBiz")
+	private IOrderBiz mallOrderBiz;
 	
+
+	
+
 	/**
 	 * 注入购物车信息
 	 */
 	@Resource(name = "mallCartBiz")
-	private ICartBiz cartBiz;
+	private ICartBiz mallCartBiz;
 
 	/**
 	 * 订单详情
@@ -88,7 +92,7 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 			return;
 		}
 
-		OrderEntity _order = (OrderEntity) orderBiz.getByOrderNo(order.getOrderNo());
+		OrderEntity _order = (OrderEntity) mallOrderBiz.getByOrderNo(order.getOrderNo());
 		if (_order.getOrderPeopleId() != this.getPeopleBySession().getPeopleId()) {
 			this.outJson(response, ModelCode.ORDER, false);
 			return;
@@ -98,10 +102,89 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 	}
 
 	/**
-	 * 提交订单
-	 * <i>参数：</i><br/>
+	 * 订单列表
+	 * 
+	 * @param order
+	 *            <i>order参数包含字段信息参考：</i><br/>
+	 *            orderNo 订单号<br/>
+	 *            orderStatus 小于0表示取所有的订单状态，默认0 订单<br/>
+	 *            orderExpress 小于0表示取所有的配送方式订单状态,默认0 送货上门<br/>
+	 *            orderPayment 小于0表示取所有的支付方式订单状态，默认0 未选择支付方式<br/>
+	 *            <dt><span class="strong">返回</span></dt><br/>
+	 *            { "list":[ {<br/>
+	 *            //订单列表 "orderId": 订单自增长编号, <br/>
+	 *            "orderPeopleId": 用户编号, <br/>
+	 *            "orderNo": "订单号", <br/>
+	 *            "orderTime": "下单日期", <br/>
+	 *            "orderPrice": 订单金额, <br/>
+	 *            "orderUserName": "收货人", <br/>
+	 *            "orderPhone": "联系电话", <br/>
+	 *            "orderAddress": "收货地址", <br/>
+	 *            "orderDescription": "订单描述留言", <br/>
+	 *            "orderExpress": 快递方式, <br/>
+	 *            "orderExpressTitle": 快递方式-送货上门, <br/>
+	 *            "orderPayment": 支付方式－数值, <br/>
+	 *            "orderPaymentTitle": "支付方式－面付", <br/>
+	 *            "orderStatus": 订单状态－数值, <br/>
+	 *            "orderStatusTitle": "订单状态－已付款", <br/>
+	 *            "orderCategoryId": 订单分类－平台自定义, <br/>
+	 *            "orderModelId": 所属模块-平台自定义, <br/>
+	 *            "peopleUser": {<br/>
+	 *            "peopleUserIcon": "头像", <br/>
+	 *            "peopleUserNickName": "昵称", <br/>
+	 *            "peopleUserRealName": "真实姓名", <br/>
+	 *            }<br/>
+	 *            "goods": [<br/>
+	 *            {<br/>
+	 *            "goodsBasicId": 信息编号, <br/>
+	 *            "goodsName": "标题", <br/>
+	 *            "goodsNum": 数量, <br/>
+	 *            "goodsPrice": 价格, <br/>
+	 *            "goodsRebate": 折扣, <br/>
+	 *            "goodsThumbnail": "缩略图", <br/>
+	 *            }<br/>
+	 *            ]<br/>
+	 *            } ]<br/>
+	 *            "page":{"endRow": 2, <br/>
+	 *            "firstPage": 1, <br/>
+	 *            "hasNextPage": true存在下一页false不存在, <br/>
+	 *            "hasPreviousPage": true存在上一页false不存在, <br/>
+	 *            "isFirstPage": true是第一页false不是第一页, <br/>
+	 *            "isLastPage": true是最后一页false不是最后一页, <br/>
+	 *            "lastPage": 最后一页的页码, <br/>
+	 *            "navigatePages": 导航数量，实现 1...5.6.7....10效果, <br/>
+	 *            "navigatepageNums": []导航页码集合, <br/>
+	 *            "nextPage": 下一页, <br/>
+	 *            "pageNum": 当前页码, <br/>
+	 *            "pageSize": 一页显示数量, <br/>
+	 *            "pages": 总页数, <br/>
+	 *            "prePage": 上一页, <br/>
+	 *            "size": 总记录, <br/>
+	 *            "startRow": , <br/>
+	 *            "total":总记录数量}<br/>
+	 *            }<br/>
+	 */
+	@RequestMapping("/list")
+	@ResponseBody
+	public void list(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request, HttpServletResponse response) {
+		if (order == null) {
+			order = new  net.mingsoft.mall.entity.OrderEntity();
+		}
+		order.setOrderAppId(BasicUtil.getAppId());
+		order.setOrderPeopleId(this.getPeopleBySession().getPeopleId());
+		order.setOrderTime(null);
+		BasicUtil.startPage();
+		List list = mallOrderBiz.query(order);
+		
+		ListBean _list = new ListBean(list, BasicUtil.endPage(list));
+		this.outJson(response, net.mingsoft.base.util.JSONArray.toJSONString(_list, new DoubleValueFilter(),new DateValueFilter("yyyy-MM-dd")));
+	}
+
+	/**
+	 * 提交订单 <i>参数：</i><br/>
 	 * cartIds 购物车编号，多个用逗号隔开<br/>
 	 * cartProductDetailIds 规格编号，多个用逗号隔开<br/>
+	 * 
 	 * @param order
 	 *            <i>order参数包含字段信息参考：</i><br/>
 	 *            "orderUserName": "收货人", <br/>
@@ -119,9 +202,9 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 	 */
 	@RequestMapping("/submit")
 	@ResponseBody
-	public void submit(@ModelAttribute OrderEntity order, HttpServletRequest request, HttpServletResponse response) {
+	public void submit(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
+			HttpServletResponse response) {
 		int[] cartIds = BasicUtil.getInts("cartIds", ",");
-		int[] cartProductDetailIds = BasicUtil.getInts("cartProductDetailIds", ",");
 		if (order == null) {
 			this.outJson(response, ModelCode.ORDER, false);
 			return;
@@ -132,32 +215,13 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 			this.outJson(response, ModelCode.ORDER, false);
 			return;
 		}
-
-		// 再次确认购物车的数据
-		List list = cartBiz.query(cartIds, cartProductDetailIds, this.getPeopleBySession().getPeopleId());
-		
-		if (list != null) {
-			for (int i=0;i<list.size();i++) {
-						CartEntity _cart = (CartEntity)list.get(i);
-						GoodsEntity goods = new GoodsEntity();
-						goods.setGoodsAppId(BasicUtil.getAppId());
-						goods.setGoodsBasicId(_cart.getCartBasicId());
-						goods.setGoodsName(_cart.getCartTitle());
-						goods.setGoodsNum(_cart.getCartNum());
-						goods.setGoodsPrice(_cart.getCartPrice());
-						goods.setGoodsRebate(_cart.getCartDiscount());
-						goods.setGoodsThumbnail(_cart.getCartThumbnail());
-						goods.setGoodsUrl(_cart.getCartUrl());
-						order.getGoods().add(goods);
-			}
-		}
-
-		// 设置订单号
-		order.setOrderNo(StringUtil.getDateSimpleStr() + StringUtil.randomNumber(4));
 		order.setOrderAppId(BasicUtil.getAppId());
 		order.setOrderPeopleId(this.getPeopleBySession().getPeopleId());
-		order.setOrderStatus(OrderStatusEnum.UNPAY);
-		orderBiz.saveEntity(order);
+		if (cartIds == null) {
+			this.outJson(response, ModelCode.ORDER, false);
+			return;
+		}
+		mallOrderBiz.saveEntity(order, cartIds);
 		this.outJson(response, order);
 	}
 

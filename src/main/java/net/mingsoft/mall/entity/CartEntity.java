@@ -81,14 +81,6 @@ public class CartEntity extends net.mingsoft.order.entity.CartEntity  {
 		this.cartProductDetailText = cartProductDetailText;
 	}
 
-	@Override
-	public void setCartNum(int cartNum) {
-		// TODO Auto-generated method stub
-		if(cartNum > 0) {
-			super.setCartNum(cartNum);
-		}
-	}
-
 	
 	
 	

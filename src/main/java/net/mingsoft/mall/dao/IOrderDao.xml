@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="net.mingsoft.mall.dao.IOrderDao">
+
+<!-- 将实体属性与表字段对接开始 -->
+	<resultMap id="resultMap" type="net.mingsoft.mall.entity.OrderEntity">
+		<id column="ORDER_ID" property="orderId" />
+		<result column="ORDER_NO" property="orderNo" />
+		<result column="ORDER_MODELID" property="orderModelId" />
+		<result column="ORDER_PRICE" property="orderPrice" />
+		<result column="ORDER_STATUS" property="orderStatus" />
+		<result column="ORDER_PAYMENT" property="orderPayment" />
+		<result column="ORDER_TIME" property="orderTime" />
+		<result column="ORDER_PEOPLEID" property="orderPeopleId" />
+		<result column="ORDER_ADDRESS" property="orderAddress" />
+		<result column="ORDER_PHONE" property="orderPhone" />
+		<result column="ORDER_BUSINESSID" property="orderBusinessId" />
+		<result column="ORDER_DESCRIPTION" property="orderDescription" />
+		<result column="ORDER_CATEGORYID" property="orderCategoryId" />
+		<result column="PEOPLE_NAME" property="peopleName" />
+		<result column="ORDER_USERNAME" property="orderUserName" />
+		<result column="ORDER_EXPRESS" property="orderExpress" />
+		<result column="ORDER_EXPRESS_TITLE" property="orderExpressTitle" />
+		<result column="ORDER_EXPRESS_NO" property="orderExpressNo" />
+		<result column="ORDER_JUDGE" property="orderJudge" />
+		<result column="ORDER_JUDGE_DATE" property="orderJudgeDatetime" />
+		<result column="goods_total_num" property="goodsTotalNum" />
+		<result column="STATUS_CATEGORY_TITLE" property="orderStatusTitle" />
+		<association property="category" column="ORDER_CATEGORYID"
+			javaType="com.mingsoft.basic.entity.CategoryEntity">
+			<id column="category_id" property="categoryId" /><!-- 关联表category的类比ID 
+				category_id字段 -->
+			<result column="category_title" property="categoryTitle" /><!-- 
+				关联表category的类比标题 category_title字段 -->
+			<result column="category_sort" property="categorySort" /><!-- 关联表category的类比排序 
+				category_sort字段 -->
+			<result column="category_datetime" property="categoryDateTime" /><!-- 
+				关联表category的类比发布时间 category_datetime字段 -->
+			<result column="category_managerid" property="categoryManagerId" /><!-- 
+				关联表category的类发布用户ID "category_managerid"字段 -->
+			<result column="category_modelId" property="categoryModelId" /><!-- 
+				关联表category的所属模块ID category_modelid字段 -->
+			<result column="category_categoryid" property="categoryCategoryId" /><!-- 
+				关联表category的父类别ID category_categoryid字段 -->
+			<result column="category_smallimg" property="categorySmallImg" /><!-- 
+				关联表category的略缩图地址 category_smallimg字段 -->
+		</association>
+		<association property="people"
+			javaType="com.mingsoft.people.entity.PeopleEntity">
+			<id column="PEOPLE_ID" property="peopleID" /><!-- 将实体的ID属性与表的ID字段对接 -->
+			<result column="PEOPLE_PHONE" property="peoplePhone" /><!-- 将实体的peoplePhone属性与表的peoplePhone字段对接 -->
+		</association>
+		<association property="peopleUser"
+			javaType="com.mingsoft.people.entity.PeopleUserEntity">
+			<id column="PU_PEOPLE_ID" property="peopleUserPeopleId" />
+			<result column="PU_REAL_NAME" property="peopleUserRealName" />
+			<result column="PU_NICKNAME" property="peopleUserNickName" />
+			<result column="PU_ICON" property="peopleUserIcon" />
+		</association>
+		<collection property="goods" ofType="net.mingsoft.mall.entity.GoodsEntity" column="ORDER_ID"
+			 select="net.mingsoft.mall.dao.IGoodsDao.queryByOrderId" />
+	</resultMap>
+
+	<!-- 查询订单开始 -->
+	<select id="query" resultMap="resultMap"
+		parameterType="net.mingsoft.mall.entity.OrderEntity">
+		select `order`.*,people_user.* from `order`
+		left join people on
+		ORDER_PEOPLEID=PEOPLE_ID
+		left join people_user on ORDER_PEOPLEID =
+		PU_PEOPLE_ID
+		<where>
+			and order_appId=#{orderAppId}
+			and order_modelId=#{orderModelId}
+			<if test="orderNo!=null and orderNo!=''">
+				and order_no = #{orderNo}
+			</if>
+			<if test="orderStatus &gt; -1">
+				and order_status = #{orderStatus}
+			</if>
+			<if test="orderUserName!=null and orderUserName!=''">
+				and order_username = #{orderUserName}
+			</if>
+			<if test="orderPayment &gt; -1">
+				and order_payment = #{orderPayment}
+			</if>
+			<if test="orderExpress &gt; -1">
+				and order_express = #{orderExpress}
+			</if>
+			<if test="orderPhone!=null and orderPhone!=''">
+				and order_phone = #{orderPhone}
+			</if>
+			<if test="orderAddress!=null and orderAddress!=''">
+				and order_address like
+				CONCAT('%',#{orderAddress},'%')
+			</if>
+			<if test="orderTime!=null and orderTime!=''">
+				and date(order_time) = #{orderTime}
+			</if>
+			<if test="orderPeopleId &gt; 0">
+				and ORDER_PEOPLEID = #{orderPeopleId}
+			</if>
+		</where>
+		order by order_id desc
+	</select>
+	<!-- 查询订单结束 -->
+
+<!-- 查询订单开始 -->
+	<select id="getByOrderNo" resultMap="resultMap"
+		parameterType="String">
+		select `order`.*,people_user.* from `order`
+		left join people on ORDER_PEOPLEID=PEOPLE_ID 
+		left join people_user on ORDER_PEOPLEID = PU_PEOPLE_ID
+		where ORDER_NO = #{orderNo}
+	</select>
+	<!-- 查询订单结束 -->
+
+</mapper>
