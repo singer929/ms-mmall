@@ -5,10 +5,13 @@
 
 	<!-- 将实体属性与表字段对接开始 -->
 	<resultMap id="resultMap" type="com.mingsoft.freight.entity.FreightEntity">
-		<id column="people_id" property="peopleId" />
-		<result column="people_name" property="peopleName" />
-		<result column="people_password" property="peoplePassword" />
-		<result column="people_date_time" property="peopleDateTime" />
+		<id column="freight_id" property="freightId" />
+		<result column="freight_city_id" property="freightCityId" />
+		<result column="freight_express_id" property="freightExpressId" />
+		<result column="freight_base_price" property="freightBasePrice" />
+		<result column="freight_base_amount" property="freightBaseAmount" />
+		<result column="freight_increase_price" property="freightIncreasePrice" />
+		<result column="freight_increase_amount" property="freightIncreaseAmount" />
 	</resultMap>
 	<!-- 将实体属性与表字段对接结束 -->
 	<!-- 查询用户列表开始 -->

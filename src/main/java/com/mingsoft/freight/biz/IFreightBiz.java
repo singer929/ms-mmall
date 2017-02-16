@@ -26,5 +26,5 @@ import com.mingsoft.base.entity.BaseEntity;
 
 public interface IFreightBiz extends IBaseBiz {
 	
-	BaseEntity getBYEntity(BaseEntity entity);
+
 }

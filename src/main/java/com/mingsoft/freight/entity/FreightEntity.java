@@ -29,10 +29,9 @@ import com.mingsoft.base.entity.BaseEntity;
 public class FreightEntity extends BaseEntity {
 	
 	/**
-	 * 
+	 *主键id
 	 */
-	private static final long serialVersionUID = 1L;
-
+	private int freightId;
 	/**
 	 * 城市id
 	 */
@@ -63,6 +62,22 @@ public class FreightEntity extends BaseEntity {
 	 */
 	private double freightIncreaseAmount;
 
+	/**
+	 * 获取主键id
+	 * @return
+	 */
+	public int getFreightId() {
+		return freightId;
+	}
+
+	/**
+	 * 设置运费主键id
+	 * @param freightId
+	 */
+	public void setFreightId(int freightId) {
+		this.freightId = freightId;
+	}
+	
 	/**
 	 * 获取 城市id
 	 * @return 
@@ -159,53 +174,5 @@ public class FreightEntity extends BaseEntity {
 		this.freightIncreaseAmount = freightIncreaseAmount;
 	}
 
-	
-	
-
-	
-	
-
-	
-
-	/**
-	 * 设置 基础运费
-	 * @param cfBasePrice
-	 */
-	
-
-	/**
-	 * 获取基础运费的数量
-	 * @return
-	 */
-	
-
-	/**
-	 * 设置基础运费的数量
-	 * @param cfBaseAmount
-	 */
-	
-
-	/**
-	 * 获取增长运费
-	 * @return
-	 */
-	
-
-	/**
-	 * 设置增长运费
-	 * @param cfIncreasePrice
-	 */
-	
-
-	/**
-	 *获取增长数量
-	 * @return
-	 */
-	
-
-	/**
-	 * 设置增长数量
-	 * @param cfIncreaseAmount
-	 */
 	
 }

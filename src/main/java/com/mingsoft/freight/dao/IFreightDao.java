@@ -29,5 +29,5 @@ import com.mingsoft.freight.entity.FreightEntity;
 
 public interface IFreightDao extends IBaseDao {
 	
-	BaseEntity getBYEntity(BaseEntity entity);
+	
 }
