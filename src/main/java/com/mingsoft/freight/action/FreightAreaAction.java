@@ -19,7 +19,7 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.action.web;
+package com.mingsoft.freight.action;
 
 import java.util.List;
 
@@ -42,15 +42,12 @@ import com.mingsoft.freight.entity.FreightAreaEntity;
 
 import net.mingsoft.basic.util.BasicUtil;
 
-@Controller()
-@RequestMapping("/${managerPath}/freight")
+@Controller
+@RequestMapping("/${managerPath}/freightArea")
 public class FreightAreaAction extends BaseAction {
 
-	/**
-	 * 注入用户基础业务层
-	 */
 	@Autowired
-	private IFreightAreaBiz freightBiz;
+	private IFreightAreaBiz freightAreaBiz;
 	@Autowired
 	private ICategoryBiz categoryBiz;
 	
@@ -61,32 +58,67 @@ public class FreightAreaAction extends BaseAction {
 	 */
 	@RequestMapping("/list")
 	private  String list(HttpServletRequest request){
-		List areaEntity = freightBiz.queryAll();
-		request.setAttribute("listArea", areaEntity);
+		List<FreightAreaEntity> list = freightAreaBiz.queryAllArea();
+		request.setAttribute("listArea", list);
 		return view("/freight/area/area_list");
 	}
 	
-	@RequestMapping("/alter")
-	private  String alter(){
+	/**
+	 * 更新区域信息
+	 * @return
+	 */
+	@RequestMapping("/update")
+	private  void update(){
 		
-		return view("/freight/area/area_alter");
 	}
 	
-	@RequestMapping("/areaAdd")
-	private  String areaAdd(@ModelAttribute CategoryEntity categoryEntity, HttpServletRequest request, HttpServletResponse response){
+	/**
+	 * 进入编辑页面
+	 * @return
+	 */
+	@RequestMapping("/edit")
+	private  String edit(){
+		
+		return view("/freight/area/area_form");
+	}
+	
+	/**
+	 * 加载添加页面
+	 * @param categoryEntity
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("/add")
+	private  String add(@ModelAttribute CategoryEntity categoryEntity, HttpServletRequest request, HttpServletResponse response){
 		int modelId =  BasicUtil.getModelCodeId(ModelCode.CITY);
 		// 传入一个实体，提供查询条件
 		CategoryEntity category = new CategoryEntity();
 		category.setCategoryModelId(modelId);
 		
 		List<CategoryEntity> list = categoryBiz.queryChilds(category);
-		request.setAttribute("categoryJson", JSONArray.toJSONString(list));
-		request.setAttribute("listArea", list);
-		return view("/freight/area/area_add");
+		String categoryJson = JSONArray.toJSONString(list);
+		request.setAttribute("categoryJson", categoryJson);
+		return view("/freight/area/area_form");
 	}
 	
-	@RequestMapping("/areaDel")
-	private  void areaDel(@ModelAttribute FreightAreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		freightBiz.areaDel(area);
+	/**
+	 * 保存添加的区域信息
+	 * @return
+	 */
+	@RequestMapping("/save")
+	private  void save(){
+		
+	}
+	
+	/**
+	 * 删除区域功能
+	 * @param area
+	 * @param response
+	 * @param request
+	 */
+	@RequestMapping("/delete")
+	private  void delete(@ModelAttribute FreightAreaEntity area, HttpServletResponse response, HttpServletRequest request){
+		freightAreaBiz.delete(area);
 	}
 }

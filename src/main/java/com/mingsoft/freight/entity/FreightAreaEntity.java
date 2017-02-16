@@ -21,20 +21,23 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 
 package com.mingsoft.freight.entity;
 
-import java.util.Date;
-
 import com.mingsoft.base.entity.BaseEntity;
 
 
 public class FreightAreaEntity extends BaseEntity {
-	
-	
-	private static final long serialVersionUID = 1L;
-	
+	/**
+	 * 区域主ID
+	 */
 	private int faId;
 	
+	/**
+	 * 区域名称
+	 */
 	private String faTitle;
 	
+	/**
+	 * 物流的地区，不仅仅包括城市，对应分类城市数据
+	 */
 	private String faCityIds;
 	
 	public int getFaId() {

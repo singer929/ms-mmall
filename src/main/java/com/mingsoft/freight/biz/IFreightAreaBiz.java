@@ -24,10 +24,19 @@ package com.mingsoft.freight.biz;
 import java.util.List;
 
 import com.mingsoft.base.biz.IBaseBiz;
-import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.freight.entity.FreightAreaEntity;
 
 public interface IFreightAreaBiz extends IBaseBiz {
-	List queryAll();
-	void areaDel(FreightAreaEntity area);
+	
+	/**
+	 * 查询所有区域信息
+	 * @return
+	 */
+	public List<FreightAreaEntity> queryAllArea();
+	
+	/**
+	 * 删除区域信息
+	 * @param area
+	 */
+	public void delete(FreightAreaEntity area);
 }

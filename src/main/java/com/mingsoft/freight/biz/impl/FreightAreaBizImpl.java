@@ -29,34 +29,39 @@ import org.springframework.stereotype.Service;
 
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
-import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.freight.biz.IFreightAreaBiz;
 import com.mingsoft.freight.dao.IFreightAreaDao;
 import com.mingsoft.freight.entity.FreightAreaEntity;
 
-@Service("freightBizImpl")
+@Service("freightAreaBizImpl")
 public class FreightAreaBizImpl extends BaseBizImpl implements IFreightAreaBiz{
 
 	/**
 	 * 用户持久化层
 	 */
 	@Autowired
-	private IFreightAreaDao freightDao; 
+	private IFreightAreaDao freightAreaDao; 
 	
 	/**
 	 * 获取freightDao
 	 */
 	@Override
 	protected IBaseDao getDao() {
-		return freightDao;
+		return freightAreaDao;
+	}
+	/**
+	 * 查询全部区域信息
+	 */
+	public List<FreightAreaEntity> queryAllArea() {
+		return  (List<FreightAreaEntity>) freightAreaDao.queryAllArea();
 	}
 	
-	public List queryAll() {
-		return  (List) freightDao.queryAll();
-	}
 	
+	/**
+	 * 删除区域信息
+	 */
 	@Override
-	public void areaDel(FreightAreaEntity area) {
-		freightDao.areaDel(area);
+	public void delete(FreightAreaEntity area) {
+		freightAreaDao.delete(area);
 	}
 }

@@ -28,7 +28,16 @@ import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.freight.entity.FreightAreaEntity;
 
 public interface IFreightAreaDao extends IBaseDao {
-	List<BaseEntity> queryAll();
+	/**
+	 * 查询所有区域数据
+	 * @return
+	 */
+	public List<FreightAreaEntity> queryAllArea();
 
-	Object areaDel(FreightAreaEntity area);
+	/**
+	 * 删除区域信息
+	 * @param area 
+	 * @return
+	 */
+	public Object delete(FreightAreaEntity area);
 }

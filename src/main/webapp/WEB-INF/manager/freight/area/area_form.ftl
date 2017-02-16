@@ -15,7 +15,7 @@
 		
 		<script id="afterareaAddTree" type="text/x-jquery-tmpl">
 			<td>
-				<input type="checkbox" name="ids" >
+				<input type="checkbox" name="ids" onclick=getDataId(this)>
 			</td>
 		</script>
 		
@@ -23,7 +23,7 @@
 </@ms.html5>	        
    		
 <script>
-
+function getDataId
 </script>
 
 

@@ -10,39 +10,30 @@
 		<result column="fa_city_ids" property="faCityIds" />
 	</resultMap>
 	<!-- 将实体属性与表字段对接结束 -->
-	<!-- 查询用户列表开始 -->
-	<select id="queryAll" resultMap="resultMap">
+	<!-- 查询区域列表开始 -->
+	<select id="queryAllArea" resultMap="resultMap">
 		select * from freight_area
 	</select>
 	<!-- 查询用户列表结束 -->
 	
-	<!-- 新增用户开始 -->
+	<!-- 新增区域开始 -->
 	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="peopleId"
-		parameterType="com.mingsoft.base.entity.BaseEntity">
+		parameterType="com.mingsoft.freight.entity.FreightAreaEntity">
 		
 		insert into user(people_name,people_password,people_date_time) values (#{peopleName},#{peoplePassword},#{peopleDateTime})
 		
 	</insert>
 	<!-- 新增用户结束 -->
 	
-	<!-- 更新用户开始 -->
-	<update id="updateEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
+	<!-- 更新区域开始 -->
+	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.FreightAreaEntity">
 		update user set people_password = #{peoplePassword}	where people_name = #{peopleName}
 		
 	</update>
 	<!-- 更新用户结束 -->
-	<!-- 查询用户开始 -->
-	<select id="getBYEntity" resultMap="resultMap" parameterType="int">
-		select * from user 
-		
-		<where> 
-			<if test=" peopleName != null ">and people_name= #{peopleName}</if>
-			<if test=" peoplePassword != null ">and people_password= #{peoplePassword}</if>
-		</where>
-	</select>
-	<!-- 查询用户结束 -->
-	<!-- 删除用户开始 -->
-	<delete id="areaDel" parameterType="int">
+	
+	<!-- 删除区域开始 -->
+	<delete id="delete" parameterType="int">
 		delete from freight_area where fa_id = #{faId}
 	</delete>
 	<!-- 删除用户结束 -->
