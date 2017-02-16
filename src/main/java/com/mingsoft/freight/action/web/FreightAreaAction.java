@@ -61,7 +61,7 @@ public class FreightAreaAction extends BaseAction {
 	 */
 	@RequestMapping("/list")
 	private  String list(HttpServletRequest request){
-		List<?> areaEntity = freightBiz.queryAll();
+		List areaEntity = freightBiz.queryAll();
 		request.setAttribute("listArea", areaEntity);
 		return view("/freight/area/area_list");
 	}
@@ -81,7 +81,7 @@ public class FreightAreaAction extends BaseAction {
 		
 		List<CategoryEntity> list = categoryBiz.queryChilds(category);
 		request.setAttribute("categoryJson", JSONArray.toJSONString(list));
-		
+		request.setAttribute("listArea", list);
 		return view("/freight/area/area_add");
 	}
 	

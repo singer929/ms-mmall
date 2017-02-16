@@ -1,9 +1,9 @@
 <@ms.html5>
-	<@ms.nav title="区域管理" back=true><@ms.savebutton  id="savebutton"/></@ms.nav>
-	<@ms.panel>
-		<@ms.table head=['编号,100','标题'] id="tableConterent" checkbox="ids">
+    <@ms.nav title="管理" back=true><@ms.savebutton  id="savebutton"/></@ms.nav>
+    <@ms.panel>
+		<@ms.table head=['编号,90','标题','操作,100'] id="tableConterent">
 			<#if categoryJson?has_content && categoryJson!="[]">
-	        	<@ms.treeTable treeId="areaTree"   tbodyId="tableConterent" json="${categoryJson?default('')}" jsonName="categoryTitle" jsonId="categoryId" jsonPid="categoryCategoryId"/>
+	        	<@ms.treeTable treeId="areaAddTree"   tbodyId="tableConterent" json="${categoryJson?default('')}" jsonName="categoryTitle" jsonId="categoryId" jsonPid="categoryCategoryId"/>
 	      	<#else>
              	<tr>
 		            <td colspan="3" class="text-center">
@@ -12,5 +12,29 @@
 	          	</tr>                          
         	</#if>
 		</@ms.table>
-	</@ms.panel>
-</@ms.html5>
+		
+		<script id="afterareaAddTree" type="text/x-jquery-tmpl">
+			<td>
+				<input type="checkbox" name="ids" >
+			</td>
+		</script>
+		
+    </@ms.panel>
+</@ms.html5>	        
+   		
+<script>
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
