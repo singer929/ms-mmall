@@ -21,6 +21,8 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 
 package com.mingsoft.freight.biz.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,8 @@ import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.freight.biz.IFreightBiz;
 import com.mingsoft.freight.dao.IFreightDao;
+import com.mingsoft.freight.entity.FreightAreaEntity;
+import com.mingsoft.freight.entity.FreightEntity;
 
 @Service("freightBizImpl")
 public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
@@ -44,6 +48,15 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 	@Override
 	protected IBaseDao getDao() {
 		return freightDao;
+	}
+
+	/**
+	 * 通过城市id查询基础数据
+	 */
+	@Override
+	public FreightEntity queryByCity(int freightCityId) {
+		
+		return  freightDao.queryByCity(freightCityId);
 	}
 	
 	

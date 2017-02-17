@@ -14,16 +14,15 @@
 		<result column="freight_increase_amount" property="freightIncreaseAmount" />
 	</resultMap>
 	<!-- 将实体属性与表字段对接结束 -->
-	<!-- 查询用户列表开始 -->
-	<select id="query" resultMap="resultMap">
+	<!-- 查询基础数据开始 -->
+	<select id="queryByCity" resultMap="resultMap" parameterType="int">
 	
-		select * from user 
+		select * from freight 
 		
 		<where> 
-			<if test=" peopleName != null ">and people_name= #{peopleName}</if>
-			<if test=" peoplePassword != null ">and people_password= #{peoplePassword}</if>
+			and freight_city_id= #{freightCityId}			
 		</where>
-		
+
 	</select>
 	<!-- 查询用户列表结束 -->
 	

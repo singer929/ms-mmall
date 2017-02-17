@@ -25,9 +25,14 @@ import java.util.List;
 
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.base.entity.BaseEntity;
+import com.mingsoft.freight.entity.FreightAreaEntity;
 import com.mingsoft.freight.entity.FreightEntity;
 
 public interface IFreightDao extends IBaseDao {
 	
-	
+	/**
+	 * 通过城市id查询基础数据
+	 * @return
+	 */
+	public FreightEntity queryByCity(int freightCityId);
 }

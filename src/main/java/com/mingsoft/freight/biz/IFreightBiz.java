@@ -21,10 +21,18 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 
 package com.mingsoft.freight.biz;
 
+import java.util.List;
+
 import com.mingsoft.base.biz.IBaseBiz;
 import com.mingsoft.base.entity.BaseEntity;
+import com.mingsoft.freight.entity.FreightAreaEntity;
+import com.mingsoft.freight.entity.FreightEntity;
 
 public interface IFreightBiz extends IBaseBiz {
 	
-
+	/**
+	 * 通过城市id查询基础数据
+	 * @return
+	 */
+	public FreightEntity queryByCity(int freightCityId);
 }

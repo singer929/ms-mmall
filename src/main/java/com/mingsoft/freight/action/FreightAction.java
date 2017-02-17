@@ -76,7 +76,7 @@ public class FreightAction extends BaseAction {
 		int modelId = BasicUtil.getModelCodeId(ModelCode.CITY);
 		//新建一个CategoryEntity实体，以供查询
 		CategoryEntity category = new CategoryEntity();
-		category.setCategoryCategoryId(modelId);
+		category.setCategoryModelId(modelId);
 		//通过category查询数据库里的数据
 		List<CategoryEntity> list = categoryBiz.queryChilds(category);	
 		//返回给前端数据categoryJson，具体指的是查询后的数据
@@ -94,7 +94,14 @@ public class FreightAction extends BaseAction {
 	 */
 	@RequestMapping("/form")
 	public String form(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
-		return view("/freight/freight_details/freight_from");
+		int freightCityId = Integer.parseInt(request.getParameter("categoryId"));
+		FreightEntity entity = freightBiz.queryByCity(freightCityId);
+		request.setAttribute("freightCityId", entity.getFreightExpressId());
+		request.setAttribute("freightBasePrice", entity.getFreightBasePrice());
+		request.setAttribute("freightBaseAmount", entity.getFreightBaseAmount());
+		request.setAttribute("freightIncreasePrice", entity.getFreightExpressId());
+		request.setAttribute("freightIncreaseAmount", entity.getFreightIncreaseAmount());
+		return view("/freight/freight_details/freight_form");
 		
 	}
 	
