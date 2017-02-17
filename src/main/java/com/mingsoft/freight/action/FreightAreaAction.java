@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.constant.ModelCode;
@@ -56,11 +57,22 @@ public class FreightAreaAction extends BaseAction {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/list")
-	private  String list(HttpServletRequest request){
-		List<FreightAreaEntity> list = freightAreaBiz.queryAllArea();
-		request.setAttribute("listArea", list);
-		return view("/freight/area/area_list");
+	@RequestMapping("/index")
+	private String index(HttpServletRequest request){
+		//左侧列表
+		List<FreightAreaEntity> listArea = freightAreaBiz.queryAllArea();
+		request.setAttribute("listArea", listArea);
+		//树形部分
+		int modelId =  BasicUtil.getModelCodeId(ModelCode.CITY);
+		CategoryEntity category = new CategoryEntity();
+		category.setCategoryModelId(modelId);
+		List<CategoryEntity> list = categoryBiz.queryChilds(category);
+		String categoryJson = JSONArray.toJSONString(list);
+		request.setAttribute("categoryJson", categoryJson);
+		//区域名称部分和区域管理部分
+		String faTitle = request.getParameter("faTitle");
+		request.setAttribute("faTitle", faTitle);
+		return view("/freight/area/index");
 	}
 	
 	/**
@@ -68,7 +80,7 @@ public class FreightAreaAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	private  void update(){
+	private void update(){
 		
 	}
 	
@@ -77,8 +89,17 @@ public class FreightAreaAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/edit")
-	private  String edit(){
-		
+	private String edit(@ModelAttribute CategoryEntity categoryEntity, HttpServletRequest request, HttpServletResponse response){
+		//树形部分
+		int modelId =  BasicUtil.getModelCodeId(ModelCode.CITY);
+		CategoryEntity category = new CategoryEntity();
+		category.setCategoryModelId(modelId);
+		List<CategoryEntity> list = categoryBiz.queryChilds(category);
+		String categoryJson = JSONArray.toJSONString(list);
+		request.setAttribute("categoryJson", categoryJson);
+		//区域名称部分和区域管理部分
+		String faTitle = request.getParameter("faTitle");
+		request.setAttribute("faTitle", faTitle);
 		return view("/freight/area/area_form");
 	}
 	
@@ -90,12 +111,12 @@ public class FreightAreaAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/add")
-	private  String add(@ModelAttribute CategoryEntity categoryEntity, HttpServletRequest request, HttpServletResponse response){
+	private String add(@ModelAttribute CategoryEntity categoryEntity, HttpServletRequest request, HttpServletResponse response){
 		int modelId =  BasicUtil.getModelCodeId(ModelCode.CITY);
 		// 传入一个实体，提供查询条件
 		CategoryEntity category = new CategoryEntity();
 		category.setCategoryModelId(modelId);
-		
+		//获取数据
 		List<CategoryEntity> list = categoryBiz.queryChilds(category);
 		String categoryJson = JSONArray.toJSONString(list);
 		request.setAttribute("categoryJson", categoryJson);
@@ -107,8 +128,20 @@ public class FreightAreaAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/save")
-	private  void save(){
-		
+	private void save(@ModelAttribute FreightAreaEntity area, HttpServletResponse response, HttpServletRequest request){
+		String faTitle = request.getParameter("faTitle");
+		FreightAreaEntity newEntity = new FreightAreaEntity();
+		newEntity.setFaTitle(faTitle);
+		FreightAreaEntity areaEntity = freightAreaBiz.getAreaEntity(newEntity);
+		boolean op = false;
+		if(areaEntity == null){
+			freightAreaBiz.saveAreaEntity(area);
+			op = true;
+			this.outJson(response,op);
+		}else{
+			op = false;
+			this.outJson(response,op);
+		}
 	}
 	
 	/**
@@ -118,7 +151,8 @@ public class FreightAreaAction extends BaseAction {
 	 * @param request
 	 */
 	@RequestMapping("/delete")
-	private  void delete(@ModelAttribute FreightAreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		freightAreaBiz.delete(area);
+	private void delete(@ModelAttribute FreightAreaEntity area, HttpServletResponse response, HttpServletRequest request){
+		String faIds = request.getParameter("faIds");
+		freightAreaBiz.delete(faIds);
 	}
 }

@@ -23,6 +23,8 @@ package com.mingsoft.freight.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.freight.entity.FreightAreaEntity;
@@ -39,5 +41,18 @@ public interface IFreightAreaDao extends IBaseDao {
 	 * @param area 
 	 * @return
 	 */
-	public Object delete(FreightAreaEntity area);
+	public void delete(@Param("faIds") String faIds);
+	
+	/**
+	 * 增加区域信息
+	 * @param area
+	 */
+	public void saveAreaEntity(FreightAreaEntity faIds);
+	
+	/**
+	 * 查询单个区域的信息
+	 * @param newEntity
+	 * @return
+	 */
+	public FreightAreaEntity getAreaEntity(FreightAreaEntity newEntity);
 }
