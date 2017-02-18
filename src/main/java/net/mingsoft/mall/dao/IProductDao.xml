@@ -1296,7 +1296,7 @@
 			</foreach>
 		</if>
 		<if test="orderBy != null">
-			order by #{orderBy} #{orderByType}
+			order by ${orderBy} ${orderByType}
 		</if>
 	</select>
 	

@@ -219,11 +219,14 @@ public class ProductAction extends BaseAction{
 		
 		//BasicUtil.startPage();
 		List<ProductEntity> list = productBiz.search(appId, modelId, category, brands, price, spec, sort);
+		for (ProductEntity pe : list){
+			
+		}
 		//BasicUtil.endPage(list);
 		
 		// 数据类型是 json 则ajax方式返回json数据, 否则返回跳转html
 		if (dataType.equals("json")){
-			String jsonStr = JSONObject.toJSONString(list);
+			String jsonStr = JSONArray.toJSONString(list);
 			outJson(response, jsonStr);
 		}
 		else {
