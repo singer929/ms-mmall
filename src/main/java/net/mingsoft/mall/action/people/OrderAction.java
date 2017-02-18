@@ -221,6 +221,7 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 			this.outJson(response, ModelCode.ORDER, false);
 			return;
 		}
+		order.setOrderModelId(net.mingsoft.mall.constant.ModelCode.MALL_ORDER.toInt());
 		mallOrderBiz.saveEntity(order, cartIds);
 		this.outJson(response, order);
 	}

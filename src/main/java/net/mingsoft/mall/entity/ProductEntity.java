@@ -138,6 +138,11 @@ public class ProductEntity extends BasicEntity{
 	 */
 	private String productSpecificationImg;
 	
+	/**
+	 * 好评率，不会超过100
+	 */
+	private int good;
+	
 	
 	
 	
@@ -365,6 +370,14 @@ public class ProductEntity extends BasicEntity{
 
 	public void setProductBrand(int productBrand) {
 		this.productBrand = productBrand;
+	}
+
+	public int getGood() {
+		return good;
+	}
+
+	public void setGood(int good) {
+		this.good = good;
 	}
 	
 	
