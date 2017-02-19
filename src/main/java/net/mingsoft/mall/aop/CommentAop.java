@@ -6,12 +6,17 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.mingsoft.basic.aop.BaseAop;
 import com.mingsoft.basic.biz.IBasicBiz;
 
+import net.mingsoft.comment.bean.CommentSumeryBean;
+import net.mingsoft.comment.biz.ICommentBiz;
+import net.mingsoft.mall.biz.IProductBiz;
 import net.mingsoft.mall.entity.OrderCommentEntity;
+import net.mingsoft.mall.entity.ProductEntity;
 
 /**
  * 铭飞评论插件
@@ -26,27 +31,33 @@ import net.mingsoft.mall.entity.OrderCommentEntity;
 @Aspect
 public class CommentAop extends BaseAop {
 
-	@Resource(name="basicBiz")
 	private IBasicBiz baicBiz;
+	
+	@Autowired
+	private ICommentBiz commentBiz;
+	@Autowired
+	private IProductBiz productBiz;
 	
 	@Pointcut("execution(* net.mingsoft.comment.biz.impl.CommentBizImpl.saveComment(..))")
 	public void save() {
 	}
 
 	/**
-	 * 报错评论时需要更新基础信息的评论数量
+	 * 更新商品好评率
 	 * @param jp
 	 * @return
 	 * @throws Throwable
 	 */
 	@Around("save()")
 	public Object save(ProceedingJoinPoint jp) throws Throwable {
-		@SuppressWarnings("unused")
 		OrderCommentEntity comment = this.getType(jp, OrderCommentEntity.class);
 		Object obj = jp.proceed();
-//		if(comment.getCommentBasicId() > 0) {
-//			baicBiz.updateHit(comment.getCommentBasicId());
-//		}
+		if(comment.getCommentBasicId() > 0) {
+			CommentSumeryBean csb =  commentBiz.sumery(comment);
+			ProductEntity product = (ProductEntity) productBiz.getEntity(comment.getCommentBasicId());
+			product.setProductGood(csb.getCommentPointsCount()/(csb.getCommentCount()*5));
+			productBiz.updateEntity(product);
+		}
 		return obj;
 	}
 	
