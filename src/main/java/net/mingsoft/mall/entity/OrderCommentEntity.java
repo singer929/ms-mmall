@@ -23,6 +23,9 @@ package net.mingsoft.mall.entity;
 
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.util.*;
+
+import net.mingsoft.comment.entity.CommentEntity;
+
 import java.util.*;
 
  /**

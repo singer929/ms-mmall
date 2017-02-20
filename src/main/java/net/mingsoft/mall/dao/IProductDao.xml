@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="net.mingsoft.mall.dao.IProductDao">
 	<sql id="column_list">
-		p.product_basicID,p.product_brand,p.product_price,p.product_inventory,p.product_appId,p.product_content,p.product_code,p.product_sale,p.product_linkUrl,p.product_cost_price,p.product_shelf,
+		p.product_basicID,p.product_brand,p.product_price,p.product_inventory,p.product_appId,p.product_content,p.product_code,p.product_sale,p.product_linkUrl,p.product_cost_price,p.product_shelf,p.product_good,
 		b.BASIC_ID,b.BASIC_TITLE,b.BASIC_DESCRIPTION,b.BASIC_THUMBNAILS,b.BASIC_HIT,b.BASIC_DATETIME,b.BASIC_UPDATETIME,b.BASIC_PEOPLEID,b.BASIC_CATEGORYID,b.BASIC_MODELID,b.BASIC_SORT,b.basic_type
 	</sql>
 
@@ -20,6 +20,7 @@
 		<result column="product_shelf" property="productShelf" />		<!-- 产品是否下架 -->
 		<result column="product_content" property="productContent" />		<!-- 产品属性 -->
 		<result column="product_brand" property="productBrand" />		
+		<result column="product_good" property="productGood" />		
 		<result column="BASIC_TITLE" property="basicTitle" />			<!-- 标题 -->
 		<result column="BASIC_DESCRIPTION" property="basicDescription" /><!-- 
 			描述 -->
@@ -59,6 +60,7 @@
 		<result column="product_cost_price" property="productCostPrice" />		<!-- 产品原价 -->
 		<result column="product_brand" property="productBrand" />
 		<result column="product_shelf" property="productShelf" />		<!-- 产品是否下架 -->
+		<result column="product_good" property="productGood" />		
 		<result column="psd_product_spec_id" property="productSpecificationId" />		<!-- 产品的规格id -->
 		<result column="psd_price" property="productSpecificationPrice" />		<!-- 产品的规格价格 -->
 		<result column="psd_stock" property="productSpecificationStock" />		<!-- 产品的规格库存 -->
@@ -104,6 +106,7 @@
 		<result column="product_cost_price" property="productCostPrice" />		<!-- 产品原价 -->
 		<result column="product_shelf" property="productShelf" />		<!-- 产品是否下架 -->
 		<result column="basic_type" property="basicType" />		<!-- 产品属性类型 -->
+		<result column="product_good" property="productGood" />		
 		<result column="BASIC_TITLE" property="productTitle" />			<!-- 标题 -->
 		<result column="BASIC_DESCRIPTION" property="productDescription" /><!-- 
 			描述 -->
@@ -181,6 +184,7 @@
 			<if test="productShelf !=null">product_shelf=#{productShelf},</if>
 			<if test="productContent !=null">product_content=#{productContent},</if>
 			<if test="productBrand &gt; 0">product_brand=#{productBrand},</if>
+			<if test="productGood &gt; 0">product_good=#{productGood},</if>
 		</set>
 		where product_basicID = #{basicId}
 	</update>

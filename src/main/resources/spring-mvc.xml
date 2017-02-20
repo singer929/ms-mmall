@@ -122,5 +122,9 @@
 			<mvc:mapping path="/**" />
 			<bean class="com.mingsoft.basic.interceptor.ActionInterceptor" />
 		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/people/**" />
+			<bean class="com.mingsoft.people.interceptor.ActionInterceptor" />
+		</mvc:interceptor>		
 	</mvc:interceptors>
 </beans>

@@ -170,6 +170,7 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 		if (order == null) {
 			order = new  net.mingsoft.mall.entity.OrderEntity();
 		}
+		order.setOrderModelId(this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL_ORDER));
 		order.setOrderAppId(BasicUtil.getAppId());
 		order.setOrderPeopleId(this.getPeopleBySession().getPeopleId());
 		order.setOrderTime(null);
@@ -221,6 +222,7 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 			this.outJson(response, ModelCode.ORDER, false);
 			return;
 		}
+		order.setOrderModelId(this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL_ORDER));
 		mallOrderBiz.saveEntity(order, cartIds);
 		this.outJson(response, order);
 	}

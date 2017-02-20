@@ -220,7 +220,7 @@ public class SearchAction extends BaseAction {
 					}else {
 							diyFieldName.put(key, value);
 					}
-					htmlContent = htmlContent.replaceAll("\\{ms:search." + key + "/\\}", value); // 将用户请求的值返回到页面上；
+					htmlContent = htmlContent.replaceAll("\\{" + key + "/\\}", value); // 将用户请求的值返回到页面上；
 					if (pageUrl.indexOf("?") < 0) {
 						pageUrl += "?" + entry.getKey() + "=" + value;
 					} else {
