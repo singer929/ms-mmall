@@ -1,0 +1,155 @@
+<div class="shipping">
+	<div class="shipping-main">
+		<div class="shipping-head">
+			<p>添加收货地址</p>
+			<p style="display:none;">编辑收货地址</p>
+			<img src="{ms:globalskin.url/}/people/images/exit.png" id="hide" style="cursor: pointer;"> </div>
+			<div class="shipping-content">
+				<ul>
+					<form>
+						<li class="ship-people no-float"><span>*</span>收货人：<br/>
+							<input type="text" size=34 name="peopleAddressConsigneeName">
+							<em>请输入收货人姓名 </em>
+						</li>
+						<li class="people-address no-float"><span>*</span>所在地区：<br/>
+							<p class="province-tip">省：</p>
+							<select style="margin-left: 0px;float:left" class="province">
+								<option>请选择</option>								
+							</select>		
+							<p style="display:none" class="city-tip">市：</p>				
+							<select class="city" style="float:left">
+								<option value="0">请选择</option>
+							</select>	
+							<p style="display:none" class="district-tip">县/区：</p>						
+							<select class="district" style="display:none;float:left">
+								<option value="0">请选择</option>
+							</select>		
+							<p style="display:none" class="street-tip">街道：</p>				
+							<select class="street" style="display:none;float:left">
+								<option value="0">请选择</option>
+							</select>
+							<em style="margin-top: 11px;    margin-left: 6px;">请选择收货地址</em>
+						</li>
+						<li class="detail-address" style="padding-top:4px"><span>*</span>详细地址：<br/>
+							<input type="text" size=78 name="peopleAddressAddress">
+							<em>请填写详细收货地址</em>
+						</li>
+						<li class="moblie-number"><span>*</span>手机号码：<br/>
+							<input type="text" size=34 name="peopleAddressPhone"]>
+						</li>
+						<li class="shipping-or">或</li>
+						<li class="fix-number" style="margin-left: -10px;">固定电话：<br/>
+							<input type="text" size=34>
+							<em>请输入手机号码</em>
+							<em>请输入正确的手机号</em>
+						</li>
+						<li class="people-email no-float">邮箱：<br/>
+							<input type="text" size=78 name="peopleAddressMail">
+							<em>请输入正确的邮箱</em>
+						</li>
+						<li class="add-new-address">
+							<input type="button" value="保存地址" id="save" style="cursor: pointer;">
+							<input type="button" value="更新地址" id="upData" data-id="3" data-default="1" style="cursor: pointer;">
+						</li>
+					</form>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+//取城市数据		
+$.ajax({
+	url : "{ms:global.host/}/category/city.do",
+	type:"post",
+	dataType:"json",
+	success : function(returnJson) {		
+		$(".province").focus(function(){
+			$(".province").empty();
+			$(".city").empty().show();
+			$(".city-tip").show();
+			$(".city").append('<option value="0">请选择</option>');
+			$(".district").empty().hide();
+			$(".district-tip").hide();
+			$(".district").append('<option value="0">请选择</option>');
+			$(".street").empty().hide();
+			$(".street-tip").hide();
+			$(".street").append('<option value="0">请选择</option>');
+			
+			for (var i = 0 ; i < returnJson.length; i++) {
+				if(returnJson[i].categoryCategoryId === 0){
+					$(".province").append('<option value='+returnJson[i].categoryId+'>'+returnJson[i].categoryTitle+'</option>');
+				}						
+			}
+		})
+		$(".city").focus(function(){	
+			var province;
+			$(".city").empty();
+			$(".district").empty().show();
+			$(".district-tip").show();
+			$(".district").append('<option value="0">请选择</option>');
+			$(".street").empty().hide();
+			$(".street-tip").hide();
+			$(".street").append('<option value="0">请选择</option>');
+			if($(".province option:selected").val() == 0){
+				for (var i = 0 ; i < returnJson.length; i++){
+					if(returnJson[i].categoryTitle == $(".province option:selected").text()){
+						province = returnJson[i].categoryId;
+					}
+				}
+			}else{
+				province = $(".province option:selected").val();
+			}
+			for (var i = 0 ; i < returnJson.length; i++){
+				if(returnJson[i].categoryCategoryId == province && returnJson[i].categoryCategoryId !=0){
+					$(".city").append('<option value='+returnJson[i].categoryId+'>'+returnJson[i].categoryTitle+'</option>');
+				}
+			}
+		})
+		$(".district").focus(function(){
+			var city;
+			$(".district").empty();
+			$(".street").empty().show();
+			$(".street-tip").show();
+			$(".street").append('<option value="0">请选择</option>');
+			if($(".province option:selected").val() == 0){
+				for (var i = 0 ; i < returnJson.length; i++){
+					if(returnJson[i].categoryTitle == $(".city option:selected").text()){
+						city = returnJson[i].categoryId;
+					}
+				}
+			}else{
+				city = $(".city option:selected").val();
+			}
+			for (var i = 0 ; i < returnJson.length; i++){
+				if(returnJson[i].categoryCategoryId == city && returnJson[i].categoryCategoryId !=0){
+					$(".district").append('<option value='+returnJson[i].categoryId+'>'+returnJson[i].categoryTitle+'</option>');
+				}
+			}
+		})
+		$(".street").focus(function(){
+			var district;
+			$(".street").empty();
+			if($(".province option:selected").val() == 0){
+				for (var i = 0 ; i < returnJson.length; i++){
+					if(returnJson[i].categoryTitle == $(".district option:selected").text()){
+						district = returnJson[i].categoryId;
+					}
+				}
+			}else{
+				district = $(".district option:selected").val();
+			}
+			for (var i = 0 ; i < returnJson.length; i++){
+				if(returnJson[i].categoryCategoryId == district && returnJson[i].categoryCategoryId !=0){
+					$(".street").append('<option value='+returnJson[i].categoryId+'>'+returnJson[i].categoryTitle+'</option>');
+				}
+			}
+			if($(".province").text() != "请选择"  && $(".city").text() != "请选择"  && $(".district").text() != "请选择"  && $(".street").text() != "请选择" ){
+				$(".people-address em").css("display","none");
+			}
+		})
+	},
+	
+});
+			
+</script>	

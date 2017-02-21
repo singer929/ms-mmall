@@ -1,0 +1,319 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>个人信息</title>
+	{ms:include filename=people/headFile.htm/}
+	<script src="{ms:globalskin.url/}/people/js/address.js"></script>
+	<script src="{ms:globalskin.url/}/people/js/check-login.js"></script>
+	<!--上传插件-->
+	<script src='http://cdn.mingsoft.net/plugins/plupload/plupload.full.min.js'></script>
+	
+</head>
+<body>
+	<!--头部开始-->
+	{ms:include filename=people/head.htm/}
+	<div class="common-content">
+		<div class="common-main">
+			{ms:include filename=people/menu.htm/}
+			<div id="main">
+				<div class="center-head">
+					<div class="this-title" data-id="userInfo">
+						<h4>个人信息</h4>
+					</div>
+				</div>
+				<form name="user-info">
+					<div class="center-main">
+						<ul>
+							<li>
+								<div class="attribute">用户名：</div>
+								<p id="peopleName" name="peopleName"></p>
+							</li>
+							<li>
+								<div class="attribute"><span>*</span>昵称：</div>
+								<input type="text" size="18" value="" name="peopleUserNickName"	style="padding-left: 4px; float:left;" maxlength="10" onkeyup="value=value.replace(/\s/g,'')"/>
+								<i class="iconfont red-txt" style="width:7px;"></i>
+								<lable class="info-name">
+									请输入昵称
+								</lable>
+							</li>
+							<li>
+								<div class="attribute"><span>*</span>性别：</div>
+								<div class="gender">
+									<span>
+										<input type="radio" name="peopleUserSex" value="1" class="gender-order">
+										&nbsp;男
+									</span>
+									<span><input type="radio" name="peopleUserSex" value="2" class="gender-order">
+										&nbsp;女
+									</span>
+								</div>
+							</li> 
+							<li>
+								<div class="attribute">生日：</div>
+								<select class="year">
+									<option value="0">请选择</option>
+								</select>
+								&nbsp;&nbsp;年
+								<select class="month">
+									<option value="0">请选择</option>
+								</select>
+								&nbsp;&nbsp;月
+								<select class="date">
+									<option value="0">请选择</option>
+								</select>
+								&nbsp;&nbsp;日&nbsp;&nbsp;&nbsp;&nbsp; 填写生日有惊喜哦~ </li>
+							<!--li>
+								<div class="attribute">邮箱：</div>
+								<p id="email"></p>
+								<a href="#" style="color:#005EA7">修改</a> &nbsp;&nbsp;&nbsp;已验证
+							</li-->
+							<li>
+								<div class="attribute"><span>*</span>真实姓名：</div>
+								<input type="text" size="18" value="" name="peopleUserRealName" style="padding-left: 4px; float:left;" maxlength="10">
+								<i class="iconfont red-txt" style="width:7px;"></i>
+								<lable class="info-relName">请输入昵称</lable>
+							</li>
+						</ul>
+						<div class="phtoto">
+							<ul>
+								<li>
+									<div class="attribute uploadImg">上传头像：</div>
+									<div></div>
+									<div ida="upload-headicon">
+										<img src="{ms:globalskin.url/}/people/images/upload.png" style="cursor: pointer;" id="updataImg">
+									</div>
+									<div class="attribute"></div>
+									<label style="font-size:13px;">仅支持JPG、PNG、JPEG、BMP格式且文件小于4M</label>
+									<br/>
+									<div class=	"attribute"></div>
+									<div class="background-photo">
+										<div id="bigIcon">
+											<img src="" name="peopleUserIcon">
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="photo-right">
+							<p>效果预览</p>
+							你上传的图片会自动生成2种尺寸，请注意小尺寸的头像是否清晰 <br/>
+							<br/>
+							<div style="width:100px;height:100px;border:none;" id="middleIcon">
+								<img src="" name="peopleUserIcon">
+							</div>
+							<label>100*100像素 </label><br/>
+							<br/>
+							<div style="width:50px;height:50px;border:none;" id="smallIcon">
+								<img src="" name="peopleUserIcon">
+							</div>
+							<label>50*50像素</label> 
+						</div>
+						<div class="clear"></div>
+						<br/>
+						<br/>
+						<div  class="submit" style="margin-left: 7px;margin-top: 9px;">
+							<input type="button" value="保存" id="tup">
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+	{ms:include filename=people/footer.htm/}
+</body>
+</html>
+<script>
+	$(function(){
+		//用户详细资料
+		ms.load(["ms.people","ms","ms.upload"],function(mpeople,ms,mupload){		
+			peopleInfo(mpeople);		//调用用户资料方法
+			updateClick(ms,mpeople);		//调用修改用户资料方法
+			style();					//调用样式方法
+			upload(mupload);			//调用上传控件方法			
+		});
+
+
+		//上传控件,上传头像
+		function upload(mupload){
+			//上传控件选择器，保存的name名，保存图片路径，
+			mupload.init("updataImg","peopleUserIcon","/upload/people/1/",{"domClass":"upImg","size":"3000","afterMsg":"<img src='{ms:globalskin.url/}/people/images/upload.png' style='cursor: pointer;'>","success":function(){
+				var newIcon = $(".upImg > img").attr("src");
+				$("img[name='peopleUserIcon']").attr("src",""+newIcon+"");
+			}});
+		}
+
+		//获取用户资料开始
+		function peopleInfo(mpeople){
+			mpeople.people.user.info(function(returnJson){
+				  $("#peopleName").text(returnJson.peopleName);//获取用户名
+				  $("input[name='peopleUserNickName']").val(returnJson.peopleUserNickName); //获取昵称
+				  $("input[name='peopleUserSex']").each(function(){ 			//获取性别
+				  	if($(this).val() == returnJson.peopleUserSex) {
+				  		$(this).attr("checked","true");
+				  		return false;
+				  	}
+				  });
+				  /*获取用户生日*/
+				  if(returnJson.peopleUserBirthday){
+				  	var getBirthArry = new Array();
+				  	var bir = returnJson.peopleUserBirthday.substr(0,10);
+				  	getBirthArry = bir.split("-");
+				  	$(".year").get(0).selectedIndex = Number(getBirthArry[0]) - Number($(".year option:eq(1)").text()) + 1;
+				  	$(".month").get(0).selectedIndex = Number(getBirthArry[1]) - Number($(".month option:eq(1)").text()) + 1;
+				  	day(Number(getBirthArry[0]),Number(getBirthArry[1]));
+				  	$(".date").get(0).selectedIndex = Number(getBirthArry[2]) - Number($(".date option:eq(1)").text()) + 1;
+				  }
+				  /*生日结束*/
+				  $("#email").text(""+returnJson.peopleMail+"");//获取邮箱
+				  $("input[name='peopleUserRealName']").val(returnJson.peopleUserRealName); //获取真实姓名
+				  if(returnJson.peopleUserIcon != ""){
+				  	$("img[name='peopleUserIcon']").attr("src",""+ms.base+""+returnJson.peopleUserIcon+"");//获取头像
+				  }else{
+				  	$("img[name='peopleUserIcon']").attr("src","http://cdn.mingsoft.net/global/images/msheader.png")
+				  }
+				  	
+				});
+		}
+	    //获取用户资料结束
+
+
+		//修改资料
+		 function updateClick(ms,mpeople){
+			$("#tup").click(function(){//修改资料,暂时未做修改头像
+				var updateParam;
+				var peopleUserBirthday;
+				var userNickName=$("input[name='peopleUserNickName']").val();		//获取昵称
+				var userRealName=$("input[name='peopleUserRealName']").val();		//获取真实姓名
+				if (validator.isNull(userNickName)){		//昵称判空
+					ms.alert("昵称不能为空");
+					return;
+				}else if(validator.isNull(userRealName)){	//真实姓名判空
+					ms.alert("真实姓名不能为空");
+					return;
+				}else if($(".year option:selected").val()==0 || $(".month option:selected").val() == 0 || $(".date option:selected").val() == 0) {
+					ms.alert("请把生日信息填写完整");
+					return;
+				}else if(!inputName){
+					ms.alert("真实姓名由4-10个字符，可由中、英文组成");
+				}else if(!inputNickName){
+					ms.alert("昵称由4-10个字符，可由中英文、数字组成");
+				}else {
+					var obj = $(this);
+					var objText = obj.val()
+					obj.attr("disabled",true).val("保存中"); 
+					peopleUserBirthday = $(".year").find("option:selected").text() + '-' + $(".month").find("option:selected").text() + '-' + $(".date").find("option:selected").text();
+					updateParam = ""+$("form").serialize()+"&peopleUserBirthday="+peopleUserBirthday+"";
+					mpeople.people.user.update(updateParam,function(returnJson){
+						alert("修改成功");
+						peopleInfo(mpeople);				//调用用户资料方法
+						obj.attr("disabled",false).val(objText); 
+					});
+				}	
+			});
+		}
+
+	    //页面样式
+	    var inputName = true;	//真实姓名是否超过4个字符
+	    var inputNickName = true;	//昵称是否超过4个字符
+	    function style(){
+	    	$(".attribute").siblings("a").hide();			//暂时隐藏掉了修改邮箱的操作
+	    	$(".info-name").hide();
+	    	$(".info-name").prev().hide();
+	    	$(".info-relName").hide();
+	    	$(".info-relName").prev().hide();
+		    $("input[name='peopleUserNickName']").click(function(){		//点击昵称输入框显示提示信息
+		    	$(".info-name").css("color","#999").text("昵称由4-10个字符，可由中英文、数字组成").show();
+		    	$(".info-name").prev().css("color","#999").show();
+		    });
+		    $("input[name='peopleUserNickName']").blur(function(){		//昵称输入框失焦时对输入框中的值进行判断，在作出相应提示
+		    	$(".info-name").hide();  
+		    	$(".info-name").prev().hide();
+		    	
+			    var inputNum = /[^\u4E00-\u9FA5A-Za-z0-9]/g;	//判断是否为数字
+			    var myRegName = /^[\u4e00-\u9fa5]+$/;			//判断是否为文字
+			    var myRegFlag = true;		//当时文字的时候为true
+			    var str =  $("input[name='peopleUserNickName']").val();
+			    for(var i = 0; i < str.length ; i++) {
+			    	if(inputNum.test(str[i])) {
+			    		$(".info-name").prev().css("color","#e4393c").show();
+			    		$(".info-name").css("color","red").html("4-10个字符，可由中英文、数字组成").show();
+			    	}else if(myRegName.test(str[i])){
+			    		myRegFlag = false;
+			    	}else{
+			    		myRegFlag = true;
+			    	}
+			    }
+			    if(!myRegFlag){		//判断昵称是否为文字
+			    	if(str.length < 2){		//如果为文字，则判断长度
+			    		$(".info-name").prev().css("color","#e4393c").show();
+			    		$(".info-name").css("color","red").html("4-10个字符，可由中英文、数字组成").show();
+			    	}
+			    }else if($(this).val() == "") {								//判断昵称是否为空
+			    	$(".info-name").css("color","#e4393c").text("昵称不能为空").show();
+			    	$(".info-name").prev().css("color","#e4393c").show();
+			    }else if(!validator.isLength($("input[name='peopleUserNickName']").val(),{min:4,max:10}))	{	//判断不含文字的最小长度为4，
+			    	$(".info-name").prev().css("color","#e4393c").show();
+			    	$(".info-name").css("color","red").html("4-10个字符，可由中英文、数字组成").show();
+			    	inputNickName = false;		//当字符少于4或者多于10  inputNickName 为false
+			    }else{
+			    	inputNickName = true;
+			    }
+			});
+		    $("input[name='peopleUserRealName']").click(function(){		//点击真实姓名输入框显示提示信息
+		    	$(".info-relName").text("真实姓名由4-10个字符，可由中、英文组成").css("color","#999").show();
+		    	$(".info-relName").prev().css("color","#999").show();				    	
+		    });
+		    
+			$("input[name='peopleUserRealName']").blur(function(){		//真实姓名输入框失焦时对输入框中的值进行判断，在作出相应提示
+				$(".info-relName").hide();
+				$(".info-relName").prev().hide();
+				var myReg = /^[\u4e00-\u9fa5]+$/;		
+				var judgeName;		//真实姓名是否为字母  true/false
+				var myJudgeName;	//真实姓名是否为文字   trur/false
+				var st = $("input[name='peopleUserRealName']").val();
+				for(var i = 0;i < st.length;i++){						//真实姓名的合法性
+					if(myReg.test(st[i])){				//判断真实姓名是否为文字
+						myJudgeName = true;
+					}else{
+					 	myJudgeName = false;
+					}				
+					if((st[i].charCodeAt() >= 65 && st[i].charCodeAt() <=90) || (st[i].charCodeAt() >= 97 && st[i].charCodeAt() <=122)){		//判断真实姓名是否为英文
+					 	judgeName = true;
+					}else{
+					 	judgeName = false;
+					}
+				}
+				if($("input[name='peopleUserRealName']").val() == "") {		//判断真实姓名是否为空
+				 	$(".info-relName").css("color","#e4393c").text("真实姓名不能为空").show();
+				 	$(".info-relName").prev().css("color","#e4393c").show();	
+				}else if(!judgeName&&!myJudgeName){		//判断真实姓名的合法性
+				 	$("input[name='peopleUserRealName']").val("");
+				 	$(".info-relName").css("color","#e4393c").text("真实姓名只能有汉字和字母构成").show();
+				 	$(".info-relName").prev().css("color","#e4393c").show();
+				}else if(myJudgeName){			//当真实姓为文字时
+					if(st.length < 2){			//判断真实姓名的长度
+					 	$(".info-relName").css("color","#e4393c").text("真实姓名由4-10个字符，可由中、英文组成").show();
+					 	$(".info-relName").prev().css("color","#e4393c").show();
+					 	inputName = false;
+					}else{
+					 	inputName = true;
+					}
+				}else if(judgeName){		//当真实姓名为英文是
+					if(st.length < 4){		//判断真实姓名的长度
+					 	$(".info-relName").css("color","#e4393c").text("真实姓名由4-10个字符，可由中、英文组成").show();
+					 	$(".info-relName").prev().css("color","#e4393c").show();
+					 	inputName = false;
+					}else{
+					 	inputName = true;
+					}
+				}
+			});	
+		}
+	});
+
+
+</script>

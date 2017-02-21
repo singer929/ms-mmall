@@ -1,0 +1,953 @@
+﻿<!DOCTYPE HTML>
+<html>
+  <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+<!--[if lte IE 7]>
+<script src="http://localhost:8080/templets/1/ms//js/json2.js"></script>
+<![endif]-->
+<meta name="keywords" content="java cms开源,java 商城 开源,java 微信 开源,java 论坛 开源,java 社区 开源,java 分销 开源,java 代理 开源,java OA 开源,java ERP开源,java wms开源,铭飞案例展示,铭飞模版下载,江西开源软件公司,江西最好的软件公司"/>
+<meta name="description" content="国内最好的Java免费开源，文章、商城、微信、论坛等更多丰富好用插件与模版，拥有更高效的代码在线生成工具，降低开发成本提高开发效率。每月28定期更新版本"/>
+<meta name="mstore-key" content="4e3d6b0543d3219ab5c767b9b9743195"/>
+<!--script type="text/javascript">document.domain="mingsoft.net";</script-->
+
+<link rel="shortcut icon" href="http://cdn.mingsoft.net/global/images/ms.ico" type="x-icon"> 
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/templets/1/ms//css/basic.css" />
+<!-- old css -->
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/templets/1/ms//css/goodshow.css"/>
+<!--新版-->
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/templets/1/ms//css/jquery.mcustomscrollbar.min.css" />
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/templets/1/ms//css/style.css" />
+
+<link rel="stylesheet" type="text/css" href="http://cdn.mingsoft.net/plugins/iconfont/1.0.0/iconfont.css" />
+
+<script src="http://cdn.mingsoft.net/plugins/jquery/1.9.1/jquery-1.9.1.js"></script>
+<script src="http://localhost:8080/templets/1/ms//people/js/goods-cookie.js" type="text/javascript"></script>
+
+<!-- old css -->
+<!-- <script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/angue.js"></script>
+ -->
+<!-- <script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/jquery.js"></script>  -->
+<script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/base.js"></script>
+<script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/index.js"></script>
+<script src="http://localhost:8080/templets/1/ms//js/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/dplus.js"></script>
+<script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/stage.js"></script>
+<script src="http://localhost:8080/templets/1/ms//js/unslider.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://localhost:8080/templets/1/ms//js/jquery.mcustomscrollbar.concat.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://localhost:8080/templets/1/ms//js/responsiveslides.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://localhost:8080/templets/1/ms//js/index.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="http://cdn.mingsoft.net/plugins/jquery.tmpl/1.4.2/jquery.tmpl.min.js"></script>
+<script src="http://cdn.mingsoft.net/plugins/jquery.cookie/2.2.0/jquery.cookie.js"></script>
+<script src="http://cdn.mingsoft.net/plugins/seajs/3.0.0/sea.js"></script>
+<script src="http://202d234463057972.mb.mstore.mingsoft.net/cdn/model/main.js"></script>
+<script src="http://cdn.mingsoft.net/plugins/validator/1.0.0/validator.js"></script>
+<script>
+	ms.config({ 
+		base:"http://localhost:8080",
+		filter: {
+		  	people:{
+		  		loginUrl:'http://localhost:8080/login.do'
+		  	}
+		  }
+	});  
+</script>
+<style>
+	.top_bar_left { color: #fff;}
+</style>
+<script>
+	//右边菜单
+$(function(){
+	$(".right_icon").mouseover(function(){
+		$(this).siblings(".mp_tooltip").css("visibility","visible");
+	});
+	$(".right_icon").mouseout(function(){
+		$(this).siblings(".mp_tooltip").css("visibility","hidden");
+	});
+
+	
+	ms.load(["ms","ms.mall","ms.people"],function(ms,mmall,mpeople) {
+
+		mpeople.checkLoginStatus(function(returnJson){
+			//如果已登录将会有以下操作
+			if (returnJson.result){
+				mpeople.people.user.info(function(returnJson){
+					$(".top_bar_left").html(""+returnJson.peopleName+" 欢迎您！<small>|</small><span class='la'><a href='#' rel='nofollow' class='quitLogin'>退出</a><small>|</small><a href='"+ms.base+"/people/center.do'>个人中心</a></span>");
+				});
+				//购物车商品数量
+				mmall.people.mall.cart.list("",function(json){
+					$(".top_bar_right").find("em").html(json.length);
+					$(".cart_num").html(json.length);
+				});
+			}
+		});
+		//点击退出
+		$(".top_bar_left").delegate(".quitLogin","click",function() {
+			mpeople.people.quit(function() {});
+			self.location.href = ""+ms.base+"";
+		});
+
+	});
+});
+</script>
+
+    <title>商品列表</title>
+    <script src="http://localhost:8080/templets/1/ms//people/js/goods-cookie.js"></script>
+    <link rel="stylesheet" rev="stylesheet" href="http://localhost:8080/templets/1/ms//css/child-list.css" />
+  </head>
+  <body>
+  <!-------------------------------------- 头部开始 -------------------------------------->
+<div class="top_bar">
+	<div class="inner">
+		<div class="top_bar_right">
+			<span>
+				<a href="http://localhost:8080/people/center.do" class="drop-a" id="drop2">会员中心</a>
+			</span>
+			<span>
+				<a href="http://localhost:8080/people/myOrder.do" >我的订单</a>
+			</span>
+			<span>
+				<a href="http://localhost:8080/people/favourite.do" class="drop-a" id="drop-shops">我的收藏</a>
+			</span>
+			<a href="http://localhost:8080/people/shopCar.do" class="shopcar">
+				<i class="icon icon-shop"></i>购物车<em>0</em>
+			</a>
+		</div>
+		<div class="top_bar_left">
+			<a>铭飞欢迎你</a><a href="http://localhost:8080">网站首页</a><span class="n_login">
+				<div class="top_logIn">
+					<a href="http://localhost:8080/login.do" class="top_logIn_a">登录</a>
+					
+				</div> <a href="http://localhost:8080/register.do">免费注册</a>
+			</span><span class="y_login"></span>
+		</div>
+	</div>
+</div>
+<!-- 工具栏 end -->
+<!-- logo和搜索 -->
+<div style="width: 100%; background: #fff">
+	<div class="inner nheader">
+		<div class="logo">
+			<a href="http://localhost:8080"></a>
+		</div>
+		<div class="all-search">
+			<div class="search clear">
+				<form id="searchDataForm" action="http://localhost:8080/mmall/14/search.do" method="post">
+		
+					<label class="input_bar" id="drop4">
+						<span id="searchType"><i class="icon icon2"></i></span>
+					</label> 
+					<input type="text" id="txt_name" name="basic_title" />
+
+					<input type="submit" value="搜索" style="width:70px;color:white;background-color:#aa0202;font-weight:600;cursor:pointer;">
+				</form>
+				
+			</div>
+		</div>
+		<img src="http://cdn.mingsoft.net/global/images/weixin.jpg" class="top_barcode" style="width: 80px;"/>
+	</div>
+</div>
+<!-- logo和搜索 end -->
+
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/templets/1/ms//css/nindex.css" />
+<script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/jquery.lazyload.js"></script>
+
+<!-- 导航栏 -->
+<div class="nav">
+	<div class="nav_bar inner clear">
+		<ul class="nav_bar_list">
+			<li><a href="http://localhost:8080">首页</a></li>
+			<li>
+				<a href="http://localhost:8080/html/1/203/index.html">服装鞋包</a>
+				<div class="nav_bar_box">
+					<div class="nav_bar_ctglist">
+						<div class="nav_bar_item">
+							<p class="nav_bar_title">服装鞋包</p>
+							<div class="nav_ctgnamebox">
+								
+									<a href="http://localhost:8080/html/1//203/239/index.html" target="_blank" class="a_baojian" >鞋包</a>
+								
+									<a href="http://localhost:8080/html/1//203/207/index.html" target="_blank" class="a_baojian" >女装</a>
+								
+									<a href="http://localhost:8080/html/1//203/205/index.html" target="_blank" class="a_baojian" >童鞋</a>
+								
+									<a href="http://localhost:8080/html/1//203/204/index.html" target="_blank" class="a_baojian" >童装</a>
+								
+							</div>
+						</div>
+					</div>
+					<div class="nav_brandbox">
+						<p class="nav_brandbox_title"></p>
+						<div class="nav_brandlist"></div>
+					</div>
+					<div class="nav_imgBox"></div>
+					<div class="clear"></div>
+				</div>
+			</li>
+			<li class=""><a href="http://localhost:8080/html/1/208/index.html">母婴用品</a>
+				<div class="nav_bar_box">
+					<div class="nav_bar_ctglist">
+						<div class="nav_bar_item">
+							<p class="nav_bar_title">母婴用品</p>
+							<div class="nav_ctgnamebox">
+								
+									<a href="http://localhost:8080/html/1//208/212/index.html" target="_blank" class="a_baojian" >用品家居</a>
+								
+									<a href="http://localhost:8080/html/1//208/211/index.html" target="_blank" class="a_baojian" >美妆个护</a>
+								
+									<a href="http://localhost:8080/html/1//208/210/index.html" target="_blank" class="a_baojian" >自营奶粉</a>
+								
+									<a href="http://localhost:8080/html/1//208/209/index.html" target="_blank" class="a_baojian" >自营纸尿裤</a>
+								
+									<a href="http://localhost:8080/html/1//208/206/index.html" target="_blank" class="a_baojian" >玩具</a>
+								
+							</div>
+						</div>
+					</div>
+					<div class="nav_brandbox">
+						<p class="nav_brandbox_title"></p>
+						<div class="nav_brandlist"></div>
+					</div>
+					<div class="nav_imgBox"></div>
+					<div class="clear"></div>
+				</div>
+			</li>
+			
+		</ul>
+	</div>
+</div>
+<!-- 导航栏 end -->
+<!-- banner -->
+<div class="banner">
+	<div class="callbacks_container">
+		<ul class="rslides" id="slider">
+			<li><a target="_blank" style="background-image: url(http://localhost:8080/templets/1/ms//images/57aaeaa0bded6.jpg);"></a></li>
+		</ul>
+	</div>
+	<div class="clear"></div>
+</div>
+<!-- banner end -->
+<script type="text/javascript">
+	$(function(){
+		var r=location.href;
+	  	if(r.match("203")){
+			$(".nav_bar_list li").removeClass("idex");
+			$(".nav_bar_list li:eq(1)").addClass("idex");
+		}else if(r.match("208")){
+			$(".nav_bar_list li").removeClass("idex");
+			$(".nav_bar_list li:eq(2)").addClass("idex");
+		}else{
+			$(".nav_bar_list li").removeClass("idex");
+			$(".nav_bar_list li:eq(0)").addClass("idex");
+		}
+	})
+</script>
+
+    <!-- logo和搜索 end -->
+    <script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/hidelayer.js"></script>
+    <link rel="stylesheet" rev="stylesheet" href="http://localhost:8080/templets/1/ms//css/hidelayer.css" />
+    <style>.newig_smR_brgd{ float:none;} .hd-t{border:1px solid #dddddd;position:fixed;top:0;z-index:1000;display:block;width:1197px;} .pg_rt{position:absolute;top:0px;right:0px;}</style>
+    <div class="mainer-list-all">
+      <div class="mainer-list-3">
+        <!--条件搜素 -->
+        <!-- 头部显示 -->
+        <div class="newig_snav">
+          <div class="newig_snav_L f_L">
+            <ul>
+              <li>
+                <a href="http://localhost:8080">全部商品</a></li>
+              <li>
+                <i class="newig_snL_jtico"></i>
+              </li>
+              <li>
+                <div>
+                  <a href="#">
+                    <span>母婴用品</span></a>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="newig_snav_R f_R">共
+            <span class="productSize">15</span>件商品</div>
+          <div class="autoHeight"></div>
+        </div>
+        <!-- end 头部显示-->
+        <!-- 其他条件筛选 -->
+        <div class="newig_smR_nav f_L">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <!-- 大分类 -->
+            <tr>
+              <td class="newig_smRn_td">
+                <span>分类</span></td>
+              <td>
+                <div class="newig_smR_bl newig_smR_blw single_select">
+                  <ul class="newig_smR_blul">
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-category="206">玩具</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-category="209">自营纸尿裤</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-category="210">自营奶粉</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-category="211">美妆个护</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-category="212">用品家居</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="newig_smRn_td">
+                <span>品牌</span></td>
+              <td>
+                <div class="newig_smR_bl newig_smR_blw single_select">
+                  <ul class="newig_smR_blul">
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="237">Pigeon</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="236">Como Tomo</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="233">LG</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="230">喜宝</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="229">Holle</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="228">爱他美</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="227">帮宝适</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+            </ul>
+        </div>
+        </td>
+        </tr>
+        </volist>
+        </table>
+        <!--end条件搜素 -->
+        <div class="wrap">
+          <!-- end 筛选条件 -->
+          <div class="sort-bar" id="scroll_find">
+            <ul style="display:inline-block;width:84%;float:left;">
+              <li>
+                <a class="a1 price">综合</a>
+              </li>
+              <li>
+                <a class="price-asc">
+                  <span>价格
+                    <i class="gjt_down"></i></span>
+                </a>
+              </li>
+            </ul>
+            <!-- end 换页 -->
+          </div>
+          <!-- end 筛选条件 -->
+          <ul class="goods-list-ul">
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/212/324.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484965190841.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/212/324.html" target="_blank">Tommee Tippe/汤美天地 母乳储存袋存奶袋储奶袋 奶水保存袋(36个装)350ml 2组</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">159.0&nbsp;</span>
+                      <del>￥200.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/212/323.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484965073864.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/212/323.html" target="_blank">艾斯托尼斯/Astonish 低泡去渍浓缩洗衣液 840ML</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">30.0&nbsp;</span>
+                      <del>￥49.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/212/322.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484964950608.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/212/322.html" target="_blank">三光云彩/GLASSLOCK 家用玻璃水杯水壶单个礼盒GL747(IJ937B)</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">29.9&nbsp;</span>
+                      <del>￥39.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/210/317.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484962996403.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/210/317.html" target="_blank">Nature Repuiblic/自然乐园 芦荟舒缓保湿化妆水舒缓套组赠芦荟胶8ml*2）</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">89.0&nbsp;</span>
+                      <del>￥119.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/210/316.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484962535183.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/210/316.html" target="_blank">爱他美/Aptamil 英国奶粉3段900g*3</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">398.0&nbsp;</span>
+                      <del>￥411.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/210/315.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484962437548.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/210/315.html" target="_blank">爱他美/Aptamil 奶粉1+段600g*4</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">399.0&nbsp;</span>
+                      <del>￥419.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/209/314.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484962021977.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/209/314.html" target="_blank">Moony/尤妮佳 纸尿裤M78（6-11KG）</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">215.0&nbsp;</span>
+                      <del>￥225.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/209/313.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484961905296.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/209/313.html" target="_blank">Pampers/帮宝适 纸尿裤 S102（4-8kg）【 2包装】</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">215.0&nbsp;</span>
+                      <del>￥225.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/209/312.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484961794575.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/209/312.html" target="_blank">Merries/花王 纸尿裤L64(9-14kg)【4包装】</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">415.0&nbsp;</span>
+                      <del>￥445.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/211/311.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484961643443.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/211/311.html" target="_blank">Herbacin/贺本清 小甘菊护手霜 润唇膏经典75ml*2+经典唇膏4.8g*2</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">99.0&nbsp;</span>
+                      <del>￥139.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/211/310.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484961466281.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/211/310.html" target="_blank">Lion/狮王 CLINICA牙膏(温和薄荷口味)130g*4</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">85.0&nbsp;</span>
+                      <del>￥105.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/211/309.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484960941521.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/211/309.html" target="_blank">澳佳宝/BLACKMORES 维生素E润肤霜 50g*2</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">99.0&nbsp;</span>
+                      <del>￥119.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/210/300.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1/1482830796745.jpg!450x450.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/210/300.html" target="_blank">HiPP/喜宝 有机奶粉2段800g*3（6-10个月）</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">319.0&nbsp;</span>
+                      <del>￥359.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/210/299.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1/1482408819781.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/210/299.html" target="_blank">Holle/泓乐 奶粉2段 600g*3 （6-10个月）</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">299.0&nbsp;</span>
+                      <del>￥399.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/211/298.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1/1482408738435.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/211/298.html" target="_blank">雅漾/Avène 舒护活泉喷雾 150ml</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">150.0&nbsp;</span>
+                      <del>￥159.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/212/297.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1/1482408524869.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/212/297.html" target="_blank">可吞食婴儿防蛀啫喱牙膏 （16个月以上） 50g</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">31.0&nbsp;</span>
+                      <del>￥31.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/209/296.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1/1482408621736.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/209/296.html" target="_blank">Merries/花王 拉拉裤 XL38（12-22KG</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">299.0&nbsp;</span>
+                      <del>￥599.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/206/289.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484903011933.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/206/289.html" target="_blank">澳贝森林放心煮 10只装摇铃罐装盒装婴儿牙胶</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">95.0&nbsp;</span>
+                      <del>￥255.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/206/288.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484903946158.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/206/288.html" target="_blank">【6个月+】auby澳贝乖乖小鸭 婴幼儿学爬</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">69.0&nbsp;</span>
+                      <del>￥188.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/206/287.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484904200619.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/206/287.html" target="_blank">贝恩施 【3岁+】哆啦A梦遥控车玩具儿童卡通模型</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">38.0&nbsp;</span>
+                      <del>￥150.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/206/286.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1/1482906468061.jpg!320x320.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/206/286.html" target="_blank">贝恩施 婴幼儿脚踏钢琴健身架送BB棒0-1岁</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">68.0&nbsp;</span>
+                      <del>￥198.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/206/285.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484904767379.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/206/285.html" target="_blank">2张爱心系列 早教益智启蒙有声学习挂图</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">25.9&nbsp;</span>
+                      <del>￥59.9</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="http:///localhost:8080/html/1/208/206/284.html" target="_blank">
+                    <img width="220" height="220" src="/upload/mall/product/1///1484904973417.jpg!350x350.jpg"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="http:///localhost:8080/html/1/208/206/284.html" target="_blank"> 澳乐 宝宝学步游戏围栏 送爬行垫（不含滑梯）</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">369.0&nbsp;</span>
+                      <del>￥741.0</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            
+          </ul>
+          <div class="noProduct" style="display: none;text-align: center;line-height:100px;height:100px;">抱歉，暂无商品</div>
+          <div class="clear"></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+	<div class="footer-top">
+		 <img src="http://localhost:8080/templets/1/ms//images/foottop-bg.jpg" /> 
+	</div>
+	<div class="footer">
+		<div class="footer-cnt">
+			<dl class="footer-dl" style="width: 130px;">
+				<dt>配送方式</dt>
+				 
+					<dd><a href=http://localhost:8080/html/1//93/94/index.html>主营业务</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//93/95/index.html>企业文化</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//93/98/index.html>企业优势</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//93/97/index.html>合作伙伴</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//93/96/index.html>资质荣誉</a></dd>
+				
+			</dl>
+			<dl class="footer-dl" style="width: 130px;">
+				<dt>关于我们</dt>
+				 
+					<dd><a href=http://localhost:8080/html/1//53/133/index.html >网站优化</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//53/134/index.html >网络营销</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//53/135/index.html >域名注册</a></dd>
+				
+			</dl>
+			<dl class="footer-dl" style="width: 130px;">
+				<dt>售后服务</dt>
+				 
+					<dd><a href=http://localhost:8080/html/1//99/102/index.html>企业形象设计</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//99/101/index.html> 全案设计</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//99/103/index.html>产品包装设计</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//99/104/index.html>连锁店设计</a></dd>
+				
+			</dl>
+			<dl class="footer-dl" style="width: 130px;">
+				<dt>商家合作</dt>
+				 
+					<dd><a href=http://localhost:8080/html/1//52/136/index.html> 优化报价</a></dd>
+				
+			</dl>
+			<img src="http://cdn.mingsoft.net/global/images/weixin.jpg" style="width: 80px;"/>
+			<div class="clear"></div>
+		</div>
+		<ul>
+			<li>@2012-2017铭飞科技(www.mingsoft.net) 铭飞科技有限公司版权所有</li>
+		</ul>
+	</div>
+</div>
+
+<!--右侧菜单栏-->
+<div class="mbar">
+	<div class="mui-mbar-tabs ">
+		<div class="quick_link_mian">
+			<div class="quick_links_panel">
+				<div id="quick_links" class="quick_links">
+					<li id="shopCart">
+						<a href="http://localhost:8080/people/shopCar.do" class="message_list mbar_click">
+							<i class="message ico-fonts">&#xe729;</i>
+							<div class="span">购物车</div><span class="cart_num">0</span>
+						</a>
+					</li>
+					<li class="right_li">
+						<a href="http://localhost:8080/people/favourite.do" class="mpbtn_histroy mbar_click right_icon" type="mbar-collect" onclick="asyn_collect()"><i class="ico-fonts">&#xe725;</i></a>
+						<div class="mp_tooltip" style="left: -121px; visibility: hidden;">我的收藏<i class="icon_arrow_right_black"></i></div>
+					</li>
+					
+				</div>
+				<div class="quick_toggle">
+					<li><a href="#top" class="return_top"><i class="top"></i></a></li>
+					<li class="right_li">
+						<a href="#"><i class="ico-fonts right_icon">&#xe914;</i></a>
+						<div class="mp_tooltip">返回顶部<i class="icon_arrow_right_black"></i></div>
+					</li>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--右侧菜单栏end--> 
+
+  </div>
+</body>
+
+</html>
+<script type="text/javascript">
+  $(function(){
+    ms.load(["ms","ms.mall"],function(ms,mmall){
+     
+      var category = "";
+      var brand = "";
+      var active = false;
+      $(".newig_smR_blul a").click(function(){
+        if($(this).hasClass("active")){
+          $(this).removeClass("active");
+          if($(this).data("category") != undefined){
+            category = "208";
+          }
+
+          if($(this).data("brand") != undefined){
+            brand = "";
+          }
+        }else{
+          $(this).addClass("active");
+          $(this).parent().siblings().find("a").removeClass("active");
+        }
+        
+
+        $(".newig_smR_blul a").each(function(){
+          if($(this).hasClass("active")){
+            if($(this).data("category") != undefined){
+              category=$(this).data("category");
+            }
+
+            if($(this).data("brand") != undefined){
+              brand=$(this).data("brand");
+            }
+          }
+        })
+        
+        
+        var data = "dataType=json&category="+category+"&brand="+brand;
+        //获取选中的分类或品牌进行搜索
+        
+        mmall.product.search(data,function(json){
+          $(".productSize").text(json.length)
+          if(json.length > 0){
+            $(".goods-list-ul").show();
+            $(".noProduct").hide();
+            $('.goods-list-ul').html($('#productSearch').tmpl(json));
+          }else{
+            $(".goods-list-ul").hide();
+            $(".noProduct").show();
+          }
+        })
+      })
+
+      //价格排序
+      $(".price-asc,.price").click(function(){
+        $(this).addClass("a1");
+        $(this).parent().siblings().find("a").removeClass("a1");
+        category="208";
+        brand="";
+        $(".newig_smR_blul a").each(function(){
+          if($(this).hasClass("active")){
+            if($(this).data("category") != undefined){
+              category=$(this).data("category");
+            }
+
+            if($(this).data("brand") != undefined){
+              brand=$(this).data("brand");
+            }
+          }
+        })
+        
+        if($(this).hasClass("price-asc")){
+          var data = "dataType=json&category="+category+"&brand="+brand+"&sort=price-asc";
+        }else{
+          var data = "dataType=json&category="+category+"&brand="+brand;
+        }
+        //获取选中的分类或品牌进行搜索
+        
+        mmall.product.search(data,function(json){
+          $(".productSize").text(json.length)
+          if(json.length > 0){
+            $(".goods-list-ul").show();
+            $(".noProduct").hide();
+            $('.goods-list-ul').html($('#productSearch').tmpl(json));
+          }else{
+            $(".goods-list-ul").hide();
+            $(".noProduct").show();
+          }
+        })
+
+      });
+
+      
+
+    })
+
+  })
+</script>
+<script type="text/x-jquery-tmpl" id="productSearch">
+  <li class="have">
+    <div class="list-shadow1">
+      <div class="list-shadow_div">
+        <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+        <a class="cp-lk-n" href="http://localhost:8080/html/1${productLinkUrl}" target="_blank">
+          <img width="220" height="220" src="${basicPic}"></a>
+        <div class="goods-info">
+          <a class="cp-n-lk a1" href="http://localhost:8080/html/1${productLinkUrl}" target="_blank">${basicTitle}</a>
+          <div class="goods-price">
+            <span>￥</span>
+            <span class="price">${productPrice}&nbsp;</span>
+            <del>￥${productCostPrice}</del></div>
+            
+        </div>
+    </div>
+  </li>
+</script>

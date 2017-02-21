@@ -1,0 +1,486 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="java cms开源,java 商城 开源,java 微信 开源,java 论坛 开源,java 社区 开源,java 分销 开源,java 代理 开源,java OA 开源,java ERP开源,java wms开源,铭飞案例展示,铭飞模版下载,江西开源软件公司,江西最好的软件公司"/>
+<meta name="description" content="国内最好的Java免费开源，文章、商城、微信、论坛等更多丰富好用插件与模版，拥有更高效的代码在线生成工具，降低开发成本提高开发效率。每月28定期更新版本"/>
+<title>铭飞MS平台|MStore|JAVA 开源 CMS、商城、微信、论坛、社区、分销、代理、OA、ERP</title>
+<link href="http://localhost:8080/templets/1/mmall//css/style.css" rel="stylesheet" type="text/css" />
+<link href="http://localhost:8080/templets/1/mmall//css/about.css" rel="stylesheet" type="text/css" />
+<script src="http://cdn.mingsoft.net/plugins/jquery/1.9.1/jquery-1.9.1.js"></script> 
+<script src="http://cdn.mingsoft.net/plugins/seajs/3.0.0/sea.js"></script> 
+<script src="http://cdn.mingsoft.net/model/1.0.0/main.js"></script> 
+<script>
+			ms.config({ 
+				base:"http://localhost:8080",
+				filter: {
+				  	people:{
+				  		loginUrl:'http://localhost:8080/login.do'
+				  	}
+				  }
+			}); 
+		</script>
+		<script src="http://localhost:8080/templets/1/mmall//js/login-state.js"></script>
+</head>
+<body  class="hchstw1">
+<script type="text/javascript">
+	var process_request = "正在处理您的请求...";
+</script>
+<script language="javascript"> 
+	function killerrors() { 
+	return true; 
+	} 
+	window.onerror = killerrors; 
+</script>
+<script>
+	$(function(){
+		ms.load(["ms","http://localhost:8080/templets/1/mmall//api-test/js/ms.cart.js"],function(ms,mmall) {
+			mmall.people.mall.order.cart.list(function(json){
+				$(".shopping span").html(json.length);
+				if (json.length > 0 ){
+					$(".goShopping").text("您可以去购物车结算您所添加的商品");//如果购物车有商品列表，显示这段话
+				}
+				else {
+					$(".goShopping").text("您的购物车里还没有商品！");
+				}
+			});
+		});
+	});
+</script>
+<span id="qq_cb"></span>
+<div class="top7" id="to_top" >
+	<div class="ebody">
+		<p class="left" id="ECS_MEMBERZONE"> 
+			<span id="loginInfo"> 
+				<a href="">收藏</a><small>|</small> 欢迎光临泡泡茶网！ 
+				<span class="la"> 
+					<a href="http://localhost:8080/login.do" rel="nofollow">登录</a><small>|</small> 
+					<a href="http://localhost:8080/register.do" rel="nofollow">免费注册</a> 
+				</span> 
+			</span>
+			<SCRIPT>
+				function ask(txt) {
+					return window.confirm(txt);
+				}
+				function bookmark(){
+					if(ask("要将本站点加入收藏夹吗？")) {
+				 		var title = document.title
+			  			var domain = window.location.hostname;
+			  			var url = window.location.href;
+			  			if( document.all ) { // ie
+			   				window.external.AddFavorite(url, title);
+			  				} 
+						else if (window.sidebar) { // firefox
+			  				window.sidebar.addPanel(title, url, title);
+			  				}
+						}
+					}
+					function setIndex(obj) {
+						var domain = window.location.hostname;
+						domain = "http://" + domain + "/";
+						if(ask("要将本站设为首页吗？")) {
+			 	 			if( document.all ) { // ie
+			   					obj.style.behavior='url(#default#homepage)';
+			   					obj.setHomePage(domain);
+			  					} 
+								else if (window.sidebar) { // firefox
+			   					if(window.netscape) {
+				   					try {  
+						  			netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");  
+					  				} catch (e) {  
+									alert( "该操作被浏览器拒绝，如果想启用该功能，请在地址栏内输入 about:config,然后将项 signed.applets.codebase_principal_support 值该为true" );  
+					  			}
+				  			} 
+				  			var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components. interfaces.nsIPrefBranch);
+				  			prefs.setCharPref('browser.startup.homepage', domain);
+			   			}
+					}
+				}
+			</SCRIPT>
+		</p>
+		<p class="rlink"> 
+			<a  rel="nofollow" title="" href="http://localhost:8080/html/1/59/index.html" >企业客户</a><small>|</small> 
+			<a  rel="nofollow" title="" href="http://localhost:8080/html/1/53/index.html" >关于我们</a><small>|</small> 
+			<a  rel="nofollow" title="" href="http://localhost:8080/html/1/19/141/index.html" >帮助中心</a> 
+		</p>
+	</div>
+</div>
+
+<div class="header7">
+	<div class="ebody">
+		<div class="header6">
+			<div class="logo">
+				<a href="http://localhost:8080"><img src="http://cdn.mingsoft.net/global/images/MStore.png" alt="" style="margin-top:8px;"/></a>
+			</div>
+			<div class="tel">
+				<div id="my360buy">
+					<dl>
+						<dt class="ld" id="orderList"><s></s><img src="http://localhost:8080/templets/1/mmall//images/blank.gif" width="24" height="24" alt="头像">
+							<a href="http://localhost:8080/people/myOrder.do">我的订单</a><b></b>
+						</dt>
+					</dl>
+				</div>
+				<div id="settleup" >
+					<DIV class="qq_jiesuan mini_cart clearfix"  onmouseover="this.className='qq_jiesuan_on mini_cart clearfix'" onmouseout="this.className='qq_jiesuan mini_cart clearfix'" id="ECS_CARTINFO">
+						<form id="formCart" name="formCart" method="post" action="flow.php" >
+							<dl >
+								<dt class="ld goodsCart"> <s ><span></span></s> <s class="shopping"><span>0</span></s> 
+									<a href="http://localhost:8080/people/shopCar.do">去购物车结算</a> <b></b> 
+								</dt>
+							</dl>
+							<div class="clear"></div>
+							<div class="jiesuan_t" >
+								<div style="padding:10px;" class="goShopping"> 您的购物车里还没有商品！ </div>
+								<script type="text/javascript">
+									function deleteCartGoods(rec_id){
+										Ajax.call('delete_cart_goods.php', 'id='+rec_id, deleteCartGoodsResponse, 'POST', 'JSON');
+									}
+									function deleteCartGoodsResponse(res)
+									{
+									  if (res.error)
+									  {
+										alert(res.err_msg);
+									  }
+									  else
+									  {
+										  document.getElementById('ECS_CARTINFO').innerHTML = res.content;
+									  }
+									}
+								</script>
+							</div>
+						</form>
+					</DIV>
+				</div>
+			</div>
+			<div class="search">
+				<dl>
+					<form id="searchDataForm"  method="post" action="http://localhost:8080/mmall/14/search.do" >
+						<dt>
+							<input type="hidden" name="redirect" />
+							<input  type="text" name="basic_title" class="inp2" />
+							<ul id="show_key_words" class='none' onmousemove="is_show_keywords=1" onMouseOut="is_show_keywords=0">
+							</ul>
+						</dt>
+						<dd>
+							<input name="sub" class="inp31" type="submit" value=""/>
+						</dd>
+					</form>
+				</dl>
+				<P>热门搜索：
+					<A  target=_blank  ><STRONG style="FONT-WEIGHT: normal;cursor: pointer;" style="color:#d90200" class="searchKey">福鼎白茶</STRONG></A>&nbsp; 
+					<A  target=_blank  ><STRONG style="FONT-WEIGHT: normal;cursor: pointer;" class="searchKey">安吉白茶</STRONG></A>&nbsp; 
+					<A  target=_blank  ><STRONG style="FONT-WEIGHT: normal;cursor: pointer;" class="searchKey">铁良老班章</STRONG></A>&nbsp; 
+					<A  target=_blank  ><STRONG style="FONT-WEIGHT: normal;cursor: pointer;" class="searchKey">铁观音</STRONG></A>&nbsp; 
+				</p>	
+				<script>
+					$(function(){					
+						$(".searchKey").click(function(){
+							var searchContent = $(this).text();
+							$("input[name='basic_title']").val(searchContent);
+							$("#searchDataForm").submit();
+						})
+					})
+				</script>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+      //初始化主菜单
+		function sw_nav()
+		{
+			document.getElementById('lnav7').style.display="block";
+		}
+		function sw_nav_hide()
+		{
+			document.getElementById('lnav7').style.display="none";
+		}
+      </script>
+	  <div class="menu7">
+		<div class="ebody">
+			<div class="mxal" id="allclass"  onMouseOver="sw_nav();" onMouseOut="sw_nav_hide();"> 
+				<a class="til" href="http://localhost:8080/html/1/245/index.html">所有商品分类</a>
+				<div class="lnav7" id="lnav7" style="display:none; ">
+					<dl class='xc1'>
+						<dt> 
+							<a href="http://localhost:8080/html/1/151/index.html" class="topcate" target="_blank" title="绿茶"><big>绿茶</big></a>
+							<ul>
+								<li class="tx"><strong><a href="http://localhost:8080/html/1/151/index.html" class="topcate" target="_blank" title="绿茶">绿茶</a></strong><em>&nbsp;</em></li>
+								<li class="txt"> 
+									<!--未找到栏目-->
+									<div class="clear"></div>
+								</li>
+								<li class="def"> 
+									<!--未找到栏目-->
+								</li>
+							</ul>
+						</dt>
+						<dd> 
+						<!--未找到栏目-->
+						</dd>
+					</dl>
+					<dl class='ot'>
+						<dt> 
+							<a href="http://localhost:8080/html/1/154/index.html" class="topcate" target="_blank" title="乌龙茶"><big>乌龙茶</big></a>
+							<ul>
+								<li class="tx"><strong><a href="http://localhost:8080/html/1/154/index.html" class="topcate" target="_blank" title="乌龙茶">乌龙茶</a></strong><em>&nbsp;</em></li>
+								<li class="txt"> 
+									<!--未找到栏目-->
+									<div class="clear"></div>
+								</li>
+								<li class="def"> 
+									<!--未找到栏目-->
+								</li>
+							</ul>
+						</dt>
+						<dd> 
+						<!--未找到栏目-->
+						</dd>
+					</dl>
+					<dl class='xc1'>
+						<dt> <a href="http://localhost:8080/html/1/171/index.html" class="topcate" target="_blank" title="黑茶"><big>黑茶</big></a>
+							<ul>
+								<li class="tx"><strong><a href="http://localhost:8080/html/1/171/index.html" class="topcate" target="_blank" title="黑茶">黑茶</a></strong><em>&nbsp;</em></li>
+								<li class="txt"> 
+									<!--未找到栏目-->
+									<div class="clear"></div>
+								</li>
+								<li class="def"> 
+									<!--未找到栏目-->
+								</li>
+							</ul>
+						</dt>
+						<dd> 
+						<!--未找到栏目-->
+						</dd>
+					</dl>
+					<dl class='ot'>
+						<dt> <a href="http://localhost:8080/html/1/152/index.html" class="topcate" target="_blank" title="普洱茶"><big>普洱茶</big>
+							</a>
+							<ul>
+								<li class="tx"><strong><a href="http://localhost:8080/html/1/152/index.html" class="topcate" target="_blank" title="普洱茶">普洱茶</a></strong><em>&nbsp;</em></li>
+								<li class="txt"> 
+									<!--未找到栏目-->
+									<div class="clear"></div>
+								</li>
+								<li class="def"> 
+									<!--未找到栏目-->
+								</li>
+							</ul>
+						</dt>
+						<dd> 
+						<!--未找到栏目-->
+						</dd>
+					</dl>
+					<dl class='xc1'>
+						<dt> <a href="http://localhost:8080/html/1/153/index.html" class="topcate" target="_blank" title="白茶"><big>白茶</big></a>
+							<ul>
+								<li class="tx"><strong><a href="http://localhost:8080/html/1/153/index.html" class="topcate" target="_blank" title="白茶">白茶</a></strong><em>&nbsp;</em></li>
+								<li class="txt"> 
+									<!--未找到栏目-->
+									<div class="clear"></div>
+								</li>
+								<li class="def"> 
+									<!--未找到栏目-->
+								</li>
+							</ul>
+						</dt>
+						<dd> 
+						<!--未找到栏目-->
+						</dd>
+					</dl>
+					<dl class='ot'>
+						<dt> <a href="http://localhost:8080/html/1/173/index.html" class="topcate" target="_blank" title="茶具"><big>茶具</big></a>
+							<ul>
+								<li class="tx"><strong><a href="http://localhost:8080/html/1/173/index.html" class="topcate" target="_blank" title="茶具">茶具</a></strong><em>&nbsp;</em></li>
+								<li class="txt"> 
+									<!--未找到栏目-->
+									<div class="clear"></div>
+								</li>
+								<li class="def"> 
+									<!--未找到栏目-->
+								</li>
+							</ul>
+						</dt>
+						<dd> 
+						<!--未找到栏目-->
+						</dd>
+					</dl>
+					<div class="clear"></div>
+					<div id="navtitle" class="title"><a href="http://localhost:8080" title="点击查看全部分类" target="_blank">热门分类</a></div>
+				</div>
+			</div>
+			<div class="mxnx" >
+				<ul>
+					<li class="this"><a href="http://localhost:8080" title="首页"><span title="首页">首页</span></a></li>
+					<li ><a href="http://localhost:8080/html/1/151/index.html"   title="" ><span class="n0" title="绿茶">绿茶</span></a></li>
+					<li ><a href="http://localhost:8080/html/1/152/index.html"   title="" ><span class="n1" title="普洱茶">普洱茶</span></a></li>
+					<li ><a href="http://localhost:8080/html/1/153/index.html"   title="" ><span class="n2" title="白茶">白茶</span></a></li>
+					<li ><a href="http://localhost:8080/html/1/154/index.html"   title="" ><span class="n3" title="乌龙茶">乌龙茶</span></a></li>
+					<div class="clear"></div>
+					<div class="new1"></div>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+</div>
+
+<div class="ebody">
+	<div class="clear line10"></div>
+	<div class="path_s1"> 当前位置: 
+		<a href="http://localhost:8080">首页</a> <code>&gt;</code> 
+		<a href="http://localhost:8080/html/1/62/83/index.html">研发团队</a> 
+	</div>
+	<div class="clear line10"></div>
+	<div class="ab_right">
+		<div class="about">
+			<div class="tx1">
+				<div class="atx" id="a1" style="border-bottom:#CCC 1px dotted; margin-right:20px; margin-bottom:10px;">
+					<h1 style="font-size: 18px;">文章列表 </h1>
+				</div>
+				<div class="art_cat_box">
+					<table width="100%" border="0" cellpadding="5" cellspacing="0" style=" line-height:30px;">
+					
+						<tr>
+							<td align="center">&nbsp;</td>
+							<td><a style="text-decoration:none" href="http://localhost:8080/html/1/62/83/193.html" title="" class="f6">宋朝华率队赴贵州招商洽谈推进重大项目</a></td>
+							<td align="right">2016-06-02</td>
+							<td align="center">&nbsp;</td>
+						</tr>
+					
+						<tr>
+							<td align="center">&nbsp;</td>
+							<td><a style="text-decoration:none" href="http://localhost:8080/html/1/62/83/192.html" title="" class="f6">纽约时髦客手中那些让人尖叫的包</a></td>
+							<td align="right">2016-06-02</td>
+							<td align="center">&nbsp;</td>
+						</tr>
+					
+					</table>
+				</div>
+			</div>
+			<div class="blank5"></div>
+			<div style="padding-right:20px;">
+				<form name="selectPageForm" action="/article_cat.php" method="get" style="text-align:center;">
+					<div id="pager" class="pages6" style="margin:0 auto; text-align:center">
+						<p>总计 <b>8</b> 个记录 <b>2</b> 页</p>
+						<p class="pr"><a href="http://localhost:8080/html/1//62/83/index.html">上一页</a></p>
+						<p class="this"><a>2</a></p>
+						<p class="nx"><a class="next" href="http://localhost:8080/html/1//62/83/list2.html">下一页</a></p>
+					</div>
+				</form>
+				<script type="Text/Javascript" language="JavaScript">
+<!--
+function selectPage(sel)
+{
+  sel.form.submit();
+}
+//-->
+</script>
+			</div>
+		</div>
+	</div>
+	<div class="ab_left">
+		<div class="title_a1"><a href=""><img src="http://localhost:8080/templets/1/mmall//images/title_a2.gif" width="200" height="37" align="absmiddle" /></a></div>
+		
+		<dl>
+			<dt>
+				<p class="i2" ><a href="http://localhost:8080/html/1//59/68/index.html">公司新闻</a></p>
+			</dt>
+		</dl>
+		
+		<dl>
+			<dt>
+				<p class="i2" ><a href="http://localhost:8080/html/1//59/69/index.html">行业新闻</a></p>
+			</dt>
+		</dl>
+		
+		<dl>
+			<dt>
+				<p class="i2" ><a href="http://localhost:8080/html/1//59/70/index.html">最新动态</a></p>
+			</dt>
+		</dl>
+		
+	</div>
+</div>
+<div class="clear line15"></div>
+<div class="kfbox7 ">
+	<div class="ebody">
+		<div class="helpnew">
+			<ul>
+				<li class="t1 im1">新手上路</li>
+				
+					<li style="padding-top:8px;"><a href="http://localhost:8080/html/1//53/133/index.html" target="_blank" rel="nofollow">网站优化</a></li>
+				
+					<li style="padding-top:8px;"><a href="http://localhost:8080/html/1//53/134/index.html" target="_blank" rel="nofollow">网络营销</a></li>
+				
+					<li style="padding-top:8px;"><a href="http://localhost:8080/html/1//53/135/index.html" target="_blank" rel="nofollow">域名注册</a></li>
+				
+			</ul>
+			<ul>
+				<li class="t1 im3">配送说明</li>
+				
+					<li style="padding-top:8px;"><a href="http://localhost:8080/html/1//93/94/index.html" target="_blank" rel="nofollow">主营业务</a></li>
+				
+					<li style="padding-top:8px;"><a href="http://localhost:8080/html/1//93/95/index.html" target="_blank" rel="nofollow">企业文化</a></li>
+				
+					<li style="padding-top:8px;"><a href="http://localhost:8080/html/1//93/98/index.html" target="_blank" rel="nofollow">企业优势</a></li>
+				
+			</ul>
+			<ul>
+				<li class="t1 im4">售后服务</li>
+				
+					<li style="padding-top:8px;"><a href="http://localhost:8080/html/1//62/83/index.html" target="_blank" rel="nofollow">研发团队</a></li>
+				
+					<li style="padding-top:8px;"><a href="http://localhost:8080/html/1//62/84/index.html" target="_blank" rel="nofollow">研发成果</a></li>
+				
+			</ul>
+			<ul style="width: 120px; padding: 40px 0px 0px 0px;background-color:#ddd; text-align: left; margin-left: 25px; ">
+				<li class="t1 ">相关知识</li>
+				
+					<li style="padding-top:8px;"><a href="http://localhost:8080/html/1//59/68/index.html" target="_blank">公司新闻</a></li>
+				
+					<li style="padding-top:8px;"><a href="http://localhost:8080/html/1//59/69/index.html" target="_blank">行业新闻</a></li>
+				
+					<li style="padding-top:8px;"><a href="http://localhost:8080/html/1//59/70/index.html" target="_blank">最新动态</a></li>
+				
+			</ul>
+			<ul style="width: 200px; padding: 40px 0px 0px 0px;background-color:#ddd; text-align: left; margin-left: 25px;  ">
+				<li>客服电话：<b style="color:#c6a756; padding-left:1px;">123456789</b></li>
+				<li >在线客服： <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1379814598&site=qq&menu=yes"> <img border="0" src="http://localhost:8080/templets/1/mmall//images/qq.gif" title="点击这里给我发消息"/> </a> </li>
+				<li>官方微信 <img src="http://cdn.mingsoft.net/global/images/weixin.jpg" width="85" height="85" style="padding-left:6px; padding-top:5px;" align="absmiddle"></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="footer7">
+	<div class="ebody">
+		<div class="line15"></div>
+		<div class="footer-lm">
+		<p class="link">
+        	<a href="http://localhost:8080/html/1/53/index.html" rel="nofollow">关于我们</a> | 
+			<a href="http://localhost:8080/html/1/53/133/index.html" rel="nofollow">企业客户</a> | 
+			<a href="http://localhost:8080/html/1/53/134/index.html" rel="nofollow">品牌合作</a> | 
+			<a href="http://localhost:8080/html/1/53/135/index.html" rel="nofollow">人才招聘</a> | 
+			<a href="http://localhost:8080/html/1/52/136/index.html" rel="nofollow">隐私保护</a> | 
+			<a href="http://localhost:8080/html/1/19/141/index.html">联系方式</a></p>
+		</div>
+		<p>版权所有 ©铭飞科技有限公司2012-2015 保留一切权利。</p>
+		<div class="line10"></div>
+	</div>
+</div>
+<a id="returnTop" href="javascript:;">回到顶部</a>
+<script src="http://localhost:8080/templets/1/mmall//js/top.js" type="text/javascript"></script>
+<script src="http://localhost:8080/templets/1/mmall//js/googleuser.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="http://localhost:8080/templets/1/mmall//js/949992390e9f43fbb5403035f8d2e58a.js" charset="UTF-8"></script>
+<div id="online_qq_layer">
+	<div id="online_qq_tab">
+		<div>
+		</div>
+		<div id="erweima"style="max-height:100%;"><img src="http://cdn.mingsoft.net/global/images/weixin.jpg" height="65px;" width="60px;"/></div>
+	</div>
+</div>
+
+</body>
+</html>

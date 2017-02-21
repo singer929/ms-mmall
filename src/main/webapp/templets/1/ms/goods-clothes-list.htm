@@ -1,0 +1,256 @@
+﻿<!DOCTYPE HTML>
+<html>
+  <head>{ms:include filename=headFile.htm/}
+    <title>商品列表</title>
+    <script src="{ms:globalskin.url/}/people/js/goods-cookie.js"></script>
+    <link rel="stylesheet" rev="stylesheet" href="{ms:globalskin.url/}/css/child-list.css" />
+  </head>
+  <body>
+  {ms:include filename=head.htm/}
+    <!-- logo和搜索 end -->
+    <script type="text/javascript" src="{ms:globalskin.url/}/js/hidelayer.js"></script>
+    <link rel="stylesheet" rev="stylesheet" href="{ms:globalskin.url/}/css/hidelayer.css" />
+    <style>.newig_smR_brgd{ float:none;} .hd-t{border:1px solid #dddddd;position:fixed;top:0;z-index:1000;display:block;width:1197px;} .pg_rt{position:absolute;top:0px;right:0px;}</style>
+    <div class="mainer-list-all">
+      <div class="mainer-list-3">
+        <!--条件搜素 -->
+        <!-- 头部显示 -->
+        <div class="newig_snav">
+          <div class="newig_snav_L f_L">
+            <ul>
+              <li>
+                <a href="{ms:global.host/}">全部商品</a></li>
+              <li>
+                <i class="newig_snL_jtico"></i>
+              </li>
+              <li>
+                <div>
+                  <a href="#">
+                    <span>{ms:field.typetitle/}</span></a>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="newig_snav_R f_R">共
+            <span class="productSize">{ms:page.rcount/}</span>件商品</div>
+          <div class="autoHeight"></div>
+        </div>
+        <!-- end 头部显示-->
+        <!-- 其他条件筛选 -->
+        <div class="newig_smR_nav f_L">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <!-- 大分类 -->
+            <tr>
+              <td class="newig_smRn_td">
+                <span>分类</span></td>
+              <td>
+                <div class="newig_smR_bl newig_smR_blw single_select">
+                  <ul class="newig_smR_blul">
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-category="206">玩具</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-category="209">自营纸尿裤</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-category="210">自营奶粉</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-category="211">美妆个护</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-category="212">用品家居</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="newig_smRn_td">
+                <span>品牌</span></td>
+              <td>
+                <div class="newig_smR_bl newig_smR_blw single_select">
+                  <ul class="newig_smR_blul">
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="237">Pigeon</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="236">Como Tomo</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="233">LG</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="230">喜宝</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="229">Holle</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="228">爱他美</a></li>
+                    <li style="overflow: hidden;">
+                      <a href="javascript:;" data-brand="227">帮宝适</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+            </ul>
+        </div>
+        </td>
+        </tr>
+        </volist>
+        </table>
+        <!--end条件搜素 -->
+        <div class="wrap">
+          <!-- end 筛选条件 -->
+          <div class="sort-bar" id="scroll_find">
+            <ul style="display:inline-block;width:84%;float:left;">
+              <li>
+                <a class="a1 price">综合</a>
+              </li>
+              <li>
+                <a class="price-asc">
+                  <span>价格
+                    <i class="gjt_down"></i></span>
+                </a>
+              </li>
+            </ul>
+            <!-- end 换页 -->
+          </div>
+          <!-- end 筛选条件 -->
+          <ul class="goods-list-ul">
+            {ms:prclist size=1000 ispaging=true}
+            <li class="have">
+              <div class="list-shadow1">
+                <div class="list-shadow_div">
+                  <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                  <a class="cp-lk-n" href="[field.link/]" target="_blank">
+                    <img width="220" height="220" src="[field.litpic/]"></a>
+                  <div class="goods-info">
+                    <a class="cp-n-lk a1" href="[field.link/]" target="_blank">[field.title/]</a>
+                    <div class="goods-price">
+                      <span>￥</span>
+                      <span class="price">[field.price/]&nbsp;</span>
+                      <del>￥[field.costprice/]</del></div>
+                      
+                  </div>
+              </div>
+            </li>
+            {/ms:prclist}
+          </ul>
+          <div class="noProduct" style="display: none;text-align: center;line-height:100px;height:100px;">抱歉，暂无商品</div>
+          <div class="clear"></div>
+        </div>
+      </div>
+    </div>
+
+    {ms:include filename=footer.htm/}
+  </div>
+</body>
+
+</html>
+<script type="text/javascript">
+  $(function(){
+    ms.load(["ms","ms.mall"],function(ms,mmall){
+     
+      var category = "";
+      var brand = "";
+      var active = false;
+      $(".newig_smR_blul a").click(function(){
+        if($(this).hasClass("active")){
+          $(this).removeClass("active");
+          if($(this).data("category") != undefined){
+            category = "208";
+          }
+
+          if($(this).data("brand") != undefined){
+            brand = "";
+          }
+        }else{
+          $(this).addClass("active");
+          $(this).parent().siblings().find("a").removeClass("active");
+        }
+        
+
+        $(".newig_smR_blul a").each(function(){
+          if($(this).hasClass("active")){
+            if($(this).data("category") != undefined){
+              category=$(this).data("category");
+            }
+
+            if($(this).data("brand") != undefined){
+              brand=$(this).data("brand");
+            }
+          }
+        })
+        
+        
+        var data = "dataType=json&category="+category+"&brand="+brand;
+        //获取选中的分类或品牌进行搜索
+        
+        mmall.product.search(data,function(json){
+          $(".productSize").text(json.length)
+          if(json.length > 0){
+            $(".goods-list-ul").show();
+            $(".noProduct").hide();
+            $('.goods-list-ul').html($('#productSearch').tmpl(json));
+          }else{
+            $(".goods-list-ul").hide();
+            $(".noProduct").show();
+          }
+        })
+      })
+
+      //价格排序
+      $(".price-asc,.price").click(function(){
+        $(this).addClass("a1");
+        $(this).parent().siblings().find("a").removeClass("a1");
+        category="208";
+        brand="";
+        $(".newig_smR_blul a").each(function(){
+          if($(this).hasClass("active")){
+            if($(this).data("category") != undefined){
+              category=$(this).data("category");
+            }
+
+            if($(this).data("brand") != undefined){
+              brand=$(this).data("brand");
+            }
+          }
+        })
+        
+        if($(this).hasClass("price-asc")){
+          var data = "dataType=json&category="+category+"&brand="+brand+"&sort=price-asc";
+        }else{
+          var data = "dataType=json&category="+category+"&brand="+brand;
+        }
+        //获取选中的分类或品牌进行搜索
+        
+        mmall.product.search(data,function(json){
+          $(".productSize").text(json.length)
+          if(json.length > 0){
+            $(".goods-list-ul").show();
+            $(".noProduct").hide();
+            $('.goods-list-ul').html($('#productSearch').tmpl(json));
+          }else{
+            $(".goods-list-ul").hide();
+            $(".noProduct").show();
+          }
+        })
+
+      });
+
+      
+
+    })
+
+  })
+</script>
+<script type="text/x-jquery-tmpl" id="productSearch">
+  <li class="have">
+    <div class="list-shadow1">
+      <div class="list-shadow_div">
+        <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+        <a class="cp-lk-n" href="{ms:global.url/}${productLinkUrl}" target="_blank">
+          <img width="220" height="220" src="${basicPic}"></a>
+        <div class="goods-info">
+          <a class="cp-n-lk a1" href="{ms:global.url/}${productLinkUrl}" target="_blank">${basicTitle}</a>
+          <div class="goods-price">
+            <span>￥</span>
+            <span class="price">${productPrice}&nbsp;</span>
+            <del>￥${productCostPrice}</del></div>
+            
+        </div>
+    </div>
+  </li>
+</script>

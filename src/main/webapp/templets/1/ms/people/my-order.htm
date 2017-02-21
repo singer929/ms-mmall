@@ -1,0 +1,412 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>我的订单</title>
+	{ms:include filename=people/headFile.htm/}
+	<script src="{ms:globalskin.url/}/people/js/check-login.js"></script>
+	<script src="{ms:globalskin.url/}/people/js/js.cookie.js" type="text/javascript"></script>
+	<script src="{ms:globalskin.url/}/people/js/login-order.js"></script>
+
+	<!--订单模板-->
+	<script type="text/x-jquery-tmpl" id="orderList">
+		<div class="my-order-table">
+			<div class="my-order-product-title">
+				<span class="order-no">订单号：<a style="color:#666;" class="to-orderDetail">${orderNo}</a></span>
+				<span class="order-time">${orderTime}</span>
+				<span class="del-order">
+					<a href="" title="删除订单"><i class='iconfont'>&#xe91b;</i></a>
+				</span>
+			</div>
+			<div class="my-order-table-list">
+				<div class="my-order-product-list">
+					<!--此处追加小div-->
+				</div>
+				<div class="my-order-info-list">
+					<div class="my-order-product-info">
+						<label class="my-order-name">${orderUserName}</label>
+						<i class="iconfont icon-grey">&#xe99b;</i>
+					</div>
+					<div class="my-order-product-info">
+						<span>总额：￥<label>${orderPrice}</label></span>
+					</div>
+					<div class="my-order-product-info">
+						<span><label>${orderStatusTitle}</label></span>
+					</div>
+					<div class="my-order-product-info-right">
+					{{if orderStatus==0}}
+						<a href="javascript:;" data-value="${orderNo}" class="order-pay">付款</a>
+						<a data-value="${orderId}" class="order-data">取消订单</a>
+					{{else orderStatus==5}}
+
+					{{else orderStatus==1}}
+						待发货
+					{{else commentId>0}}
+						已评价
+					{{else orderStatus==6 || orderStatus==4}}
+						<form name="forComment" action="{ms:global.host/}/people/orderComment.do" method="post" style="display: none;">
+							<input name="orderNo" value="${orderNo}"/>
+						</form>
+						<a href="javascript:;" class="order-comment">去评价</a>
+					{{/if}}
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</script>
+
+	<script type="text/x-jquery-tmpl" id="goodsList">
+		<div class="my-order-product">
+			<div class="order-product-img">
+				<a href="{ms:global.host/}/html/1${goodsUrl}">
+					<img src="${goodsThumbnail}" />
+				</a>
+			</div>
+			<div class="my-order-product-txt">
+				<a href="{ms:global.host/}/html/1${goodsUrl}">${goodsTitle} <span>${goodsProductDetailText}</span></a>
+				<span style="float:right;width:70px;">x${goodsNum}</span>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/x-jquery-tmpl" id="guessList">
+		<li>
+			<div class="p-item">
+				<div class="p-img">
+					<a href="${goodsUrl}"><img src="${goodsThumbnail}" /></a>
+				</div>
+				<div class="p-name">
+					<a href="${goodsUrl}">${goodsTitle} <span>${goodsProductDetailText}</span></a>
+				</div>
+				<div class="p-price">
+					<strong>¥${goodsPrice}</strong>
+				</div>
+				<div class="p-extra">
+					<a href="${goodsUrl}">(已有${goodsComment}人评价)</a>
+				</div>
+			</div>
+		</li>
+	</script>
+	
+</head>
+<body>
+	{ms:include filename=people/head.htm/}	
+	<div class="common-content">
+		<div class="common-main">
+			{ms:include filename=people/menu.htm/}
+			<div id="main">
+				<div class="my-order-cut-main">
+					<div class="this-title" data-id="order">
+						<h4>我的订单</h4>
+					</div>
+					<div class="my-order-second-lines">
+						<ul>
+							<li><a data-value="-1" class="red-a">全部订单</a></li>
+							<li><a data-value="0">待付款</a></li>
+							<li><a data-value="1">已付款</a></li>
+						</ul>
+						<div id="search">
+							<input type="text" name="" class="my-order-searchText" placeholder="输入订单编号进行查询"/>
+							<a class="my-order-typeBtn">
+								<i class="iconfont" style="font-size:15px;">&#xe70d;</i>
+							</a>
+							<div class="clear"></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="my-order-product-table">
+						<div class="my-order-third-lines">
+							<div class="my-order-order-detail">订单详情</div>
+							<div>收货人</div>
+							<div>金额</div>
+							<div>全部状态</div>
+							<div>操作</div>
+						</div>
+						<div class="order-list">
+							<!-- 此处追加订单列表 -->
+						</div>
+					</div>
+					<div class="my-order-product-blank">
+						<div class="my-order-blank-text">
+							<h5 class="blank-txt-1">您暂时还没有订单哦~</h5>
+							<a id="favorite-btn" href="{ms:global.host/}">去首页看看</a>
+						</div>
+					</div>
+					<div class="page">
+						<div class="cut-main-page"> 
+							<a  class="pre-page">&lt; 上一页</a> 
+							
+							<a  class="next-page">下一页 &gt;</a> 
+							<span style="color:black;">共<em class="cut-main-black-sum">1</em>页</span> 
+						</div>
+					</div>
+					<div class="clear"></div>
+					
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<form method="post" action="{ms:global.host/}/people/orderDetail.do" style="display:none" id="orderNoList">
+			<input name="orderNo" id="orderNo" value=""/>
+		</form>
+		<form method="post" action="{ms:global.host/}/bank/pay/alipay.do" style="display:none" id="orderPay">
+			<input name="returnUrl"  value="{ms:global.host/}/people/myOrder.do"/>
+			<input name="orderNo"  value=""/>
+			<input name="orderName"  value=""/>
+			<input name="orderPrice"  value=""/>
+			<input name="showUrl"  value=""/>
+			<input name="orderDesc"  value=""/>
+			<input name="notifyUrl"  value="{ms:global.host/}/mall//ordertify.do"/>
+		</form>
+	</div>
+	{ms:include filename=people/footer.htm/}
+</body>
+</html>
+<script type="text/javascript">
+$(function(){
+	var cookieData = Cookies.getJSON("goods_history");
+	/*
+	 *追加cookie数据
+	 *最近查看的商品
+	 */
+	if (cookieData != undefined) {	//要是cookie里没有数据的话就不用追加了
+		var goodsNum = cookieData.length;
+		var pageSize = 5;//设置一页显示多少商品，默认5个
+		var pageNum = goodsNum / pageSize;//计算总页数
+		var remainderPage = goodsNum % pageSize;//计算最后一页的商品余数
+		var curPage = 1;//记录当前页面，默认是1
+		var index = 0;//记录cookie中当前商品的索引
+		
+		/*追加导航页开始*/
+		for (var i = 1; i < pageNum; i++) {
+			curPage = i + 1;
+			$(".switch-page a:first").after("<a class=''>"+curPage+"</a>");
+		}
+		/*追加导航页结束*/
+		
+		/*加载满一页的数据*/
+		for (var i = 1; i <= pageNum; i++) {
+			for (var j = 0; j < pageSize; j++) {//循环加载满一页的数据
+				var data = cookieData[index++];
+				$("#guessList").tmpl(data).appendTo(".tabcon-"+i+"");
+			}
+			$(".tabcon-"+i+"").append("<div class='clear'></div>");
+		}
+		/*加载完毕*/
+		
+		/*加载未满一页的数据*/
+		for (var j = 0; j < remainderPage; j++) {
+			var data = cookieData[index++];
+			$("#guessList").tmpl(data).appendTo(".tabcon-"+curPage+"");
+		}
+		$(".tabcon-"+curPage+"").append("<div class='clear'></div>");
+		/*加载完毕*/
+	}
+	else {
+		$(".guessing-liked").hide();
+	}
+
+	var orderStatus = -1;	//默认订单状态
+	var pageNo = 1;		//默认当前页码
+	var isFirstPage;	//是否是第一页
+	var isLastPage;		//是否是最后一页
+	var orderNo = "";		//订单搜索时所需要的订单编号				
+	
+	//加载接口并且调用用相关的方法
+	ms.load(["ms","ms.mall","ms.pay"],function(ms,mmall,mpay) { 
+		getOrderList(mmall);	//获取订单列表
+		closeOrder(mmall) 		//关闭未支付的订单
+		delOrder(mmall)  		//删除已支付的订单
+		prePage(mmall);			//上一页
+		nextPage(mmall);		//下一页	
+		nav(mmall);				//页码导航
+		switchOrderStatus(mmall);//切换订单状态	
+		searchOrder(mmall)   	//搜索订单
+		payOrder(mmall,mpay)
+		
+	});
+	function payOrder(mmall,mpay){
+		$(".order-list").delegate(".order-pay","click",function(){
+		    var orderNo = $(this).attr("data-value");
+			var id = "orderNo="+$(this).attr("data-value")
+			mmall.people.mall.order.detail(id,function(json){
+				$("#orderPay input[name=orderNo]").val(orderNo);
+				$("#orderPay input[name=orderName]").val("订单标题");
+				$("#orderPay input[name=orderPrice]").val(json.orderPrice);
+				$("#orderPay input[name=orderDesc]").val("订单描述");
+				$("#orderPay input[name=showUrl]").val("{ms:global.host/}/people/orderDetail.do?"+json.orderNo);
+				$("#orderPay").submit();
+			})
+		})
+
+		$(".order-list").delegate(".order-comment","click",function(){
+			$("form[name=forComment]").submit();
+		})
+	}
+	//已支付订单显示可删除
+	$(".my-order-product-table").delegate(".my-order-table","mouseover mouseout",function(event){//只有已支付的订单才能删除
+		if ($(this).find("a.order-data").text() === "订单详情"){//只有text值显示为“订单详情”的才是已支付订单
+			if (event.type === "mouseover"){
+				$(this).find("span.del-order").show();
+			}
+			else {
+				$(this).find("span.del-order").hide();
+			}
+		}
+	});
+
+	//点击订单号跳到订单详情
+	$(".my-order-product-table").delegate(".to-orderDetail","click",function(){//点击订单号跳到订单详情
+		$("#orderNoList input[name='orderNo']").val(""+$(this).text()+"");
+		$("#orderNoList").submit(); 
+	});
+
+	//获取订单列表
+	function getOrderList(mmall) {	
+	//获取订单页面函数，此函数主要只做三件事：1.追加订单数据 	2.为订单数据再追加商品数据	3.追加分页数据
+		$(".my-order-table:visible").remove();		//每一次获取列表前都应该移除当前列表
+		$(".cut-main-red-num:visible").remove();	//每一次获取列表前都应该移除当前分页导航
+		var ListParam = "orderNo="+orderNo+"&orderStatus="+orderStatus+"&orderExpress=-1&orderPayment=-1&pageSize=10&pageNo="+pageNo+"";	//拼接订单列表数据
+		mmall.people.mall.order.list(ListParam,function(json){	//订单列表接口
+			pageNo = json.page.pageNum;		//获取当前页码
+			isFirstPage = json.page.isFirstPage;	//获取是否为第一页
+			isLastPage = json.page.isLastPage;		//获取是否为最后一页
+			if (json.list.length > 0 ){
+				$(".my-order-product-table").show();
+				$(".my-order-product-blank").hide();
+				$(".cut-main-page").show();
+			}
+			else {
+				$(".my-order-product-table").hide();
+				$(".my-order-product-blank").show();
+				$(".cut-main-page").hide();
+			}
+			
+			/*追加的订单列表，追加订单列表里面的数据*/
+			for (var i = 0; i < (json.list.length); i++){
+				/*开始建立orderList数据*/
+				var orderData = {orderTime:json.list[i].orderTime,
+								 orderNo:json.list[i].orderNo,
+								 orderUserName:json.list[i].orderUserName,
+								 orderId:json.list[i].orderId,
+								 orderStatus:json.list[i].orderStatus,
+								 commentId:json.list[i].commentId,
+								 orderStatusTitle:json.list[i].orderStatusTitle,
+								 goodsProductDetailText:json.list[i].goodsProductDetailText,
+								 orderPrice:parseFloat(json.list[i]. orderPrice).toFixed(2)//价格问题需要对数据进行处理
+								 }
+				/*数据建立完毕*/
+				
+				/*开始填入数据*/
+				$('#orderList').tmpl(orderData).appendTo('.order-list');
+				/*填入数据完毕*/
+				
+				/*开始建立goodsList数据*/
+				var goodsData = json.list[i].goods;
+				/*数据建立完毕*/
+				
+				/*开始填入数据*/
+				$('#goodsList').tmpl(goodsData).appendTo('.my-order-product-list:last');
+				var H = 90 * Number(""+json.list[i].goods.length+"");//商品列表右侧需要重新计算高度
+				$(".my-order-info-list:last").height(H);
+				/*填入数据完毕*/
+				
+			}
+			/*数据追加完毕*/						
+			for(var j = 0; j < json.page.navigatepageNums.length;j++){	//追加分页
+	            $(".next-page").before('<a class="cut-main-red-num" style="cursor: pointer;">'+json.page.navigatepageNums[j]+'</a>');
+	    	}
+			var curPage = Number(pageNo) - 1;	//获取当前页码的索引值
+			$(".cut-main-red-num:eq("+curPage+")").addClass("cur-page");	//为当前页面追加选中样式
+	        $(".cut-main-black-sum").text(json.page.pages);		//追加总页数 
+		});
+	}
+
+	//上一页订单列表
+	function prePage(mmall){
+		$(".pre-page").click(function(){//上一页
+			if(!isFirstPage){
+				pageNo--;
+				getOrderList(mmall);
+			}
+		});	
+	}
+
+	//下一页订单列表
+	 function nextPage(mmall){
+		 $(".next-page").click(function(){//下一页
+			if(!isLastPage){
+				pageNo++;
+				getOrderList(mmall);
+			}
+		});
+	}	
+
+	//页面导航
+	function nav(mmall){					
+		$(".cut-main-page").delegate(".cut-main-red-num","click",function(){//点击导航页码
+			pageNo = $(this).text();
+			getOrderList(mmall);
+		});
+	}
+
+	//关闭未支付订单
+	function closeOrder(mmall){					
+		$(".my-order-product-table").delegate(".order-data","click",function(){//关闭未支付订单
+			if (validator.isNumeric($(this).prev().text())) {//如果是已支付订单，此按钮将跳到我的订单去
+				$("#orderNoList input[name='orderNo']").val(""+$(this).prev().text()+"");
+				$("#orderNoList").submit();
+			}
+			else {
+				var closeOrder = confirm("确定取消订单？")
+				if (closeOrder) {
+					var closeParam = "orderId="+$(this).attr("data-value")+"";		//关闭订单接口所需要的参数							
+					mmall.people.mall.order.close(closeParam,function(){
+						getOrderList(mmall);
+					});
+				}
+			}
+		});
+	}
+
+	//删除已支付订单
+	function delOrder(mmall){
+		$(".my-order-product-table").delegate(".del-order","click",function(){//删除已支付订单
+			var delOrder = confirm("确定删除订单？");
+			if (delOrder){
+				var delParam = "orderId="+$(this).parent().siblings("div:eq(1)").find("a.order-data").attr("data-value")+"";
+				mmall.people.mall.order.del(delParam,function(){
+					getOrderList(mmall);
+				});
+			}
+		});
+	}
+
+	//切换订单状态
+	function switchOrderStatus(mmall){					
+		$(".my-order-second-lines ul a").click(function(){//切换订单状态
+			orderStatus = $(this).attr("data-value");
+			$(".my-order-second-lines a").removeClass("red-a");
+			$(this).addClass("red-a");
+			$(".my-order-searchText").val("")
+			orderNo = "";
+			getOrderList(mmall);
+		});
+	}
+
+	//订单搜索功能
+	function searchOrder(mmall){					
+		$(".my-order-typeBtn").click(function(){//订单搜索
+			orderNo = $(".my-order-searchText").val();
+			if (validator.isNumeric(orderNo)) {
+				getOrderList(mmall);
+			}
+			else {
+				alert("订单编号必须都为数字！");
+			}
+		});
+	}
+});			
+</script>

@@ -1,0 +1,377 @@
+<htmL>
+	<head>
+		<meta charset="utf-8" />
+		<title>订单评价</title>
+		{ms:include filename=people/headFile.htm/}
+		<script src="{ms:globalskin.url/}/people/js/check-login.js"></script>
+		<script src="{ms:globalskin.url/}/people/js/order-comment.js"></script>
+		<!-- 上传插件 -->
+		<script src='http://cdn.mingsoft.net/plugins/plupload/plupload.full.min.js'></script>
+		<script id="myTemplate" type="text/x-jquery-tmpl">   
+			<div class="orderCo-f-item" data-id="${goodsBasicId}" name="${goodsBasicId}">
+				<!--开始 左边-->
+				<div class="orderCo-fi-infos" id="orderCo-fi-div">
+					<div class="orderCo-comment-goods">
+						<div class="orderCo-p-img">
+							<img src="${goodsThumbnail}" alt="">
+						</div>
+						<div class="orderCo-p-name">
+							<span class="orderCo-name-a">${goodsName} ${goodsProductDetailText}</span>
+						</div>
+						<div class="orderCo-p-price">
+							<strong>￥${goodsPrice}</strong>
+						</div>
+					</div>
+				</div>
+				<!--结束 左边-->
+				<!--开始 右边-->
+				<div class="orderCo-fi-shop">
+					<div id="orderCo-tip-div">
+						<div class="orderCo-img-div"></div>
+						<img src="{ms:globalskin.url/}/people/images/comment3.png" class="orderCo-img4"/>
+						<div class="orderCo-tip-text">请至少填写意见商品的评价</div>
+					</div>
+					<div class="bop-tip">
+						<div class="orderCo-img-div"></div>
+						<i class='iconfont' style='font-size:14px;'>&#xe695;</i>
+						<span id="red-span">请填写商品满意度</span>
+					</div>
+					<div style="padding-top: 8px">
+						<span class="orderCo-sp-good">商品满意度</span>
+						<div class="ordetCo-sp-img">
+							<span data-id="1" class="ordetCo-span-img"></span>
+							<span data-id="2" class="ordetCo-span-img"></span>
+							<span data-id="3" class="ordetCo-span-img"></span>
+							<span data-id="4" class="ordetCo-span-img"></span>
+							<span data-id="5" class="ordetCo-span-img"></span>
+						</div>
+						<span class="orderCo-sps oc-product"><span class="goosScore">0</span>分</span>
+					</div>						
+					<div class="orderCo-fop-item">
+						<div class="orderCo-fop-label">买家印象</div>
+						<div class="orderCo-m-tagbox">								
+							<a class="orderCo-tag-item-a">
+								<span class="orderCo-tag-item-span">
+									<i class="fa icon iconfont" style="font-size:14px">&#xe86e;</i>
+									<em>自定义标签</em>
+								</span>
+								<input type="text" class="orderCo-tag-item-input"/>
+							</a>
+						</div>
+					</div>						
+					<div class="orderCo-fop-labels">评价晒单</div>
+					<div class="orderCo-fop-items">
+						<div class="orderCo-f-textarea">
+							<textarea class="orderCo-text-textarea" placeholder="商品是否给力？快来分享你的购买心得~"></textarea>
+							<div class="orderCo-textarea-ext">
+								<span class="orderCo-tips">
+									0 / 500（评价多于
+									<span class="orderCo-ftc1">10</span>
+									个字,有机会获奖哦~）
+								</span>
+							</div>
+						</div>
+						<div class="orderCo-m-imgshow">
+							<div class="orderCo-list">
+								<div class="orderCo-img-tmpl${goodsBasicId}"></div>
+								<img src="" class="orderCo-none"  style="display:none"/>
+								<img src="{ms:globalskin.url/}/people/images/bg-upload.png" class="orderCo-list-img" id="updataImg${goodsBasicId}" data-id="${goodsBasicId}"/>
+								<span class="orderCo-upload-num">
+									共
+									<span class="orderCo-ftc1">0</span>
+									张，还能上传
+									<span class="orderCo-ftc1">10</span>
+									张
+								</span>
+							</div>
+							<div class="orderCo-big-div">
+								<img src="" class="orderCo-big-img" style="display:none"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--结束 右边-->
+			</div>
+		</script>
+		<script id="myImgTmpl" type="text/x-jquery-tmpl">
+			<div class="orderCo-be-div">
+				<div class="thumbnail-operate">
+					<span class="op-delete">
+						<i class="fa icon iconfont" style="font-size: 14px"></i>
+					</span>
+				</div>
+				<img src=${newIcon} name="orderCo-img" style="display:inline"/>
+			</div>
+		</script>
+		
+	</head>
+	<body>
+		<!----------------------------头部开始----------------------------------->
+			{ms:include filename=people/head.htm/}
+		<!----------------------------头部结束----------------------------------->
+		<div id="orderCo-container">
+			<div class="orderCo-w">
+				<!--开始 评价订单-->
+				<div class="orderCo-detail-hd">
+					<div class="orderCo-orderinfo"  style="height:0px;"></div>
+				</div>
+				<!--结束 评价订单 -->
+				<!--开始 配送员-->
+				<div id="orderCo-activityVoucher">
+					<div class="orderCo-fi-info">
+						<div class="orderCo-comment-service">
+							<div class="orderCo-s-main">
+								<div class="orderCo-s-name">评价订单</div>
+								<div class="orderCo-s-info">订单号：{orderNo/}</div>
+								<div class="orderCo-s-info">下单时间：<span class="order-time"></span></div>
+							</div>
+						</div>
+					</div>
+					<div class="orderCo-fi-fuwu">
+						<div class="orderCo-fi-div"></div>
+						<div class="orderCo-fi-tip">
+							<img src="{ms:globalskin.url/}/people/images/comment3.png" class="orderCo-img3" />
+							<div class="orderCo-tip-text">请填写服务评价</div>
+						</div>
+						<div class="fop-tip">
+							<i class='iconfont' style="font-size:14px;">&#xe695;</i>
+							请填写服务评价
+						</div>
+						<div class="orderCo-item">
+							<span class="orderCo-sp">商品包装</span>
+							<div class="ordetCo-sp-img">
+								<span data-id="1" class="ordetCo-span-img remo"></span>
+								<span data-id="2" class="ordetCo-span-img remo"></span>
+								<span data-id="3" class="ordetCo-span-img remo"></span>
+								<span data-id="4" class="ordetCo-span-img remo"></span>
+								<span data-id="5" class="ordetCo-span-img remo"></span>
+							</div>
+							<span class="orderCo-sps oc-impression"><span id="firstScore">0</span>分</span>
+						</div>
+						<div class="orderCo-item">
+							<span class="orderCo-sp">送货速度</span>
+							<div class="ordetCo-sp-img">
+								<span data-id="1" class="ordetCo-span-img"></span>
+								<span data-id="2" class="ordetCo-span-img"></span>
+								<span data-id="3" class="ordetCo-span-img"></span>
+								<span data-id="4" class="ordetCo-span-img"></span>
+								<span data-id="5" class="ordetCo-span-img"></span>
+							</div>
+							<span class="orderCo-sps oc-logistics" ><span id="twoScore">0</span>分</span>
+						</div>
+						<div class="orderCo-item">
+							<span class="orderCo-sp">服务态度</span>
+							<div class="ordetCo-sp-img">
+								<span data-id="1" class="ordetCo-span-img"></span>
+								<span data-id="2" class="ordetCo-span-img"></span>
+								<span data-id="3" class="ordetCo-span-img"></span>
+								<span data-id="4" class="ordetCo-span-img"></span>
+								<span data-id="5" class="ordetCo-span-img"></span>
+							</div>
+							<span class="orderCo-sps oc-service "><span id="threeScore">0</span>分</span>
+						</div>
+						
+					</div>
+				</div>
+				<!--结束 配送员-->
+				<!--开始 商品评价-->
+				<div id="order-list">
+					<!--追加订单列表-->					
+				</div>				
+				<!--结束 商品评价-->
+				<!--开始 提交-->
+				<div class="orderCo-f-btnbox">
+					<a class="orderCo-btn-submit" style="color: #fff !important;">提交</a>
+					<!--span class="orderCo-f-checkbox">
+						<input type="checkbox" checked="checked" class="orderCo-i-check"/>
+						<label class="orderCo-chec-label">匿名评价</label>
+					</span-->
+				</div>
+				<!--结束 提交-->
+			</div>
+		</div>
+		<!--底部开始-->
+		{ms:include filename=people/footer.htm/}
+	<!--底部结束-->
+	</body>
+</htmL>
+<script>
+			
+	$(function(){ 
+		var saveNum = 0;//保存的数量
+		var shopNum;  //商品数量
+		var imgNum = 0;		//上传图片的数量
+		var imgFalg = false;	//上传图片数量没超过为false
+		var newIcon;
+		var picId = "";
+		ms.load(["ms","ms.mall","ms.upload"],function(ms,mmall,mupload){				
+			orderDetailInfo(mmall,mupload);		//调用订单详情方法，把相应的数据追加到页面
+			submitComment(mmall);		//提交订单方法，包括保存评论。以及保存印象
+		});
+		/*
+		 *订单详情接口
+		 *将相应的数据填追加到相应的页面
+		 *目前订单号还未通过传参传送过来
+		 */
+		function orderDetailInfo(mmall,mupload){
+			var orderDetailParam = "orderNo={orderNo/}";				
+			mmall.people.mall.order.detail(orderDetailParam,function(json){	
+				shopNum = json.goods.length;
+				$("#orderCo-activityVoucher").attr("data-orderId",json.orderId);
+				$('#myTemplate').tmpl(json.goods).appendTo('#order-list');//追加订单信息中的商品列表
+				$(".order-time").text(json.orderTime)
+				
+				uploadImg(mupload); //上传图片方法	
+				uploadImgManage(); //对上传的图片进行删除操作,以及鼠标移上去操作							
+			});	
+		}
+		
+		function submitComment(mmall){
+			$(".orderCo-btn-submit").click(function(){											
+				var ocImpression = $(".oc-impression span").text();
+				var ocLogistics = $(".oc-logistics span").text();
+				var ocService = $(".oc-service span").text();
+				/*
+				 *对订单中的商品评论依次进行保存
+				 */
+				$(".orderCo-f-item").each(function(index, element){						 						
+					var commentBasicId = $(this).attr("data-id"); //商品Id参数
+					var commentPicture = "";	//晒图参数
+					var ocServiceDescribe = "123";	//服务描述参数
+					var ocProduct = $(this).children().find(".goosScore").text();	//商品印象
+					var commentContent = $(this).children().find(".orderCo-text-textarea").val(); //评论内容
+					var isAnonymous;	//匿名评价
+					if($(".orderCo-i-check").is(":checked")){		//判定是否选中匿名评价
+						isAnonymous = true;		
+					}else{
+						isAnonymous = false;
+					}
+					var orderCommentParam = "commentBasicId="+commentBasicId+"&ocImpression="+ocImpression+"&ocProduct="+ocProduct+"&ocService="+ocService+"&ocLogistics="+ocLogistics+"&ocServiceDescribe="+ocServiceDescribe+"&commentPicture="+commentPicture+"&commentContent="+commentContent+"&anonymous="+isAnonymous+"";
+					var isLastImg = 0; //用于判断是否为最后一张图片
+					/*
+					 *添加照片路径
+					 */
+					$("img[name='orderCo-img']").each(function(){	
+						isLastImg++;
+						commentPicture += $(this).attr("src");
+						if(imgNum > isLastImg){
+							commentPicture += "|";
+						}
+					});					
+					$(".bop-tip").hide();
+					/*
+					 *判断是否评论
+					 */
+					if($("#firstScore").text() == "0" ||$("#Score").text() == "0" || $("#threeScore").text() == "0"){
+						$(".orderCo-fi-tip").hide();
+						$(".fop-tip").show();
+						$("html,body").animate({scrollTop:$(".fop-tip").offset().top},800);
+						return;
+					}
+					/*
+					 *判断商品满意的是否评论
+					 */
+					
+					if(ocProduct == 0){
+						$("#orderCo-tip-div").hide();
+						$(".bop-tip").show();
+						$("#red-span").html("请填写商品满意度").css("color","red");
+						$("html,body").animate({scrollTop:$(this).offset().top},800);
+						return;
+					}
+					/*
+					 *评论内容不能为空
+					 */
+					
+					if(validator.isNull(commentContent)){
+						$("#orderCo-tip-div").hide();
+						$(".bop-tip").show();
+						$("#red-span").html("请填写完整的评价内容").css("color","red");
+						$("html,body").animate({scrollTop:$(this).offset().top},800);
+						return;
+					}
+					/*
+					 *调用订单评论接口
+					 */
+					
+					mmall.people.mall.comment.save(orderCommentParam+'&ocOrderId='+$("#orderCo-activityVoucher").attr("data-orderId"),function(json){
+						saveNum++;
+						if(saveNum == shopNum){
+							alert("评论成功");
+							self.location.href="{ms:global.host/}/people/myOrder.do";
+						}								
+					});
+					//商品印象sava接口
+						
+					/*
+					 *对于选中的映像调用保存印象接口
+					 */						
+					var piBasicId = $(this).attr("data-id");
+					$(this).children().find(".orderCo-small").each(function(index, element){
+						var piTitle;
+						if($(this).children("span").text() != ""){   
+							piTitle = $(this).children("span").text();
+						}else{
+							piTitle = $(this).text();
+						}							
+						var impressSaveParam =  "piTitle="+piTitle+"&piBasicId="+piBasicId+"";
+						mmall.people.mall.impression.save(impressSaveParam,function(returnJson){
+							
+						})
+					})																																	
+				})						
+			});
+		}
+		function uploadImg(mupload){
+			$("#order-list").find(".orderCo-list-img").each(function(){
+				var imgId = $(this).attr("data-id");
+				mupload.init("updataImg"+imgId,"orderCo-img","/upload/people/1/",{"domClass":"upImg","size":"3000","afterMsg":"<img src='{ms:globalskin.url/}/people/images/bg-upload.png' style='cursor: pointer;'>","success":function(){
+					var imgData;
+					$(".moxie-shim-html5").css("width","0");
+					newIcon = $(".upImg > img").attr("src");	
+					imgData = {"newIcon":newIcon}
+					$(".upImg").remove();
+					$('#myImgTmpl').tmpl(imgData).appendTo('.orderCo-img-tmpl'+imgId);
+					//$(this).siblings(".orderCo-none").before("<div class='orderCo-be-div'><div class='thumbnail-operate'><span class='op-delete'><i class='fa icon iconfont' style='font-size: 14px'></i></span></div><img src="+newIcon+" class='orderCo-list-div-img' name='orderCo-img' style='display:inline'/></div>");					 
+					imgNum++;						
+					$("#updataImg").siblings(".orderCo-upload-num").find(".orderCo-ftc1:eq(0)").text(imgNum);
+					$("#updataImg").siblings(".orderCo-upload-num").find(".orderCo-ftc1:eq(1)").text(10-imgNum);
+					if(imgNum >= 10){
+						 $(".orderCo-list-img,.orderCo-upload-num").hide();
+						 imgFalg = true;
+					 	}
+					}
+				});
+			})
+				
+		}
+		function uploadImgManage(){
+			/*
+			 *鼠标移到上传的图片上，出现删除按钮
+			 */
+			$(".orderCo-list").delegate(".orderCo-be-div","mouseover",function(){
+				$(this).find(".thumbnail-operate").show();
+			});
+			/*
+			 *鼠标移开，隐藏删除按钮
+			 */
+			$(".orderCo-list").delegate(".orderCo-be-div","mouseout",function(){
+				$(this).find(".thumbnail-operate").hide();
+			});
+			/*
+			 *删除掉上传的图片事件
+			 */
+			$(".orderCo-list").delegate(".op-delete","click",function(){
+				$(this).parents(".orderCo-be-div").remove();
+				imgNum--;
+				$(".orderCo-upload-num").children().first().text(imgNum);
+				$(".orderCo-upload-num").children().last().text(10-imgNum);
+				
+				 if(imgFalg == true && imgNum<10){
+					 $(".orderCo-list-img,.orderCo-upload-num").show();
+					 imgFalg = false;
+				 }
+			});
+		}
+	})
+</script>

@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+<head>{ms:include filename=headFile.htm/}
+  <title>搜索结果</title>
+  <script src="{ms:globalskin.url/}/people/js/goods-cookie.js"></script>
+  <link rel="stylesheet" rev="stylesheet" href="{ms:globalskin.url/}/css/child-list.css" />
+</head>
+<body>
+  {ms:include filename=head.htm/}
+  <!-- logo和搜索 end -->
+  <script type="text/javascript" src="{ms:globalskin.url/}/js/hidelayer.js"></script>
+  <link rel="stylesheet" rev="stylesheet" href="{ms:globalskin.url/}/css/hidelayer.css" />
+  <style>.newig_smR_brgd{ float:none;} .hd-t{border:1px solid #dddddd;position:fixed;top:0;z-index:1000;display:block;width:1197px;} .pg_rt{position:absolute;top:0px;right:0px;}</style>
+  <div class="mainer-list-all">
+    <div class="mainer-list-3">
+      <!--条件搜素 -->
+      <!-- 头部显示 -->
+      <div class="newig_snav">
+        <div class="newig_snav_L f_L">
+          <ul>
+            <li><a href="{ms:global.host/}">首页</a></li>
+            <li><i class="newig_snL_jtico"></i></li>
+            <li><div><span>搜索"{basic_title/}"结果如下</span></div></li>
+          </ul>
+        </div>
+        <div class="newig_snav_R f_R">共
+          <span>{ms:page.rcount/}</span>件商品</div>
+          <div class="autoHeight"></div>
+        </div>
+        <!-- end 头部显示-->
+        <!-- 其他条件筛选 -->
+        <div class="newig_smR_nav f_L">
+          <div class="wrap">
+            <div class="pro_nopro" style="line-height:100px;height:100px;display: none">暂未搜索到您需要的商品</div>
+            <ul class="goods-list-ul search_list">
+
+              {ms:prclist size=1000 ispaging=true}
+              <li class="have">
+                <div class="list-shadow1">
+                  <div class="list-shadow_div">
+                    <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                    <a class="cp-lk-n" href="[field.link/]" target="_blank">
+                      <img width="220" height="220" src="[field.litpic/]">
+                    </a>
+                    <div class="goods-info">
+                      <a class="cp-n-lk a1" href="[field.link/]" target="_blank">[field.title/]</a>
+                      <div class="goods-price">
+                        <span>￥</span>
+                        <span class="price">[field.price/]&nbsp;</span>
+                        <del>￥[field.costprice/]</del>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              {/ms:prclist}
+            </ul>
+            <!--推荐-->
+            <div class="recommend" id="tj_cp">
+              <p class="p-recommend">为你推荐</p>
+              <div class="goods-list">
+                <ul class="goods-list-ul">
+                  {ms:prclist typeid=208 size=4}
+                  <li class="have">
+                    <div class="list-shadow1">
+                      <div class="list-shadow_div">
+                        <div style="position: absolute; top: 7px;left:0px;width:100%;"></div>
+                        <a class="cp-lk-n" href="[field.link/]" target="_blank">
+                          <img width="220" height="220" src="[field.litpic/]">
+                        </a>
+                        <div class="goods-info">
+                          <a class="cp-n-lk a1" href="[field.link/]" target="_blank">[field.title/]</a>
+                          <div class="goods-price">
+                            <span>￥</span>
+                            <span class="price">[field.price/]&nbsp;</span>
+                            <del>￥[field.costprice/]</del>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  {/ms:prclist}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {ms:include filename=footer.htm/}
+  </div>
+</body>
+
+</html>
+<script type="text/javascript">
+  $(function(){
+    if($(".search_list").children().length == 0){
+      $(".pro_nopro").show();
+    }
+  })
+</script>

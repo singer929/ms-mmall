@@ -1,0 +1,480 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>确认订单</title>
+	{ms:include filename=people/headFile.htm/}
+	<script src="{ms:globalskin.url/}/people/js/confirm-order.js" type="text/javascript"></script>
+	<script src="{ms:globalskin.url/}/people/js/check-login.js"></script>
+	<script src="http://cdn.mingsoft.net/plugins/jquery.tmpl/1.4.2/jquery.tmpl.min.js"></script>
+	<!-- 调用列表模板 -->
+	<script id="myTemplate" type="text/x-jquery-tmpl">   
+		<li class="user-name-hide-one" data-num=${peopleAddressId} data-default=${peopleAddressDefault}>
+			<div class="user-name">
+				<p class="border-haver user-name-one">${peopleAddressConsigneeName}</p>
+			</div>
+			<div class="add-detail">
+				<span class="add-name">${peopleAddressConsigneeName}</span>
+				<span class="orderAddress">${peopleAddresProvince}&nbsp;${peopleAddressCity}&nbsp;${peopleAddressDistrict}&nbsp;${peopleAddressStreet}</span>
+				<span class="orderDetail">${peopleAddressAddress}</span>
+				<span class="orderPhone">${peopleAddressPhone}</span>
+			</div>
+			<div class="default-address" data-default=${peopleAddressDefault}>
+				默认地址
+			</div>
+			<div class="op-btns">
+				<a id="setdefault" data-setdefault=${peopleAddressDefault}>设为默认地址</a>
+				<a href="#" class="order-edit">编辑</a>
+				<a class="delAddress" href="#">删除</a>
+			</div>
+		</li>
+		<div class="clear"></div>
+	</script>
+	
+	<script id="mySecondTemplate" type="text/x-jquery-tmpl">
+		<div class="replace-goods">
+			<div class="replace-goods-list">
+				<img src="${cartThumbnail}" />
+			</div>
+			<div class="replace-goods-info">
+				<a class="goods-info-abstract" href="{ms:global.url/}${cartUrl}">${cartTitle} <span style="margin-left: 20px;">${cartProductDetailText}</span></a>
+				<div class="goods-info-price-red">
+					￥${cartPrice}
+				</div>
+				<div class="goods-info-number">
+					x${cartNum}
+				</div>
+			</div>
+		</div>
+	</script>
+
+</head>
+<body>
+	<!--头部开始-->
+	{ms:include filename=people/head.htm/}
+	<!--头部结束-->
+	<div class="confirm-order-content">
+		<div class="content-steps">
+			<div class="steps-img"><img src="{ms:globalskin.url/}/people/images/steps-2.png"/></div>
+			<div class="confirm-title">
+				<span>填写并核对订单信息</span>
+			</div>
+		</div>
+		<div class="content-inner"> 
+			<div class="inner-replace-goods-info">
+				<h1>收货人信息</h1>
+				<div class="add-address">
+					<a>新增收货地址</a>
+				</div>
+				<ul id="address-list">
+
+				</ul>
+				<div class="clear"></div>
+				<div class="more-address" id="more-hide">
+					<span>更多地址</span>
+					<i class="fa icon iconfont" style="position: relative;top:5px;font-size:30px;">&#xe7db;</i>
+				</div>
+				<div class="more-address hide" id="retract-hide">
+					<span>收起地址</span>
+					<i class="fa icon iconfont" style="position: relative;top:5px;font-size:30px;">&#xe7db;</i>
+				</div>
+			</div>
+			<div class="inner-pay">
+				<h1>支付方式</h1>
+				<div class="inner-pay-item" data-value="1">货到付款</div>
+				<div class="inner-pay-item-haver" id="inner-pay-item" data-value="2">在线支付</div>
+			</div>
+			<div class="inventory">
+				<h1>送货清单</h1>
+				<div class="inner-replace">
+					<a href="{ms:global.host/}/people/shopCar.do">返回修改购物车</a>
+				</div>
+				<div class="inventory-list">
+					<div class="none-list" style="display: none;text-align: center;height: 50px;line-height: 50px;">加载中</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="content-accounts">
+			<div class="goods-sum-list">
+				<span><em class="sum-nums">加载中</em>&nbsp;件商品，总商品金额：</span>
+				<em class="goods-info-price">加载中</em>
+			</div>
+			<div class="goods-sum-list">
+				<span>运费：</span>
+				<em class="goods-shipping">¥<label>0.00</label></em>
+			</div>
+		</div>
+		<div class="content-sum">
+			<div class="message">
+				<h1>备注</h1>
+				<textarea class="order-message" name="orderDescription" placeholder="选填:对本次交易的说明(建议填写已和卖家协商一致的内容)"></textarea>
+			</div>
+			<div class="content-sum-money">
+				<span>应付总额：</span>
+				<div class="content-sum-goods-info-price">加载中</div>
+			</div>
+			<div class="content-sum-address">
+				<span></span>
+			</div>
+		</div>
+		<button class="content-btn"></button>
+		{ms:include filename=people/address-add.htm/}
+		<div class="clear"></div>
+		<form id="oderDefuMeg" style="display:none">
+			<input name="orderExpress" value="0"/>
+			<input name="orderExpressTitle" value="送货上门"/>
+			<input name="orderInvoiceName" value="个人"/>
+			<input name="orderInvoiceDefinite" value="明细"/>
+			<input name="orderPrice" value="商品总额"/>
+			<input name="goodsTotalNum" value="商品总数"/>
+			<!-- <input name="orderExprecessPrice" value="邮费"/> -->
+			<!-- <input name="orderInvoiceType" value=""/> -->
+		</form>
+
+		<form action="{ms:global.host/}/people/successOrder.do" method="post" id="submit-order" style="display:none">
+			<input value="" name="orderNo" />
+			<input value="" name="orderPrice" />
+		</form>
+	</div>
+	<!--底部开始-->
+	{ms:include filename=people/footer.htm/}
+	<!--底部结束-->
+</body>
+</html>
+<script>
+	/*submit所需要参数*/
+	var orderList = 0;		//当收货地址为空时，arderList=0
+	var orderUserName;		//收货人姓名
+	var orderPhone;			//收货人电话
+	var orderAddress;		//收货地址
+	var orderPayment = 2;	//默认为2，支付宝
+	/**/
+	/*计算价钱所需变量*/
+	var orderExprecessPrice = Number($(".goods-shipping > label").text());
+	var totalPrice = 0;
+	var TotalNum = 0;
+	var subPrice = 0;
+	/**/
+	$(function(){
+		//var data = Request.Form["idToOrder"].ToString();
+		/*判断是否存在默认地址所用参数*/
+		$(".inner-pay div").click(function(){	//改变订单支付方式
+			orderPayment = $(this).attr("data-value");
+		});
+		$(".more-address").click(function(){  	//点击 切换收藏地址
+			$(".user-name-one").parent().parent().toggle();
+			$(".border-haver").parent().parent().show();
+		});		
+	});
+	$(function(){
+		ms.load(["ms","ms.mall","ms.people"],function(ms,mmall,mpeople) {
+			$(".content-btn").click(function(){    //提交订单接口
+				var obj = $(this)
+				obj.attr("disabled", true);
+				submit(ms,mmall,obj);
+			});
+			info(mmall); 					//获取订单信息
+			peopleAddress(false,mpeople);   //收货地址列表接口
+			delAddress(mpeople) ;	 		// 删除收货地址
+		    setDefault(mpeople) ;  			// 设置默认地址 
+			$("#save").click(function(){	//保存收获地址接口
+				saveAddress(ms,mpeople);
+			});
+			getAddress(mpeople);  			// 获取地址信息接口
+			updateAddress(ms,mpeople)  		// 更新地址信息接口
+		});
+	});
+	/*
+	* 提交订单接口
+	*/
+	function submit(ms,mmall,obj) {
+		var submitParameter = "orderUserName="+orderUserName+"&orderPhone="+orderPhone+"&orderAddress="+orderAddress+"&orderExpressPrice=10&orderPayment="+orderPayment+"&orderStatus=0&cartIds={idToOrder/}&"+$('#oderDefuMeg').serialize()+"&orderDescription="+$(".order-message").val();
+		if(orderList == 0){
+			ms.alert("收货地址为空");	
+		}else{
+			mmall.people.mall.order.submit(submitParameter,function(json){
+				if(json.result != undefined && json.result == false){
+					ms.alert("请求超时，请稍后重试！");
+				}else{
+					ms.alert("提交成功");
+					obj.attr("disabled", false);
+					$("#submit-order input[name=orderNo]").val(json.orderNo);
+					$("#submit-order input[name=orderPrice]").val(json.orderPrice);	
+					$("#submit-order").submit();
+					//self.location.href="{ms:global.host/}/people/successOrder.do";
+				}
+				
+			});
+		}
+	}
+	/*
+	* 获取订单商品信息接口
+	*/
+	function info(mmall) {
+		/*获取订单商品开始*/
+		var infoParam = "cartIds={idToOrder/}";
+		if(infoParam[7] === "{"){
+			self.location.href="{ms:global.host/}/people/shopCar.do";
+			return;
+		}
+		var goodsDom = $(".replace-goods");
+		$(".none-list").show();
+		mmall.people.mall.cart.list(infoParam,function(json){
+			var subNum;
+			var cartList = new Array();						
+			for(var i = 0; i < json.length; i++) {
+				var thisPrice = json[i].cartPrice.toFixed(2);
+				cartList[i] = {cartThumbnail:json[i].cartThumbnail,
+				cartUrl:json[i].cartUrl,
+				cartTitle:json[i].cartTitle,
+				cartPrice:thisPrice,
+				cartNum:json[i].cartNum,
+				cartProductDetailText:json[i].cartProductDetailText,
+
+			}				
+				subNum = Number(""+json[i].cartNum+"");
+				TotalNum += Number(""+json[i].cartNum+"");
+				subPrice += Number(""+json[i].cartPrice+"") * subNum;
+			}
+			$('#mySecondTemplate').tmpl(cartList).appendTo('.inventory-list');
+			$(".none-list").hide();	
+			$(".sum-nums").text(""+TotalNum+"");					 //赋值总数量
+			$(".goods-info-price").text("￥"+subPrice.toFixed(2)+"");//赋值总商品金额
+			totalPrice = subPrice + orderExprecessPrice;			 //总额需加上运费
+			$(".content-sum-goods-info-price").text("￥"+totalPrice.toFixed(2)+""); //赋值总额			//把商品总额传给接口
+			$("#oderDefuMeg input[name='orderPrice']").val(""+subPrice+"");			//把商品总额传给接口
+			$("#oderDefuMeg input[name='goodsTotalNum']").val(""+TotalNum+"");		//把商品总数传给接口
+			$("#oderDefuMeg input[name='orderExprecessPrice']").val(""+orderExprecessPrice+"");//把邮费传给接口
+		});
+	}
+	/*
+	* 收货地址列表接口
+	*/
+	function peopleAddress(display,mpeople){
+		var	judgeDefault =  true
+		$(".user-name-hide-one").remove();
+		mpeople.people.address.list(function(json){  //获取收获地址列表
+			var addresDdefault = true;
+			var addressList = new Array();
+			var index = 0;
+			for(var i=0; i<(json.length); i++ ) {							
+				if(json[i].peopleAddressDefault === 1) {	//如果存在默认收货地址先追加默认收货地址
+					addressList[index] = {peopleAddressId:json[i].peopleAddressId,
+						peopleAddressConsigneeName:json[i].peopleAddressConsigneeName,
+						peopleAddressAddress:json[i].peopleAddressAddress,					
+						peopleAddressPhone:json[i].peopleAddressPhone,
+						peopleAddressMail:json[i].peopleAddressMail,
+						peopleAddressProvince:json[i].peopleAddressProvince,
+						peopleAddressAddress:json[i].peopleAddressAddress,
+						peopleAddressCity:json[i].peopleAddressCity,
+						peopleAddressDistrict:json[i].peopleAddressDistrict,
+						peopleAddressStreet:json[i].peopleAddressStreet,
+						peopleAddressDefault:json[i].peopleAddressDefault};
+					$('#myTemplate').tmpl(addressList).appendTo('#address-list');//通过tmpl追加数据
+					addresDdefault = false;
+					orderAddress = $(".orderAddress").text();
+					orderUserName = json[i].peopleAddressConsigneeName;
+					orderList++;
+					orderPhone = json[i].peopleAddressPhone;
+					$(".content-sum-address span").text('寄送至：'+orderAddress+'\t收货人：'+orderUserName+'\t联系电话：'+orderPhone+' ');
+				}						
+			}
+			for(var i = json.length- 1; i >= 0 && json.length - i < 5; i-- ) {	//追加5个非默认的收货地址						
+				if(json[i].peopleAddressDefault !== 1) {
+					addressList[index] = {peopleAddressId:json[i].peopleAddressId,
+						peopleAddressConsigneeName:json[i].peopleAddressConsigneeName,
+						peopleAddressAddress:json[i].peopleAddressAddress,
+						peopleAddressPhone:json[i].peopleAddressPhone,
+						peopleAddressMail:json[i].peopleAddressMail,
+						peopleAddressProvince:json[i].peopleAddressProvince,
+						peopleAddressAddress:json[i].peopleAddressAddress,
+						peopleAddressCity:json[i].peopleAddressCity,
+						peopleAddressDistrict:json[i].peopleAddressDistrict,
+						peopleAddressStreet:json[i].peopleAddressStreet,
+						peopleAddressDefault:json[i].peopleAddressDefault};
+						index++;	
+						orderList++;
+					}							
+				}
+				if(index !== 0){
+				$('#myTemplate').tmpl(addressList).appendTo('#address-list');//通过tmpl追加数据
+			}						
+			if(addresDdefault){
+				orderAddress = $(".orderAddress:first").text();
+				orderUserName = json[json.length- 1].peopleAddressConsigneeName;
+				orderPhone = json[json.length- 1].peopleAddressPhone;
+				$(".content-sum-address span").text('寄送至：'+orderAddress+'\t收货人：'+orderUserName+'\t联系电话：'+orderPhone+' ');
+			}
+			
+			$("a[data-setdefault='1']").hide();//调用 收货地址列表时，根据是否为默认地址。显/隐相应的数据
+			$("a[data-setdefault='0']").show();
+			$("div[data-default='0']").hide();
+			$("div[data-default='1']").show();	
+			
+			$('.op-btns').hide();				//隐藏编辑信息
+			$('.user-name p').removeClass("border-haver");	//隐藏收货人红色框样式
+			$("li[data-default='1'] .user-name-one").addClass("border-haver");
+			$("li[data-default='1'] .user-name-one").each(function(){
+				judgeDefault =  false;
+			});
+			if(judgeDefault){ 					//如果不存在默认地址，默认追加第一个非默认为选中状态
+				$("li[data-default='0']:first .user-name-one").addClass("border-haver");
+			}
+			$("li[data-default='0']").hide();
+			$("li[data-default='1']").hide();
+			$(".border-haver").parent().parent().show();							
+			$(".user-name-hide-one").mouseover(function(){  //鼠标悬停添加的样式
+				$(this).children('.op-btns').show();							
+			});
+			$(".user-name-one").mouseover(function(){ 		//鼠标悬停添加的样式
+				$(this).css("border","2px solid #e4393c");
+			});
+			$(".user-name-one").mouseout(function(){  		//鼠标移开移除样式
+				$(this).css("border","1px solid #bbb");
+			});
+			$(".user-name-hide-one").mouseout(function(){  	//鼠标移开移除样式
+				$('.op-btns').hide();
+			});
+			$(".user-name-one").click(function(){     		//点击选中收货地址
+				$('.user-name p').removeClass("border-haver");//移除旧的被选中样式
+				$(this).css("border","2px solid #e4393c");
+				$(this).addClass("border-haver");			//赋值新的选中样式
+				orderAddress = $(this).parent().next().children(".orderAddress").text();
+				orderUserName = $(this).parent().next().children(".add-name").text();
+				orderPhone = $(this).parent().next().children(".orderPhone").text();
+				$(".content-sum-address span").text('寄送至：'+orderAddress+'\t收货人：'+orderUserName+'\t联系电话：'+orderPhone+' ');
+			});
+			if(display){
+				$(".user-name-one").parent().parent().show();							
+			}
+		})
+	}
+	/*
+	* 删除收货地址接口
+	*/
+	function delAddress(mpeople) {
+		$("#address-list").delegate(".delAddress","click",function(){   //删除收获地址
+			var dataId = $(this).parent().parent().attr("data-num");
+			var delParam = "peopleAddressId="+dataId+"";
+			var delAddress = confirm("删除收货地址？");
+			if(delAddress === true) {
+				mpeople.people.address.del(delParam,function(json){
+					peopleAddress(true,mpeople);
+				});
+			}
+		});	
+	}
+	/*
+	* 设置默认地址接口
+	*/
+	function setDefault(mpeople) {
+		$("#address-list").delegate("#setdefault","click",function(){     //设置为默认收货地址
+			var dataId = $(this).parent().parent().attr("data-num");
+			var defaultData = "peopleAddressId="+dataId+"";
+			mpeople.people.address.setDefault(defaultData,function(json){
+				peopleAddress(true,mpeople);
+			});
+		});	
+	}
+	/*
+	* 保存收货地址接口
+	*/
+	function saveAddress(ms,mpeople) {
+		var addressJugdge = judgeAddressDetail();
+		if(addressJugdge == 1){
+			return;
+		}
+		var saveParameter = ""+$("form").serialize()+"&peopleAddressDefault=0&peopleAddressProvince="+$(".province option:selected").text()+"&peopleAddressCity="+$(".city option:selected").text()+"&peopleAddressDistrict="+$(".district option:selected").text()+"&peopleAddressStreet="+$(".street option:selected").text()+"";
+		mpeople.people.address.save(saveParameter,function(json){	
+			if(json.result) {
+				ms.alert("收货地址保存成功");
+				peopleAddress(true,mpeople);
+				$(".shipping").hide();
+			}
+		})
+	}
+	/*
+	* 获取地址信息接口
+	*/
+	function getAddress(mpeople) {
+		$("#address-list").delegate(".order-edit","click",function(){//把编辑框调用出来并且把相应的数据填入编辑框中
+			var dataId = $(this).parent().parent().attr("data-num");
+			var dataDefault = $(this).parent().parent().attr("data-default");
+			$("#upData").attr("data-id",dataId);
+			$("#upData").attr("data-default",dataDefault);
+			var getParam = "peopleAddressId="+dataId+"&peopleAddressDefault="+dataDefault+"";
+			mpeople.people.address.get(getParam,function(json){  //调用接口并且把相应的数据追加到编辑框内
+				$(".province").empty().show();
+				$(".city").empty().show();							
+				$(".district").empty().show();
+				$(".street").empty().show();
+				$("input[name='peopleAddressConsigneeName']").val(json.peopleAddressConsigneeName);
+				$("input[name='peopleAddressAddress']").val(json.peopleAddressAddress);
+				$("input[name='peopleAddressPhone']").val(json.peopleAddressPhone);
+				$("input[name='peopleAddressMail']").val(json.peopleAddressMail);
+				$(".province").append('<option value="0">'+json.peopleAddressProvince+'</option>');
+				$(".city").append('<option value="0">'+json.peopleAddressCity+'</option>');
+				$(".district").append('<option value="0">'+json.peopleAddressDistrict+'</option>');
+				$(".street").append('<option value="0">'+json.peopleAddressStreet+'</option>');
+			})
+			$(".shipping").show();
+			$(".shipping-head p:first").hide();
+			$(".shipping-head p:last").show();
+			$("#save").hide();
+			$("#upData").show();
+			$(".city-tip").show();
+			$(".district-tip").show();
+			$(".street-tip").show();
+		});	
+	}
+	/*
+	* 更新收货地址接口
+	*/
+	function updateAddress(ms,mpeople) {
+		$("#upData").click(function(){ //更新数据并且判断数据是否正确
+			var addressJugdge = judgeAddressDetail();
+			if(addressJugdge == 1){
+				return;
+			}
+			var dataId = $(this).attr("data-id");
+			var dataDefaut = $(this).attr("data-default");
+			var updataData = ""+$("form").serialize()+"&peopleAddressDefault="+dataDefaut+"&peopleAddressId="+dataId+"&peopleAddressProvince="+$(".province option:selected").text()+"&peopleAddressCity="+$(".city option:selected").text()+"&peopleAddressDistrict="+$(".district option:selected").text()+"&peopleAddressStreet="+$(".street option:selected").text();
+			mpeople.people.address.update(updataData,function(json){     //  调用更新接口
+				if(json.result) {
+					ms.alert("更新成功");
+					peopleAddress(true,mpeople);
+					$(".shipping").hide();
+				}
+			})
+		});	
+	}
+	/*
+	 *判断收货地址信息是否合法
+	 */
+	function judgeAddressDetail(){		//判断收货地址信息是否合法
+		var shipPeople = $(".ship-people input").val();						
+		var detailAddress = $(".detail-address input").val();
+		var moblieNumber = $(".moblie-number input").val();
+		var fixNumber = $(".fix-number input").val();
+		var peopleEmail = $(".people-email input").val();
+		if(shipPeople.length > 25){
+			return 1;
+		}
+		if(detailAddress.length > 50){
+			return 1;
+		}
+		if(validator.isNull(shipPeople)){
+			return 1; 
+		}
+		if(validator.isNull(detailAddress)){
+			return 1;
+		}
+		if(validator.isNull(moblieNumber)){
+			return 1;
+		}
+		if(!validator.isMobilePhone(moblieNumber,'zh-CN')){
+			return 1;
+		}
+	}
+</script>

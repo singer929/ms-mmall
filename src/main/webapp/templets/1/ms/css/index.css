@@ -1,0 +1,72 @@
+﻿/* CSS Document */
+body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,legend,button,input,select,textarea,th,td,div{margin:0;padding:0;}
+body,button,input,select,textarea{font-family: "Microsoft Yahei",'Tahoma',"SimSun";line-height:1.5;}
+h1,h2,h3,h4,h5,h6{font-weight:400;}
+ul,ol{list-style:none}
+/*a{text-decoration:none;color:#3D84B8;}
+a:hover{text-decoration:underline;color:#0af;}
+a:focus{outline:thin dotted;}
+a:active,a:hover{outline:0;}
+img{border:none;}*/
+
+.mu_container{width:800px; margin:0px auto;}
+
+.sp_w{width:800px; float: left;}
+.sp_marg{margin:auto auto;}
+.sp_mleft{ margin-left:12px;}
+.sp_ptop{padding-top:2px;}
+.sp_pbottom{padding-bottom:5px;}
+.sp_f4f5f5{ background:#f4f5f5;}
+.sp_h30{height:30px; color:#666666; line-height:30px;}
+.sp_tabw{width:709px;}
+.sp_tabw td{height:30px; line-height:30px; color:#666666; text-align:center;border:1px solid #dcdcdc;}
+
+
+
+.sp_img img{width:265px; height:200px;}
+.sp_textleft{ text-align:left; padding-left:15px;}
+.sp_tab{ margin:21px auto;}
+
+
+/*商品参数*/
+.sp_xs{height:45px; background:#2d2d2d;}
+.sp_xs .sp_title{font-family:[MicrosoftYaHei]; font-size:18px; color:#e7cea0; height:20px;font-weight:400;text-align: left;}
+.sp_xs .sp_ztitle{font-family:[MicrosoftYaHei]; font-size:12px; color:#6d6d6b;/*letter-spacing:2px;*/float: left;}
+.ps_zsimg li{width:780px; margin:20px auto; overflow:hidden; list-style-type: none; text-align: center; }
+
+.sp_xjzs{width:353px; height:244px; display:block; float:left; overflow:hidden;}
+.sp_xjzs img{/*border:1px solid #aba9ac;*/}
+.sp_xjzs .sp_sjtitle{ font-size:24px; color:#333333;}
+.sp_xjzs .sp_jsms{ color:#666666;}
+.mgleft60{ padding-left: 60px;}
+.mb_title{ height: 63px; line-height:60px; font-size: 30px; }
+.mgleft60 .sp_jsms{font-size: 14px; line-height: 22px; }
+
+.mb_left{ width: 400px; float: left;  height: 282px; overflow: hidden; margin-top: 40px;}
+.mb_txt{ width:300px; height: 196px; overflow: hidden;font-size: 14px; line-height: 22px;color:#666666;}
+.mb_rt{
+ width: 375px; height: 283px; float: left;overflow: hidden;
+}
+.mu_ul li{ float: left; list-style-type: none; width: 100%;}
+.mb_brand{ width: 760px; height: 226px; padding: 20px 20px; color: #666666; font-size: 12px; line-height: 24px;  overflow: hidden;}
+.m-pro-div img{width:220px;}
+/*add 2015-03-31 tgd*/
+.wd100{width: 100%;}
+.pt-img{width: 300px;height: 247px;float: left;overflow: hidden;}
+/*.pt-img img{width: 300px;}*/
+.pt-txt{width:470px;float: left;margin-left: 8px;}
+.pt-tit{width: 100%;font-weight: bold;float: left;text-align: left;}
+.pt-ct{width: 100%;float: left;line-height: 20px;font-size: 12px;font-family: 宋体;text-align: left;}
+.wd761{width: 780px;}
+.ht-auto{height: auto;}
+.pdrt{padding-right: 0px;}
+.fleft{float: left;}
+.mgtop8{margin-top: 8px;}
+.center{text-align: center;}
+.n-ht{height:280px;}
+.n-ht img{height: 280px;}
+
+
+
+
+

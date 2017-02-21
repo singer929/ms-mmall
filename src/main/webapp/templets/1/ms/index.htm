@@ -1,0 +1,219 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<title>{ms:global.name/}</title>
+{ms:include filename=headFile.htm/}
+<link rel="stylesheet" type="text/css" href="{ms:globalskin.url/}/css/index-htm.css" />
+</head>
+<body ng-app="agApp" id="ng-app">
+{ms:include filename=head.htm/}
+
+<!--首页大图下的服务介绍小图-->
+<div class="hd_service">
+	<p class="inner">
+		<span class="hd_service1"></span>
+		<span class="hd_service2"></span>
+		<span class="hd_service3"></span>
+		<span class="hd_service4"></span>
+		<span class="hd_service5 last"></span>
+	</p>
+</div>
+
+<div class="boxBg"> 
+	<!--today start-->
+	<h2 class="biaotinav inner2 fz20" id="todayOptimization">今日精选</h2>
+	<div class="everyday inner4">
+		<ul class="pro-nav-list clear">
+		{ms:prclist size=4 typeid=207}
+			<li>
+				<div class="box"> 
+					<a href=[field.link/] target="_blank">
+						<div class="box1"> <img src="[field.litpic/]" style="width:260px;height:260px;"> </div>
+						<div class="box2"> 
+							<span class="f-col1 fz18">￥</span>
+							<span class="fz26 f-col1"> [field.price/] </span>
+							<span><del>￥[field.costprice/]</del></span>
+						</div>
+						<div class="box3"> [field.title/] </div>
+					</a> 
+				</div>
+			</li>
+			{/ms:prclist}
+		</ul>
+	</div>
+	<!--today end--> 
+	<!--特色馆-->
+	<h2 class="biaotinav inner2 fz20" id="tese">特色馆</h2>
+	<div class="temaig inner2 clear">
+		<ul>
+			<li> 
+				<a href="{ms:global.url/}/203/207/index.html"><img src="{ms:globalskin.url/}/images/c1.jpg"></a> 
+			</li>
+			<li> 
+				<a href="{ms:global.url/}/208/206/index.html"><img src="{ms:globalskin.url/}/images/c2.jpg"> 
+			</li>
+			<li> 
+				<a href=""><img src="{ms:globalskin.url/}/images/c3.jpg"></a>
+				<div class="tc_all">
+					<div class="tc_yiying"></div>
+					<div class="tc_mid">敬请期待</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<!--今日上新-->
+	<h2 class="biaotinav inner2 fz20" id="temai"> 今日上新</h2>
+	<div class="temaipind inner2">
+		<div class="left">
+			{ms:prclist size=4 typeid=208 flag=热销}
+			<div class="list-pinp-box"> 
+				<a href="[field.link/]">
+					<div class="boxshow">
+						 <img src="[cfield.images/]"> 
+					</div>
+					<div class="main-right-nr">
+						<div class="a1 fz14">[field.title/]</div>
+						<div class="a2 fz14">
+							<span style="color:#c11420;font-size:20px;">[field.price/]</span>元起
+						</div>
+						
+					</div>
+				</a> 
+			</div>
+			{/ms:prclist}
+		</div>
+		<div class="right">
+			<div class="right-box1">
+				<ul class="right_tabs">
+					<h3 class="right_hotTitle">今日优选</h3>
+				</ul>
+				<dl class="right_tabs_cnt">
+					<dd>
+						<ul class="brandList">
+							<!--品牌列表追加到这-->
+							
+						</ul>
+						<div class="clear"></div>
+					</dd>
+					<!--今日优选 end--> 
+					<script type="text/x-jquery-tmpl" id="brandList">
+						<li> 
+							<a><img src="${categorySmallImg}" alt="${categoryTitle}"/></a> 
+						</li>
+					</script>
+					<script>
+						$(function(){
+							ms.load(["ms","ms.mall"],function(ms,mmall) {
+								/*追加品牌列表数据*/
+								mmall.brand.list("",function(json){
+									var list = new Array();
+									for(var i = 0; i < 9;i++){
+										list[i] = {categoryCategoryId:json[i].categoryCategoryId,
+												   categorySmallImg:json[i].categorySmallImg,
+												   categoryTitle:json[i].categoryTitle,	
+												   				
+													}
+									}
+									$("#brandList").tmpl(list).appendTo(".brandList");
+								});
+							});
+							
+							/*点击品牌将跳到品牌详情页，并且附带传送了categoryCategoryId参数*/
+							$(".m-brand-today").delegate("li","click",function(){
+								var categoryCategoryId = $(this).attr("data-categoryCategoryId");
+								$(".m-brand-today").val(""+categoryCategoryId+"");
+							});
+						});
+					</script>
+				</dl>
+			</div>
+			<div class="right-box3">
+				<h3 class="right_hotTitle">热卖排行榜</h3>
+				<dl class="right_hotTabs_cnt">
+					<!--童装-->
+					<dd class="baojiao">
+						{ms:prclist size=7 typeid=208}
+							<div class="right_hotList">
+								<div class="right_hotList_left"> <a href=[field.link/] target="_blank"> <img src="[field.litpic/]"/></a> </div>
+								<div class="right_hotList_right">
+									<p class="right_hotList_title"><a href=[field.link/] target="_blank">[field.title/]</a></p>
+									<p class="right_hotList_price"><b>￥</b>[field.price/]</p>
+								</div>
+								<div class="clear"></div>
+							</div>
+						{/ms:prclist}
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<!--今日上新-->
+		<h2 style="margin-top: -20px;" class="biaotinav inner2 fz20" id="shangpin"> 今日上新</h2>
+		<div class="temaipind inner2">
+			<ul class="shopview">
+				{ms:prclist typeid=203}
+					<li> 
+						<div class="shopview-img"> 
+							<a href=[field.link/] target="_blank">
+								<img src="[field.litpic/]"/>
+							</a> 
+						</div>
+						<p class="shopview-box1"> <span> </span> </p>
+						<p class="shopview-title"> 
+							<a href=[field.link/] target="_blank">[field.title/]</a> 
+						</p>
+						<p class="shopview-price">
+							 <b>￥</b>[field.price/]
+							 <span>[field.costprice/]</span> 
+						</p>
+					</li>
+				{/ms:prclist}
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<!--今日上新 end--> 
+		<h2 style="margin-top: -20px;" class="biaotinav inner2 fz20 mg20" id="quanqiu">全球热卖</h2>
+		<ul class="shopList">
+			{ms:prclist size=6 typeid=211}
+				<li> 
+					<div class="shopList-img"> <a href=[field.link/] target="_blank"><img src="[field.litpic/]" /></a> </div>
+					<div class="shopList-txt">
+						 
+						<p class="shopList-title"><a href=[field.link/] target="_blank">[field.title/]</a></p>
+						
+						<p class="shopList-price"> <b>￥</b>[field.price/] <span>￥[field.costprice/]</span> </p>
+						<p class="shopList-num">[field.sale/]人已购买</p>
+					</div>
+				</li>
+			{/ms:prclist}
+			<div class="clear"></div>
+		</ul>
+	</div>
+	<!--特卖频道--> 
+	<!--抢购商品-->
+	<h2 class="biaotinav inner2 fz20" id="qianggou"> 抢购商品</h2>
+	<div class="temaipind inner2">
+		<ul class="rushBox">
+			{ms:prclist size=4 typeid=209}
+				<li>
+					<div class="rushBox-img"> 
+						<a href="[field.link/]" target="_blank"> 
+							<img src="[field.litpic/]" /> 
+						</a> 
+					</div>
+					<div class="rushBox-txt"> 
+						<a href="[field.link/]" target="_blank">[field.title/]</a>
+						<p> <b>￥</b><!--49-->[field.price/] <span>[field.costprice/]</span> </p>
+					</div>
+				</li>
+			{/ms:prclist}
+		</ul>
+		<div class="clear"></div>
+	</div>
+	<!--抢购商品 end--> 
+	
+</div>
+{ms:include filename=footer.htm/}
+</body>
+</html>

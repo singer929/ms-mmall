@@ -1,0 +1,132 @@
+<!-------------------------------------- 头部开始 -------------------------------------->
+<div class="top_bar">
+	<div class="inner">
+		<div class="top_bar_right">
+			<span>
+				<a href="{ms:global.host/}/people/center.do" class="drop-a" id="drop2">会员中心</a>
+			</span>
+			<span>
+				<a href="{ms:global.host/}/people/myOrder.do" >我的订单</a>
+			</span>
+			<span>
+				<a href="{ms:global.host/}/people/favourite.do" class="drop-a" id="drop-shops">我的收藏</a>
+			</span>
+			<a href="{ms:global.host/}/people/shopCar.do" class="shopcar">
+				<i class="icon icon-shop"></i>购物车<em>0</em>
+			</a>
+		</div>
+		<div class="top_bar_left">
+			<a>铭飞欢迎你</a><a href="{ms:global.host/}">网站首页</a><span class="n_login">
+				<div class="top_logIn">
+					<a href="{ms:global.host/}/login.do" class="top_logIn_a">登录</a>
+					
+				</div> <a href="{ms:global.host/}/register.do">免费注册</a>
+			</span><span class="y_login"></span>
+		</div>
+	</div>
+</div>
+<!-- 工具栏 end -->
+<!-- logo和搜索 -->
+<div style="width: 100%; background: #fff">
+	<div class="inner nheader">
+		<div class="logo">
+			<a href="{ms:global.host/}"></a>
+		</div>
+		<div class="all-search">
+			<div class="search clear">
+				<form id="searchDataForm" action="{ms:global.host/}/mmall/14/search.do" method="post">
+		
+					<label class="input_bar" id="drop4">
+						<span id="searchType"><i class="icon icon2"></i></span>
+					</label> 
+					<input type="text" id="txt_name" name="basic_title" />
+
+					<input type="submit" value="搜索" style="width:70px;color:white;background-color:#aa0202;font-weight:600;cursor:pointer;">
+				</form>
+				
+			</div>
+		</div>
+		<img src="http://cdn.mingsoft.net/global/images/weixin.jpg" class="top_barcode" style="width: 80px;"/>
+	</div>
+</div>
+<!-- logo和搜索 end -->
+
+<link rel="stylesheet" type="text/css" href="{ms:globalskin.url/}/css/nindex.css" />
+<script type="text/javascript" src="{ms:globalskin.url/}/js/jquery.lazyload.js"></script>
+
+<!-- 导航栏 -->
+<div class="nav">
+	<div class="nav_bar inner clear">
+		<ul class="nav_bar_list">
+			<li><a href="{ms:global.host/}">首页</a></li>
+			<li>
+				<a href="{ms:global.url/}/203/index.html">服装鞋包</a>
+				<div class="nav_bar_box">
+					<div class="nav_bar_ctglist">
+						<div class="nav_bar_item">
+							<p class="nav_bar_title">服装鞋包</p>
+							<div class="nav_ctgnamebox">
+								{ms:channel typeid=203}
+									<a href="[field.typelink/]" target="_blank" class="a_baojian" >[field.typetitle/]</a>
+								{/ms:channel}
+							</div>
+						</div>
+					</div>
+					<div class="nav_brandbox">
+						<p class="nav_brandbox_title"></p>
+						<div class="nav_brandlist"></div>
+					</div>
+					<div class="nav_imgBox"></div>
+					<div class="clear"></div>
+				</div>
+			</li>
+			<li class=""><a href="{ms:global.url/}/208/index.html">母婴用品</a>
+				<div class="nav_bar_box">
+					<div class="nav_bar_ctglist">
+						<div class="nav_bar_item">
+							<p class="nav_bar_title">母婴用品</p>
+							<div class="nav_ctgnamebox">
+								{ms:channel typeid=208}
+									<a href="[field.typelink/]" target="_blank" class="a_baojian" >[field.typetitle/]</a>
+								{/ms:channel}
+							</div>
+						</div>
+					</div>
+					<div class="nav_brandbox">
+						<p class="nav_brandbox_title"></p>
+						<div class="nav_brandlist"></div>
+					</div>
+					<div class="nav_imgBox"></div>
+					<div class="clear"></div>
+				</div>
+			</li>
+			
+		</ul>
+	</div>
+</div>
+<!-- 导航栏 end -->
+<!-- banner -->
+<div class="banner">
+	<div class="callbacks_container">
+		<ul class="rslides" id="slider">
+			<li><a target="_blank" style="background-image: url({ms:globalskin.url/}/images/57aaeaa0bded6.jpg);"></a></li>
+		</ul>
+	</div>
+	<div class="clear"></div>
+</div>
+<!-- banner end -->
+<script type="text/javascript">
+	$(function(){
+		var r=location.href;
+	  	if(r.match("203")){
+			$(".nav_bar_list li").removeClass("idex");
+			$(".nav_bar_list li:eq(1)").addClass("idex");
+		}else if(r.match("208")){
+			$(".nav_bar_list li").removeClass("idex");
+			$(".nav_bar_list li:eq(2)").addClass("idex");
+		}else{
+			$(".nav_bar_list li").removeClass("idex");
+			$(".nav_bar_list li:eq(0)").addClass("idex");
+		}
+	})
+</script>

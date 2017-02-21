@@ -1,0 +1,488 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>购物车</title>
+	{ms:include filename=people/headFile.htm/}
+	<script src="{ms:globalskin.url/}/people/js/check-login.js"></script>
+
+	<!--购物车商品模板-->
+	<script id="myTemplate" type="text/x-jquery-tmpl">   
+		<div class="item-shop-list cart-goods-active" data-detailId="${cartProductDetailId}" data-cart="${cartId}" data-basic="${cartBasicId}">
+			<div class="cart-checkbox">
+				<input type="checkbox" name="checkItem" checked="checked">
+			</div>
+			<div class="item-shop-list-img">
+				<div class="item-shop-list-images">
+					<a href="{ms:global.url/}${cartUrl}">
+						<img src="${cartThumbnail}" width="80" height="80" style="float:left;"></a>
+				</div>
+				<a href="{ms:global.url/}${cartUrl}">${cartTitle}</a>
+			</div>
+			<div class="item-shop-list-props">
+			{{if cartProductDetailId>0}}
+				<div class="props-txt">${cartProductDetailText}</div>
+			{{/if}}
+			</div>
+			<div class="item-shop-list-price">${cartPrice}</div>
+			<div class="item-shop-list-num">
+				<div class="item-shop-list-num-down"><a>-</a></div>
+				<input type="text" value="${cartNum}" class="item-shop-list-num-text">
+				<div class="item-shop-list-num-up"><a>+</a></div>
+			</div>
+			<div class="item-shop-list-priceCom">
+				<b>${price}</b>
+			</div>
+			<div class="item-shop-list-del">
+				<a id="del-goods">删除</a>
+			</div>
+			<div style="display:none" class="com-info"><!-- 此处储藏着商品的信息（重要） -->					
+			</div>
+		</div>	
+	</script>
+		
+</head>
+<body>
+	{ms:include filename=people/head.htm/}
+	<!--头部结束-->
+	<div class="shop-content">
+		<!--购物篮-->
+		<div class="product">
+			<h2 style="margin-top:20px;font-size:22px">购物车</h2>
+			<div class="product-car">
+				<div id="product-car-shop">
+					<div class="product-car-null"></div>
+					<i class="iconfont" style="float:left; color:#F6D6D7; font-size:35px; line-height: 35px;">&#xe75a;</i><p>
+					购物车空空的哦~，去看看心仪的商品吧~<br/>
+					<a href="{ms:global.host/}">去购物></a></p>
+				</div>
+			</div>
+		</div>
+		<div class=product-existed>
+			<div class="product-list">
+				<div class="product-list-type">
+					<div class="cart-allcheckbox">
+						<input type="checkbox" name="toggle-checkboxes" checked="checked"/>
+					</div>
+					<div class="product-list-type-all">全选</div>
+					<div class="product-list-type-com">商品</div>
+					<div class="product-list-type-nu"></div>
+					<div class="product-list-type-plice">单价(元)</div>
+					<div class="product-list-type-count">数量</div>
+					<div class="product-list-type-add">小计(元)</div>
+					<div class="product-list-type-operate">操作</div>
+				</div>
+				<!--购物篮结束-->
+				<!--商品列表-->
+				<div id="cart-list"></div>					
+			</div>
+			<!--购物结算-->
+			<div class="select-inventory">
+				<div class="cart-allcheckbox"><input type="checkbox" name="toggle-checkboxes" checked="checked"/></div>
+				<div class="select-inventory-check">全选</div>
+				<div class="select-inventory-batch">
+					<a style="text-decoration:none; color:#666;" class="select-del">删掉选中的商品</a>
+				</div>
+				<div class="select-total-prices">
+					<p>已选择<span id="select-total-red-piece">0</span>
+					件商品&nbsp;&nbsp;&nbsp;&nbsp;总价 (不含运费) ：<em>￥<label id="cart-money">0</label></em></p>
+				</div>
+				<a id="settle-accounts"></a>
+			</div>
+		</div>
+	</div>
+	<form method="post" action="{ms:global.host/}/people/confirmOrder.do" style="display:none" id="cartIdList">
+		<input value="" id="idToOrder" name="idToOrder">
+	</form>
+	<!--购物结算结束-->
+	<!--底部开始-->
+	<div class="clear"></div>
+	{ms:include filename=people/footer.htm/}
+</body>
+</html>
+<script>
+	var totalPrice = 0;//总价
+	var TotalNum = 0;//总数量
+	var price;		//商品单价
+	var subPrice = 0;//小计金额
+	var subNum = 0;//小计数量
+	var bakNum = 0;//备份变量，在全选按钮中有用
+	var bakPrice = 0;//备份变量，在全选按钮中有用		//
+	$(function(){																
+		isAllChecked();
+		//加载接口文件
+		 ms.load(["ms","ms.mall"],function(ms,mmall) {
+			//调用列表函数，把购物车列表追加到相应的位置
+			cartList(mmall); 		//购物车数量
+			inputBlur(mmall);		//商品数量输入框失去焦点，对数据进行保存，以及判断		
+			inputNum(); 			//键盘键入数量，以及一些数据处理
+			changeShopNum(mmall);   //加减商品数量															
+			delSingleShop(mmall);	//删除单个商品	
+			delCheckedShop(mmall);	//删除选中的商品
+		});
+
+		//删除选中的商品
+		 function delCheckedShop(mmall){				
+			$(".select-del").click(function(){//删除所有被选中的商品
+				var isChecked = 0;
+				$("input[name='checkItem']:visible:checked").each(function(){
+					isChecked++;
+				});
+				if (isChecked === 0){
+					alert("还未选中任何商品！");
+					return;
+				}
+				var delShop = confirm("是否删除所有选中商品？");
+				if(delShop === true) {
+					var cartIds;
+					var subPrice = 0;
+					var subNum = 0;
+					$("input[name='checkItem']:visible:checked").each(function(index,element){
+						if (index === 0){
+							cartIds = $(this).parents(".item-shop-list").attr("data-cart");//获取当前商品的购物车编号			
+							//cartProductDetailIds = $(this).parents(".item-shop-list").attr("data-detailId");				
+						}
+						else {
+							cartIds += "," + $(this).parents(".item-shop-list").attr("data-cart");//获取当前商品的购物车编号
+							//cartProductDetailIds += "," + $(this).parents(".item-shop-list").attr("data-detailId");									
+						}
+						subPrice += Number($(this).parent().siblings(".item-shop-list-priceCom").children("b").text());
+						subNum += Number($(this).parent().siblings(".item-shop-list-num").children(".item-shop-list-num-text").val());
+						
+					});
+					var obj = $("input[name='checkItem']:visible:checked").parent().parent();
+					delCart(mmall,cartIds,subPrice,subNum,true,obj);
+				}
+			});
+		}
+
+		/*
+		 *商品总数，以及总价只显示选中的商品。
+		 *当复选框状态发生变化时，下面总价以及总数也进行变化
+		 */	
+		$(".product-list").delegate("input[name='checkItem']:visible","click",function(){//商品复选框
+			subNum = Number($(this).parent().siblings("div.item-shop-list-num").find("input").val());//获取出该商品的数量
+			subPrice = Number($(this).parent().siblings("div.item-shop-list-priceCom").find("b").text());//获取出该商品的小计
+			if ($(this).get(0).checked === false){
+				TotalNum -= subNum;
+				totalPrice -= subPrice;						
+			}
+			else {
+				TotalNum += subNum;
+				totalPrice += subPrice;						
+			}
+			
+			$(this).parent().parent().toggleClass("cart-goods-active");
+			$("#select-total-red-piece").text(""+TotalNum+"");//重新赋值总数量
+			$("#cart-money").text(""+totalPrice.toFixed(2)+"");//赋值总价
+			isAllChecked();
+		});
+
+		/*
+		 *点击去全选按钮，如果存在商品没有选中。
+		 *那么所有的商品都会被选中
+		 *如果所有的商品都被选中了，那么久取消选中所有商品
+		 */
+		$("input[name='toggle-checkboxes']").click(function(){//全选框按钮
+			var theState = $(this).get(0).checked;
+			if (theState === false){//如果全选被取消						
+				TotalNum = 0;
+				totalPrice = 0;
+				$(".item-shop-list").removeClass("cart-goods-active");						
+			}
+			else {//全选激活
+				TotalNum = bakNum;
+				totalPrice = bakPrice;
+				$(".item-shop-list").addClass("cart-goods-active");						
+			}					
+			$("#select-total-red-piece").text(""+TotalNum+"");//重新赋值总数量
+			$("#cart-money").text(""+totalPrice.toFixed(2)+"");//赋值总价
+			$("input[name='toggle-checkboxes']").each(function(){
+				$(this).get(0).checked = theState;
+			});
+			$("input[name='checkItem']:visible").each(function(index,element){
+				$(this).get(0).checked = theState;
+			});
+		});
+
+		/*
+		 *购物车页面提交
+		 *只提交选中的商品
+		 */
+		 $("#settle-accounts").click(function(){
+		 	var data = "";
+		 	$("input[name='checkItem']:visible:checked").each(function(index,element){
+		 		if (index === 0){
+					data = $(this).parents(".item-shop-list").attr("data-cart");//获取当前商品的购物车编号							
+				}
+				else {
+					data += ',' + $(this).parents(".item-shop-list").attr("data-cart");;
+				}
+			});
+		 	if (validator.isNull(data)){
+		 		alert("还未选择任何商品！");
+		 		return;
+		 	}
+		 	$("#idToOrder").val(""+data+"");
+		 	$("#cartIdList").submit();					
+		 });
+
+		/*
+		 *删除单个商品
+		 */
+		 function delSingleShop(mmall){
+			$(".product-list").delegate("#del-goods","click",function(){//删除购物车中的商品
+				var isChecked = $(this).parent().siblings(".cart-checkbox").children("input").get(0).checked;
+				var cartIds = $(this).parent().parents(".item-shop-list").attr("data-cart");//获取当前商品的购物车编号					
+				var subPrice = Number($(this).parent().prev().children().text());
+				var subNum = Number($(this).parent().siblings("div.item-shop-list-num").children("input").val());
+				var delShop = confirm("是否删除所有选中商品？");
+				if(delShop === true) {
+					var obj = $(this).parent().parent();
+					delCart(mmall,cartIds,subPrice,subNum,isChecked,obj);
+					
+				}
+			});
+		};
+
+		/*购物车删除商品,这个函数只做三件事：1.给备份变量减去删除的的商品数值（注意，删除的不一定是选中的）	2.给总计减去选中的商品变量	3.删除后判断购物车中是否还存在商品*/
+		function delCart(mmall,cartIds,subPrice,subNum,isChecked,obj){
+			var delParam = "cartIds="+cartIds;
+			/*
+			 *调用删除接口
+			 */
+			 mmall.people.mall.cart.del(delParam,function(json){
+			 	if (json.result === true){
+			 		bakNum -= subNum;
+			 		bakPrice -= subPrice;
+			 		obj.remove();
+			 		if (Number($("#select-total-red-piece").text()) > 0 && isChecked === true){
+			 			TotalNum -= subNum;
+			 			totalPrice -= subPrice;
+						$("#select-total-red-piece").text(""+TotalNum+"");//重新赋值总数量
+						$("#cart-money").text(""+totalPrice.toFixed(2)+"");//赋值总价
+					}
+					//cartList(mmall); 
+					if ($("#cart-list").find(".item-shop-list").length > 0 ){
+						$(".product-existed").show();//如果购物车有商品列表，这个容器显示
+						$(".product").hide();
+					}
+					else {
+						$(".product").show();
+						$(".product-existed").hide();
+					}
+					$("#shoppingAmount").text(""+$("#cart-list").find(".item-shop-list").length+"");
+				}
+			});
+			
+		}
+
+		/*
+		 *点击加、减修改商品数量
+		 */
+		 function changeShopNum(mmall){					
+			$(".product-list").delegate(".item-shop-list-num-up,.item-shop-list-num-down","click",function(){//委派购物车商品加减一
+				var cartNum;
+				price = Number($(this).parent().prev().text());
+				if ($(this).parent().siblings("div.cart-checkbox").children("input").get(0).checked === false){
+					TotalNum += Number($(this).siblings("input").val());
+					totalPrice += Number($(this).parent().next().find("b").text());
+				}
+				if ($(this).children().text() === '+'){	//加操作
+					cartNum = Number($(this).prev().val()) + 1;	//获取当前数量加一
+					if(cartNum >= 201){
+						alert("商品数量应大于0小于等于200");
+						cartNum = 200;
+					}
+					$(this).prev().val(""+cartNum+"");//赋值加一
+					TotalNum++;
+					totalPrice += price;
+					bakNum++;
+					bakPrice += price;
+				}
+				else {//减操作
+					cartNum = Number($(this).next().val());//获取当前数量
+					if (cartNum > 1){//商品需要大于1，接口规定
+						cartNum -= 1;
+						$(this).next().val(""+cartNum+"");
+						TotalNum--;
+						totalPrice -= price;
+						bakNum--;
+						bakPrice -= price;
+					}
+				}
+				$(this).parent().siblings("div.cart-checkbox").children("input").get(0).checked = true;
+				isAllChecked();
+				$(this).parent().parent().addClass("cart-goods-active");	//加减操作能追加上样式
+				subPrice = cartNum * price;		//重新计算小计								
+				$(this).parent().next().children().text(""+subPrice.toFixed(2)+"");	//重新赋值小计
+				$("#select-total-red-piece").text(""+TotalNum+"");	//重新赋值总数量
+				$("#cart-money").text(""+totalPrice.toFixed(2)+"");	//赋值总价
+				var cartId = $(this).parents(".item-shop-list").attr("data-cart");	//获取当前商品的购物车编号
+				var cartBasicId = $(this).parents(".item-shop-list").attr("data-basic");	//获取当前商品的信息编号
+				//var cartProductDetailId = $(this).parents(".item-shop-list").attr("data-detailId");	
+				var data = "cartId="+cartId+"&cartBasicId="+cartBasicId+"&cartNum="+cartNum+"";
+				mmall.people.mall.cart.update(data,function(json){});	//更新购物车商品数量
+			});
+		}
+
+		/*
+		 *商品数量的input框是去焦点时，判断数据是否正确
+		 */
+		 function inputBlur(mmall){					
+			$(".product-list").delegate(".item-shop-list-num-text","blur",function(){	//把数字规范化
+
+				var shopNumber = parseInt($(this).val());
+				if(isNaN(shopNumber) || shopNumber <= 0 || shopNumber > 200){//判断数据是否合法，如果不合法按情况进行处理
+					if(shopNumber <= 0){
+						shopNumber = 1;
+					}else if(shopNumber > 200){
+						shopNumber = 200;
+					}else{
+						shopNumber = 1;
+					}							
+				}											
+				$(this).val(shopNumber);
+				var cartId = $(this).parents(".item-shop-list").attr("data-cart");//获取当前商品的购物车编号
+				var cartBasicId = $(this).parents(".item-shop-list").attr("data-basic");//获取当前商品的信息编号
+				var updateParam = "cartId="+cartId+"&cartBasicId="+cartBasicId+"&cartNum="+shopNumber+"";
+				mmall.people.mall.cart.update(updateParam,function(json){});//更新购物车商品数量						
+			});
+		}
+
+		/*
+		 *商品数量的input框中输入数据时
+		 *判断输入的数据是否合法，
+		 *且需要对价格数据进行处理
+		 *并且调用更新接口
+		 */
+		 function inputNum(){					
+		 	$(".product-list").delegate(".item-shop-list-num-text","keyup",function(){
+				var judgeNumber = isNaN($(this).val()); //判断输入框中是否为数字
+				var shopNum,shoppingAmountNum=0; //商品数量
+				var shopPrice; 					 //商品价格
+				var shopSum;					 //单个商品总价
+				var shopSumTotal = 0;			 //商品总数
+				var shopTotalPrice = 0;			 //商品总价
+				var shopNumber = parseInt($(this).val());
+				/*
+				 *判断数据是否为整型
+				*/
+				if (Number($(this).val()) != parseInt($(this).val())){
+				 	judgeNumber = true;
+				}	
+				/*
+				 *若数据不合法置为1
+				*/
+				if(judgeNumber && $(this).val() != ""){
+				 	$(this).val("1");
+				}
+				$(this).parent().siblings("div.cart-checkbox").children("input").get(0).checked = true;
+				$(this).parent().parent().addClass("cart-goods-active");
+				$(".item-shop-list:visible").each(function(index, element){		//此遍历把isAll的值赋给所有全选按钮
+					if($(this).children("div.cart-checkbox").children("input").get(0).checked){
+						shopPrice = parseFloat($(this).children(".item-shop-list-price").text());
+						shopNum = parseInt($(this).children(".item-shop-list-num").children("input").val());	
+						if(isNaN(shopNum)){//单输入框为空时，数量置1								
+							shopNum = 1;
+						}
+						if(shopNum <= 0 || shopNum > 200){//数据不合法时，置为1
+							if(shopNum >= 200){
+								shopNum = 200;
+							}else{
+								shopNum = 1;
+							}								
+							alert("商品数量应大于0小于等于200");
+							$(this).children(".item-shop-list-num").children("input").val(shopNum);
+						}
+						shopSum = shopPrice * shopNum;	//数据产生变化后，对页面上的数据进行修改
+						shopTotalPrice += shopSum;							
+						$(this).children(".item-shop-list-priceCom").children().text((shopSum).toFixed(2));	
+						if($(this).children(".item-shop-list-num").children("input").val() == ""){
+							$(this).children(".item-shop-list-priceCom").children().text((shopPrice).toFixed(2));
+						}
+						shopSumTotal +=  shopNum;
+					}								
+				});
+				/*
+				 *计算商品总数量
+				 */
+				$(".item-shop-list:visible").each(function(index, element){
+				 	shopNum = parseInt($(this).children(".item-shop-list-num").children("input").val());
+					if(isNaN(shopNum)){//单输入框为空时，数量置1								
+						shopNum = 1;
+					}
+					shoppingAmountNum += shopNum;
+				})
+				/*
+			 	 *对页面上的数据进行赋值
+			 	 */
+			 	 TotalNum = shopSumTotal;
+			 	 totalPrice = shopTotalPrice;
+			 	 bakNum = TotalNum;
+			 	 bakPrice = shopTotalPrice;
+			 	 $("#select-total-red-piece").text(shopSumTotal);
+			 	 $("#cart-money").text((shopTotalPrice).toFixed(2));
+			});	
+		}
+	})
+
+	/*
+	 *检查复选框是否选中
+	 */
+	function isAllChecked() {//检查是否所有商品复选框选中
+		var isAll = true;
+		$("input[name='checkItem']:visible").each(function(){
+			if ($(this).get(0).checked === false){
+				isAll = false;
+			}
+		});					
+		$("input[name='toggle-checkboxes']").each(function(){
+			$(this).get(0).checked = isAll;
+		});
+	}
+
+	 function cartList(mmall){
+		/*
+		 *调用购物车列表接口，并把列表数据追加到页面
+		 */
+		mmall.people.mall.cart.list("",function(json){//获取购物车列表
+			var cartListTmpl = new Array();
+			if (json.length > 0 ){
+				$(".product-existed").show();//如果购物车有商品列表，这个容器显示
+				$(".product").hide();
+			}
+			else {
+				$(".product").show();
+				$(".product-existed").hide();
+			}
+			$("#shoppingAmount").text(""+json.length+"");
+			/*
+			 *循环追加数据
+			 */
+			for (var i = 0; i < (json.length); i++){ //对数组列表进行赋值
+				var prices = json[i].cartNum * json[i].cartPrice;
+				cartListTmpl[i] = {cartUrl:json[i].cartUrl,
+					cartThumbnail:json[i].cartThumbnail,
+					cartTitle:json[i].cartTitle,
+					cartPrice:json[i].cartPrice.toFixed(2),
+					cartNum:json[i].cartNum,price:prices.toFixed(2),
+					cartBasicId:json[i].cartBasicId,
+					cartId:json[i].cartId,
+					cartProductDetailText:json[i].cartProductDetailText,
+					cartProductDetailId:json[i].cartProductDetailId,
+				};
+				price = Number(json[i].cartPrice);   //获取该商品单价				
+				subNum = Number(json[i].cartNum);	//获取该商品的数量
+				subPrice = subNum * price;			//计算该商品的小计
+				TotalNum += subNum;					//叠加总数量
+				totalPrice += subPrice;				//叠加总价
+				bakNum += subNum;					//备份总数量
+				bakPrice += subPrice;				//备份总价							
+			}
+			$('#myTemplate').tmpl(cartListTmpl).appendTo('#cart-list'); //tmpl追加数据
+			$("#select-total-red-piece").text(""+TotalNum+"");			//赋值总数量
+			$("#cart-money").text(""+totalPrice.toFixed(2)+"");			//赋值总价
+		});
+	}
+</script>

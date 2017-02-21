@@ -1,0 +1,291 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>收货地址</title>
+	{ms:include filename=people/headFile.htm/}
+	<script src="{ms:globalskin.url/}/people/js/check-login.js"></script>
+	<script src="http://cdn.mingsoft.net/plugins/jquery.tmpl/1.4.2/jquery.tmpl.min.js"></script>
+	<!-- 调用列表模板 -->
+	<script id="myTemplate" type="text/x-jquery-tmpl">   
+		<div class="address" data-num=${peopleAddressId}>
+			<div class="address-top">
+				<h3>
+					<em style="font-style: normal;">${peopleAddressConsigneeName} </em>&nbsp; &nbsp; &nbsp;
+					<i class="fa icon iconfont" style="font-size:14px">&#xe76e;</i>
+					&nbsp;&nbsp;&nbsp;<span style="" data-default=${peopleAddressDefault}>默认地址</span>
+				</h3>
+				<div class="extra">
+					<i class="fa icon iconfont" style="font-size: 14px"></i>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="address-list">
+				<div class="item">
+					<ul>
+						<li><p>收货人：</p>
+							<div class="ship-people">${peopleAddressConsigneeName}</div></li>
+						<li><p>所在地区：</p>
+							<div class="ship-address">${peopleAddressProvince}&nbsp;${peopleAddressCity}&nbsp;${peopleAddressDistrict}&nbsp;${peopleAddressStreet}</div></li>
+						<li><p>地址：</p>
+							<div class="ship-detail-address">${peopleAddressAddress}</div></li>
+						<li><p>手机：</p>
+							<div class="ship-phone">${peopleAddressPhone}</div></li>
+						<li><p>固定电话：</p>
+							<div class="ship-fix-phone"></div></li>
+						<li><p>电子邮箱：</p>
+							<div class="ship-email">${peopleAddressMail}</div></li>
+					</ul>
+				</div>
+				<div class="edit">
+					<a class="set-default" style="display: none;" data-id=${peopleAddressDefault}>设为默认</a>&nbsp;&nbsp;&nbsp;<a>编辑</a>
+				</div>
+			</div>
+		</div>	
+	</script>
+
+</head>
+<body>
+	<!--头部开始-->
+	{ms:include filename=people/head.htm/}
+	<!--头部结束-->
+	<div class="common-content">
+		<div class="common-main">
+			{ms:include filename=people/menu.htm/}
+			<div id="main">
+				<div class="address-head">
+					<div class="this-title" data-id="address">
+						<h4>收货地址</h4>
+					</div>
+					<div style="margin-top:10px;">
+						<input type="button" value="新增收货地址" class="address-show">
+						<span id="address-num">您已创建<span id="Sum">2</span>个收货地址，最多可创建20个</span> 
+					</div>
+				</div>
+				<!--地址内容开始-->	
+				<div class="address-append-list"></div>			
+				<div class="content-last"></div>
+				<div style="height:355px;">						
+					<div class="content-last" style=" margin-top: 10px;display:none">还没有收货地址哦~</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	{ms:include filename=people/address-add.htm/}
+	<!--底部开始-->
+	<div class="clear"></div>
+	{ms:include filename=people/footer.htm/}
+	<script src="{ms:globalskin.url/}/people/js/address.js"></script>
+</body>
+
+</html>
+<script>
+$(function(){
+	ms.load(["ms","ms.people"],function(ms,mpeople) {	
+		addressList(mpeople);
+		addressDel(mpeople);		//删除收货地址
+		addressEdit(mpeople)
+		saveClick(ms,mpeople);		//保存收货地址点击事件
+		addressUpData(ms,mpeople);	//修改收货地址
+	});
+	//编辑收货地址
+	function addressEdit(mpeople){								//编辑收货地址
+		$("#main").delegate(".set-default","click",function(){  //设为默认
+			var data = $(this).parent().parent().parent().attr("data-num")
+			var setdefaultParam = "peopleAddressId="+data+"";
+			 mpeople.people.address.setDefault(setdefaultParam,function(json){//调用设为默认 的接口							
+				addressList(mpeople);								//调用收货地址列表方法
+			});
+		});
+		$("#main").delegate(".edit a:odd","click",function(){  //点击产生编辑事件
+			$(".shipping em").hide();
+			var dataId = $(this).parent().parent().parent().attr("data-num");
+			var dataDefault = $(this).prev().attr("data-id");
+			$("#upData").attr("data-id",dataId);
+			$("#upData").attr("data-default",dataDefault);
+			var getParam = "peopleAddressId="+dataId+"&peopleAddressDefault="+dataDefault+"";
+			 mpeople.people.address.get(getParam,function(json){   //把get出来的数据追加到编辑框中
+			 	$(".province").empty().show();
+			 	$(".city").empty().show();							
+			 	$(".district").empty().show();
+			 	$(".street").empty().show();
+				 $("input[name='peopleAddressConsigneeName']").val(json.peopleAddressConsigneeName);  //将用户名追加到文本框
+				 $("input[name='peopleAddressAddress']").val(json.peopleAddressAddress);   //将地址追加到地址栏
+				 $("input[name='peopleAddressPhone']").val(json.peopleAddressPhone); 	//将电话号码追加到电话栏
+				 $("input[name='peopleAddressMail']").val(json.peopleAddressMail);		//将邮箱追加到邮箱栏
+				 $(".province").append('<option value="0">'+json.peopleAddressProvince+'</option>');
+				 $(".city").append('<option value="0">'+json.peopleAddressCity+'</option>');
+				 $(".district").append('<option value="0">'+json.peopleAddressDistrict+'</option>');
+				 $(".street").append('<option value="0">'+json.peopleAddressStreet+'</option>');
+				});
+			 $(".shipping").show();
+			 $(".shipping-head p:first").hide();
+			 $(".shipping-head p:last").show();
+			 $("#save").hide();
+			 $(".city-tip").show();
+			 $(".district-tip").show();
+			 $(".street-tip").show();
+			 $("#upData").show();
+		});
+	}
+
+	//收货地址列表
+	function addressList(mpeople){   					//调用列表方法
+		mpeople.people.address.list(function(json){	//调用收货地址列表接口
+			$(".address").remove();
+			var addressList = new Array(); 			//定义一个数组存在收藏的列表	
+			$('#myTemplate').tmpl(json).appendTo('.address-append-list');//通过tmpl追加数据
+			$("span[data-default='1']").show();
+			$("span[data-default='0']").hide();
+			$("a[data-id='0']").show();
+			$("a[data-id='1']").hide();
+			if(json.length == 0){     // 收获地址为空，显示没有收获地址
+				$(".content-last").show();
+			}else{
+				$(".content-last").hide();
+			}
+			$("#address-num").html("您已创建<b id='Sum'>"+json.length+"</b>个收货地址，最多可创建20个");//已拥有的收货地址数量
+			$(".ship-detail-address").each(function(){		//控制  设为默认 编辑 两个按钮的样式
+				var heigth = $(this).height();
+				if(heigth == 38){
+					$(this).parents().siblings(".edit").css("top",120);
+				}
+			});
+		});
+	}					
+	//保存收货地址点击事件
+	function saveClick(ms,mpeople){			//保存收货地址按钮点击事件
+		$("#save").click(function(){//保存按钮点击事件
+			if($("#Sum").text() >= 20 ){
+				ms.alert("收货地址不能超过20个")
+				return;
+			}
+			var target = $(this);
+			target.val("保存中...");
+			var shipPeople = $(".ship-people input").val();
+			var peopleAddress;
+			var detailAddress = $(".detail-address input").val();
+			var moblieNumber = $(".moblie-number input").val();
+			var fixNumber = $(".fix-number input").val();
+			var peopleEmail = $(".people-email input").val();
+			/*
+			* 判断保存数据是否合法
+			*/
+			if(shipPeople.length >　25){			//判断用户名是否超过25位
+				return;
+			}
+			if(detailAddress.length > 50){		//判断收货地址是否超过50位
+				return;			
+			}
+			if(validator.isNull(shipPeople)){	 //判断用户名是否为空
+				return; 
+			}
+			if ($(".province").val() == 0 || $(".city").val() == 0 || $(".district").val() == 0 ||$(".street").val() == 0) {  //判断是否选择详细的地区信息
+				$(".people-address em").text("请选择收货地址");
+				$(".people-address em").css("display","inline-block");
+				return;
+			}else{
+				$(".people-address em").css("display","none");
+			}
+			if(validator.isNull(detailAddress)){   //判断地址是否为空
+				return;
+			}
+			if(validator.isNull(moblieNumber)){    //判断电话号码是否为空
+				return;
+			}
+			if(!validator.isMobilePhone(moblieNumber,'zh-CN')){   //判断号码是否正确
+				return;
+			}
+			if((!validator.isEmail(peopleEmail)) && (!validator.isNull(peopleEmail))){
+				return;
+			}
+			var saveParam = ""+$("form").serialize()+"&peopleAddressDefault=0&peopleAddressProvince="+$(".province option:selected").text()+"&peopleAddressCity="+$(".city option:selected").text()+"&peopleAddressDistrict="+$(".district option:selected").text()+"&peopleAddressStreet="+$(".street option:selected").text()+"";  //接口所需参数
+			mpeople.people.address.save(saveParam,function(returnJson){	//保存收货地址接口
+				if(returnJson.result) {
+					target.val("保存地址");
+					ms.alert("收货地址保存成功");
+					$(".shipping").hide();
+					addressList(mpeople);	//调用收货地址列表方法
+				}else{
+					ms.alert("保存失败");
+				}						
+			});
+		});
+	}
+	
+	//更新收货地址
+	function addressUpData(ms,mpeople){		//更新收货地址
+		$("#upData").click(function(){		
+			var target = $(this);
+			target.val("修改中...");	
+			var shipPeople = $(".ship-people input").val();
+			var peopleAddress;
+			var detailAddress = $(".detail-address input").val();
+			var moblieNumber = $(".moblie-number input").val();
+			var fixNumber = $(".fix-number input").val();
+			var peopleEmail = $(".people-email input").val();
+			var checkIndex = $(".province").get(0).selectedIndex;
+			/*
+			* 判断数据是否合法
+			*/
+			if(shipPeople.length >　25){			//判断用户名是否超过25位
+				return;
+			}
+			if(detailAddress.length > 50){		//判断收货地址是否超过50位
+				return;			
+			}
+			if(validator.isNull(shipPeople)){   //判断用户名是否为空
+				return; 
+			}
+			if ($(".province").text() == "请选择"  || $(".city").text() == "请选择"  || $(".district").text() == "请选择"  ||$(".street").text() == "请选择" ) {  //判断是否选择详细的地区信息
+				$(".people-address em").text("请选择收货地址");
+				$(".people-address em").css("display","inline-block");
+				return;
+			}else{
+				$(".people-address em").css("display","none");
+			} 
+			if(validator.isNull(detailAddress)){   //判断 地址是否为空
+				return;
+			}
+			if(validator.isNull(moblieNumber)){  //判断 电话号码是否为空
+				return;
+			}
+			if(!validator.isMobilePhone(moblieNumber,'zh-CN')){  //判断 电话号码是否正确
+				return;
+			}
+			if((!validator.isEmail(peopleEmail)) && (!validator.isNull(peopleEmail))){
+				return;
+			}
+			var dataId = $(this).attr("data-id");
+			var dataDefaut = $(this).attr("data-default");
+			//数据序列化
+			var updataParam = ""+$("form").serialize()+"&peopleAddressDefault="+dataDefaut+"&peopleAddressId="+dataId+"&peopleAddressProvince="+$(".province option:selected").text()+"&peopleAddressCity="+$(".city option:selected").text()+"&peopleAddressDistrict="+$(".district option:selected").text()+"&peopleAddressStreet="+$(".street option:selected").text()+"";
+				mpeople.people.address.update(updataParam,function(json){//调用updata接口
+				if(json.result) {
+					target.val("更新地址");
+					ms.alert("更新成功");
+					$(".shipping").hide();
+					addressList(mpeople);	//调用收货地址列表方法
+				}
+			});
+		});
+	}
+
+	//删除收货地址
+	function addressDel(mpeople){
+		$("#main").delegate(".extra","click",function(){ 		//删除收获地址
+			var dataId = $(this).parent().parent().attr("data-num");
+			var delParam = "peopleAddressId="+dataId+"";
+			var delAddress = confirm("删除收货地址？");
+			if(delAddress) {    //提示是否删除地址
+				mpeople.people.address.del(delParam,function(json){   //调用删除接口
+					addressList(mpeople);
+				});
+			}	
+		});
+	}
+});	
+			
+</script>	

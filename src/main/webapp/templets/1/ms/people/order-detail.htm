@@ -1,0 +1,433 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>订单详情</title>
+	{ms:include filename=people/headFile.htm/}
+	<script src="{ms:globalskin.url/}/people/js/check-login.js"></script>
+	<script id="myTemplate" type="text/x-jquery-tmpl">
+		<div class="order-detial-product">
+			<div class="order-product-img img-expand"><img src="${goodsThumbnail}"></div>
+			<div class="order-detial-product-txt">
+				<a href="{ms:global.url/}${goodsUrl}">${goodsName} <span>${goodsProductDetailText}</span></a>
+			</div>
+		</div>
+		<div class="product-price">
+			<span>￥<label class="goods-price">${goodsPrice}</label></span>
+		</div>
+		<div class="product-number">
+			<span>${goodsNum}</span>
+		</div>
+		<div class="clear"></div>
+		
+	</script>
+	
+</head>
+<body>
+	{ms:include filename=people/head.htm/}
+	<div class="order-detial-container">
+		<div class="order-detial-content">
+			<div class="order-detial-nav">
+				<a href="{ms:global.host/}/people/center.do">个人中心</a>&nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp;
+				<a href="{ms:global.host/}/people/myOrder.do?orderStatus=-1">订单中心</a>&nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;
+				<strong>订单:&nbsp;<label class="order-no">加载中</label></strong>
+			</div>
+			<div class="order-state">
+				<div class="left-state">
+					<div class="state-text-1">
+						<span>订单号：<label class="order-no">加载中</label></span>
+					</div>
+					<div class="state-text-2">
+						<h3 id="orderAchieve">加载中</h3>
+					</div>
+					<div class="state-text-3">
+						<a id="orderComment">加载中</a>
+					</div>
+				</div>
+				<div class="right-state">
+					<div class="state-ttop">
+						<span>加载中</span>
+						<a href="" style="display:none">发表评价</a>
+					</div>
+					<div class="process">
+						<div class="process-node-1">
+							<i class="start-icon"></i>
+							<ul class="process-node-text">
+								<li class="txt1">&nbsp;</li>
+								<li class="txt2">提交订单</li>
+								<li id="track_time_0" class="txt3">加载中</li>
+							</ul>
+						</div>
+						<div class="process-dot">
+							<ul>
+								<i class="proce-icon"></i>
+							</ul>	
+						</div>
+						<div class="process-node-2">
+							<i class="pay-icon"></i>
+							<ul class="process-node-text">
+								<li class="txt1">&nbsp;</li>
+								<li class="txt2">付款成功</li>
+								<li id="track_time_0" class="txt3"></li>
+							</ul>
+						</div>
+						<div class="process-dot">
+							<ul>
+								<i class="proce-icon"></i>
+							</ul>
+						</div>
+						<div class="process-node-3">
+							<i class="store-icon"></i>
+							<ul class="process-node-text">
+								<li class="txt1">&nbsp;</li>
+								<li class="txt2">商品出库</li>
+								<li id="track_time_0" class="txt3"></li>
+							</ul>
+						</div>
+						<div class="process-dot">
+							<ul>
+								<i class="proce-icon"></i>
+							</ul>
+						</div>
+						<div class="process-node-4">
+							<i class="express-icon"></i>
+							<ul class="process-node-text">
+								<li class="txt1">&nbsp;</li>
+								<li class="txt2">等待收货</li>
+								<li id="track_time_0" class="txt3"></li>
+							</ul>
+						</div>
+						<div class="process-dot">
+							<ul>
+								<i class="proce-icon"></i>
+							</ul>
+						</div>
+						<div class="process-node-5">
+							<i class="finish-icon"></i>
+							<ul class="process-node-text">
+								<li class="txt1">&nbsp;</li>
+								<li class="txt2">订单完成</li>
+								<li id="track_time_0" class="txt3"></li>
+							</ul>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="order-detial-product-table">
+				<div class="order-detial-product-table-title">
+					<div class="order-detial-title-product">商品</div>
+					<div>价格</div>
+					<div>商品数量</div>
+				</div>
+				<div class="order-detial-list">
+					
+				</div>					
+				<div class="goods-total">
+					<div class="message">
+						<h1>备注</h1>
+						<div class="order-message"></div>
+					</div>
+					<ul style="width: 190px;">
+						<li>
+							<span class="label">商品总额：</span>
+							<span class="txt">￥<label class="order-price">加载中</label></span>
+						</li>
+						<li>
+							<span class="label">运　　费：</span>
+							<span class="txt">￥<label class="exprecess-price">0</label></span>
+						</li>
+						<li>
+							<span class="label total">应付总额：</span>
+							<span class="txt count">￥<label class="payable-price">加载中</label></span>
+						</li>
+					</ul>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<!--div class="express">
+				<div class="left-express">
+					<div class="express-img">
+						<img src="" />
+					</div>
+					<div class="express-txt">
+						<span>送货方式：<label class="express-title">普通快递</label></span>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="right-express">
+					<div class="express-information">
+						<ul>
+							
+						</ul>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div-->
+			<div class="order-info">
+				<div class="cut-order-info">
+					<div class="receiver">
+						<div class="order-detial-title">
+							<h4>收货人信息</h4>
+						</div>
+						<div class="detial">
+							<div class="order-detial-item">
+								<span class="text-left">收货人：</span>
+								<span class="text-right">加载中</span>
+								<div class="clear"></div>
+							</div>
+							<div class="order-detial-item">
+								<span class="text-left">地址：</span>
+								<span class="text-right txt-hide">加载中</span>
+								<div class="clear"></div>
+							</div>
+							<div class="order-detial-item">
+								<span class="text-left">手机号码：</span>
+								<span class="text-right" id="phone">加载中</span>
+								<div class="clear"></div>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<div class="distribution">
+						<div class="order-detial-title">
+							<h4>配送信息</h4>
+						</div>
+						<div class="detial">
+							<div class="order-detial-item">
+								<span class="text-left">配送信息：</span>
+								<span class="text-right express-title">普通快递</span>
+								<div class="clear"></div>
+							</div>
+
+							<div class="order-detial-item">
+								<span class="text-left">运费：</span>
+								<span class="text-right">￥<label class="exprecess-price">0</label></span>
+								<div class="clear"></div>
+							</div>
+							<div class="order-detial-item">
+								<span class="text-left">下单日期：</span>
+								<span class="text-right">加载中</span>
+								<div class="clear"></div>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<div class="payment">
+						<div class="order-detial-title">
+							<h4>付款信息</h4>
+						</div>
+						<div class="detial">
+							<div class="order-detial-item">
+								<span class="text-left">付款方式：</span>
+								<span class="text-right">在线支付</span>
+								<div class="clear"></div>
+							</div>
+							<div class="order-detial-item">
+								<span class="text-left">商品总额：</span>
+								<span class="text-right">¥<label class="order-price">0</label></span>
+								<div class="clear"></div>
+							</div>
+							<div class="order-detial-item">
+								<span class="text-left">运费金额：</span>
+								<span class="text-right">¥<label class="exprecess-price">0</label></span>
+								<div class="clear"></div>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{ms:include filename=people/footer.htm/}
+</body>
+</html>
+<script>
+var orderNo = "{orderNo/}";//获取所点击的订单编号
+$(function(){
+	ms.load(["ms","ms.mall"],function(ms,mmall) {					
+		detail(mmall);	//调用获取订单方法
+	});
+		
+	//获取订单
+	function detail(mmall){
+		$(".order-no").text(""+orderNo+"");	
+		if(!validator.isInt(orderNo)){ //订单格式错误则返回
+			alert("订单号错误");
+			self.location.href="{ms:global.host/}/people/myOrder.do";
+		}
+		var detailParam = "orderNo={orderNo/}";
+		var time = new Array;
+		var detailList = new Array;
+		var goodsDom = $(".order-detial-list").html();
+		var orderPrice = 0;
+		var orderExprecessPrice;
+		var totalPrice = 0;
+		if(orderNo[0] === "{"){ //没有传参数订单号，直接进入本页面时。返回我的订单页面
+			self.location.href="{ms:global.host/}/people/myOrder.do";
+			return;
+		}
+		/*
+		*调用订单详情接口
+		*并且追加相关数据
+		*并实现追加后的页面效果
+		*/
+		mmall.people.mall.order.detail(detailParam,function(json){			//订单详情接口		
+			var jsonOrderExpressInfo = JSON.parse(json.orderExpressInfo);	//将物流信息转化为json数据
+			if (json.goods.length === 0){		//订单中没有任何商品
+				alert("订单异常：订单中没有任何商品");	
+				self.location.href="{ms:global.host/}/people/myOrder.do";
+				return;
+			}
+			time = json.orderTime.split(" ");
+			if(json.orderDescription != ""){
+				$(".order-message").text(""+json.orderDescription+"");	
+				if(json.orderDescription == "备注"){
+					$(".order-message").text("暂无备注信息");
+				}
+			}else{
+				$(".order-message").text("暂无备注信息");
+			}
+			
+			$("#orderAchieve").text(""+json.orderStatusTitle+"");				//获取订单信息
+			$(".express-title").text(""+json.orderExpressTitle+"");				//获取送货方式
+			$(".receiver .text-right:eq(0)").text(""+json.orderUserName+"");	//获取收货人
+			$(".receiver .text-right:eq(1)").text(""+json.orderAddress+"");		//获取地址
+			$(".receiver .text-right:eq(2)").text(""+json.orderPhone+"");		//获取联系电话
+			$(".exprecess-price").text(""+json.orderExprecessPrice.toFixed(2)+"");	//获取运费
+			$(".distribution .text-right:eq(2)").text(""+json.orderTime+"");			//获取送货日期
+			$(".payment .text-right:eq(0)").text(""+json.orderPaymentTitle+"");	//获取付款方式
+			$(".payment .text-right:eq(1)").text("￥"+json.orderPrice.toFixed(2)+"");			//获取付款时间
+			$(".order-price").text(""+json.orderPrice.toFixed(2)+"")			//获取商品总额
+			$(".exprecess-price").text(""+json.orderExprecessPrice.toFixed(2)+"")	//获取运费
+			$(".express-img img").attr("src",""+json.goods[0].goodsThumbnail+"");
+			$(".invoice .text-right:eq(0)").text(""+json.orderInvoiceType+"");	//获取发票类型
+			$(".invoice .text-right:eq(1)").text(""+json.orderInvoiceName+"");	//获取发票抬头
+			$(".invoice .text-right:eq(2)").text(""+json.orderInvoiceDefinite+"");	//获取发票抬头	
+			var phoneNumber = $("#phone").text();  // 将电话的值赋给一个变量
+			var phone = phoneNumber.substr(0,3)+"****"+phoneNumber.substr(phoneNumber.length-4,phoneNumber.length); //截取变量
+			$("#phone").text(phone);  // 赋值电话号码 
+			
+			/*
+			*物流信息--开始
+			*/
+			for(var i = 0; i < jsonOrderExpressInfo.data.length; i++){		//追加物流信息
+				$(".express-information").find("ul").append("<li><i class='node-icon'></i><span class='time'>"+jsonOrderExpressInfo.data[i].time+"</span><span>"+jsonOrderExpressInfo.data[i].context+"</span></li>");
+				if(i == 0){
+					$("li").addClass("express-first");
+				}
+			}
+			/*
+			*物流信息--结束
+			*/
+			orderPrice = Number(json.orderPrice);
+			orderExprecessPrice = Number(json.orderExprecessPrice);
+			totalPrice = orderPrice + orderExprecessPrice;
+			$(".payable-price").text(""+totalPrice.toFixed(2)+"");//获取应付金额,这里应该加上邮费
+			for(var i = 0; i < json.goods.length; i++){
+				var orderDetial = {
+					goodsThumbnail:json.goods[i].goodsThumbnail,
+					goodsUrl:json.goods[i].goodsUrl,
+					goodsName:json.goods[i].goodsName,
+					goodsProductDetailText:json.goods[i].goodsProductDetailText,
+					goodsBasicId:json.goods[i].goodsBasicId,
+						goodsPrice:json.goods[i].goodsPrice.toFixed(2),//价格问题需要对数据进行处理
+						goodsNum:json.goods[i].goodsNum,
+
+					}
+				/*
+				*使用tmpl追加数据
+				*/
+				$('#myTemplate').tmpl(orderDetial).appendTo('.order-detial-list');//通过tmpl追加数据
+			}
+			
+			
+			/*
+			*根据订单状态页面显示不同的效果
+			*/
+			if (json.orderStatusTitle === "待付款"){		//当订单状态为待付款
+				$("#orderComment").text("付款");
+				$(".state-ttop span").text("该订单还未付款，请尽快完成付款");
+				$(".process-node-1").next().find("i").css("background-position-y","-0px");
+				$(".process-node-1 .txt3").text(""+time[0]+"");
+			}
+			if (json.orderStatusTitle === "已付款"){ 	//当订单状态为已付款
+				$("#orderComment").hide();
+				$(".state-ttop span").text("该订单已经付款，请耐心等待商家发货");
+				$(".process-node-2 > i").css("background-position-y","-108px");
+				$(".proce-icon:eq(0)").css("background-position-y","-38px");
+				$(".proce-icon:eq(1)").css("background-position-y","0px");
+				$(".process-node-2 .txt3").text(""+time[0]+"");
+			}
+			if (json.orderStatusTitle === "待发货"){ 	//当订单状态为待发货
+				$("#orderComment").hide();
+				$(".state-ttop span").text("该订单已经付款，请耐心等待商家发货");
+				$(".process-node-2 > i").css("background-position-y","-108px");
+				$(".proce-icon:eq(0)").css("background-position-y","-38px");
+				$(".proce-icon:eq(1)").css("background-position-y","0px");
+				$(".process-node-2 .txt3").text(""+time[0]+"");
+			}
+			if (json.orderStatusTitle === "已发货"){ 	//当订单状态为已发货
+				$("#orderComment").hide();
+				$(".state-ttop span").text("该订商品已出库，正在物流");
+				for (var i = 2; i < 4; i++){//让箭头变绿
+					$(".process-node-"+i+" > i").css("background-position-y","-108px");
+				}
+				for (var i = 0; i < 2; i++){//让结点变绿
+					$(".proce-icon:eq("+i+")").css("background-position-y","-38px");
+				}
+				$(".proce-icon:eq(2)").css("background-position-y","0px");
+				for (var i = 2; i < 4; i++){//赋值时间
+					$(".process-node-"+i+" .txt3").text(""+time[0]+"");
+				}
+			}
+			if (json.orderStatusTitle === "交易完成"){ //当订单状态为交易完成时
+				$("#orderComment").hide();
+				$(".state-ttop span").text("交易已完成，确认收货订单完成");
+				for (var i = 2; i < 5; i++){//让箭头变绿
+					$(".process-node-"+i+" > i").css("background-position-y","-108px");
+				}
+				for (var i = 0; i < 3; i++){//让结点变绿
+					$(".proce-icon:eq("+i+")").css("background-position-y","-38px");
+				}
+				$(".proce-icon:eq(3)").css("background-position-y","0px");
+				for (var i = 2; i < 5; i++){//赋值时间
+					$(".process-node-"+i+" .txt3").text(""+time[0]+"");
+				}
+			}
+			if (json.orderStatusTitle === "交易成功"){	//当订单状态为交易成功时
+				$("#orderComment").text("评论").attr("href","{ms:global.host/}/people/orderComment.do?orderNo="+json.orderNo);
+				$(".state-ttop span").text("交易已完成，确认收货订单完成");
+				for (var i = 2; i < 5; i++){//让箭头变绿
+					$(".process-node-"+i+" > i").css("background-position-y","-108px");
+				}
+				$(".process-node-5 > i").css("background-position-y","-54px");
+				for (var i = 0; i < 4; i++){//让结点变绿
+					$(".proce-icon:eq("+i+")").css("background-position-y","-38px");
+				}
+				for (var i = 2; i < 6; i++){//赋值时间
+					$(".process-node-"+i+" .txt3").text(""+time[0]+"");
+				}
+			}
+			if (json.orderStatusTitle === "交易关闭"){ 	//当订单状态为交易关闭时
+				$("#orderComment").hide();
+				$(".order-state").css("border-color","#e4393c");//变成红色系
+				$(".orderAchieve").css("color","#e4393c");//变成红色系
+				$(".state-ttop span").text("订单关闭，交易已经终止");
+				$(".process-node-1 > i").css("background-position-y","-216px");
+				$(".proce-icon:eq(0)").css("background-position-y","-19px");
+				for (var i = 2; i < 6; i++){
+					$(".process-node-"+i+" .txt3").text(""+time[0]+"");
+				}
+			}
+		});
+	}
+});
+
+
+
+</script>

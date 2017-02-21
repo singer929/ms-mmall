@@ -1,0 +1,308 @@
+#drop1_pop {
+	margin-left: 0px;
+	*margin-left: -10px;
+	*background: #fff;
+}
+
+.bag {
+	background: url(images/bg1_hb.png);
+	display: block;
+	width: 100px;
+	height: 110px;
+	cursor: pointer;
+}
+
+.bz_tccc {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 10;
+	display: none;
+}
+
+.bz_ctop {
+	position: fixed;
+	top: 40%;
+	left: 40%;
+	width: 300px;
+	height: 130px;
+	border: 1px solid #635F5F;
+	background: #fff;
+	box-shadow: 0px 1px 2px 2px #6D6767;
+	z-index: 100;
+}
+
+.bz_th {
+	width: 100%;
+	overflow: hidden;
+	border-bottom: 1px dashed #fff;
+	background: #BD1C22;
+}
+
+.bz_th a {
+	float: right;
+	font-size: 24px;
+	text-decoration: none;
+	color: #000;
+	width: 60px;
+	height: 30px;
+	color: #fff;
+}
+
+.bz_cencc {
+	width: 100%;
+	clear: both;
+	line-height: 23px;
+	text-align: center;
+	z-index: 150;
+	margin-top: 15px;
+	height: 46px;
+	overflow: hidden;
+}
+
+.bz_yiying {
+	background: #000;
+	opacity: 0.5;
+	filter: alpha(opacity = 50);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 99;
+}
+
+.bz_bot a {
+	display: block;
+	width: 100px;
+	margin: 0 auto;
+	background: #BD1C22;
+	color: #fff;
+	text-decoration: none;
+	padding: 5px 10px;
+	text-align: center;
+}
+/* = 弹出层 = */
+.top_bar_right span {
+	position: relative;
+}
+
+.newig_dmid_Rdys li {
+	height: auto;
+	width: auto;
+}
+
+.pro_tip {
+	text-align: center;
+}
+
+.pop1 {
+	display: none;
+	position: absolute;
+	right: 0px;
+	top: 0;
+	z-index: 100;
+	border: 1px solid #ddd;
+	border-top: 0;
+	background-color: #fff;
+	padding-top: 5px
+}
+
+.pop1 ul {
+	min-width: 70px;
+	width: 71px;
+}
+
+.pop1 a {
+	line-height: 28px;
+	color: #333;
+	display: block;
+	text-align: center;
+	margin: 0px;
+	white-space: nowrap;
+}
+
+.pop1 li em {
+	color: red;
+	font-style: normal;
+}
+
+.pop1 .more {
+	*zoom: 1;
+	height: 28px;
+	line-height: 28px;
+	text-indent: 10px;
+	color: #000;
+	background-color: #eee;
+}
+
+.pop_searchtype {
+	width: 72px;
+	font-size: 14px;
+	font-family: "Microsoft Yahei";
+	color: #666;
+	text-indent: 4px;
+	margin: 0 !important;
+}
+
+.pop_searchlist {
+	width: 379px;
+	text-indent: 10px;
+}
+
+.pop_searchlist ul {
+	padding: 0;
+	cursor: pointer;
+	width: 100%
+}
+
+.pop_searchlist li:hover {
+	background-color: #666;
+}
+
+.pop_searchlist li:hover a {
+	color: #fff;
+}
+
+.top_bar_right a {
+	margin: 0px;
+}
+
+.dropHover .pop1 {
+	display: block;
+}
+
+.top_bar_right span {
+	margin-right: 20px;
+	min-width: 70px;
+	display: inline-block;
+	text-align: center;
+	padding: 0 1px;
+	z-index: 999;
+}
+
+.stock-gj {
+	float: left;
+	height: 26px;
+	line-height: 26px;
+	margin-left: 20px;
+	color: #d80001;
+}
+
+.checks {
+	float: left;
+	border: 1px solid #ddd;
+	margin: 104px 0 0 0;
+	padding: 23px 30px 0 30px;
+	width: 288px;
+	height: 280px;
+	position: relative;
+	z-index: 9;
+	top: -505px;
+	background-color: white;
+}
+
+.checks .p-title {
+	color: #000;
+	font-size: 22px;
+	font-family: 黑体, serif;
+	margin-bottom: 35px;
+}
+
+.checks .p-title b {
+	float: left;
+}
+
+.checks input {
+	height: 34px;
+	line-height: 34px;
+	width: 180px;
+	border: 1px solid #ddd;
+	color: #999;
+	padding-left: 7px;
+	font-size: 14px;
+	margin: 25px 0 25px 0;
+}
+
+.close {
+	margin-left: 50px;
+	/*		  color: #CCCCCC;*/
+	margin-top: 2px;
+	display: block;
+	height: 36px;
+	width: 95px;
+	line-height: 36px;
+	text-align: center;
+	color: #fff;
+	background: #CCCCCC;
+	font-size: 14px;
+	text-decoration: none;
+	float: left;
+}
+
+.checks .btn-login {
+	margin-top: 2px;
+	display: block;
+	height: 36px;
+	width: 95px;
+	line-height: 36px;
+	text-align: center;
+	color: #fff;
+	background: #d5000b;
+	font-size: 14px;
+	text-decoration: none;
+	float: left;
+}
+
+.drop-a {
+	color: #fff;
+}
+
+.stpage {
+	margin-top: 120px;
+}
+
+.man_yuren {
+	display: none;
+	position: relative;
+}
+
+.man_yuren span {
+	display: block;
+	width: 32px;
+	height: 32px;
+	position: absolute;
+	top: 20px;
+	right: 45px;
+	cursor: pointer;
+}
+
+.man_luy {
+	width: 650px;
+	margin: 0 auto;
+}
+
+.man_top {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	opacity: 0.4;
+	filter: alpha(opacity = 40);
+	background: #000;
+	top: 0px;
+	left: 0px;
+	z-index: 99;
+}
+
+.man_bottom {
+	position: fixed;
+	z-index: 999;
+	width: 650px;
+	top: 13%;
+}
+
+.up-rt {
+	overflow: hidden;
+}

@@ -1,0 +1,107 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+{ms:include filename=headFile.htm/}
+<title>{ms:global.name/}</title>
+<script type="text/javascript">
+	$(function() {
+		$(".nav_bar_list").find("li").mouseover(function(){
+			$(this).find(".nav_bar_box").show();
+		});
+		$(".nav_bar_list").find("li").mouseout(function(){
+			$(this).find(".nav_bar_box").hide();
+		});
+	})
+	$(function() {
+		$(".top_bar_right span").hover(function() {
+			$(this).addClass("dropHover");
+		}, function() {
+			$(this).removeClass("dropHover");
+		})
+	});
+</script>
+
+</head>
+
+<div class="bz_tccc tc1" style="display: none">
+	<div class="bz_ctop">
+		<div class="bz_th">
+			<a href="javascript:;">X</a>
+		</div>
+		<div class="bz_cencc"></div>
+	</div>
+	<div class="bz_yiying"></div>
+</div>
+<div id="shb" style="background: #D85052"></div>
+
+<link href="{ms:globalskin.url/}/css/aboutus.css" rel="stylesheet" type="text/css" />
+<link href="{ms:globalskin.url/}/css/about.css" rel="stylesheet" type="text/css" />
+{ms:include filename=head.htm/}
+<div class="cen1200 clearfix" style="padding-bottom: 30px;">
+	<div class="list_main">
+		<div class="help_center">
+			<div class="help-left">
+				<div class="ag_main_l_b mar_b10" style="background: #fff;">
+					<div class="ag_main_l_bt">
+						配送方式 <i class="ag_openico"></i>
+					</div>
+					<ul>
+					{ms:channel typeid=93}
+						<li>
+							<a href=[field.typelink/]>[field.typetitle/]</a>
+						</li>
+					{/ms:channel}
+					</ul>
+					<div class="ag_main_l_bt">
+						关于我们 <i class="ag_openico"></i>
+					</div>
+					<ul>
+					{ms:channel typeid=53}
+						<li>
+							<a href=[field.typelink/]>[field.typetitle/]</a>
+						</li>
+					{/ms:channel}
+					</ul>
+					<div class="ag_main_l_bt">
+						售后服务 <i class="ag_openico"></i>
+					</div>
+					<ul>
+					{ms:channel typeid=99}
+						<li>
+							<a href=[field.typelink/]>[field.typetitle/]</a>
+						</li>
+					{/ms:channel}
+					</ul>
+					<div class="ag_main_l_bt">
+						商家合作 <i class="ag_openico"></i>
+					</div>
+					<ul>
+					{ms:channel typeid=52}
+						<li>
+							<a href=[field.typelink/]>[field.typetitle/]</a>
+						</li>
+					{/ms:channel}
+					</ul>
+				</div>
+			</div>
+
+			<div class="hrt">
+				<div class="rttip">
+					当前位置: <a href="{ms:global.host/}">首页</a> > <a href="">{ms:field.title/}</a>
+				</div>
+				<div class="htxt" style="overflow: hidden;">
+					<p><br /></p>
+					<p><br /></p>
+					<p>
+						{ms:field.content/}
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+{ms:include filename=footer.htm/}
+</body>
+</html>

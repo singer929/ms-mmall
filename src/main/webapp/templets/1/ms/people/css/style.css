@@ -1,0 +1,272 @@
+ /* CSS Document */
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, pre, dl, dt, dd, ul, ol, li, th, td, div, span, img, fieldset, lengend, button, input, select, textarea{
+	margin: 0;padding: 0;
+}
+
+ul,ul li,dl,dl dt,dl dd,input,ol, ol li{ 
+	list-style:none;
+}
+
+img{
+	border:none;
+}
+
+html,body{
+	*position:static
+}
+/*以上为清除样式*/
+
+/*标签公共部分*/
+body{
+	font-family:Arial,Verdana,"\5b8b\4f53";
+	font-size:12px;
+	color:#666;
+}
+
+a{
+	text-decoration:none;
+	color: #666;
+}
+
+a:hover{
+	color: #E4393C !important;
+	cursor:pointer;
+}
+
+a:focus,input{
+	outline:none;
+}
+
+span{
+	color: #aaa;
+}
+
+label{
+	cursor:text;
+}
+
+/*以下为注册登录页面的头部。因为其更小，所以他们都被烙上了little的标记*/
+.little-header,.little-container{
+	background-color:#aa0202;
+	height:80px;
+	width:100%;
+}
+
+.little-container,.footer{
+	width:1020px;
+	margin:0 auto;
+}
+
+#logo{
+	padding-top:10px;
+}
+/*结束*/
+
+/*订单页的公共头部*/
+.head{
+	width:100%;
+	height:30px;
+	line-height:30px;
+	background-color:#F1F1F1;
+}
+
+.head-nav
+{
+	width:1210px;
+	margin:0 auto;
+	background-color:#F1F1F1;
+	overflow: hidden;
+}
+
+.nav-right
+{
+	width:650px;
+	float:right;
+}
+
+.nav-right ul li
+{
+	float:right;
+	font-size:13px;
+}
+
+.header{
+	width:100%;
+	height:80px;
+	background-color:#aa0202;
+}
+
+.logo{
+	width:1210px;
+	margin:0  auto;
+	background-color:#aa0202;
+	height:100%;
+}
+
+.nav-right ul li div{
+	padding:0 8px
+}
+
+.headerleft,.headerRight{
+	float:left;
+    padding-top:15px;
+	width:50%;
+}
+.headerleft img{
+	margin-top: -2px;
+    margin-left: 1px;
+}
+.headerRight{
+	float:right;
+}
+
+.search{
+	float:right;
+	margin:10px 15px 0px 0px;
+}
+
+.goodsCart{
+	float:right;
+	margin-right:5px;
+	margin-top:10px;
+	background-color:#F9F9F9;
+	width:170px;
+	height:33px;
+	line-height:33px;
+	text-align:center;
+}
+
+#shoppingAmount{
+	position: relative;
+    top: -35px;
+    right: -35px;
+    display: inline-block;
+    padding: 1px 2px;
+    font-size: 12px;
+    line-height: 12px;
+    color: #fff;
+    background-color: #c81623;
+    border-radius: 7px 7px 7px 0;
+    min-width: 12px;
+    text-align: center;
+}
+
+.text,.searchBtn{
+	height:33px;
+	border:none;
+	outline:none;
+	float:left;
+	cursor: pointer;
+}
+
+.text{
+	width:130px;
+	line-height:33px;
+}
+
+.searchBtn
+{
+	width:55px;
+	background-color:#F7F7F7;
+}
+
+.clear{
+	clear:both;
+}
+
+.shopping p{
+	font: 13px/150% Arial,Verdana,"\5b8b\4f53";
+}
+
+.footer{   
+	height:120px;
+}
+
+.footer-link{
+	height:80px;
+	line-height:80px;
+	text-align:center;
+}
+
+.footer-link a{
+	margin: 0 10px;
+}
+
+.footer-link a:hover{
+    text-decoration: underline;
+}
+
+.choose{
+	color: #E4393C;
+    font-weight: 700;
+}
+.copy{
+	text-align:center;
+}
+
+.menu-left{
+	margin-left:11px;
+    margin-top:-6px;
+	width:105px;
+	float:left;
+}
+
+.menu-left dt{
+	color:#333;
+	height: 28px;
+    line-height: 28px;
+    font-weight: 700;
+}
+
+.menu-left dd{
+	color:#777777;
+	height: 24px;
+    line-height: 24px;
+}
+
+.this-title{
+	height:60px;
+	line-height:58px;
+	font-size:16px;
+	margin-left:-1px;
+}
+.submit input{
+	width: 80px!important;
+	height:30px!important;
+	position: relative;
+	left: 67px;
+	background-color:#F0F9E9;
+	border: 1px solid #BFD6AF;
+	-webkit-border-radius: 3px;
+}
+
+.txt-hide{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	display: -webkit-box;
+}
+
+/*部分订单页面公共部分*/
+.common-content{
+	width:100%;
+	background-color:#F5F5F5;
+}
+
+.common-main{
+	width:1210px;
+	padding-top:33px;
+	margin:0 auto;
+	background-color:#F5F5F5;
+	padding-bottom:25px;
+}
+
+.hide{
+	display:none;
+}
+
+.border-red{
+	border-color:#E4393C !important;
+	color:#E4393C !important;
+}

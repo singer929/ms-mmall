@@ -1,0 +1,90 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+<!--[if lte IE 7]>
+<script src="{ms:globalskin.url/}/js/json2.js"></script>
+<![endif]-->
+<meta name="keywords" content="{ms:global.keyword/}"/>
+<meta name="description" content="{ms:global.descrip/}"/>
+<meta name="mstore-key" content="4e3d6b0543d3219ab5c767b9b9743195"/>
+<!--script type="text/javascript">document.domain="mingsoft.net";</script-->
+
+<link rel="shortcut icon" href="http://cdn.mingsoft.net/global/images/ms.ico" type="x-icon"> 
+<link rel="stylesheet" type="text/css" href="{ms:globalskin.url/}/css/basic.css" />
+<!-- old css -->
+<link rel="stylesheet" type="text/css" href="{ms:globalskin.url/}/css/goodshow.css"/>
+<!--新版-->
+<link rel="stylesheet" type="text/css" href="{ms:globalskin.url/}/css/jquery.mcustomscrollbar.min.css" />
+<link rel="stylesheet" type="text/css" href="{ms:globalskin.url/}/css/style.css" />
+
+<link rel="stylesheet" type="text/css" href="http://cdn.mingsoft.net/plugins/iconfont/1.0.0/iconfont.css" />
+
+<script src="http://cdn.mingsoft.net/plugins/jquery/1.9.1/jquery-1.9.1.js"></script>
+<script src="{ms:globalskin.url/}/people/js/goods-cookie.js" type="text/javascript"></script>
+
+<!-- old css -->
+<!-- <script type="text/javascript" src="{ms:globalskin.url/}/js/angue.js"></script>
+ -->
+<!-- <script type="text/javascript" src="{ms:globalskin.url/}/js/jquery.js"></script>  -->
+<script type="text/javascript" src="{ms:globalskin.url/}/js/base.js"></script>
+<script type="text/javascript" src="{ms:globalskin.url/}/js/index.js"></script>
+<script src="{ms:globalskin.url/}/js/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="{ms:globalskin.url/}/js/dplus.js"></script>
+<script type="text/javascript" src="{ms:globalskin.url/}/js/stage.js"></script>
+<script src="{ms:globalskin.url/}/js/unslider.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="{ms:globalskin.url/}/js/jquery.mcustomscrollbar.concat.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="{ms:globalskin.url/}/js/responsiveslides.js" type="text/javascript" charset="utf-8"></script>
+<script src="{ms:globalskin.url/}/js/index.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="http://cdn.mingsoft.net/plugins/jquery.tmpl/1.4.2/jquery.tmpl.min.js"></script>
+<script src="http://cdn.mingsoft.net/plugins/jquery.cookie/2.2.0/jquery.cookie.js"></script>
+<script src="http://cdn.mingsoft.net/plugins/seajs/3.0.0/sea.js"></script>
+<script src="http://202d234463057972.mb.mstore.mingsoft.net/cdn/model/main.js"></script>
+<script src="http://cdn.mingsoft.net/plugins/validator/1.0.0/validator.js"></script>
+<script>
+	ms.config({ 
+		base:"{ms:global.host/}",
+		filter: {
+		  	people:{
+		  		loginUrl:'{ms:global.host/}/login.do'
+		  	}
+		  }
+	});  
+</script>
+<style>
+	.top_bar_left { color: #fff;}
+</style>
+<script>
+	//右边菜单
+$(function(){
+	$(".right_icon").mouseover(function(){
+		$(this).siblings(".mp_tooltip").css("visibility","visible");
+	});
+	$(".right_icon").mouseout(function(){
+		$(this).siblings(".mp_tooltip").css("visibility","hidden");
+	});
+
+	
+	ms.load(["ms","ms.mall","ms.people"],function(ms,mmall,mpeople) {
+
+		mpeople.checkLoginStatus(function(returnJson){
+			//如果已登录将会有以下操作
+			if (returnJson.result){
+				mpeople.people.user.info(function(returnJson){
+					$(".top_bar_left").html(""+returnJson.peopleName+" 欢迎您！<small>|</small><span class='la'><a href='#' rel='nofollow' class='quitLogin'>退出</a><small>|</small><a href='"+ms.base+"/people/center.do'>个人中心</a></span>");
+				});
+				//购物车商品数量
+				mmall.people.mall.cart.list("",function(json){
+					$(".top_bar_right").find("em").html(json.length);
+					$(".cart_num").html(json.length);
+				});
+			}
+		});
+		//点击退出
+		$(".top_bar_left").delegate(".quitLogin","click",function() {
+			mpeople.people.quit(function() {});
+			self.location.href = ""+ms.base+"";
+		});
+
+	});
+});
+</script>

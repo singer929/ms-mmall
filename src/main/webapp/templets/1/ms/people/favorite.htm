@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>我的收藏</title>
+	{ms:include filename=people/headFile.htm/}
+	<script src="{ms:globalskin.url/}/people/js/check-login.js"></script>
+	<script src="http://cdn.mingsoft.net/plugins/jquery.tmpl/1.4.2/jquery.tmpl.min.js"></script>
+
+	<!-- 调用列表模板 -->
+	<script id="myTemplate" type="text/x-jquery-tmpl">   
+    	<div class="cut-main-commodity" data-num=${basicId}>
+			<div class="cut-main-commodity-img"> 
+				<a href={ms:global.url/}${productLinkUrl}>
+					<img src=${basicPic} width="160" height="160" 
+					alt="${basicTitle}" title="${basicTitle}"/>
+				</a> 
+			</div>
+			<div class="cut-main-commodity-name">
+				<input type="checkbox" name="inputchecked" class="cut-main-list-inputTop" value=${basicId}>
+				<a href={ms:global.url/}${productLinkUrl} title="${basicTitle}">${basicTitle}</a> 
+			</div>
+			<div class="cut-main-commodity-price"> ￥ ${productPrice}</div>
+			<div class="cut-main-commodity-conmment">
+				<span class="commodity-conmment-left"><a href="#">${basicComment}人评价</a></span> 
+				<span class="commodity-conmment-right">好评度${basicSort}%</span>
+			</div>
+			<div class="cut-main-commodity-opbtns">
+				<input type="button" value="取消" class="cut-main-list-inputButton"/>
+			</div>
+		</div>	
+	</script>	
+	
+</head>
+<body>
+	{ms:include filename=people/head.htm/}
+	<div class="common-content">
+		<div class="common-main"> 
+			<!----左边列表详情---->
+			{ms:include filename=people/menu.htm/}
+			<!----左边列表详情结束----> 
+			<!----右边收藏列表详情---->
+			<div id="main">
+				<div class="cut-main">
+				<form>
+					<div class="this-title" data-id="favorite">
+						<h4>我的收藏</h4>
+					</div>						
+					<div class="cut-main-list"> 							
+					</div>
+					
+					<div class="page-wrap">
+						<div class="page-wrap-all">
+							<input type="checkbox" name="allchecked" class="cut-main-list-inputTop"/>
+							<label>全选</label>
+							<a>取消关注</a> </div>
+						<div class="cut-main-page"> 
+							<a  class="pre-page">< 上一页</a> 
+							<a  class="next-page">下一页 ></a> 
+							<span style="color:balck;">共<em class="cut-main-black-sum">1</em>页</span> 
+						</div>
+					</div>
+				</form>
+					<div id="cut-main-collect-shop">
+						<div style="height:200px;"></div>
+						<div class="cut-main-collect-shop-mid">
+							<h5>没有收藏的商品哦~</h5>
+							<a href="{ms:global.host/}" id="favorite-btn">去首页看看</a> 
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<!----右边收藏列表详情结束----> 
+		</div>
+	</div>
+	<!---底部-->
+	{ms:include filename=people/footer.htm/}
+	<form style="display:none">
+		<input  id="page-number" value="1">
+	</form>
+	<script src="{ms:globalskin.url/}/people/js/shop.js" type="text/javascript"></script>
+</body>
+</html>
+<script>
+$(function(){
+	var pageNumber = $("#page-number").val();  //获取页码
+	var isLastPage;
+	var isFirstPage;
+
+	ms.load(["ms","ms.mall"],function(ms,mmall) {//引用接口数据					
+		attentionList(mmall);	//获取收藏列表
+		del(mmall);				//删除收藏
+		prePage(mmall);			//上一页
+		nextPage(mmall);		//下一页	
+		nav(mmall);				//页码导航
+	});
+
+	//收藏列表
+	function attentionList(mmall){										
+		var listParam = "pageNo="+pageNumber+"&pageSize=5&basicAttentionType=1";
+		var goodsList = new Array(); //由于价格问题，需要数组进行追加
+		mmall.people.mall.attention.list(listParam,function(json){
+			for(var i = 0;i < json.list.length;i++){
+				goodsList[i] = {basicId:json.list[i].basicId,
+							 basicPic:json.list[i].basicPic,
+							 productLinkUrl:json.list[i].productLinkUrl,
+							 basicTitle:json.list[i].basicTitle,
+							 productPrice:parseFloat(json.list[i].productPrice).toFixed(2),
+							 basicComment:json.list[i].basicComment,
+							 basicSort:json.list[i].basicSort
+							}
+			}
+			$(".cut-main-commodity").remove();
+			$(".cut-main-red-num").remove();
+            $('#myTemplate').tmpl(goodsList).appendTo('.cut-main-list');//通过tmpl追加数据
+            if(json.list.length == 0){
+            	$("#cut-main-collect-shop").show();
+            	$(".page-wrap").hide();
+            }else{
+            	$("#cut-main-collect-shop").hide();
+            }
+            for(var j = 0;j < json.page.navigatepageNums.length;j++){  //追加分页
+            	$(".next-page").before('<a  class="cut-main-red-num" style="cursor: pointer;">'+json.page.navigatepageNums[j]+'</a>');
+            }
+            var curPage = Number(json.page.pageNum) - 1;
+            $(".cut-main-red-num:eq("+curPage+")").addClass("cur-page");		            
+            isFirstPage = json.page.isFirstPage;
+            isLastPage = json.page.isLastPage;		            				           			            	            
+            $(".cut-main-black-sum").text(json.page.pages);//追加总页数数据
+		});
+	}
+
+	//上一页收藏列表
+	function prePage(mmall){
+		$(".pre-page").click(function(){//上一页
+			if(!isFirstPage){
+				pageNumber--;
+				$("#page-number").val(pageNumber);
+				attentionList(mmall);							
+			}
+		});	
+	}
+
+	//下一页收藏列表
+	 function nextPage(mmall){
+		 $(".next-page").click(function(){//下一页
+			if(!isLastPage){
+				pageNumber++;
+				attentionList(mmall);
+				$("#page-number").val(pageNumber);
+			}
+		});
+	}
+
+	//页面导航
+	  function nav(mmall){					
+		$(".cut-main-page").delegate(".cut-main-red-num","click",function(){//点击导航页码
+			pageNumber = $(this).text();
+			$("#page-number").val(pageNumber);
+			attentionList(mmall);						
+		});
+	}
+
+	//删除收藏
+	function del(mmall){
+		
+		//取消商品关注
+		function delFavor(delParam) {				
+			var delAll = confirm("取消商品关注？");	//弹框提示
+			if(delAll){								//判断是否取消商品关注
+				$(".page-wrap-all input").get(0).checked = false;
+				mmall.people.mall.attention.del(delParam,function(json){
+				});
+				attentionList(mmall); 				//调用收藏列表方法
+			}
+		}
+		$(".cut-main-list-inputButton").click(function(){
+			var basicId = $(this).parent().siblings("div:eq(1)").children("input").val();
+			delFavor(basicId);   
+		});
+
+		$(".page-wrap-all > a").click(function(){						
+			var basicId = "";
+			$("input[name='inputchecked']").each(function(index, element){
+				if($(this).get(0).checked === true){
+					if (basicId == ""){
+						basicId = $(this).val();
+					}
+					else {
+						basicId +=  ',' + $(this).val();
+					}	
+				}
+			});
+			delParam = "basicId="+basicId+""
+			if(basicId == ""){
+				alert("还未选择任何商品");
+				return;
+			}
+			delFavor(delParam);//调用取消关注方法
+		});
+
+		//删除收藏	
+		$(".cut-main-list").delegate(".cut-main-list-inputButton","click",function(){ 						
+			var delShop = confirm("取消商品关注？");
+			if(delShop === true) {   
+				var delNum = $(this).parents(".cut-main-commodity").attr("data-num");
+				var delParam = "basicId="+delNum+"";
+				mmall.people.mall.attention.del(delParam,function(returnJson){//调用删除接口
+					
+				});
+				attentionList(mmall);//由于没有返回方法所以，只能在外面（调用收藏列表方法）
+			 }	
+		});
+	}
+});
+
+</script>

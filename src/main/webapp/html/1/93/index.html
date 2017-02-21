@@ -1,0 +1,466 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+<!--[if lte IE 7]>
+<script src="http://localhost:8080/templets/1/ms//js/json2.js"></script>
+<![endif]-->
+<meta name="keywords" content="java cms开源,java 商城 开源,java 微信 开源,java 论坛 开源,java 社区 开源,java 分销 开源,java 代理 开源,java OA 开源,java ERP开源,java wms开源,铭飞案例展示,铭飞模版下载,江西开源软件公司,江西最好的软件公司"/>
+<meta name="description" content="国内最好的Java免费开源，文章、商城、微信、论坛等更多丰富好用插件与模版，拥有更高效的代码在线生成工具，降低开发成本提高开发效率。每月28定期更新版本"/>
+<meta name="mstore-key" content="4e3d6b0543d3219ab5c767b9b9743195"/>
+<!--script type="text/javascript">document.domain="mingsoft.net";</script-->
+
+<link rel="shortcut icon" href="http://cdn.mingsoft.net/global/images/ms.ico" type="x-icon"> 
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/templets/1/ms//css/basic.css" />
+<!-- old css -->
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/templets/1/ms//css/goodshow.css"/>
+<!--新版-->
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/templets/1/ms//css/jquery.mcustomscrollbar.min.css" />
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/templets/1/ms//css/style.css" />
+
+<link rel="stylesheet" type="text/css" href="http://cdn.mingsoft.net/plugins/iconfont/1.0.0/iconfont.css" />
+
+<script src="http://cdn.mingsoft.net/plugins/jquery/1.9.1/jquery-1.9.1.js"></script>
+<script src="http://localhost:8080/templets/1/ms//people/js/goods-cookie.js" type="text/javascript"></script>
+
+<!-- old css -->
+<!-- <script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/angue.js"></script>
+ -->
+<!-- <script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/jquery.js"></script>  -->
+<script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/base.js"></script>
+<script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/index.js"></script>
+<script src="http://localhost:8080/templets/1/ms//js/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/dplus.js"></script>
+<script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/stage.js"></script>
+<script src="http://localhost:8080/templets/1/ms//js/unslider.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://localhost:8080/templets/1/ms//js/jquery.mcustomscrollbar.concat.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://localhost:8080/templets/1/ms//js/responsiveslides.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://localhost:8080/templets/1/ms//js/index.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="http://cdn.mingsoft.net/plugins/jquery.tmpl/1.4.2/jquery.tmpl.min.js"></script>
+<script src="http://cdn.mingsoft.net/plugins/jquery.cookie/2.2.0/jquery.cookie.js"></script>
+<script src="http://cdn.mingsoft.net/plugins/seajs/3.0.0/sea.js"></script>
+<script src="http://202d234463057972.mb.mstore.mingsoft.net/cdn/model/main.js"></script>
+<script src="http://cdn.mingsoft.net/plugins/validator/1.0.0/validator.js"></script>
+<script>
+	ms.config({ 
+		base:"http://localhost:8080",
+		filter: {
+		  	people:{
+		  		loginUrl:'http://localhost:8080/login.do'
+		  	}
+		  }
+	});  
+</script>
+<style>
+	.top_bar_left { color: #fff;}
+</style>
+<script>
+	//右边菜单
+$(function(){
+	$(".right_icon").mouseover(function(){
+		$(this).siblings(".mp_tooltip").css("visibility","visible");
+	});
+	$(".right_icon").mouseout(function(){
+		$(this).siblings(".mp_tooltip").css("visibility","hidden");
+	});
+
+	
+	ms.load(["ms","ms.mall","ms.people"],function(ms,mmall,mpeople) {
+
+		mpeople.checkLoginStatus(function(returnJson){
+			//如果已登录将会有以下操作
+			if (returnJson.result){
+				mpeople.people.user.info(function(returnJson){
+					$(".top_bar_left").html(""+returnJson.peopleName+" 欢迎您！<small>|</small><span class='la'><a href='#' rel='nofollow' class='quitLogin'>退出</a><small>|</small><a href='"+ms.base+"/people/center.do'>个人中心</a></span>");
+				});
+				//购物车商品数量
+				mmall.people.mall.cart.list("",function(json){
+					$(".top_bar_right").find("em").html(json.length);
+					$(".cart_num").html(json.length);
+				});
+			}
+		});
+		//点击退出
+		$(".top_bar_left").delegate(".quitLogin","click",function() {
+			mpeople.people.quit(function() {});
+			self.location.href = ""+ms.base+"";
+		});
+
+	});
+});
+</script>
+
+<title>铭飞MS平台|MStore|JAVA 开源 CMS、商城、微信、论坛、社区、分销、代理、OA、ERP</title>
+<script type="text/javascript">
+	$(function() {
+		$(".nav_bar_list").find("li").mouseover(function(){
+			$(this).find(".nav_bar_box").show();
+		});
+		$(".nav_bar_list").find("li").mouseout(function(){
+			$(this).find(".nav_bar_box").hide();
+		});
+	})
+	$(function() {
+		$(".top_bar_right span").hover(function() {
+			$(this).addClass("dropHover");
+		}, function() {
+			$(this).removeClass("dropHover");
+		})
+	});
+</script>
+
+</head>
+
+<div class="bz_tccc tc1" style="display: none">
+	<div class="bz_ctop">
+		<div class="bz_th">
+			<a href="javascript:;">X</a>
+		</div>
+		<div class="bz_cencc"></div>
+	</div>
+	<div class="bz_yiying"></div>
+</div>
+<div id="shb" style="background: #D85052"></div>
+
+<link href="http://localhost:8080/templets/1/ms//css/aboutus.css" rel="stylesheet" type="text/css" />
+<link href="http://localhost:8080/templets/1/ms//css/about.css" rel="stylesheet" type="text/css" />
+<!-------------------------------------- 头部开始 -------------------------------------->
+<div class="top_bar">
+	<div class="inner">
+		<div class="top_bar_right">
+			<span>
+				<a href="http://localhost:8080/people/center.do" class="drop-a" id="drop2">会员中心</a>
+			</span>
+			<span>
+				<a href="http://localhost:8080/people/myOrder.do" >我的订单</a>
+			</span>
+			<span>
+				<a href="http://localhost:8080/people/favourite.do" class="drop-a" id="drop-shops">我的收藏</a>
+			</span>
+			<a href="http://localhost:8080/people/shopCar.do" class="shopcar">
+				<i class="icon icon-shop"></i>购物车<em>0</em>
+			</a>
+		</div>
+		<div class="top_bar_left">
+			<a>铭飞欢迎你</a><a href="http://localhost:8080">网站首页</a><span class="n_login">
+				<div class="top_logIn">
+					<a href="http://localhost:8080/login.do" class="top_logIn_a">登录</a>
+					
+				</div> <a href="http://localhost:8080/register.do">免费注册</a>
+			</span><span class="y_login"></span>
+		</div>
+	</div>
+</div>
+<!-- 工具栏 end -->
+<!-- logo和搜索 -->
+<div style="width: 100%; background: #fff">
+	<div class="inner nheader">
+		<div class="logo">
+			<a href="http://localhost:8080"></a>
+		</div>
+		<div class="all-search">
+			<div class="search clear">
+				<form id="searchDataForm" action="http://localhost:8080/mmall/14/search.do" method="post">
+		
+					<label class="input_bar" id="drop4">
+						<span id="searchType"><i class="icon icon2"></i></span>
+					</label> 
+					<input type="text" id="txt_name" name="basic_title" />
+
+					<input type="submit" value="搜索" style="width:70px;color:white;background-color:#aa0202;font-weight:600;cursor:pointer;">
+				</form>
+				
+			</div>
+		</div>
+		<img src="http://cdn.mingsoft.net/global/images/weixin.jpg" class="top_barcode" style="width: 80px;"/>
+	</div>
+</div>
+<!-- logo和搜索 end -->
+
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/templets/1/ms//css/nindex.css" />
+<script type="text/javascript" src="http://localhost:8080/templets/1/ms//js/jquery.lazyload.js"></script>
+
+<!-- 导航栏 -->
+<div class="nav">
+	<div class="nav_bar inner clear">
+		<ul class="nav_bar_list">
+			<li><a href="http://localhost:8080">首页</a></li>
+			<li>
+				<a href="http://localhost:8080/html/1/203/index.html">服装鞋包</a>
+				<div class="nav_bar_box">
+					<div class="nav_bar_ctglist">
+						<div class="nav_bar_item">
+							<p class="nav_bar_title">服装鞋包</p>
+							<div class="nav_ctgnamebox">
+								
+									<a href="http://localhost:8080/html/1//203/239/index.html" target="_blank" class="a_baojian" >鞋包</a>
+								
+									<a href="http://localhost:8080/html/1//203/207/index.html" target="_blank" class="a_baojian" >女装</a>
+								
+									<a href="http://localhost:8080/html/1//203/205/index.html" target="_blank" class="a_baojian" >童鞋</a>
+								
+									<a href="http://localhost:8080/html/1//203/204/index.html" target="_blank" class="a_baojian" >童装</a>
+								
+							</div>
+						</div>
+					</div>
+					<div class="nav_brandbox">
+						<p class="nav_brandbox_title"></p>
+						<div class="nav_brandlist"></div>
+					</div>
+					<div class="nav_imgBox"></div>
+					<div class="clear"></div>
+				</div>
+			</li>
+			<li class=""><a href="http://localhost:8080/html/1/208/index.html">母婴用品</a>
+				<div class="nav_bar_box">
+					<div class="nav_bar_ctglist">
+						<div class="nav_bar_item">
+							<p class="nav_bar_title">母婴用品</p>
+							<div class="nav_ctgnamebox">
+								
+									<a href="http://localhost:8080/html/1//208/212/index.html" target="_blank" class="a_baojian" >用品家居</a>
+								
+									<a href="http://localhost:8080/html/1//208/211/index.html" target="_blank" class="a_baojian" >美妆个护</a>
+								
+									<a href="http://localhost:8080/html/1//208/210/index.html" target="_blank" class="a_baojian" >自营奶粉</a>
+								
+									<a href="http://localhost:8080/html/1//208/209/index.html" target="_blank" class="a_baojian" >自营纸尿裤</a>
+								
+									<a href="http://localhost:8080/html/1//208/206/index.html" target="_blank" class="a_baojian" >玩具</a>
+								
+							</div>
+						</div>
+					</div>
+					<div class="nav_brandbox">
+						<p class="nav_brandbox_title"></p>
+						<div class="nav_brandlist"></div>
+					</div>
+					<div class="nav_imgBox"></div>
+					<div class="clear"></div>
+				</div>
+			</li>
+			
+		</ul>
+	</div>
+</div>
+<!-- 导航栏 end -->
+<!-- banner -->
+<div class="banner">
+	<div class="callbacks_container">
+		<ul class="rslides" id="slider">
+			<li><a target="_blank" style="background-image: url(http://localhost:8080/templets/1/ms//images/57aaeaa0bded6.jpg);"></a></li>
+		</ul>
+	</div>
+	<div class="clear"></div>
+</div>
+<!-- banner end -->
+<script type="text/javascript">
+	$(function(){
+		var r=location.href;
+	  	if(r.match("203")){
+			$(".nav_bar_list li").removeClass("idex");
+			$(".nav_bar_list li:eq(1)").addClass("idex");
+		}else if(r.match("208")){
+			$(".nav_bar_list li").removeClass("idex");
+			$(".nav_bar_list li:eq(2)").addClass("idex");
+		}else{
+			$(".nav_bar_list li").removeClass("idex");
+			$(".nav_bar_list li:eq(0)").addClass("idex");
+		}
+	})
+</script>
+
+<div class="cen1200 clearfix" style="padding-bottom: 30px;">
+	<div class="list_main">
+		<div class="help_center">
+			<div class="help-left">
+				<div class="ag_main_l_b mar_b10" style="background: #fff;">
+					<div class="ag_main_l_bt">
+						配送方式 <i class="ag_openico"></i>
+					</div>
+					<ul>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//93/94/index.html>主营业务</a>
+						</li>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//93/95/index.html>企业文化</a>
+						</li>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//93/98/index.html>企业优势</a>
+						</li>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//93/97/index.html>合作伙伴</a>
+						</li>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//93/96/index.html>资质荣誉</a>
+						</li>
+					
+					</ul>
+					<div class="ag_main_l_bt">
+						关于我们 <i class="ag_openico"></i>
+					</div>
+					<ul>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//53/133/index.html>网站优化</a>
+						</li>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//53/134/index.html>网络营销</a>
+						</li>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//53/135/index.html>域名注册</a>
+						</li>
+					
+					</ul>
+					<div class="ag_main_l_bt">
+						售后服务 <i class="ag_openico"></i>
+					</div>
+					<ul>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//99/102/index.html>企业形象设计</a>
+						</li>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//99/101/index.html> 全案设计</a>
+						</li>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//99/103/index.html>产品包装设计</a>
+						</li>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//99/104/index.html>连锁店设计</a>
+						</li>
+					
+					</ul>
+					<div class="ag_main_l_bt">
+						商家合作 <i class="ag_openico"></i>
+					</div>
+					<ul>
+					
+						<li>
+							<a href=http://localhost:8080/html/1//52/136/index.html>优化报价</a>
+						</li>
+					
+					</ul>
+				</div>
+			</div>
+
+			<div class="hrt">
+				<div class="rttip">
+					当前位置: <a href="http://localhost:8080">首页</a> > <a href="">关于我们</a>
+				</div>
+				<div class="htxt" style="overflow: hidden;">
+					<p><br /></p>
+					<p><br /></p>
+					<p>
+						<p><span style="color: rgb(51, 51, 51); font-family: 微软雅黑; font-size: 13px; line-height: 25px; text-align: justify;">广州城市规划设计有限公司是中欧国际旅游规划设计研究院（Sino-Europe Academy of Tourism Planning and Design）旗下之专业机构，公司专注于城市规划、旅游规划设计与商业综合体设计，构建了从规划设计、品牌营销、资本运作到管理咨询等全产品链集成一体化服务，提供从总体策划、建筑景观设计、资源引进、战略实施、平台搭建到运营管理等全程、专业化解决方案。</span></p><p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; border: 0px; color: rgb(51, 51, 51); font-family: 微软雅黑; font-size: 13px; line-height: 25px; text-align: justify; white-space: normal;"><br style="margin: 0px; padding: 0px; border: 0px;"/>广州规划设计以“产业联动、搭建平台、金融孵化”为经营哲学，推动旅游业与民俗艺术、饮食、地产、绿色农业及金融业的融合发展，同时依托中欧国际旅游规划设计研究院的学术背景与国际资源，搭建行业交互平台，提供切合旅游企业需要的一揽子专业协同服务。<br style="margin: 0px; padding: 0px; border: 0px;"/><br style="margin: 0px; padding: 0px; border: 0px;"/>广州规划设计秉持“文化开发与生态保护相结合”的规划设计理念，切实将“因地制宜、以人为本、市场引导、经济可行、体验为怀、低碳环保”的精神贯穿于每一个项目之中，倡导空间与艺术相结合、经济与美学相融合、历史文明与现代时尚相调和，力求每个作品都能达到人文景观与大自然的和谐完美融合。<br style="margin: 0px; padding: 0px; border: 0px;"/><br style="margin: 0px; padding: 0px; border: 0px;"/>广州规划设计与国际行业组织、海内外同行及国内知名高等院校如香港大学、中山大学、同济大学、广东财经大学等建立和保持着密切的合作与互动关系，致力于整合行业高端智慧，引进行业优质资源，推动中国旅游业迈向更高的竞争层次。</p><p><br/></p>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+<div>
+	<div class="footer-top">
+		 <img src="http://localhost:8080/templets/1/ms//images/foottop-bg.jpg" /> 
+	</div>
+	<div class="footer">
+		<div class="footer-cnt">
+			<dl class="footer-dl" style="width: 130px;">
+				<dt>配送方式</dt>
+				 
+					<dd><a href=http://localhost:8080/html/1//93/94/index.html>主营业务</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//93/95/index.html>企业文化</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//93/98/index.html>企业优势</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//93/97/index.html>合作伙伴</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//93/96/index.html>资质荣誉</a></dd>
+				
+			</dl>
+			<dl class="footer-dl" style="width: 130px;">
+				<dt>关于我们</dt>
+				 
+					<dd><a href=http://localhost:8080/html/1//53/133/index.html >网站优化</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//53/134/index.html >网络营销</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//53/135/index.html >域名注册</a></dd>
+				
+			</dl>
+			<dl class="footer-dl" style="width: 130px;">
+				<dt>售后服务</dt>
+				 
+					<dd><a href=http://localhost:8080/html/1//99/102/index.html>企业形象设计</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//99/101/index.html> 全案设计</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//99/103/index.html>产品包装设计</a></dd>
+				 
+					<dd><a href=http://localhost:8080/html/1//99/104/index.html>连锁店设计</a></dd>
+				
+			</dl>
+			<dl class="footer-dl" style="width: 130px;">
+				<dt>商家合作</dt>
+				 
+					<dd><a href=http://localhost:8080/html/1//52/136/index.html> 优化报价</a></dd>
+				
+			</dl>
+			<img src="http://cdn.mingsoft.net/global/images/weixin.jpg" style="width: 80px;"/>
+			<div class="clear"></div>
+		</div>
+		<ul>
+			<li>@2012-2017铭飞科技(www.mingsoft.net) 铭飞科技有限公司版权所有</li>
+		</ul>
+	</div>
+</div>
+
+<!--右侧菜单栏-->
+<div class="mbar">
+	<div class="mui-mbar-tabs ">
+		<div class="quick_link_mian">
+			<div class="quick_links_panel">
+				<div id="quick_links" class="quick_links">
+					<li id="shopCart">
+						<a href="http://localhost:8080/people/shopCar.do" class="message_list mbar_click">
+							<i class="message ico-fonts">&#xe729;</i>
+							<div class="span">购物车</div><span class="cart_num">0</span>
+						</a>
+					</li>
+					<li class="right_li">
+						<a href="http://localhost:8080/people/favourite.do" class="mpbtn_histroy mbar_click right_icon" type="mbar-collect" onclick="asyn_collect()"><i class="ico-fonts">&#xe725;</i></a>
+						<div class="mp_tooltip" style="left: -121px; visibility: hidden;">我的收藏<i class="icon_arrow_right_black"></i></div>
+					</li>
+					
+				</div>
+				<div class="quick_toggle">
+					<li><a href="#top" class="return_top"><i class="top"></i></a></li>
+					<li class="right_li">
+						<a href="#"><i class="ico-fonts right_icon">&#xe914;</i></a>
+						<div class="mp_tooltip">返回顶部<i class="icon_arrow_right_black"></i></div>
+					</li>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--右侧菜单栏end--> 
+
+</body>
+</html>

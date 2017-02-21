@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>订单提交成功</title>
+	{ms:include filename=people/headFile.htm/}
+	<script src="{ms:globalskin.url/}/people/js/confirm-order.js" type="text/javascript"></script>
+	<script src="{ms:globalskin.url/}/people/js/check-login.js"></script>
+	<script src="http://cdn.mingsoft.net/plugins/jquery.tmpl/1.4.2/jquery.tmpl.min.js"></script>
+	
+</head>
+<body>
+	<!--头部开始-->
+	{ms:include filename=people/head.htm/}
+	<!--头部结束-->
+	<div class="confirm-order-content">
+		<div class="content-steps">
+			<div class="steps-img"><img src="{ms:globalskin.url/}/people/images/steps-3.png"/></div>
+			<div class="confirm-title">
+				<span>请选择支付方式</span>
+			</div>
+		</div>
+
+		<div class="success-content">
+			<div class="payment-content">
+				<div class="success-title">订单提交成功，请您尽快付款！ 订单号：{orderNo/}</div>
+				<div class="success-amount">应支付金额：<span class="order-amount">￥{orderPrice/}</span></div>
+
+				<h3>请选择支付方式</h3>
+				<ul class="pay_select clearfix">
+	               <li class="zhifu"><input type="radio" name="ra_bank" checked="checked" value="0"></li>
+	               <li class="weixin"><input type="radio" name="ra_bank" value="1"></li>
+			   </ul>
+			   <div class="success-operate">
+			   		<button class="paysure_btn">确定支付方式</button>
+			   </div>
+		    </div>
+
+		    <div class="question-content">
+		    	<div>付款遇到问题？</div>
+				<b>1.网上银行已经扣款，但订单状态仍显示未付款？</b>
+				<p>答：由于银行的数据没有及时传输给系统，我们会尽快与银行对账后给与确认，请您耐心等待。</p>
+				<b>2.网上银行页面打不开，怎么办？</b>
+				<p>答：点击浏览器菜单“工具”－“Internet选项”－“安全”，将安全中的各项设置恢复到默认级别。</p>
+				<b>3.网上银行重复多次付款了怎么办？</b>
+				<p>答：请联系客服，我们会在你提交申请后，尽快和银行核对。确认您的汇款后，重复支付付款会原路返回至你的支付账户。</p>
+		    </div>
+		</div>
+
+	</div>
+	<!--底部开始-->
+	{ms:include filename=people/footer.htm/}
+	<!--底部结束-->
+	<form method="post" action="{ms:global.host/}/bank/pay/alipay.do" style="display:none" id="orderPay">
+		<input name="returnUrl"  value="{ms:global.host/}/people/myOrder.do"/>
+		<input name="orderNo"  value=""/>
+		<input name="orderName"  value=""/>
+		<input name="orderPrice"  value=""/>
+		<input name="showUrl"  value=""/>
+		<input name="orderDesc"  value=""/>
+		<input name="notifyUrl"  value="{ms:global.host/}/mall//ordertify.do"/>
+	</form>
+</body>
+</html>
+<script type="text/javascript">
+	$(function(){
+		ms.load(["ms","ms.mall"],function(ms,mmall){
+			var orderNo = "orderNo="+ {orderNo/};
+			mmall.people.mall.order.detail(orderNo,function(json){
+				$("#orderPay input[name=orderNo]").val(orderNo);
+				$("#orderPay input[name=orderName]").val("订单标题");
+				$("#orderPay input[name=orderPrice]").val(json.orderPrice);
+				$("#orderPay input[name=orderDesc]").val("订单描述");
+				$("#orderPay input[name=showUrl]").val("{ms:global.host/}/people/orderDetail.do?"+json.orderNo);
+				
+			})
+		});
+
+		$(".paysure_btn").click(function(){
+			
+			$("input[name=ra_bank]:checked").each(function(){
+				if($(this).val() == "0"){
+					//支付宝支付
+					$("#orderPay").submit();
+				}else{
+					//微信支付
+
+				}
+			})
+		})
+	})
+</script>

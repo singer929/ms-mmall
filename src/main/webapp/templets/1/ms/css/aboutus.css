@@ -1,0 +1,51 @@
+﻿
+.yangwebWidth{width:769px;margin:0 auto;}
+
+/*网站简介*/
+.yangAboutUscl{clear: both;}
+.yangAboutUs_l{float:left;}
+.yangAboutUs_r{float:right;}
+.yangH10{height:12px;}
+.yangH50{height:50px;}
+.yangH47{height:47px}
+.yangAboutUswidth{width:453px;}
+.yangAblinheigt{line-height: 58px;}
+.yangAboutfontszyk{letter-spacing:2px;margin-top: 11px;display: block;}
+.yangAboutleftteryk{letter-spacing:-1.2px;}
+.yangBoutdingww{letter-spacing:2px;margin-top: 11px;display: block;}
+.yangAboutUsRight{width:283px;}
+.yangIntrOduction{font-family: '[MicrosoftYaHei]'; font-size: 26px;color:#61b3d1; font-weight:bold; background: #fff;}
+.yangAboutUsTitle{height:76px; text-align:center; padding-top:3px; background: url("../images/aboutus_home.jpg") 106px center no-repeat; border-bottom:2px solid #d04e2c;}
+.yangAboutUsTitle .yangTitleDes,.DwyangTitleDes{font-size: 16px; display: block; position: relative; top:-4px; font-weight: normal;}
+
+/*爱购保税*/
+.yangAboutUs_Igent{height:64px; font-family: '[MicrosoftYaHei]'; font-weight:bold; font-size: 40px; letter-spacing: 3.5px; letter-spacing: 2px \9; _letter-spacing: 1px; *+letter-spacing: 1px; font-weight:normal; _font-weight:normal; *+font-weight:normal; color:#61b3d1; position: relative; top:-16px; border-bottom:1px dashed #61b3d1;}
+.yangAboutUsTitleBs{height:60px;  padding-top:3px; border-bottom:2px solid #d04e2c;}
+.BsyangTitleDes{font-size: 16px; font-weight: normal;}
+.yangAboutUsciontCont{padding:12px 0px;text-indent: 4px;}
+
+/*网站定位*/
+.yangAboutUsWebdw{height:67px; text-align:center; background:url("../images/aboutus_dw.jpg") 20px center no-repeat; border-top:2px solid #d04e2c; font-weight:bold;  border-bottom:2px solid #d04e2c;}
+.yangAboutUsMh{height:56px; line-height:56px; font-size:14px; margin:10px 0; letter-spacing:1px; padding:0 3px; color:#fff; background: #5eb8d1;}
+/*.yangAboutUsxkz dl{width:72px;float: left; margin:0 5px;}
+.yangAboutUsxkz dl.yangAboutUs_Magin{margin: 0 20px;}
+.yangAboutUsxkz dl dt.yangAboutUs_dwx{width:71px; height:56px; background:url("../images/aboutus_dwx.jpg") center no-repeat;}
+.yangAboutUsxkz dl dt.yangAboutUs_dwk{width:71px; height:56px; background:url("../images/aboutus_dwk.jpg") center no-repeat;}
+.yangAboutUsxkz dl dt.yangAboutUs_dwz{width:71px; height:56px; background:url("../images/aboutus_dwz.jpg") center no-repeat;}
+.yangAboutUsxkz dl dd{color:#5e5e5e; margin: 10px 0 0; text-align: center;}
+*/
+
+.yangAboutUsxkz ul li{width:75px;float: left; margin:0 5px;color:#5e5e5e; margin: 10px 0 0;  text-align: center;}
+.yangAboutUsxkz ul li.yangAboutUs_Magin{margin-left:27px;margin-right: 27px;}
+.yangAboutUsxkz ul li .yangAboutUs_dwx{width:71px; height:56px; background:url("../images/aboutus_dwx.jpg") center no-repeat;}
+.yangAboutUsxkz ul li .yangAboutUs_dwk{width:71px; height:56px; background:url("../images/aboutus_dwk.jpg") center no-repeat;}
+.yangAboutUsxkz ul li .yangAboutUs_dwz{width:71px; height:56px; background:url("../images/aboutus_dwz.jpg") center no-repeat;}
+.yangAboutUsxkz ul li .yangAboutykext{font-size:12px;margin-top:5px; }
+
+/*垂直物流体系*/
+.yangAboutUsWltx{height:70px; text-align:center; background:url(../images/aboutus_logistics.jpg) 225px center no-repeat; border-top:2px solid #d04e2c;  border-bottom:2px solid #d04e2c;}
+.yangAboutUslist ul li{height:78px; margin:15px 0; background: #5eb8d1;}
+.yangAboutUslist ul li .yangAboutUsLisct{width:203px; height:58px; margin: 10px 10px; text-align:center; line-height:58px; font-weight:bold; font-size:24px; color:#020202; background: #fff;}
+.yangAboutUslist ul li .yangAboutUsLisctpt{width:200px;height:58px; font-size: 20px; text-align:center; margin: 10px 0px; color:#FFF;}
+.yangAboutUsLisimg li{margin: 10px 0;}
+.yangAboutUslist ul li.yangAboutjrmyke{margin: 40px 0;_margin:33px 0; *+margin:37px 0;}

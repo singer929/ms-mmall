@@ -1,0 +1,358 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>注册</title>
+	{ms:include filename=people/headFile.htm/}
+	<script src="{ms:globalskin.url/}/people/js/check-login.js"></script>
+
+</head>
+<body>
+	<div class="little-header">
+		<div class="little-container">
+			<div id="logo"><a href="{ms:global.host/}"><img src="http://cdn.mingsoft.net/global/images/whiteMStore300.png"/></a></div>
+		</div>
+	</div>
+	<div class="reg-log-main">
+		<div class="register-content-left">
+			<form name="registe">
+				<div class="log-user-name">
+					<label>用　户　名</label>
+					<input type="text" name="peopleName" value="" placeholder="您的账户名和登录名"/>
+				</div>
+				<div class="input-tip">
+					<p style="color:#E4393C;"><i class="iconfont">&#xe695;</i>请输入用户名</p>
+				</div>
+				<div class="log-user-password">
+					<label>设 置 密 码</label>
+					<input type="password" name="peoplePassword" value="" placeholder="建议至少使用两种字符组合"/>
+				</div>
+				<div class="input-tip">
+					<p><i class="iconfont">&#xe695;</i>建议使用字字母、数字和符号两种及以上的组合,6-20个字符</p>
+				</div>
+				<div class="log-user-repassword">
+					<label>确 认 密 码</label>
+					<input type="password" name="rePassword" value="" placeholder="请再次输入密码"/>
+				</div>
+				<div class="input-tip">
+					<p><i class="iconfont">&#xe695;</i>请再输入密码</p>
+				</div>
+				<!--div>
+					<label>邮 箱 号 码</label>
+					<input type="text" name="peopleMail"  placeholder="建议使用常见邮箱" id="receiveEmail"/>
+				</div>
+				<div class="input-tip">
+					<p><i class="iconfont">&#xe695;</i>建议使用常见邮箱</p>
+				</div-->
+				<div class="reg-code">
+					<label>验　证　码</label>
+					<input type="text" name="rand_code" value="" placeholder="请输入验证码"/>
+					<div id="rRandCode">
+						<img id="registeCode" style="cursor: pointer;"/>
+					</div>
+				</div>
+				<div class="input-tip">
+					<p><i class="iconfont">&#xe695;</i>点击图片更换验证码</p>
+				</div>
+				<!--div class="reg-email">
+					<label>邮箱验证码</label>
+					<input name="receive" type="hidden"/>
+					<input type="text" name="modelCode" type="hidden" value="register" style="height:0px"/>						
+					<input type="text" name="peopleCode" value="" placeholder="请输入邮箱验证码"/>
+					<input id="sendCode" type="button" class="ticking" value="获取验证码" disabled style="color:black;padding-left:0px">
+				</div>
+				<div class="input-tip">
+					<p><i class="iconfont">&#xe695;</i>验证码已发送,120s内输入有效</p>
+				</div-->
+				<div id="message">
+					<input type="checkbox" id="checkBtn" checked/>我已阅读并同意<a href="" style="color:#3388FF;">《用户注册协议》</a>
+				</div>
+				<div id="submit">
+					<input type="button" name="" value="立即注册" id="register"/>
+				</div>
+			</form>
+		</div>
+
+		<!--演示提示信息-->
+		<div class="register-content-right">
+			<div class="register-login-box">
+				<div class="register-login">
+					<a href="{ms:global.host/}/login.do" id="login1"></a>
+					<p><a href="{ms:global.host/}/forgetPassWordBegin.do">忘记密码？</a></p>
+				</div>
+				<div style="background:#f9ebeb;padding: 20px;line-height: 30px;border: 1px dashed #e45050;margin: 40px;">欢迎访问铭飞科技商城模板演示站，为减少不必要的垃圾数据，本演示站暂不支持注册，请登录测试账号进行查看会员功能<p style="font-size: 16px;color: #e45050;">测试账号：mtest</p><p style="font-size: 16px;color: #e45050;">密码：123456</p></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="clear"></div>
+	</div>
+	{ms:include filename=people/footer.htm/}
+</body>
+</html>
+<script>
+	//对输入框中的信息依次进行判断
+	var tipPicture = "<i class='iconfont'>&#xe695;</i>";
+	$(function(){
+		//输入用户名时提示
+		$(".log-user-name input").focus(function() {        
+		 	$(".log-user-name").next().children().html(tipPicture+"请输入用户名").show();
+		})
+		//输入密码时 提示	
+		$(".log-user-password input").focus(function() {   		
+		 	$(".log-user-password").next().children().html(tipPicture+"建议使用字字母、数字和符号两种及以上的组合,6-20个字符").show().css("color","#c5c5c5");			 
+		})
+		//再次输入面时提示
+	    $(".log-user-repassword input").focus(function() {		
+	     	$(".log-user-repassword").next().children().html(tipPicture+"请再次输入密码").show().css("color","#c5c5c5");
+	    })
+	    //输入邮箱时提示	
+		/*$("input[name='peopleMail']").focus(function(){					
+		 	$("input[name='peopleMail']").parent().next().children().html(tipPicture+"建议使用常见邮箱").show().css("color","#c5c5c5");		
+		})*/
+	 	//判断密码是否符合规范
+		$(".log-user-password input").blur(function() {   //判断密码长度
+			if(!validator.isLength($(".log-user-password input").val(),{min:6,max:20})){   
+				//调用框架判断密码长度是否合法
+				$(".log-user-password").next().children().html(tipPicture+"密码长度为6~12位").show().css("color","red");	
+			}else{
+				$(".log-user-password").next().children().hide();
+			}			 
+		})
+		//判断两次密码是否一致
+		$(".log-user-repassword input").blur(function() {  //判断两次密码是否一致
+			if($(".log-user-repassword input").val() != $(".log-user-password input").val()){  
+				$(".log-user-repassword").next().children().html(tipPicture+"两次密码不一致").show().css("color","red");
+			}else{
+				$(".log-user-repassword").next().children().hide();
+			}
+		})
+
+		//文本框选中添加颜色
+		$("form").find("input").click(function(){
+			$(this).parent().css("border-color","rgb(58,162,228)");
+		});
+		$("form").find("input").blur(function(){
+			$(this).parent().css("border-color","rgb(230, 230, 230)");
+		});
+	})
+	 
+	$(function(){											
+	 	//注册验证码接口			
+		/*
+		*判断用户名长度是否符合规范
+		*并且调用接口判断用户名是否已经存在
+		*/
+		$(".log-user-name input").blur(function() {            
+			//判断用户名长度是否合法
+			if(!validator.isLength($(".log-user-name input").val(),{min:4,max:12})){
+				$(".log-user-name").next().children().html(tipPicture+"用户名长度在3`12之间").show();
+			}else{
+				ms.load(["ms","ms.people"], function(ms,mpeople) {   	
+				   	mpeople.check("peopleName="+$(".log-user-name input").val(),function(json){
+				    //调用接口check,检测用户是否存在
+				   	if(json.result){
+				   		$(".log-user-name").next().children().html(tipPicture+"用户名已注册，请更换一个用户名").show();
+				   	}else{
+				   		$(".log-user-name").next().children().hide();
+				   	}
+				   })    
+				})
+			}
+		});
+	})
+
+	/*
+	*检测图片验证码是否为空
+	*并且调用图片检测验证码接口判断验证码是否错误
+	*/
+	function checkCode(mpeople) {
+		$(".reg-code input:first").blur(function(){       
+			//判断验证码是否为空
+			if(validator.isNull($("input[name='rand_code']").val())){
+				return false;
+			}
+			var code = $("input[name='rand_code']").val();
+			mpeople.checkCode(code,function(returnJson){		
+				//调用检测验证码接口
+				if(JSON.stringify(returnJson.result) == "false"){
+					$(".reg-code").next().children().html(tipPicture+'验证码错误').show().css("color","red");
+					$("#sendCode").attr("disabled","disabled");
+				}else{
+					$(".reg-code").next().children().hide();
+					$("#sendCode").removeAttr("disabled");
+				}
+			});
+		})
+	}
+
+	/*
+	*点击发送邮箱验证码倒计时
+	*调用发送邮箱接口
+	
+	function sendCode(mpeople) {
+		var receiveAddress = $("input[name='peopleMail']").val();	
+		//获取邮箱的value值	
+		receive = "receive="+receiveAddress+"&modelCode=register&rand_code="+$("input[name='rand_code']").val()+"&isSession=true";					
+		mpeople.sendCode(receive,function(json){		
+			//发送验证码接口
+			if(json.result){
+				//发送成功后计时
+			  	$('.ticking').click(function() { 
+			  		var time = 60;
+			  		var timeOver = setInterval(countDown,1000);
+			  		function countDown() {
+			  			$(".ticking").attr("disabled", true);
+			  			$(".ticking").val(""+time+"s后重新获取");
+			  			if (time === 0) {
+			  				$(".ticking").removeAttr("disabled");
+			  				clearInterval(timeOver);
+			  				$("#sendCode").val("重新获取验证码");
+			  			}
+			  			time--;
+			  		}
+			  	});
+			  	$(".reg-email").next().children().html(tipPicture+'验证码已发送,120s内输入有效').show().css("color","red"); 
+			}
+		});							
+	}
+
+	//检测发送的邮箱验证码
+	var checkSend = false;  
+	// 与发送的邮箱验证码相同标记为假
+	function checkSendCode(mpeople) {
+		mpeople.checkSendCode($("form").serialize(),function(returnJson){
+			if(result) {
+				checkSend = true ;
+			} else {
+				checkSend = false;
+			}
+		});
+	}*/
+
+	//调用注册接口前已经对参数进行判断
+	function register(ms,mpeople) {
+		var info = false;
+		/*if(mailFalg){
+			info = true;
+		}*/
+		if(!validator.isLength($(".log-user-name input").val(),{min:3,max:12})){
+			$(".log-user-name").next().children().html(tipPicture+"用户名长度在3`12之间").show();
+			info = true;
+		}
+		if(validator.isNull($("input[name='peoplePassword']").val())) {	//判断密码
+			$(".log-user-password").next().children().html(tipPicture+"请输入密码").show().css("color","red");
+			info = true;
+		}else if(!validator.isLength($(".log-user-password input").val(),{min:6,max:20})){   //调用框架判断密码长度是否合法
+			$(".log-user-password").next().children().html(tipPicture+"密码长度为6~12位").show().css("color","red");
+			info = true;
+		}
+		if(validator.isNull($(".log-user-repassword input").val())){	//判断两次密码是否一致
+			$(".log-user-repassword").next().children().html(tipPicture+"两次密码不一致").show().css("color","red");
+			info = true;
+		}
+		/*if(validator.isNull($("input[name='peopleMail']").val())){	//判断邮箱
+			$("input[name='peopleMail']").parent().next().children().html(tipPicture+"邮箱不能为空").show().css("color","red");		
+			info = true;
+		}else if(!validator.isEmail($("input[name='peopleMail']").val())){            //判断邮箱是否合法
+			$(this).parent().next().children().html(tipPicture+"请输入正确的邮箱").show().css("color","red");	
+			info = true;
+		}*/
+		if(validator.isNull($("input[name='rand_code']").val())){ //判断验证码是否输入
+			$("input[name='rand_code']").parent().next().children().html(tipPicture+"请输入验证码").show().css("color","red")
+			info = true;
+		}
+		
+		if($("#checkBtn").get(0).checked == false){	//判断check是否选中
+			$("#message").next().children().html(tipPicture+"请同意协议并勾选").show().css("color","red");
+			info = true;
+		}
+		/*if(!checkSend) {
+			if(validator.isNull($("input[name='peopleCode']").val())){ //判断邮箱验证码是否正确
+				$("#message").prev().children().html(tipPicture+"请输入邮箱验证码").show().css("color","red")
+				info = true;
+			}else {
+				$("#message").prev().children().html(tipPicture+"邮箱验证码错误").show().css("color","red")
+				info = true;
+			}
+		}*/
+		//var receiveAddress = $("input[name='peopleMail']").val();
+		//如果所有数据都输入正确就调用注册接口
+		if(!info){
+		  	mpeople.register($("form").serialize(),function(json){ //调用注册接口								  
+		  		if(json.result){	
+		  			alert("注册成功");
+				  	self.location.href="{ms:global.host/}/login.do";//注册成功后跳转到登录界面
+				}else{
+				  	//$(".reg-email").next().children().text("邮箱验证码错误").show().css("color","red");
+				  	ms.alert(json.resultMsg);
+				}
+			})
+		}    
+	}
+
+	//判断邮箱是否符合规范
+	/*
+	var mailFalg = true;
+	function isMail(mpeople){
+		$("input[name=peopleMail]").blur(function(){
+			if(validator.isNull($(this).val())) {
+				$(this).parent().next().children().html(tipPicture+"请输入邮箱").show().css("color","red");
+			}
+			if(!validator.isEmail($(this).val())){            //判断邮箱是否合法
+				$(this).parent().next().children().html(tipPicture+"请输入正确的邮箱").show().css("color","red");
+				$("#sendCode").attr("disabled","disabled");
+				return false;
+			}else{					
+				$(this).parent().next().children().hide();
+				$("#sendCode").removeAttr("disabled");
+			}
+			mpeople.isExists($("form").serialize(),function(json){
+				if(json.result){
+					$("input[name=peopleMail]").parent().next().children().html(tipPicture+"该邮箱已被注册，请重新输入").show().css("color","red");	
+					mailFalg = true;
+				}else{
+					mailFalg = false;
+				}
+			});
+		});
+	}
+	*/
+	
+	//加载接口数据
+	$(function(){
+		ms.load(["ms.people","ms"],function(mpeople,ms) {
+			//加载验证码接口
+			ms.code("registeCode");       
+			//点击更新验证码                    
+			$("#registeCode").click(function(){			
+				ms.code("registeCode");
+			});
+
+			//判断邮箱是否存在
+			//isMail(mpeople);
+
+			//检测图片验证码
+			checkCode(mpeople);  
+
+			//发送验证码
+			$("#sendCode ").click(function(){					
+				sendCode(mpeople);
+			});	
+
+			//点击注册调用注册方法
+			$("#register").click(function(){
+				register(ms,mpeople);
+			});
+
+			//回车键出发注册事件
+			$('input').keydown(function(event){	
+				//键盘回车触发注册事件
+				var keyCode = event.keyCode?event.keyCode:event.which?event.which:event.charCode;
+				if(keyCode === 13) {
+					register(ms,mpeople);
+				}	 
+			});
+		});
+	});
+</script>

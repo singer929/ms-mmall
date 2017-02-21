@@ -1,0 +1,95 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+	{ms:include filename=headFile.htm/}
+	<title>{ms:field.typetitle/}</title>
+	<script src="{ms:globalskin.url/}/people/js/goods-cookie.js" type="text/javascript"></script>
+	<link rel="stylesheet" rev="stylesheet" href="{ms:globalskin.url/}/css/hot-list.css" />
+	
+</head>
+<!-- logo和搜索 end -->
+<script type="text/javascript" src="{ms:globalskin.url/}/js/hidelayer.js"></script>
+<link href="{ms:globalskin.url/}/css/aboutus.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" rev="stylesheet" href="{ms:globalskin.url/}/css/hidelayer.css" />
+<body>{ms:include filename=head.htm/}
+	<div class="wrap-qg">
+		
+		<div style="width:1200px;text-align:center;margin:0px auto 0px;padding-top: 40px;padding-bottom:40px;">
+			<!-- test -->
+			<div class="t-ln new_main">
+				<div class="t-htl" style="left:0px;"></div>
+				<!-- -->
+				<span class="t-ctl" style="height:auto;top:-10px;background:#f5f5f5;color:#333;padding:0px 20px;margin-left:-65px;">
+					<span style="display:inline-block;width:100%;text-align:center;">
+						<p style="display:block;width:100%;text-align:center;font-weight:bold;font-size:18px;">精选推荐</p>
+						<p style="display:block;width:100%;text-align:center;color:#999;font-size:12px;">RECOMMENDED</p></span>
+				</span>
+			</div>
+			<div class=" btn_rr">
+				<div class="layout">
+					{ms:prclist typeid=211 flag=热销 size=1}
+					<div class="mainLeft">
+						<a href="[field.link/]" target="_blank">
+							<img src="[cfield.images/]" width="700" height="355"></a>
+						<div class="t-ic-ct">
+							<span class="t-xp">新品</span>
+							<span class="t-xp t-tj">特价</span></div>
+					</div>
+					<div class="mainRight">
+						<ul style="display:inline-block;width:100%;">
+							<li>
+								<span class="lineid1">
+									<span class="t-zk">5.6折</span>精致生活</span></li>
+							<li>
+								<span class="lineId2">[field.title/]</span></li>
+						</ul>
+						<div class="moneyLeft">
+							<div class="money">
+								<b>￥</b>[field.price/]</div>
+							<div class="Mz">
+								<div class="baoy"></div>
+								<div class="delMoney">￥[field.costprice/]</div></div>
+						</div>
+					</div>
+					{/ms:prclist}
+				</div>
+				<div class="btn_ly">
+					{ms:prclist size=9}
+					<li>
+						<a href="[field.link/]" target="_blank"><span class="btn_ao">
+							<i class="btn_price">￥</i>[field.price/]</span>
+							<img src="[field.litpic/]" height="90" width="90" />
+						</a>
+					</li>
+					{/ms:prclist}
+				</div>
+			</div>
+			
+		</div>
+		<div class="new_rec warp_nn">
+			<div class="new_top">
+				<span class="new_tj">新品推荐</span>
+				<span class="new_eng">NEW&nbsp;GOODS</span>
+			</div>
+			<ul class="ul_text">
+				{ms:prclist ispaging=true size=1000}
+				<li>
+					<a class="new_cg" href="[field.link/]" target="_blank">
+						<img src="[field.litpic/]" />
+						<span class="new_sm">[field.title/]</span></a>
+					<div class="new_center">
+						<a class="new_cg" href="[field.link/]" target="_blank" style="color:#999999">[field.title/]</div></a>
+					<div class="new_bottom">
+						<span class="new_price">
+							<b>￥</b>[field.price/]</span>
+						<span class="new_nprice">[field.costprice/]</span>
+				</li>
+				{/ms:prclist}
+			</ul>
+		</div>
+	</div>
+
+	{ms:include filename=footer.htm/}
+</body>
+
+</html>
