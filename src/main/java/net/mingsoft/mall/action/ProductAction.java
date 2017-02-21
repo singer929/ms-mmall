@@ -134,7 +134,6 @@ public class ProductAction extends BaseAction {
 		
 		int[] childColumnId = new int[]{};
 		// 查询当前分类的所有子分类
-
 		if (categoryId != 0){
 			childColumnId = this.categoryBiz.queryChildrenCategoryIds(categoryId, appId, modelId);
 			// 若没有子分类, 则把自己装进分类id中, 以便查询具体商品
@@ -144,7 +143,6 @@ public class ProductAction extends BaseAction {
 		}
 
 		int shelf = product.getProductShelf();
-		
 		// 当前页面
 		BasicUtil.startPage();
 		List<ProductEntity> listProduct = this.productBiz.queryList(appId, childColumnId, null, true, shelf, null, null);
@@ -153,7 +151,6 @@ public class ProductAction extends BaseAction {
 		model.addAttribute("listProduct", listProduct);
 		model.addAttribute("product", product);
 		this.removeUrlParams(request, new String[] { "basicId" });
-
 		return view("/mall/product/product_list");
 	}
 

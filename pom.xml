@@ -10,6 +10,7 @@
 	<artifactId>ms-mmall</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
+
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>ms-mmall tools Library</description>
 	<url>https://github.com/ming-soft/ms-mmall</url>
@@ -176,6 +177,11 @@
 			<version>${ms.mcomment.version}</version> <type>war</type> </dependency> 
 			<dependency> <groupId>net.mingsoft</groupId> <artifactId>ms-upgrader</artifactId> 
 			<version>1.0.1-SNAPSHOT</version> </dependency -->
+		<dependency>
+			<groupId>net.mingsoft</groupId>
+			<artifactId>ms-upgrader</artifactId>
+			<version>1.0.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -272,68 +278,21 @@
 						</resource>
 					</webResources>
 					<attachClasses>true</attachClasses>
-					<!-- <warSourceExcludes> */web.xml,static</warSourceExcludes>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-					<packagingExcludes>ms.install,html/,static/,temp,upgrader,WEB-INF/web.xml,WEB-INF/lib/,templets/,WEB-INF/classes/*.xml,WEB-INF/classes/*.properties,*.sh</packagingExcludes>
-					 <overlays>
-						<overlay>
-							<groupId>net.mingsoft</groupId>
-							<artifactId>ms-basic</artifactId>
-							<excludes>
-								<exclude>*/</exclude>
-							</excludes>
-						</overlay>
-						<overlay>
-							<groupId>net.mingsoft</groupId>
-							<artifactId>ms-mdiy</artifactId>
-							<excludes>
-								<exclude>*/</exclude>
-							</excludes>
-						</overlay>
-						<overlay>
-							<groupId>net.mingsoft</groupId>
-							<artifactId>ms-mcomment</artifactId>
-							<excludes>
-								<exclude>*/</exclude>
-							</excludes>
-						</overlay>
-						<overlay>
-							<groupId>net.mingsoft</groupId>
-							<artifactId>ms-morder</artifactId>
-							<excludes>
-								<exclude>*/</exclude>
-							</excludes>
-						</overlay>
-						<overlay>
-							<groupId>net.mingsoft</groupId>
-							<artifactId>ms-mcms</artifactId>
-							<excludes>
-								<exclude>*/</exclude>
-							</excludes>
-						</overlay>
-						<overlay>
-							<groupId>net.mingsoft</groupId>
-							<artifactId>ms-mbank</artifactId>
-							<excludes>
-								<exclude>*/</exclude>
-							</excludes>
-						</overlay>
-						<overlay>
-							<groupId>net.mingsoft</groupId>
-							<artifactId>ms-mattention</artifactId>
-							<excludes>
-								<exclude>*/</exclude>
-							</excludes>
-						</overlay>
-
-						<overlay>
-							<groupId>net.mingsoft</groupId>
-							<artifactId>ms-mpeople</artifactId>
-							<excludes>
-								<exclude>*/</exclude>
-							</excludes>
-						</overlay>
-					</overlays>-->
+					<!-- <warSourceExcludes> */web.xml,static</warSourceExcludes> <failOnMissingWebXml>false</failOnMissingWebXml> 
+						<packagingExcludes>ms.install,html/,static/,temp,upgrader,WEB-INF/web.xml,WEB-INF/lib/,templets/,WEB-INF/classes/*.xml,WEB-INF/classes/*.properties,*.sh</packagingExcludes> 
+						<overlays> <overlay> <groupId>net.mingsoft</groupId> <artifactId>ms-basic</artifactId> 
+						<excludes> <exclude>*/</exclude> </excludes> </overlay> <overlay> <groupId>net.mingsoft</groupId> 
+						<artifactId>ms-mdiy</artifactId> <excludes> <exclude>*/</exclude> </excludes> 
+						</overlay> <overlay> <groupId>net.mingsoft</groupId> <artifactId>ms-mcomment</artifactId> 
+						<excludes> <exclude>*/</exclude> </excludes> </overlay> <overlay> <groupId>net.mingsoft</groupId> 
+						<artifactId>ms-morder</artifactId> <excludes> <exclude>*/</exclude> </excludes> 
+						</overlay> <overlay> <groupId>net.mingsoft</groupId> <artifactId>ms-mcms</artifactId> 
+						<excludes> <exclude>*/</exclude> </excludes> </overlay> <overlay> <groupId>net.mingsoft</groupId> 
+						<artifactId>ms-mbank</artifactId> <excludes> <exclude>*/</exclude> </excludes> 
+						</overlay> <overlay> <groupId>net.mingsoft</groupId> <artifactId>ms-mattention</artifactId> 
+						<excludes> <exclude>*/</exclude> </excludes> </overlay> <overlay> <groupId>net.mingsoft</groupId> 
+						<artifactId>ms-mpeople</artifactId> <excludes> <exclude>*/</exclude> </excludes> 
+						</overlay> </overlays> -->
 				</configuration>
 			</plugin>
 			<plugin>

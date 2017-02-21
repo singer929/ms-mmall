@@ -67,15 +67,16 @@
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>login.do</welcome-file>
 	</welcome-file-list>
-	<!-- 配置session超时时间，单位分钟 -->
-	<error-page>
+	
+	<!--  error-page>
 		<error-code>404</error-code>
 		<location>/error/404.do</location>
-	</error-page>
+	</error-page-->
 	<error-page>
 		<error-code>500</error-code>
 		<location>/error/500.do</location>
 	</error-page>
+	<!-- 配置session超时时间，单位分钟 -->
 	<session-config>
 		<session-timeout>15</session-timeout>
 	</session-config>

@@ -20,7 +20,7 @@
 			<@ms.searchFormButton>
 				 <@ms.queryButton form="searchForm"/> 
 			</@ms.searchFormButton>			
-		</@ms.searchForm>
+	</@ms.searchForm>
     <@ms.panel> 
 		<@ms.panelNav>
 			<!--@ms.menuButton links=[{"click":"on","name":"上架"},{"click":"off","name":"下架"}] name="批量操作"/-->		
