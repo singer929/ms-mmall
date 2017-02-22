@@ -86,21 +86,48 @@ public class FreightAction extends BaseAction {
 	}
 	
 	/**
-	 * 右边修改基础数据框架
-	 * @param freightEntity
+	 * 右边页面显示数据
+	 * @param freightEntity 前端传过来的城市id
 	 * @param response
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping("/form")
 	public String form(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
+		//将前端传过来的categoryId转成int类型
 		int freightCityId = Integer.parseInt(request.getParameter("categoryId"));
+		//通过freightCityId查对应的数据
 		FreightEntity entity = freightBiz.queryByCity(freightCityId);
-		request.setAttribute("freightCityId", entity.getFreightExpressId());
-		request.setAttribute("freightBasePrice", entity.getFreightBasePrice());
-		request.setAttribute("freightBaseAmount", entity.getFreightBaseAmount());
-		request.setAttribute("freightIncreasePrice", entity.getFreightExpressId());
-		request.setAttribute("freightIncreaseAmount", entity.getFreightIncreaseAmount());
+		CategoryEntity category = new CategoryEntity();
+		//获取快递的id
+		int freightExpressId = entity.getFreightExpressId();
+		category.setCategoryModelId(freightExpressId);
+		//通过快递id查询对应的快递公司
+		CategoryEntity list =  categoryBiz.getCategory(freightExpressId);
+		//创建一个modeId(基于BasicUtil里的方法)
+		int modelId = BasicUtil.getModelCodeId(net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
+		CategoryEntity expressCategory = new CategoryEntity();
+		expressCategory.setCategoryModelId(modelId);
+		//通过获取的modelId查询出所有的快递公司
+		List<CategoryEntity> expresslist =  categoryBiz.queryChilds(expressCategory);
+		//返回数据给前端
+		request.setAttribute("express", expresslist);
+		request.setAttribute("freight", entity);
+		request.setAttribute("freightExpress", list);
+		return view("/freight/freight_details/freight_form");
+		
+	}
+	
+	@RequestMapping("/update")
+	public String update(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
+		int freightCityId = Integer.parseInt(request.getParameter("freightCityId"));
+		FreightEntity entity = freightBiz.queryByCity(freightCityId);
+		if(entity != null){
+			freightBiz.updateEntity(freightEntity);
+		}else{
+			freightBiz.saveEntity(freightEntity);
+		}
+		
 		return view("/freight/freight_details/freight_form");
 		
 	}

@@ -15,45 +15,50 @@
 	</resultMap>
 	<!-- 将实体属性与表字段对接结束 -->
 	<!-- 查询基础数据开始 -->
-	<select id="queryByCity" resultMap="resultMap" parameterType="int">
-	
-		select * from freight 
-		
+	<select id="queryByCity" resultMap="resultMap" parameterType="int">	
+		select * from freight 		
 		<where> 
 			and freight_city_id= #{freightCityId}			
 		</where>
-
 	</select>
 	<!-- 查询用户列表结束 -->
 	
 	<!-- 新增用户开始 -->
-	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="peopleId"
-		parameterType="com.mingsoft.base.entity.BaseEntity">
-		
-		insert into user(people_name,people_password,people_date_time) values (#{peopleName},#{peoplePassword},#{peopleDateTime})
+	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="peopleId" parameterType="com.mingsoft.freight.entity.FreightEntity">
+		insert into freight
+		<!-- 添加表字段 -->
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="freightCityId != null">freight_city_id,</if>
+			<if test="freightExpressId !=null">freight_express_id,</if>
+			<if test="freightBasePrice !=null">freight_base_price,</if>
+			<if test="freightBaseAmount !=null">freight_base_amount,</if>
+			<if test="freightIncreasePrice !=null">freight_increase_price,</if>
+			<if test="freightIncreaseAmount !=null">freight_increase_amount,</if>
+		</trim>
+		<!-- 注入控制层字段 -->
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="freightCityId != null">#{freightCityId},</if>
+			<if test="freightExpressId !=null">#{freightExpressId},</if>
+			<if test="freightBasePrice !=null">#{freightBasePrice},</if>
+			<if test="freightBaseAmount !=null">#{freightBaseAmount},</if>
+			<if test="freightIncreasePrice !=null">#{freightIncreasePrice},</if>
+			<if test="freightIncreaseAmount !=null">#{freightIncreaseAmount},</if>			
+		</trim>
 		
 	</insert>
 	<!-- 新增用户结束 -->
 	
 	<!-- 更新用户开始 -->
-	<update id="updateEntity" parameterType="com.mingsoft.base.entity.BaseEntity">
-		update user set people_password = #{peoplePassword}	where people_name = #{peopleName}
-		<!-- <set>
-			PEOPLE_ID=#{peopleId},
-			<if test="peopleName != null">PEOPLE_NAME=#{peopleName},</if>
-			<if test="peoplePassword != null">PEOPLE_PASSWORD=#{peoplePassword},</if>
+	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.FreightEntity">
+		update freight
+		<set>
+			<if test="freightBasePrice != null">freight_base_price=#{freightBasePrice},</if>
+			<if test="freightBaseAmount !=null">freight_base_amount=#{freightBaseAmount},</if>
+			<if test="freightIncreasePrice !=null">freight_increase_price=#{freightIncreasePrice},</if>
+			<if test="freightIncreaseAmount !=null">freight_increase_amount=#{freightIncreaseAmount},</if>
 		</set>
-		where PEOPLE_ID = #{peopleId} -->
+		where freight_express_id = #{freightExpressId} and freight_city_id = #{freightCityId}
 	</update>
 	<!-- 更新用户结束 -->
-	<!-- 查询用户开始 -->
-	<select id="getBYEntity" resultMap="resultMap" parameterType="int">
-		select * from user 
-		
-		<where> 
-			<if test=" peopleName != null ">and people_name= #{peopleName}</if>
-			<if test=" peoplePassword != null ">and people_password= #{peoplePassword}</if>
-		</where>
-	</select>
-	<!-- 查询用户结束 -->
+	
 </mapper>

@@ -35,4 +35,18 @@ public interface IFreightDao extends IBaseDao {
 	 * @return
 	 */
 	public FreightEntity queryByCity(int freightCityId);
+	
+	/**
+	 * 保存数据
+	 * @param entity
+	 * @return
+	 */
+	public FreightEntity saveEntity(FreightEntity entity);
+	
+	/**
+	 * 通过快递公司idfreightExpressId和freightCityId更新运费数据
+	 * @param entity
+	 * @return
+	 */
+	public FreightEntity updateEntity(FreightEntity entity);
 }

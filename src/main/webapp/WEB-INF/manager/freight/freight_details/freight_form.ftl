@@ -1,40 +1,101 @@
 <@ms.html5>
     <@ms.nav title="运费管理" back=false>
-    	<@ms.panelNav>
-    		<@ms.buttonGroup>
-				<@ms.addButton url=""/>
-			</@ms.buttonGroup>
-    	</@ms.panelNav>
 	</@ms.nav>
     <@ms.panel> 
 		<@ms.panelNav>
 			<!--@ms.menuButton links=[{"click":"on","name":"上架"},{"click":"off","name":"下架"}] name="批量操作"/-->		
-		</@ms.panelNav>
-		
-			<@ms.table head=['编号,80', '快递公司200','基础运费,150','基础运费数量,150','增长运费,150','增长数量,150'] checkbox="ids">
-		        	<#if listProduct?has_content>
-		           	<#list listProduct as listProduct>
-			        	<tr> 
-			        		<td>
-								<input type="checkbox" name="ids" value="">
-					        </td>
-				           	<td></td>
-				            <td>
-				            	<a class="btn btn-xs red tooltips edit-btn"  data-toggle="tooltip"  >
-				            	
-				            	</a>
-				            </td>
-				            <td></td>
-				            <td></td>
-				            <td style="color:red"></td>
-				            <td></td>
-				        </tr>
-			        </#list>
-		           	<#else>
-		           	<td colspan="7"  class="text-center">
-		            	<@ms.nodata/>
-					</td>
-		          	</#if>
-			</@ms.table>				
-    </@ms.panel>
+		</@ms.panelNav>		
+		<@ms.table head=['编号,80', '快递公司','基础运费,300','基础运费数量,300','增长运费,300','增长数量,300'] checkbox="ids">
+        	<#if express?has_content>
+	           	<#list express as expressCompany>
+		        	<tr> 
+		        		<td>
+							<input type="checkbox" name="ids" value="${expressCompany.categoryId}">
+				        </td>
+				        <td>${expressCompany.categoryId}</td>
+			           	<td>${expressCompany.categoryTitle}</td>
+			           	<#if expressCompany.categoryTitle == freightExpress.categoryTitle>
+				            <td><@ms.text id="${expressCompany.categoryId}" name="freightBasePrice"  width="100"  value="${freight.freightBasePrice?default('')}" style = "padding-left:0px;"/></td>
+				            <td><@ms.text id="${expressCompany.categoryId}" name="freightBaseAmount"  width="100"  value="${freight.freightBaseAmount?default('')}" style = "padding-left:0px;"/></td>
+				            <td><@ms.text id="${expressCompany.categoryId}" name="freightIncreasePrice"  width="100"  value="${freight.freightIncreasePrice?default('')}" style = "padding-left:0px;"/></td>
+				            <td><@ms.text id="${expressCompany.categoryId}" name="freightIncreaseAmount"  width="100"  value="${freight.freightIncreaseAmount?default('')}" style = "padding-left:0px;"/></td>
+				            <input type="hidden" name="freightCityId" value="${freight.freightCityId?default('')}"/>				            
+			            <#else>
+				            <td><@ms.text id="${expressCompany.categoryId}" name="freightBasePrice"  width="100"  value="" style = "padding-left:0px;"/></td>
+				            <td><@ms.text id="${expressCompany.categoryId}" name="freightBaseAmount"  width="100"  value="" style = "padding-left:0px;"/></td>
+				            <td><@ms.text id="${expressCompany.categoryId}" name="freightIncreasePrice"  width="100"  value="" style = "padding-left:0px;"/></td>
+				            <td><@ms.text id="${expressCompany.categoryId}" name="freightIncreaseAmount"  width="100"  value="" style = "padding-left:0px;"/></td>		
+			            </#if>
+			        </tr>
+		        </#list>
+           	<#else>
+	           	<td colspan="7"  class="text-center">
+	            	<@ms.nodata/>
+				</td>
+          	</#if>
+		</@ms.table>				
+	</@ms.panel>
+    <script>
+    	$(function(){
+    		$("input[name=freightBasePrice]").blur(function(){	
+    			var categoryId = $(this).attr("id");   			
+				var freightBasePrice = $(this).val();				
+				var freightCityId = $("input[name=freightCityId]").val();
+				if(freightBasePrice != ""){
+					$.post("${managerPath}/freight/update.do",
+					{
+						freightBasePrice:freightBasePrice,
+						freightExpressId:categoryId,
+						freightCityId:freightCityId
+					},
+					function(data,status){});
+				}				
+			});	
+			
+			$("input[name=freightBaseAmount]").blur(function(){		
+				var freightBaseAmount = $(this).val();
+				var categoryId = $(this).attr("id");
+				var freightCityId = $("input[name=freightCityId]").val();
+				if(freightBaseAmount != ""){
+					$.post("${managerPath}/freight/update.do",
+					{
+						freightBaseAmount : freightBaseAmount,
+						freightExpressId : categoryId,
+						freightCityId : freightCityId
+					},
+					function(data,status){});
+				}				
+			});
+			
+			$("input[name=freightIncreasePrice]").blur(function(){		
+				var freightIncreasePrice = $(this).val();
+				var categoryId = $(this).attr("id");
+				var freightCityId = $("input[name=freightCityId]").val();
+				if(freightIncreasePrice != ""){
+					$.post("${managerPath}/freight/update.do",
+					{
+						freightIncreasePrice : freightIncreasePrice,
+						freightExpressId : categoryId,
+						freightCityId : freightCityId
+					},
+					function(data,status){});
+				}				
+			});
+			
+			$("input[name=freightIncreaseAmount]").blur(function(){		
+				var freightIncreaseAmount = $(this).val();
+				var categoryId = $(this).attr("id");
+				var freightCityId = $("input[name=freightCityId]").val();
+				if(freightIncreaseAmount != ""){
+					$.post("${managerPath}/freight/update.do",
+					{
+						freightIncreaseAmount : freightIncreaseAmount,
+						freightExpressId : categoryId,
+						freightCityId : freightCityId
+					},
+					function(data,status){});
+				}			
+			});					
+    	})
+    </script>
 </@ms.html5>
