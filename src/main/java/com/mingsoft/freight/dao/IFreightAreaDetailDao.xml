@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 管理员持久化层XML配置继承IRoleDao -->
+<mapper namespace="com.mingsoft.freight.dao.IFreightAreaDetailDao">
+
+	<!-- 将实体属性与表字段对接开始 -->
+	<resultMap id="resultMap" type="com.mingsoft.freight.entity.FreightAreaDetailEntity">
+		<id column="fad_id" property="fadId" />
+		<result column="fad_area_id" property="fadAreaId" />
+		<result column="fad_base_price" property="fadBasePrice" />
+		<result column="fad_base_amount" property="fadBaseAmount" />
+		<result column="fad_increase_price" property="fadIncreasePrice" />
+		<result column="fad_increase_amount" property="fadIncreaseAmount" />
+		<association property="category" column="fad_express_id" javaType="CategoryEntity">
+		  <id column="CATEGORY_ID" property="categoryId"/>
+		  <result column="CATEGORY_TITLE" property="categoryTitle"/>
+		</association>
+	</resultMap>
+	<!-- 将实体属性与表字段对接结束 -->
+	<!-- 查询区域列表开始 -->
+	<select id="queryAllFad" resultMap="resultMap">
+		select * from freight_area_detail
+	</select>
+	<!-- 查询区域列表结束 -->
+	
+	<!-- 新增区域开始 -->
+	<insert id="saveAreaEntity" useGeneratedKeys="true" keyProperty="faId"
+		parameterType="com.mingsoft.freight.entity.FreightAreaDetailEntity">
+				
+	</insert>
+	<!-- 新增区域结束 -->
+	
+	<!-- 查询区域开始 -->
+	<select id="getAreaEntity" resultMap="resultMap" 
+	parameterType="com.mingsoft.freight.entity.FreightAreaDetailEntity">
+		
+	</select>
+	<!-- 查询区域结束 -->
+	
+	<!-- 更新区域开始 -->
+	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.FreightAreaDetailEntity">
+		
+	</update>
+	<!-- 更新区域结束 -->
+	
+	<!-- 删除区域开始 -->
+	<delete id="delete" >
+		
+	</delete>
+	<!-- 删除区域结束 -->
+</mapper>

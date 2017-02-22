@@ -39,13 +39,16 @@
 	<!-- 更新区域开始 -->
 	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.FreightAreaEntity">
 		update user set people_password = #{peoplePassword}	where people_name = #{peopleName}
-		
 	</update>
 	<!-- 更新区域结束 -->
 	
 	<!-- 删除区域开始 -->
-	<delete id="delete" parameterType="String">
-		delete from freight_area where fa_id IN (#{faIds})
+	<delete id="delete" >
+		delete from freight_area where fa_id in
+	  	<foreach item="faId" index="index" collection="faIdsArr"
+	      	open="(" separator="," close=")">
+	        	#{faId}
+	  	</foreach>
 	</delete>
 	<!-- 删除区域结束 -->
 </mapper>

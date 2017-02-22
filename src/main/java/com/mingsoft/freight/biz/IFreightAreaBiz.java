@@ -38,7 +38,7 @@ public interface IFreightAreaBiz extends IBaseBiz {
 	 * 删除区域信息
 	 * @param area
 	 */
-	public void delete(String faIds);
+	public void delete(String[] faIdsArr);
 	
 	/**
 	 * 增加区域信息
@@ -51,4 +51,5 @@ public interface IFreightAreaBiz extends IBaseBiz {
 	 * @param area
 	 */
 	public FreightAreaEntity getAreaEntity(FreightAreaEntity newEntity);
+
 }

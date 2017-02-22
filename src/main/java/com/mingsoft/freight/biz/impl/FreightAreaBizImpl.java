@@ -61,8 +61,8 @@ public class FreightAreaBizImpl extends BaseBizImpl implements IFreightAreaBiz{
 	 * 删除区域信息
 	 */
 	@Override
-	public void delete(String faIds) {
-		freightAreaDao.delete(faIds);
+	public void delete(String[] faIdsArr) {
+		freightAreaDao.delete(faIdsArr);
 	}
 	
 	/**

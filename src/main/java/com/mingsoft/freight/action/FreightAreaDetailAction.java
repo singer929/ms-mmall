@@ -21,7 +21,6 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 
 package com.mingsoft.freight.action;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,23 +32,25 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.constant.ModelCode;
 import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.freight.biz.IFreightAreaBiz;
-import com.mingsoft.freight.dao.IFreightAreaDao;
+import com.mingsoft.freight.biz.IFreightAreaDetailBiz;
 import com.mingsoft.freight.entity.FreightAreaEntity;
+import com.mingsoft.freight.entity.FreightAreaDetailEntity;
 
 import net.mingsoft.basic.util.BasicUtil;
 
 @Controller
-@RequestMapping("/${managerPath}/freightArea")
-public class FreightAreaAction extends BaseAction {
-
+@RequestMapping("/${managerPath}/freightAreaDetail")
+public class FreightAreaDetailAction extends BaseAction {
+	
 	@Autowired
-	private IFreightAreaBiz freightAreaBiz;
+	private IFreightAreaBiz freightArealBiz;
+	@Autowired
+	private IFreightAreaDetailBiz freightAreaDetailBiz;
 	@Autowired
 	private ICategoryBiz categoryBiz;
 	
@@ -61,62 +62,29 @@ public class FreightAreaAction extends BaseAction {
 	@RequestMapping("/index")
 	private String index(HttpServletRequest request){
 		//左侧列表
-		List<FreightAreaEntity> listArea = freightAreaBiz.queryAllArea();
+		List<FreightAreaEntity> listArea = freightArealBiz.queryAllArea();
 		request.setAttribute("listArea", listArea);
-		//树形部分
-		int modelId =  BasicUtil.getModelCodeId(ModelCode.CITY);
+		//table
+		int modelId = BasicUtil.getModelCodeId(net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
 		CategoryEntity category = new CategoryEntity();
 		category.setCategoryModelId(modelId);
 		List<CategoryEntity> list = categoryBiz.queryChilds(category);
-		String categoryJson = JSONArray.toJSONString(list);
-		request.setAttribute("categoryJson", categoryJson);
-		//区域名称部分和区域管理部分
-		String faTitle = request.getParameter("faTitle");
-		request.setAttribute("faTitle", faTitle);
-		return view("/freight/area/index");
+		List faList = freightAreaDetailBiz.queryAllFad();
+		String faId = request.getParameter("faId");
+		request.setAttribute("list", list);
+		request.setAttribute("faList", faList);
+		request.setAttribute("faId", faId);
+		return view("/freight/areaDetail/index");
 	}
 	
 	/**
-	 * 更新区域信息
-	 * @return
-	 */
-	@RequestMapping("/update")
-	private void update(@ModelAttribute FreightAreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		FreightAreaEntity areaEntity = freightAreaBiz.getAreaEntity(area);
-		this.outJson(response, null, true, null,areaEntity.getFaCityIds());
-	}
-	
-	/**
-	 * 保存添加的区域信息
-	 * @return
-	 */
-	@RequestMapping("/save")
-	private void save(@ModelAttribute FreightAreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		String faTitle = request.getParameter("faTitle");
-		FreightAreaEntity newEntity = new FreightAreaEntity();
-		newEntity.setFaTitle(faTitle);
-		FreightAreaEntity areaEntity = freightAreaBiz.getAreaEntity(newEntity);
-		boolean op = false;
-		if(areaEntity == null){
-			freightAreaBiz.saveAreaEntity(area);
-			op = true;
-			this.outJson(response,op);
-		}else{
-			op = false;
-			this.outJson(response,op);
-		}
-	}
-	
-	/**
-	 * 删除区域功能
+	 * 加载页面显示快递信息
 	 * @param area
 	 * @param response
 	 * @param request
 	 */
-	@RequestMapping("/delete")
-	private void delete(@ModelAttribute FreightAreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		String faIds = request.getParameter("faIds");
-		String [] faIdsArr= faIds.split(",");
-		freightAreaBiz.delete(faIdsArr);
+	@RequestMapping("/list")
+	private void list(@ModelAttribute FreightAreaDetailEntity area, HttpServletResponse response, HttpServletRequest request){
+		
 	}
 }
