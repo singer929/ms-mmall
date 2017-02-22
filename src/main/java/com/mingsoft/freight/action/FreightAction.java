@@ -97,10 +97,10 @@ public class FreightAction extends BaseAction {
 		//将前端传过来的categoryId转成int类型
 		int freightCityId = Integer.parseInt(request.getParameter("categoryId"));
 		//通过freightCityId查对应的数据
-		FreightEntity entity = freightBiz.queryByCity(freightCityId);
+		List<FreightEntity> entity = freightBiz.queryByCity(freightCityId);
 		CategoryEntity category = new CategoryEntity();
 		//获取快递的id
-		int freightExpressId = entity.getFreightExpressId();
+		int freightExpressId =  entity.get(1).getFreightExpressId();
 		category.setCategoryModelId(freightExpressId);
 		//通过快递id查询对应的快递公司
 		CategoryEntity list =  categoryBiz.getCategory(freightExpressId);
@@ -118,10 +118,18 @@ public class FreightAction extends BaseAction {
 		
 	}
 	
+	/**
+	 * 更新运费基本数据
+	 * @param freightEntity
+	 * @param response
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/update")
 	public String update(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
 		int freightCityId = Integer.parseInt(request.getParameter("freightCityId"));
-		FreightEntity entity = freightBiz.queryByCity(freightCityId);
+		int freightExpressId = Integer.parseInt(request.getParameter("freightExpressId"));
+		FreightEntity entity = freightBiz.queryByCityExpress(freightEntity);
 		if(entity != null){
 			freightBiz.updateEntity(freightEntity);
 		}else{

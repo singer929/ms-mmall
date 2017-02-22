@@ -54,7 +54,7 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 	 * 通过城市id查询基础数据
 	 */
 	@Override
-	public FreightEntity queryByCity(int freightCityId) {
+	public List<FreightEntity> queryByCity(int freightCityId) {
 		
 		return  freightDao.queryByCity(freightCityId);
 	}
@@ -77,6 +77,15 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 	public FreightEntity updateEntity(FreightEntity entity) {
 		
 		return  freightDao.updateEntity(entity);
+	}
+
+	/**
+	 * 通过快递公司idfreightExpressId和freightCityId查询运费数据
+	 */
+	@Override
+	public FreightEntity queryByCityExpress(FreightEntity entity) {
+		
+		return freightDao.queryByCityExpress(entity);
 	}
 	
 	

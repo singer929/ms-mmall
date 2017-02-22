@@ -23,6 +23,15 @@
 	</select>
 	<!-- 查询用户列表结束 -->
 	
+	<!-- 查询基础数据开始 -->
+	<select id="queryByCityExpress" resultMap="resultMap" parameterType="com.mingsoft.freight.entity.FreightEntity">	
+		select * from freight 		
+		<where> 
+			 and freight_express_id = #{freightExpressId} and freight_city_id= #{freightCityId}			
+		</where>
+	</select>
+	<!-- 查询用户列表结束 -->
+	
 	<!-- 新增用户开始 -->
 	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="peopleId" parameterType="com.mingsoft.freight.entity.FreightEntity">
 		insert into freight
@@ -52,10 +61,10 @@
 	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.FreightEntity">
 		update freight
 		<set>
-			<if test="freightBasePrice != null">freight_base_price=#{freightBasePrice},</if>
-			<if test="freightBaseAmount !=null">freight_base_amount=#{freightBaseAmount},</if>
-			<if test="freightIncreasePrice !=null">freight_increase_price=#{freightIncreasePrice},</if>
-			<if test="freightIncreaseAmount !=null">freight_increase_amount=#{freightIncreaseAmount},</if>
+			<if test="freightBasePrice != 0">freight_base_price=#{freightBasePrice},</if>
+			<if test="freightBaseAmount !=0">freight_base_amount=#{freightBaseAmount},</if>
+			<if test="freightIncreasePrice !=0">freight_increase_price=#{freightIncreasePrice},</if>
+			<if test="freightIncreaseAmount !=0">freight_increase_amount=#{freightIncreaseAmount},</if>
 		</set>
 		where freight_express_id = #{freightExpressId} and freight_city_id = #{freightCityId}
 	</update>

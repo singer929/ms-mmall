@@ -5,7 +5,7 @@
 		<@ms.panelNav>
 			<!--@ms.menuButton links=[{"click":"on","name":"上架"},{"click":"off","name":"下架"}] name="批量操作"/-->		
 		</@ms.panelNav>		
-		<@ms.table head=['编号,80', '快递公司','基础运费,300','基础运费数量,300','增长运费,300','增长数量,300'] checkbox="ids">
+		<@ms.table head=['编号,80', '快递公司,300','基础运费,300','基础运费数量,300','增长运费,300','增长数量,300'] checkbox="ids">
         	<#if express?has_content>
 	           	<#list express as expressCompany>
 		        	<tr> 
