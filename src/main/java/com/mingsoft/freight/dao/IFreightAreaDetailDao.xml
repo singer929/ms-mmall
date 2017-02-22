@@ -11,10 +11,7 @@
 		<result column="fad_base_amount" property="fadBaseAmount" />
 		<result column="fad_increase_price" property="fadIncreasePrice" />
 		<result column="fad_increase_amount" property="fadIncreaseAmount" />
-		<association property="category" column="fad_express_id" javaType="CategoryEntity">
-		  <id column="CATEGORY_ID" property="categoryId"/>
-		  <result column="CATEGORY_TITLE" property="categoryTitle"/>
-		</association>
+		<result column="fad_express_id" property="fadExpressId" />
 	</resultMap>
 	<!-- 将实体属性与表字段对接结束 -->
 	<!-- 查询区域列表开始 -->
