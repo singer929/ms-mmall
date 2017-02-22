@@ -1,6 +1,7 @@
 package com.mingsoft.freight.entity;
 
 import com.mingsoft.base.entity.BaseEntity;
+import com.mingsoft.basic.entity.CategoryEntity;
 
 public class FreightAreaDetailEntity extends BaseEntity {
 	/**
@@ -15,6 +16,10 @@ public class FreightAreaDetailEntity extends BaseEntity {
 	 * 快递公司id 对应category快递数据id
 	 */
 	public int fadExpressId;
+	/**
+	 * 获取的快递公司Entity
+	 */
+	public CategoryEntity fadExpress;
 	/**
 	 * 基础运费
 	 */
@@ -48,12 +53,12 @@ public class FreightAreaDetailEntity extends BaseEntity {
 		this.fadAreaId = fadAreaId;
 	}
 	
-	public int getFadExpressId() {
-		return fadExpressId;
+	public CategoryEntity getFadExpress() {
+		return fadExpress;
 	}
 	
-	public void setFadExpressId(int fadExpressId) {
-		this.fadExpressId = fadExpressId;
+	public void setFadExpress(CategoryEntity fadExpress) {
+		this.fadExpress = fadExpress;
 	}
 	
 	public double getFadBasePrice() {
@@ -86,6 +91,14 @@ public class FreightAreaDetailEntity extends BaseEntity {
 	
 	public void setFadIncreaseAmount(double fadIncreaseAmount) {
 		this.fadIncreaseAmount = fadIncreaseAmount;
+	}
+
+	public int getFadExpressId() {
+		return fadExpressId;
+	}
+
+	public void setFadExpressId(int fadExpressId) {
+		this.fadExpressId = fadExpressId;
 	}
 	
 }

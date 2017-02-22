@@ -12,11 +12,22 @@
 		<result column="fad_increase_price" property="fadIncreasePrice" />
 		<result column="fad_increase_amount" property="fadIncreaseAmount" />
 		<result column="fad_express_id" property="fadExpressId" />
+		<association property="fadExpress" column="fad_express_id" 
+			javaType="com.mingsoft.basic.entity.CategoryEntity">
+		  	<id property="categoryId" column="CATEGORY_ID"/>
+		  	<result property="categoryTitle" column="CATEGORY_TITLE"/>
+		</association>
 	</resultMap>
 	<!-- 将实体属性与表字段对接结束 -->
 	<!-- 查询区域列表开始 -->
 	<select id="queryAllFad" resultMap="resultMap">
-		select * from freight_area_detail
+		SELECT c.CATEGORY_ID,c.CATEGORY_TITLE,
+		fad.fad_area_id,fad.fad_express_id,fad.fad_base_price,fad.fad_base_amount,
+		fad.fad_increase_price,fad.fad_increase_amount
+		FROM category c 
+		LEFT JOIN freight_area_detail fad
+		ON c.CATEGORY_ID = fad.fad_express_id and fad.fad_area_id = 188
+		WHERE c.CATEGORY_MODELID = 96 AND c.category_del=0 
 	</select>
 	<!-- 查询区域列表结束 -->
 	

@@ -63,17 +63,11 @@ public class FreightAreaDetailAction extends BaseAction {
 	private String index(HttpServletRequest request){
 		//左侧列表
 		List<FreightAreaEntity> listArea = freightArealBiz.queryAllArea();
-		request.setAttribute("listArea", listArea);
 		//table
-		int modelId = BasicUtil.getModelCodeId(net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
-		CategoryEntity category = new CategoryEntity();
-		category.setCategoryModelId(modelId);
-		List<CategoryEntity> list = categoryBiz.queryChilds(category);
-		List faList = freightAreaDetailBiz.queryAllFad();
-		String faId = request.getParameter("faId");
-		request.setAttribute("list", list);
+		List<FreightAreaDetailEntity> faList = freightAreaDetailBiz.queryAllFad();
+		
+		request.setAttribute("listArea", listArea);
 		request.setAttribute("faList", faList);
-		request.setAttribute("faId", faId);
 		return view("/freight/areaDetail/index");
 	}
 	
