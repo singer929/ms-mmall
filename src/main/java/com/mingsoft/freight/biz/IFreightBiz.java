@@ -43,16 +43,22 @@ public interface IFreightBiz extends IBaseBiz {
 	public FreightEntity queryByCityExpress(FreightEntity entity);
 	
 	/**
+	 * 通过快递公司分类categoryModelId和城市编号freightCityId查询运费数据
+	 * @return
+	 */
+	public List<FreightEntity> queryAllFreight(int freightCityId , int categoryModelId);
+	
+	/**
 	 * 保存数据
 	 * @param entity
 	 * @return
 	 */
-	public FreightEntity saveEntity(FreightEntity entity);
+	public void saveEntity(FreightEntity entity);
 	
 	/**
 	 * 通过快递公司idfreightExpressId和freightCityId更新运费数据
 	 * @param entity
 	 * @return
 	 */
-	public FreightEntity updateEntity(FreightEntity entity);
+	public void updateEntity(FreightEntity entity);
 }

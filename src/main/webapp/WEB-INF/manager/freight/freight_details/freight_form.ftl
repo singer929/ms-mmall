@@ -6,26 +6,35 @@
 			<!--@ms.menuButton links=[{"click":"on","name":"上架"},{"click":"off","name":"下架"}] name="批量操作"/-->		
 		</@ms.panelNav>		
 		<@ms.table head=['编号,80', '快递公司,300','基础运费,300','基础运费数量,300','增长运费,300','增长数量,300'] checkbox="ids">
-        	<#if express?has_content>
-	           	<#list express as expressCompany>
+        	<#if freightList?has_content>
+	           	<#list freightList as freight>
 		        	<tr> 
 		        		<td>
-							<input type="checkbox" name="ids" value="${expressCompany.categoryId}">
+							<input type="checkbox" name="ids" value="${freight.freExpress.categoryId?default('')}">
 				        </td>
-				        <td>${expressCompany.categoryId}</td>
-			           	<td>${expressCompany.categoryTitle}</td>
-			           	<#if expressCompany.categoryTitle == freightExpress.categoryTitle>
-				            <td><@ms.text id="${expressCompany.categoryId}" name="freightBasePrice"  width="100"  value="${freight.freightBasePrice?default('')}" style = "padding-left:0px;"/></td>
-				            <td><@ms.text id="${expressCompany.categoryId}" name="freightBaseAmount"  width="100"  value="${freight.freightBaseAmount?default('')}" style = "padding-left:0px;"/></td>
-				            <td><@ms.text id="${expressCompany.categoryId}" name="freightIncreasePrice"  width="100"  value="${freight.freightIncreasePrice?default('')}" style = "padding-left:0px;"/></td>
-				            <td><@ms.text id="${expressCompany.categoryId}" name="freightIncreaseAmount"  width="100"  value="${freight.freightIncreaseAmount?default('')}" style = "padding-left:0px;"/></td>
-				            <input type="hidden" name="freightCityId" value="${freight.freightCityId?default('')}"/>				            
+				        <td>${freight.freExpress.categoryId?default('')}</td>
+			           	<td>${freight.freExpress.categoryTitle?default('')}</td>			           	
+			            <#if freight.freightBasePrice != 0>
+			            	<td><@ms.text id="${freight.freExpress.categoryId}" name="freightBasePrice"  width="100"  value="${freight.freightBasePrice?default('')}" style = "padding-left:0px;"/></td>
 			            <#else>
-				            <td><@ms.text id="${expressCompany.categoryId}" name="freightBasePrice"  width="100"  value="" style = "padding-left:0px;"/></td>
-				            <td><@ms.text id="${expressCompany.categoryId}" name="freightBaseAmount"  width="100"  value="" style = "padding-left:0px;"/></td>
-				            <td><@ms.text id="${expressCompany.categoryId}" name="freightIncreasePrice"  width="100"  value="" style = "padding-left:0px;"/></td>
-				            <td><@ms.text id="${expressCompany.categoryId}" name="freightIncreaseAmount"  width="100"  value="" style = "padding-left:0px;"/></td>		
+			            	<td><@ms.text id="${freight.freExpress.categoryId}" name="freightBasePrice"  width="100"  value="" style = "padding-left:0px;"/></td>
 			            </#if>
+			            <#if freight.freightBaseAmount != 0>
+			            	<td><@ms.text id="${freight.freExpress.categoryId}" name="freightBaseAmount"  width="100"  value="${freight.freightBaseAmount?default('')}" style = "padding-left:0px;"/></td>
+			            <#else>
+			            	<td><@ms.text id="${freight.freExpress.categoryId}" name="freightBaseAmount"  width="100"  value="" style = "padding-left:0px;"/></td>
+			            </#if>
+			            <#if freight.freightIncreasePrice != 0>
+			            	<td><@ms.text id="${freight.freExpress.categoryId}" name="freightIncreasePrice"  width="100"  value="${freight.freightIncreasePrice?default('')}" style = "padding-left:0px;"/></td>
+			            <#else>
+			            	<td><@ms.text id="${freight.freExpress.categoryId}" name="freightIncreasePrice"  width="100"  value="" style = "padding-left:0px;"/></td>
+			            </#if>
+			            <#if freight.freightIncreaseAmount != 0>
+			            	<td><@ms.text id="${freight.freExpress.categoryId}" name="freightIncreaseAmount"  width="100"  value="${freight.freightIncreaseAmount?default('')}" style = "padding-left:0px;"/></td>
+			            <#else>
+			            	<td><@ms.text id="${freight.freExpress.categoryId}" name="freightIncreaseAmount"  width="100"  value="" style = "padding-left:0px;"/></td>
+			            </#if>		            
+			            <input type="hidden" name="freightCityId" value="${freight.freightCityId?default('')}"/>	
 			        </tr>
 		        </#list>
            	<#else>
@@ -37,6 +46,7 @@
 	</@ms.panel>
     <script>
     	$(function(){
+    		var flag = 0 ;				//当前端数据为空时，传到后台的值默认为0
     		$("input[name=freightBasePrice]").blur(function(){	
     			var categoryId = $(this).attr("id");   			
 				var freightBasePrice = $(this).val();				
@@ -47,8 +57,14 @@
 						freightBasePrice:freightBasePrice,
 						freightExpressId:categoryId,
 						freightCityId:freightCityId
-					},
-					function(data,status){});
+					});
+				}else{
+					$.post("${managerPath}/freight/update.do",
+					{
+						freightBasePrice:flag,
+						freightExpressId:categoryId,
+						freightCityId:freightCityId
+					});
 				}				
 			});	
 			
@@ -62,8 +78,14 @@
 						freightBaseAmount : freightBaseAmount,
 						freightExpressId : categoryId,
 						freightCityId : freightCityId
-					},
-					function(data,status){});
+					});
+				}else{
+					$.post("${managerPath}/freight/update.do",
+					{
+						freightBaseAmount : flag,
+						freightExpressId : categoryId,
+						freightCityId : freightCityId
+					});
 				}				
 			});
 			
@@ -77,8 +99,14 @@
 						freightIncreasePrice : freightIncreasePrice,
 						freightExpressId : categoryId,
 						freightCityId : freightCityId
-					},
-					function(data,status){});
+					});
+				}else{
+					$.post("${managerPath}/freight/update.do",
+					{
+						freightIncreasePrice : flag,
+						freightExpressId : categoryId,
+						freightCityId : freightCityId
+					});
 				}				
 			});
 			
@@ -92,8 +120,14 @@
 						freightIncreaseAmount : freightIncreaseAmount,
 						freightExpressId : categoryId,
 						freightCityId : freightCityId
-					},
-					function(data,status){});
+					});
+				}else{
+					$.post("${managerPath}/freight/update.do",
+					{
+						freightIncreaseAmount : flag,
+						freightExpressId : categoryId,
+						freightCityId : freightCityId
+					});
 				}			
 			});					
     	})

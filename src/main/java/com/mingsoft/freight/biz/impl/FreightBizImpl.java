@@ -63,20 +63,20 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 	 * 保存数据
 	 */
 	@Override
-	public FreightEntity saveEntity(FreightEntity entity) {
+	public void saveEntity(FreightEntity entity) {
 		
-		return freightDao.saveEntity(entity);
+		 freightDao.saveEntity(entity);
 	}
 
 	/**
 	 * 通过快递公司idfreightExpressId和freightCityId更新运费数据
 	 * @param entity
-	 * @return
+	 * 
 	 */
 	@Override
-	public FreightEntity updateEntity(FreightEntity entity) {
+	public void updateEntity(FreightEntity entity) {
 		
-		return  freightDao.updateEntity(entity);
+		  freightDao.updateEntity(entity);
 	}
 
 	/**
@@ -87,6 +87,17 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 		
 		return freightDao.queryByCityExpress(entity);
 	}
+
+	/**
+	 * 通过快递公司分类categoryModelId和城市编号freightCityId查询运费数据
+	 */
+	@Override
+	public List<FreightEntity> queryAllFreight(int freightCityId, int categoryModelId) {
+		
+		return freightDao.queryAllFreight(freightCityId, categoryModelId);
+	}
+
+	
 	
 	
 

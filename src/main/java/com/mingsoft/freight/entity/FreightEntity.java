@@ -24,6 +24,7 @@ package com.mingsoft.freight.entity;
 import java.util.Date;
 
 import com.mingsoft.base.entity.BaseEntity;
+import com.mingsoft.basic.entity.CategoryEntity;
 
 
 public class FreightEntity extends BaseEntity {
@@ -62,6 +63,11 @@ public class FreightEntity extends BaseEntity {
 	 */
 	private double freightIncreaseAmount;
 
+	/**
+	 * 快递公司Entity
+	 */
+	private CategoryEntity freExpress;
+	
 	/**
 	 * 获取主键id
 	 * @return
@@ -172,6 +178,22 @@ public class FreightEntity extends BaseEntity {
 	 */
 	public void setFreightIncreaseAmount(double freightIncreaseAmount) {
 		this.freightIncreaseAmount = freightIncreaseAmount;
+	}
+
+	/**
+	 * 获取的快递公司Entity
+	 * @return
+	 */
+	public CategoryEntity getFreExpress() {
+		return freExpress;
+	}
+
+	/**
+	 * 设置获取的快递公司Entity
+	 * @param freExpress
+	 */
+	public void setFreExpress(CategoryEntity freExpress) {
+		this.freExpress = freExpress;
 	}
 
 	

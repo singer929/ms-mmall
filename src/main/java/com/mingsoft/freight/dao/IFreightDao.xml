@@ -12,6 +12,11 @@
 		<result column="freight_base_amount" property="freightBaseAmount" />
 		<result column="freight_increase_price" property="freightIncreasePrice" />
 		<result column="freight_increase_amount" property="freightIncreaseAmount" />
+		<association property="freExpress" column="freight_express_id" 
+			javaType="com.mingsoft.basic.entity.CategoryEntity">
+		  	<id property="categoryId" column="CATEGORY_ID"/>
+		  	<result property="categoryTitle" column="CATEGORY_TITLE"/>
+		</association>
 	</resultMap>
 	<!-- 将实体属性与表字段对接结束 -->
 	<!-- 查询基础数据开始 -->
@@ -31,6 +36,18 @@
 		</where>
 	</select>
 	<!-- 查询用户列表结束 -->
+	
+	<!-- 查询城市列表开始 -->
+	<select id="queryAllFreight" resultMap="resultMap" parameterType="com.mingsoft.freight.entity.FreightEntity">	
+		SELECT c.CATEGORY_ID,c.CATEGORY_TITLE,
+		fre.freight_city_id,fre.freight_express_id,fre.freight_base_price,fre.freight_base_amount,
+		fre.freight_increase_price,fre.freight_increase_amount
+		FROM category c 
+		LEFT JOIN freight fre
+		ON c.CATEGORY_ID = fre.freight_express_id and fre.freight_city_id = #{freightCityId}
+		WHERE c.CATEGORY_MODELID = #{categoryModelId} AND c.category_del=0
+	</select>
+	<!-- 查询城市列表结束 -->
 	
 	<!-- 新增用户开始 -->
 	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="peopleId" parameterType="com.mingsoft.freight.entity.FreightEntity">
@@ -61,10 +78,10 @@
 	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.FreightEntity">
 		update freight
 		<set>
-			<if test="freightBasePrice != 0">freight_base_price=#{freightBasePrice},</if>
-			<if test="freightBaseAmount !=0">freight_base_amount=#{freightBaseAmount},</if>
-			<if test="freightIncreasePrice !=0">freight_increase_price=#{freightIncreasePrice},</if>
-			<if test="freightIncreaseAmount !=0">freight_increase_amount=#{freightIncreaseAmount},</if>
+			<if test="freightBasePrice &gt; 0">freight_base_price=#{freightBasePrice},</if>
+			<if test="freightBaseAmount &gt; 0">freight_base_amount=#{freightBaseAmount},</if>
+			<if test="freightIncreasePrice &gt; 0">freight_increase_price=#{freightIncreasePrice},</if>
+			<if test="freightIncreaseAmount &gt; 0">freight_increase_amount=#{freightIncreaseAmount},</if>
 		</set>
 		where freight_express_id = #{freightExpressId} and freight_city_id = #{freightCityId}
 	</update>

@@ -23,6 +23,8 @@ package com.mingsoft.freight.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.freight.entity.FreightAreaEntity;
@@ -43,16 +45,23 @@ public interface IFreightDao extends IBaseDao {
 	public FreightEntity queryByCityExpress(FreightEntity entity);
 	
 	/**
+	 * 通过城市id与快递分类id查询基础数据
+	 * @return
+	 */
+	public List<FreightEntity> queryAllFreight(@Param("freightCityId") int freightCityId ,  @Param("categoryModelId") int categoryModelId);
+	
+	
+	/**
 	 * 保存数据
 	 * @param entity
 	 * @return
 	 */
-	public FreightEntity saveEntity(FreightEntity entity);
+	public void saveEntity(FreightEntity entity);
 	
 	/**
 	 * 通过快递公司idfreightExpressId和freightCityId更新运费数据
 	 * @param entity
 	 * @return
 	 */
-	public FreightEntity updateEntity(FreightEntity entity);
+	public void updateEntity(FreightEntity entity);
 }
