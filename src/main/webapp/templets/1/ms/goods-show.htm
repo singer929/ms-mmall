@@ -99,40 +99,7 @@
 			<div class="newig_dmian">
 				<div class="newig_dm_imgd">
 					<div class="newig_dmid_L">
-						<!--放大镜-->
-						<script type="text/javascript">/*使用jqzoom*/
-							$(function() {
-								$(".jqzoom").jqueryzoom({
-									xzoom: 530,
-									//放大图的宽度(默认是 200)  
-									yzoom: 530,
-									//放大图的高度(默认是 200)  
-									offset: 108,
-									//离原图的距离(默认是 10)  
-									position: "right",
-									//放大图的定位(默认是 "right")  
-									preload: 1
-								});
-								var down = 1;
-								var numkucun = $('#kucun').html();
-								if (down != 1) {
-									$('.newig_dmid_Rea1').hide();
-									$('.newig_dmid_Rea2').hide();
-									$('#buy_num').hide();
-									$('#down').show();
-									$('#qiangguang').show();
-								} else {
-									if (parseInt(numkucun) <= 0) {
-										$('.newig_dmid_Rea1').hide();
-										$('.newig_dmid_Rea2').hide();
-										$('#buy_num').hide();
-										$('#lost').show();
-										$('#qiangguang').show();
-									}
-								}
-
-							});
-						</script>
+						
 						<div class="newig_dmid_Limg jqzoom" id="divImg">
 							<div class="zkimg" style="left: 0px; right: auto;"></div>
 							<img src={ms:field.litpic/} jqimg={ms:field.litpic/} id="big_img" />
@@ -167,36 +134,32 @@
 									</td>
 								</tr>
 								<tr>
-									<td width="65" align="left"></td>
+									<td width="65" align="left">原&nbsp;&nbsp;价：</td>
 									<td>
-										<!--税改后预计价格：<span style="color: red;font-size: 12px;">0元</span>--></td>
-									<tr>
-										<td width="65" align="left">原&nbsp;&nbsp;价：</td>
-										<td>
-											<del>&yen;
-												<font id="p_scj">{ms:field.costprice/}</font></del>
-										</td>
-										</td>
-									</tr>
-									<tr>
-										<td width="65" align="left" valign="top">
-											<div class="pad_t5">库&nbsp;&nbsp;存：</div></td>
-										<td>
-											<div class="newig_dmid_Rcd">
-												<div class="pad_b5" data-specs="ms-specs-stock">{ms:field.stock/}</div>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td width="65" align="left" valign="top">
-											<div class="pad_t10" style="margin-top: 10px;">服&nbsp;&nbsp;务：</div></td>
-										<td valign="top">
-											<div class="newig_dmid_Rcg">
-												<span class="black">
-													<span class="sy6">由某某某公司</span></span>
-												<span class="gray pad_r20">供货并提供售后并统一发货</span></div>
-										</td>
-									</tr>
+										<del>&yen;
+											<font id="p_scj">{ms:field.costprice/}</font></del>
+									</td>
+									</td>
+								</tr>
+								<tr>
+									<td width="65" align="left" valign="top">
+										<div class="pad_t5">库&nbsp;&nbsp;存：</div></td>
+									<td>
+										<div class="newig_dmid_Rcd">
+											<div class="pad_b5" data-specs="ms-specs-stock">{ms:field.stock/}</div>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td width="65" align="left" valign="top">
+										<div class="pad_t10" style="margin-top: 10px;">服&nbsp;&nbsp;务：</div></td>
+									<td valign="top">
+										<div class="newig_dmid_Rcg">
+											<span class="black">
+												<span class="sy6">由某某某公司</span></span>
+											<span class="gray pad_r20">供货并提供售后并统一发货</span></div>
+									</td>
+								</tr>
 							</table>
 						</div>
 						<div class="newig_dmid_Rd">
@@ -280,19 +243,25 @@
 									var data = "productId={ms:field.id/}&num=10"
 									ms.load(["ms","ms.mall"],function(ms,mmall){
 								     	mmall.product.getOthersPurchase(data,function(json){
-								     		$('#getOthersPurchase').tmpl(eval("("+json.resultMsg+")")).appendTo('.getOthersPurchase');
-
+								     		if(json.length>0){
+								     			$('#getOthersPurchase').tmpl(eval("("+json.resultMsg+")")).appendTo('.getOthersPurchase');
+								     		}else{
+								     			$('.getOthersPurchase li').show();
+								     		}
 
 								     	})
 								    })
+
 								})
 							</script>
 							<script type="text/x-jquery-tmpl" id="getOthersPurchase">
 								<li style="text-align: center;"><a href="{ms:global.url/}${productLinkUrl}" target="_blank"><img src="${basicPic}" /></a></li>
 							</script>
 							<ul class="up-u getOthersPurchase" st="7656">
+							{ms:prclist size=4}
+								<li style="text-align: center;display: none;"><a href="[field.link/]" target="_blank"><img src="[field.litpic/]" /></a></li>
 								<!--追加购买此商品的用户还购买的什么的数据-->
-
+							{/ms:prclist}
 							</ul>
 						</div>
 
@@ -300,8 +269,10 @@
 							<ul class="up-qh" id="clxihuan">
 								<li class=" b-rt l-on xihuan" style="width: 100%; border-bottom: 1px solid #EEEEEE;">猜你喜欢</li>
 							</ul>
-							<ul class="up-u" st="7656">
-
+							<ul class="up-u hotSale" st="7656">
+							{ms:prclist size=4 typeid=203}
+								<li style="text-align: center;display: none;"><a href="[field.link/]"><img src="[field.litpic/]"></a></li>
+							{ms:prclist size=4}
 							</ul>
 						</div>
 					</div>
@@ -321,6 +292,7 @@
 										var data = "category={ms:field.typeid/}&sort=sale&dataType=json"
 										ms.load(["ms","ms.mall"],function(ms,mmall){
 									     	mmall.product.search(data,function(json){
+
 									     		$('#search').tmpl(json).appendTo('#lazy_brow');
 
 
@@ -491,8 +463,9 @@
 		$.cookies.del(name);
 	};
 	$(function(){
+
 		//获取历史记录
-		var historyJson = '{"id":"{ms:field.id/}","title":"{ms:field.title/}","img":"{ms:field.litpic/}","price":"{ms:cfield.originalCost/}","url":"{ms:field.link/}"}';
+		var historyJson = '{"id":"{ms:field.id/}","title":"{ms:field.title/}","img":"{ms:field.litpic/}","price":"{ms:field.price/}","url":"{ms:field.link/}"}';
 		var historyObj = historyList("historyGoods");
 		if(historyObj != null && historyObj != ""){
 			var html = "";
@@ -504,9 +477,11 @@
 					if(obj[i].id == "{ms:field.id/}"){
 						markHistory = false;
 					};	
+				}else{
+					$(".hotSale li").show();
 				}			
 			};
-			$(".up-u").html(html);
+			$(".hotSale").html(html);
 			if(markHistory == true){
 				historySave("historyGoods",historyJson,240);
 			};		
@@ -517,6 +492,8 @@
 
 
 	$(function() {
+		var img = $("#big_img").attr("src"); //获取当前缩略图
+		var bimg = $("#qiangguang").attr("src");
 		//点击事件及鼠标移入移除事件
 		$("#center").click(function() {
 			$("#proatt_1").css("display", "none");
@@ -540,12 +517,17 @@
 
 			checkLogin(mpeople); //判断是登录
 			$(".newig_dmid_Rd").delegate(".newig_dmid_Rdys li","click",function(){
+				
 				if($(this).hasClass("sel")){
+					if($(this).find("img").attr("src") != undefined){
+						$("#big_img,#qiangguang").attr("src",$(this).find("img").attr("src"));
+					}
 					$(this).parent().siblings(".att_hd").val("1")
 					$(this).parent().siblings(".erromassegDiv").hide();
 				}else{
 					$(this).parent().siblings(".att_hd").val("0")
-					
+					$("#big_img").attr("src",img);
+					$("#big_img").attr("src",bimg);
 				}
 			})
 

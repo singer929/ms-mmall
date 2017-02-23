@@ -50,9 +50,6 @@
 		  }
 	});  
 </script>
-<style>
-	.top_bar_left { color: #fff;}
-</style>
 <script>
 	//右边菜单
 $(function(){
@@ -70,13 +67,16 @@ $(function(){
 			//如果已登录将会有以下操作
 			if (returnJson.result){
 				mpeople.people.user.info(function(returnJson){
-					$(".top_bar_left").html(""+returnJson.peopleName+" 欢迎您！<small>|</small><span class='la'><a href='#' rel='nofollow' class='quitLogin'>退出</a><small>|</small><a href='"+ms.base+"/people/center.do'>个人中心</a></span>");
+
+					$(".top_bar_left").show().html(""+returnJson.peopleName+" 欢迎您！<small>|</small><span class='la'><a href='#' rel='nofollow' class='quitLogin'>退出</a><small>|</small><a href='"+ms.base+"/people/center.do'>个人中心</a></span>");
 				});
 				//购物车商品数量
 				mmall.people.mall.cart.list("",function(json){
 					$(".top_bar_right").find("em").html(json.length);
 					$(".cart_num").html(json.length);
 				});
+			}else{
+				$(".top_bar_left").show();
 			}
 		});
 		//点击退出

@@ -21,7 +21,7 @@
 
 <div class="boxBg"> 
 	<!--today start-->
-	<h2 class="biaotinav inner2 fz20" id="todayOptimization">今日精选</h2>
+	<h2 class="biaotinav inner2 fz20" id="todayOptimization">近期上新</h2>
 	<div class="everyday inner4">
 		<ul class="pro-nav-list clear">
 		{ms:prclist size=4 typeid=207}
@@ -63,7 +63,7 @@
 	</div>
 
 	<!--今日上新-->
-	<h2 class="biaotinav inner2 fz20" id="temai"> 今日上新</h2>
+	<h2 class="biaotinav inner2 fz20" id="temai"> 母婴热销</h2>
 	<div class="temaipind inner2">
 		<div class="left">
 			{ms:prclist size=4 typeid=208 flag=热销}
@@ -86,7 +86,7 @@
 		<div class="right">
 			<div class="right-box1">
 				<ul class="right_tabs">
-					<h3 class="right_hotTitle">今日优选</h3>
+					<h3 class="right_hotTitle">优选品牌</h3>
 				</ul>
 				<dl class="right_tabs_cnt">
 					<dd>
@@ -98,8 +98,8 @@
 					</dd>
 					<!--今日优选 end--> 
 					<script type="text/x-jquery-tmpl" id="brandList">
-						<li> 
-							<a><img src="${categorySmallImg}" alt="${categoryTitle}"/></a> 
+						<li data-id="${categoryCategoryId}" data-title="${categoryTitle}"> 
+							<a href="{ms:global.host/}/mall/product/search.do?brand=${categoryCategoryId}" target="_blank"><img src="${categorySmallImg}" alt="${categoryTitle}"/></a> 
 						</li>
 					</script>
 					<script>
@@ -119,19 +119,19 @@
 								});
 							});
 							
-							/*点击品牌将跳到品牌详情页，并且附带传送了categoryCategoryId参数*/
-							$(".m-brand-today").delegate("li","click",function(){
-								var categoryCategoryId = $(this).attr("data-categoryCategoryId");
-								$(".m-brand-today").val(""+categoryCategoryId+"");
-							});
+							/*点击品牌将跳到品牌详情页，并且附带传送了categoryCategoryId参数
+							$(".brandList").delegate("li","click",function(){
+								var brand = $(this).attr("data-id");
+								var title = $(this).attr("data-title");
+								window.open("{ms:global.host/}/brand.do?brand="+brand+"&title="+title);
+							});*/
 						});
 					</script>
 				</dl>
 			</div>
 			<div class="right-box3">
-				<h3 class="right_hotTitle">热卖排行榜</h3>
+				<h3 class="right_hotTitle">母婴推荐</h3>
 				<dl class="right_hotTabs_cnt">
-					<!--童装-->
 					<dd class="baojiao">
 						{ms:prclist size=7 typeid=208}
 							<div class="right_hotList">
@@ -148,8 +148,9 @@
 			</div>
 		</div>
 		<div class="clear"></div>
-		<!--今日上新-->
-		<h2 style="margin-top: -20px;" class="biaotinav inner2 fz20" id="shangpin"> 今日上新</h2>
+
+		<!--服装鞋包-->
+		<h2 style="margin-top: -20px;" class="biaotinav inner2 fz20" id="shangpin"> 服装鞋包</h2>
 		<div class="temaipind inner2">
 			<ul class="shopview">
 				{ms:prclist typeid=203}
@@ -172,8 +173,9 @@
 			</ul>
 			<div class="clear"></div>
 		</div>
-		<!--今日上新 end--> 
-		<h2 style="margin-top: -20px;" class="biaotinav inner2 fz20 mg20" id="quanqiu">全球热卖</h2>
+		<!--服装鞋包 end--> 
+
+		<h2 style="margin-top: -20px;" class="biaotinav inner2 fz20 mg20" id="quanqiu">美妆个护</h2>
 		<ul class="shopList">
 			{ms:prclist size=6 typeid=211}
 				<li> 
@@ -190,9 +192,8 @@
 			<div class="clear"></div>
 		</ul>
 	</div>
-	<!--特卖频道--> 
-	<!--抢购商品-->
-	<h2 class="biaotinav inner2 fz20" id="qianggou"> 抢购商品</h2>
+
+	<h2 class="biaotinav inner2 fz20" id="qianggou"> 自营纸尿裤</h2>
 	<div class="temaipind inner2">
 		<ul class="rushBox">
 			{ms:prclist size=4 typeid=209}
@@ -211,7 +212,7 @@
 		</ul>
 		<div class="clear"></div>
 	</div>
-	<!--抢购商品 end--> 
+	<!--自营纸尿裤 end--> 
 	
 </div>
 {ms:include filename=footer.htm/}

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE HTML>
 <html>
   <head>{ms:include filename=headFile.htm/}
-    <title>商品列表</title>
+    <title>{ms:field.typetitle/}</title>
     <script src="{ms:globalskin.url/}/people/js/goods-cookie.js"></script>
     <link rel="stylesheet" rev="stylesheet" href="{ms:globalskin.url/}/css/child-list.css" />
   </head>
@@ -96,7 +96,7 @@
           <div class="sort-bar" id="scroll_find">
             <ul style="display:inline-block;width:84%;float:left;">
               <li>
-                <a class="a1 price">综合</a>
+                <a class="a1 price">默认</a>
               </li>
               <li>
                 <a class="price-asc">
@@ -109,7 +109,7 @@
           </div>
           <!-- end 筛选条件 -->
           <ul class="goods-list-ul">
-            {ms:prclist size=1000 ispaging=true}
+            {ms:prclist size=16 ispaging=true}
             <li class="have">
               <div class="list-shadow1">
                 <div class="list-shadow_div">
@@ -128,6 +128,16 @@
             </li>
             {/ms:prclist}
           </ul>
+
+          <div class="clear"></div>
+          <div class="cp-pg-all">
+            <div class="cp-pg">
+              <a href="{ms:page.pre/}">上一页</a>
+              <a href="{ms:page.next/}">下一页</a>    
+              <div class="clear"></div>
+            </div>
+          </div>
+          <div class="loading" style="display: none;text-align: center;line-height:100px;height:100px;">加载中</div>
           <div class="noProduct" style="display: none;text-align: center;line-height:100px;height:100px;">抱歉，暂无商品</div>
           <div class="clear"></div>
         </div>
@@ -147,7 +157,10 @@
       var brand = "";
       var active = false;
       $(".newig_smR_blul a").click(function(){
+        $(".goods-list-ul,.cp-pg-all,.noProduct").hide();
+        $(".loading").show();
         if($(this).hasClass("active")){
+
           $(this).removeClass("active");
           if($(this).data("category") != undefined){
             category = "208";
@@ -179,13 +192,14 @@
         //获取选中的分类或品牌进行搜索
         
         mmall.product.search(data,function(json){
-          $(".productSize").text(json.length)
+          $(".productSize").text(json.length);
+          $(".loading").hide();
           if(json.length > 0){
-            $(".goods-list-ul").show();
+            $(".goods-list-ul,.cp-pg-all").show();
             $(".noProduct").hide();
             $('.goods-list-ul').html($('#productSearch').tmpl(json));
           }else{
-            $(".goods-list-ul").hide();
+            $(".goods-list-ul,.cp-pg-all").hide();
             $(".noProduct").show();
           }
         })

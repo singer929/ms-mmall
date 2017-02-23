@@ -3,20 +3,20 @@
 	<div class="inner">
 		<div class="top_bar_right">
 			<span>
-				<a href="{ms:global.host/}/people/center.do" class="drop-a" id="drop2">会员中心</a>
+				<a href="{ms:global.host/}/people/center.do" class="drop-a" id="drop2" target="_blank">会员中心</a>
 			</span>
 			<span>
-				<a href="{ms:global.host/}/people/myOrder.do" >我的订单</a>
+				<a href="{ms:global.host/}/people/myOrder.do" target="_blank">我的订单</a>
 			</span>
 			<span>
-				<a href="{ms:global.host/}/people/favourite.do" class="drop-a" id="drop-shops">我的收藏</a>
+				<a href="{ms:global.host/}/people/favourite.do" class="drop-a" id="drop-shops" target="_blank">我的收藏</a>
 			</span>
-			<a href="{ms:global.host/}/people/shopCar.do" class="shopcar">
+			<a href="{ms:global.host/}/people/shopCar.do" class="shopcar" target="_blank">
 				<i class="icon icon-shop"></i>购物车<em>0</em>
 			</a>
 		</div>
 		<div class="top_bar_left">
-			<a>铭飞欢迎你</a><a href="{ms:global.host/}">网站首页</a><span class="n_login">
+			<a>铭飞欢迎你</a><a href="{ms:global.host/}" target="_blank">网站首页</a><span class="n_login">
 				<div class="top_logIn">
 					<a href="{ms:global.host/}/login.do" class="top_logIn_a">登录</a>
 					
@@ -41,7 +41,7 @@
 					</label> 
 					<input type="text" id="txt_name" name="basic_title" />
 
-					<input type="submit" value="搜索" style="width:70px;color:white;background-color:#aa0202;font-weight:600;cursor:pointer;">
+					<input type="button" value="搜索" class="searchBtn" style="width: 80px;">
 				</form>
 				
 			</div>
@@ -58,49 +58,9 @@
 <div class="nav">
 	<div class="nav_bar inner clear">
 		<ul class="nav_bar_list">
-			<li><a href="{ms:global.host/}">首页</a></li>
-			<li>
-				<a href="{ms:global.url/}/203/index.html">服装鞋包</a>
-				<div class="nav_bar_box">
-					<div class="nav_bar_ctglist">
-						<div class="nav_bar_item">
-							<p class="nav_bar_title">服装鞋包</p>
-							<div class="nav_ctgnamebox">
-								{ms:channel typeid=203}
-									<a href="[field.typelink/]" target="_blank" class="a_baojian" >[field.typetitle/]</a>
-								{/ms:channel}
-							</div>
-						</div>
-					</div>
-					<div class="nav_brandbox">
-						<p class="nav_brandbox_title"></p>
-						<div class="nav_brandlist"></div>
-					</div>
-					<div class="nav_imgBox"></div>
-					<div class="clear"></div>
-				</div>
-			</li>
-			<li class=""><a href="{ms:global.url/}/208/index.html">母婴用品</a>
-				<div class="nav_bar_box">
-					<div class="nav_bar_ctglist">
-						<div class="nav_bar_item">
-							<p class="nav_bar_title">母婴用品</p>
-							<div class="nav_ctgnamebox">
-								{ms:channel typeid=208}
-									<a href="[field.typelink/]" target="_blank" class="a_baojian" >[field.typetitle/]</a>
-								{/ms:channel}
-							</div>
-						</div>
-					</div>
-					<div class="nav_brandbox">
-						<p class="nav_brandbox_title"></p>
-						<div class="nav_brandlist"></div>
-					</div>
-					<div class="nav_imgBox"></div>
-					<div class="clear"></div>
-				</div>
-			</li>
-			
+			<li><a href="{ms:global.host/}" target="_blank">首页</a></li>
+			<li><a href="{ms:global.url/}/203/index.html" target="_blank">服装鞋包</a></li>
+			<li><a href="{ms:global.url/}/208/index.html" target="_blank">母婴用品</a></li>
 		</ul>
 	</div>
 </div>
@@ -109,7 +69,9 @@
 <div class="banner">
 	<div class="callbacks_container">
 		<ul class="rslides" id="slider">
-			<li><a target="_blank" style="background-image: url({ms:globalskin.url/}/images/57aaeaa0bded6.jpg);"></a></li>
+		{ms:arclist typeid=147 size=1 flag=p}
+			<li><a target="_blank" style="background-image: url([field.litpic/]);"></a></li>
+		{/ms:arclist}
 		</ul>
 	</div>
 	<div class="clear"></div>
@@ -128,5 +90,28 @@
 			$(".nav_bar_list li").removeClass("idex");
 			$(".nav_bar_list li:eq(0)").addClass("idex");
 		}
+		
+		$(".searchBtn").click(function(){
+			var strings = $("#txt_name").val();
+			if(strings.replace(/\s/g, "").length == 0){
+				alert("请输入需要搜索的关键字");
+				return;
+			}else{
+				$("#searchDataForm").submit();
+			}
+		})
+
+		document.onkeydown=function(){
+			var strings = $("#txt_name").val();
+		    if (event.keyCode == 13){
+		    	if(strings.replace(/\s/g, "").length == 0){
+					alert("请输入需要搜索的关键字");
+					return;
+				}else{
+					$("#searchDataForm").submit();
+				}
+		    }
+		}
+				
 	})
 </script>

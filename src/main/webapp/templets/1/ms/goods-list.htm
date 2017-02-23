@@ -28,30 +28,32 @@
 			<div class=" btn_rr">
 				<div class="layout">
 					{ms:prclist typeid=211 flag=热销 size=1}
-					<div class="mainLeft">
-						<a href="[field.link/]" target="_blank">
+					<a href="[field.link/]" target="_blank">
+						<div class="mainLeft">
 							<img src="[cfield.images/]" width="700" height="355"></a>
-						<div class="t-ic-ct">
-							<span class="t-xp">新品</span>
-							<span class="t-xp t-tj">特价</span></div>
-					</div>
-					<div class="mainRight">
-						<ul style="display:inline-block;width:100%;">
-							<li>
-								<span class="lineid1">
-									<span class="t-zk">5.6折</span>精致生活</span></li>
-							<li>
-								<span class="lineId2">[field.title/]</span></li>
-						</ul>
-						<div class="moneyLeft">
-							<div class="money">
-								<b>￥</b>[field.price/]</div>
-							<div class="Mz">
-								<div class="baoy"></div>
-								<div class="delMoney">￥[field.costprice/]</div></div>
+							<div class="t-ic-ct">
+								<span class="t-xp">新品</span>
+								<span class="t-xp t-tj">特价</span>
+							</div>
 						</div>
-					</div>
+						<div class="mainRight">
+							<ul style="display:inline-block;width:100%;">
+								<li>
+									<span class="lineid1">精致生活</span></li>
+								<li>
+									<span class="lineId2">[field.title/]</span></li>
+							</ul>
+							<div class="moneyLeft">
+								<div class="money">
+									<b>￥</b>[field.price/]</div>
+								<div class="Mz">
+									<div class="baoy"></div>
+									<div class="delMoney">￥[field.costprice/]</div></div>
+							</div>
+						</div>
+					</a>
 					{/ms:prclist}
+
 				</div>
 				<div class="btn_ly">
 					{ms:prclist size=9}
@@ -72,7 +74,7 @@
 				<span class="new_eng">NEW&nbsp;GOODS</span>
 			</div>
 			<ul class="ul_text">
-				{ms:prclist ispaging=true size=1000}
+				{ms:prclist ispaging=true size=12}
 				<li>
 					<a class="new_cg" href="[field.link/]" target="_blank">
 						<img src="[field.litpic/]" />
@@ -87,6 +89,7 @@
 				{/ms:prclist}
 			</ul>
 		</div>
+			
 	</div>
 
 	{ms:include filename=footer.htm/}

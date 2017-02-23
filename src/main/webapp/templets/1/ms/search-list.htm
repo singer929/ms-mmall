@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>{ms:include filename=headFile.htm/}
-  <title>搜索结果</title>
+  <title>"{basic_title/}"相关商品</title>
   <script src="{ms:globalskin.url/}/people/js/goods-cookie.js"></script>
   <link rel="stylesheet" rev="stylesheet" href="{ms:globalskin.url/}/css/child-list.css" />
 </head>
@@ -20,7 +20,7 @@
           <ul>
             <li><a href="{ms:global.host/}">首页</a></li>
             <li><i class="newig_snL_jtico"></i></li>
-            <li><div><span>搜索"{basic_title/}"结果如下</span></div></li>
+            <li><div><span>搜索"{basic_title/}"相关商品如下</span></div></li>
           </ul>
         </div>
         <div class="newig_snav_R f_R">共
@@ -31,10 +31,20 @@
         <!-- 其他条件筛选 -->
         <div class="newig_smR_nav f_L">
           <div class="wrap">
+            <!-- end 筛选条件 -->
+            <div class="sort-bar" id="scroll_find">
+              <ul style="display:inline-block;width:84%;float:left;">
+                <li>
+                  <a class="a1 price">全部</a>
+                </li>
+              </ul>
+              <!-- end 换页 -->
+            </div>
+            <!-- end 筛选条件 -->
             <div class="pro_nopro" style="line-height:100px;height:100px;display: none">暂未搜索到您需要的商品</div>
             <ul class="goods-list-ul search_list">
 
-              {ms:prclist size=1000 ispaging=true}
+              {ms:prclist size=16 ispaging=true}
               <li class="have">
                 <div class="list-shadow1">
                   <div class="list-shadow_div">
@@ -55,6 +65,14 @@
               </li>
               {/ms:prclist}
             </ul>
+            <div class="clear"></div>
+            <div class="cp-pg-all">
+              <div class="cp-pg">
+                <a href="{ms:page.pre/}">上一页</a>
+                <a href="{ms:page.next/}">下一页</a>    
+                <div class="clear"></div>
+              </div>
+            </div>
             <!--推荐-->
             <div class="recommend" id="tj_cp">
               <p class="p-recommend">为你推荐</p>
@@ -96,6 +114,8 @@
   $(function(){
     if($(".search_list").children().length == 0){
       $(".pro_nopro").show();
+      $(".cp-pg-all").hide();
     }
+    $("#txt_name").val("{basic_title/}");
   })
 </script>
