@@ -7,83 +7,101 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
     <@ms.nav title="商品管理" back=false>
 	</@ms.nav>
-    <@ms.searchForm name="searchForm" action="${managerPath}/mall/product/list.do">
-        	<@ms.select 
-			    name="productShelf" 
-			    label="状态" 
-			    list=[{"id":"-1","name":"全部"},{"id":"1","name":"上架"},{"id":"2","name":"下架"}]
+    <@ms.searchForm name="searchForm" action="${managerPath}/mall/order/list.do">
+    		<@ms.text name="orderNo" label="订 单 号"/>
+    		<@ms.text name="orderUserName" label="收货人"/>
+    		<@ms.text name="orderPhone" label="联系电话"/>
+
+ 			<@ms.select 
+			    name="orderStatus" 
+			    label="订单状态" 
+			    list=orderStatus
 			    listKey="id" 
 			    listValue="name"
 			    value="${productShelf?default('')}"
-			/>
+			/>			
+			
 			<@ms.searchFormButton>
-				 <@ms.queryButton form="searchForm"/> 
+				 <@ms.queryButton onclick="search()"/> 
 			</@ms.searchFormButton>			
-	</@ms.searchForm>	
+	</@ms.searchForm>
     <@ms.panel>
-		<table data-toggle="table" data-detail-view="true"  data-detail-formatter="detailFormatter">		
-		    <thead>
-		        <tr>
-		            <th data-width="150">订单号</th>
-		            <th data-width="150">下单用户</th>
-		            <th data-width="150" data-align="right">订单总额</th>
-		            <th data-width="150" data-align="right">运费金额</th>
-		            <th data-width="150" data-align="right">订单状态</th>
-		            <th data-width="150" data-align="right">支付方式</th>
-		            <th>下单时间</th>
-		        </tr>
-		    </thead>
-		    <tbody>
-		        <tr>
-		            <td>14871475950320845</td>
-		            <td>张三1</td>
-		            <td>500.00</td>
-		            <td>10.00</td>
-		            <td>已完成</td>
-		            <td>在线支付</td>
-		            <td>2017-02-15</td>
-		        </tr>
-		        <tr>
-		            <td>14871475950320845</td>
-		            <td>张三1</td>
-		            <td>500.00</td>
-		            <td>10.00</td>
-		            <td>已完成</td>
-		            <td>在线支付</td>
-		            <td>2017-02-15</td>
-		        </tr>		        
-		    </tbody>
+    	<div id="toolbar">
+    		<@ms.delButton value="取消订单" id="delButton" icon="" />
+    		<@ms.updateButton value="发货" id="sendButton" icon="" />
+    	</div>
+		<table id="testTable"
+			 data-toolbar="#toolbar"
+			data-detail-view="true" 
+			data-show-refresh="true"
+	        data-show-columns="true"
+	        data-show-export="true"
+			data-method="post" 
+			data-detail-formatter="detailFormatter" 
+			data-pagination="true"
+			data-page-size="1"
+			data-side-pagination="server">
 		</table>
     </@ms.panel>
 </@ms.html5>	        
  <script>
+ 		$(function() {
+	        $("#testTable").bootstrapTable({
+	        		url:"${managerPath}/mall/order/list.do",
+	        		contentType : "application/x-www-form-urlencoded",
+	        		queryParams:function(params) {
+						return  $.param(params)+"&pageSize="+ params.limit+"&pageNo="+(params.offset+1)+"&"+$("#searchForm").serialize();
+					},
+				    columns: [{ checkbox: true},{
+				        field: 'orderNo',
+				        title: '订单号'
+				    }, {
+				        field: 'peopleUser.peopleUserNickName',
+				        title: '下单用户'
+				    }, {
+				    	sortable:true,
+				        field: 'orderPrice',
+				        title: '订单总额'
+				    }, {
+				        field: 'orderExprecessPrice',
+				        title: '运费金额'
+				    }, {
+				        field: 'orderStatusTitle',
+				        title: '订单状态'
+				    }, {
+				        field: 'orderPaymentTitle',
+				        title: '支付方式'
+				    }, {
+				        field: 'orderTime',
+				        title: '下单时间'
+				    }]
+	        }); 		
+ 		})
  	   function detailFormatter(index, row) {
-	        
-	        return $("#test").html();
+	        return $("#test").tmpl(row);
     	}
-
+ 	   function search() {
+ 	   	$("#testTable").bootstrapTable('refresh');
+ 	   }
  </script>
- <div id="test" style="display:none">
+<script id="test" type="text/x-jquery-tmpl">
 		<table class="table">
+				{{each goods}} 
 		        <tr>
-		            <td width="70"><img src="http://localhost:8080/upload/mall/product/1///1484905377060.jpg!350x350.jpg" width="62" height="62"/></td>
-		            <td>烟花烫女装气质复古时尚不规则套装 安晴 颜色:紫色,尺码:M</td>
-		            <td>x1</td>
+		            <td width="70"><img src="<#noparse>${$value.goodsThumbnail}</#noparse>" width="62" height="62"/></td>
+		            <td><#noparse>${$value.goodsName}</#noparse> <#noparse>${$value.goodsProductDetailText}</#noparse></td>
+		            <td>x<#noparse>${$value.goodsNum}</#noparse></td>
 		        </tr>
-		        <tr>
-		            <td><img src="http://localhost:8080/upload/mall/product/1///1484905377060.jpg!350x350.jpg" width="62" height="62"/></td>
-		            <td>烟花烫女装气质复古时尚不规则套装 安晴 颜色:紫色,尺码:M</td>
-		            <td>x1</td>		            
-		        </tr>
+		        {{/each}}
 		</table>
 		<table class="table">
 			<tr>
 				<td>
-收货人信息<br/>
-收货人：测试<br/>
-地址： 景德镇 昌江区 瓷都大道<br/>
-手机号码：133****0130<br/>
+				收货人信息<br/>
+				收货人：<#noparse>${orderUserName}</#noparse><br/>
+				地址： <#noparse>${orderAddress}</#noparse><br/>
+				手机号码：<#noparse>${orderPhone}</#noparse><br/>
 				</td>
 			</tr>
 		</table>
-</div>
+</script>
