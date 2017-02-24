@@ -50,10 +50,33 @@ public class FreightAreaDetailBizImpl extends BaseBizImpl implements IFreightAre
 	protected IBaseDao getDao() {
 		return freightAreaDetailDao;
 	}
-
+	/**
+	 * 获取所有的区域信息
+	 */
 	@Override
-	public List<FreightAreaDetailEntity> queryAllFad() {
-		return freightAreaDetailDao.queryAllFad();
+	public List<FreightAreaDetailEntity> queryAllFad(int faId,int modelId) {
+		return freightAreaDetailDao.queryAllFad(faId,modelId);
 	}
-	
+	/**
+	 * 获取单个区域信息
+	 */
+	@Override
+	public FreightAreaDetailEntity getByFaEntity(FreightAreaDetailEntity faEntity) {
+		return freightAreaDetailDao.getByFaEntity(faEntity);
+	}
+	/**
+	 * 添加区域信息
+	 */
+	@Override
+	public void saveByFaEntity(FreightAreaDetailEntity faEntity) {
+		freightAreaDetailDao.saveByFaEntity(faEntity);
+	}
+	/**
+	 * 修改区域信息
+	 * @param faEntity
+	 * @return
+	 */
+	public void updateByFaEntity(FreightAreaDetailEntity faEntity) {
+		freightAreaDetailDao.updateByFaEntity(faEntity);
+	}
 }

@@ -38,7 +38,9 @@ import com.mingsoft.basic.constant.ModelCode;
 import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.freight.biz.IFreightAreaBiz;
 import com.mingsoft.freight.biz.IFreightAreaDetailBiz;
+import com.mingsoft.freight.biz.IFreightBiz;
 import com.mingsoft.freight.entity.FreightAreaEntity;
+import com.mingsoft.freight.entity.FreightEntity;
 import com.mingsoft.freight.entity.FreightAreaDetailEntity;
 
 import net.mingsoft.basic.util.BasicUtil;
@@ -47,6 +49,8 @@ import net.mingsoft.basic.util.BasicUtil;
 @RequestMapping("/${managerPath}/freightAreaDetail")
 public class FreightAreaDetailAction extends BaseAction {
 	
+	@Autowired
+	private IFreightBiz freightlBiz;
 	@Autowired
 	private IFreightAreaBiz freightArealBiz;
 	@Autowired
@@ -63,22 +67,35 @@ public class FreightAreaDetailAction extends BaseAction {
 	private String index(HttpServletRequest request){
 		//左侧列表
 		List<FreightAreaEntity> listArea = freightArealBiz.queryAllArea();
-		//table
-		List<FreightAreaDetailEntity> faList = freightAreaDetailBiz.queryAllFad();
-		
 		request.setAttribute("listArea", listArea);
-		request.setAttribute("faList", faList);
 		return view("/freight/areaDetail/index");
 	}
 	
+	@RequestMapping("/list")
+	private String list(HttpServletRequest request){
+		//table
+		int modelId = BasicUtil.getModelCodeId(net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
+		int faId = Integer.parseInt(request.getParameter("faId"));
+		List<FreightAreaDetailEntity> faList = freightAreaDetailBiz.queryAllFad(faId,modelId);
+		request.setAttribute("faList", faList);
+		request.setAttribute("faId", faId);
+		return view("/freight/areaDetail/areaDetail_list");
+	}
 	/**
-	 * 加载页面显示快递信息
+	 * 区域运费的修改和添加
 	 * @param area
 	 * @param response
 	 * @param request
 	 */
-	@RequestMapping("/list")
-	private void list(@ModelAttribute FreightAreaDetailEntity area, HttpServletResponse response, HttpServletRequest request){
+	@RequestMapping("/update")
+	private void update(@ModelAttribute FreightAreaDetailEntity faEntity, HttpServletResponse response, HttpServletRequest request){
+		//查询区域信息是否存在
+		FreightAreaDetailEntity freightAreaEntity = freightAreaDetailBiz.getByFaEntity(faEntity);
+		if(freightAreaEntity == null ){
+			freightAreaDetailBiz.saveByFaEntity(faEntity);
+		}else{
+			freightAreaDetailBiz.updateByFaEntity(faEntity);
+		}
 		
 	}
 }

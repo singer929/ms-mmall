@@ -27,5 +27,28 @@ import com.mingsoft.base.biz.IBaseBiz;
 import com.mingsoft.freight.entity.FreightAreaDetailEntity;
 
 public interface IFreightAreaDetailBiz extends IBaseBiz {
-	public List<FreightAreaDetailEntity> queryAllFad();
+	/**
+	 * 查询所有的区域信息
+	 * @param modelId 
+	 * @param faId 
+	 * @return
+	 */
+	public List<FreightAreaDetailEntity> queryAllFad(int faId, int modelId);
+	/**
+	 * 查询单个区域信息
+	 * @return
+	 */
+	public FreightAreaDetailEntity getByFaEntity(FreightAreaDetailEntity faEntity);
+	/**
+	 * 添加区域信息
+	 * @param faEntity
+	 * @return
+	 */
+	public void saveByFaEntity(FreightAreaDetailEntity faEntity);
+	/**
+	 * 修改区域信息
+	 * @param faEntity
+	 * @return
+	 */
+	public void updateByFaEntity(FreightAreaDetailEntity faEntity);
 }

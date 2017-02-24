@@ -26,28 +26,54 @@
 		fad.fad_increase_price,fad.fad_increase_amount
 		FROM category c 
 		LEFT JOIN freight_area_detail fad
-		ON c.CATEGORY_ID = fad.fad_express_id and fad.fad_area_id = 188
-		WHERE c.CATEGORY_MODELID = 96 AND c.category_del=0 
+		ON c.CATEGORY_ID = fad.fad_express_id and fad.fad_area_id = #{faId}
+		WHERE c.CATEGORY_MODELID = #{modelId} AND c.category_del=0 
 	</select>
 	<!-- 查询区域列表结束 -->
 	
 	<!-- 新增区域开始 -->
-	<insert id="saveAreaEntity" useGeneratedKeys="true" keyProperty="faId"
-		parameterType="com.mingsoft.freight.entity.FreightAreaDetailEntity">
-				
+	<insert id="saveByFaEntity" useGeneratedKeys="true" keyProperty="faId"
+	parameterType="com.mingsoft.freight.entity.FreightAreaDetailEntity">
+		INSERT INTO freight_area_detail
+		<!-- 添加表字段 -->
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fadAreaId != null">fad_area_id,</if>
+			<if test="fadBasePrice != null">fad_base_price,</if>
+			<if test="fadBaseAmount != null">fad_base_amount,</if>
+			<if test="fadIncreasePrice != null">fad_increase_price,</if>
+			<if test="fadIncreaseAmount != null">fad_increase_amount,</if>
+			<if test="fadExpressId != null">fad_express_id,</if>
+		</trim>
+		<!-- 注入控制层字段 -->
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fadAreaId != null">#{fadAreaId},</if>
+			<if test="fadBasePrice != null">#{fadBasePrice},</if>
+			<if test="fadBaseAmount != null">#{fadBaseAmount},</if>
+			<if test="fadIncreasePrice != null">#{fadIncreasePrice},</if>
+			<if test="fadIncreaseAmount != null">#{fadIncreaseAmount},</if>
+			<if test="fadExpressId != null">#{fadExpressId},</if>
+		</trim>	
 	</insert>
 	<!-- 新增区域结束 -->
 	
 	<!-- 查询区域开始 -->
-	<select id="getAreaEntity" resultMap="resultMap" 
+	<select id="getByFaEntity" resultMap="resultMap" 
 	parameterType="com.mingsoft.freight.entity.FreightAreaDetailEntity">
-		
+		SELECT * FROM freight_area_detail 
+		WHERE fad_area_id=#{fadAreaId} AND fad_express_id=#{fadExpressId}
 	</select>
 	<!-- 查询区域结束 -->
 	
 	<!-- 更新区域开始 -->
-	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.FreightAreaDetailEntity">
-		
+	<update id="updateByFaEntity" parameterType="com.mingsoft.freight.entity.FreightAreaDetailEntity">
+		update freight_area_detail
+		<set>
+			<if test="fadBasePrice &gt; 0">fad_base_price=#{fadBasePrice},</if>
+			<if test="fadBaseAmount &gt; 0">fad_base_amount=#{fadBaseAmount},</if>
+			<if test="fadIncreasePrice &gt; 0">fad_increase_price=#{fadIncreasePrice},</if>
+			<if test="fadIncreaseAmount &gt; 0">fad_increase_amount=#{fadIncreaseAmount},</if>
+		</set>
+		where fad_area_id = #{fadAreaId} and fad_express_id=#{fadExpressId}
 	</update>
 	<!-- 更新区域结束 -->
 	

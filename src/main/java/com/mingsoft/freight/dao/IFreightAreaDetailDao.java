@@ -23,9 +23,34 @@ package com.mingsoft.freight.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.freight.entity.FreightAreaDetailEntity;
 
 public interface IFreightAreaDetailDao extends IBaseDao {
-	public List<FreightAreaDetailEntity> queryAllFad();
+	/**
+	 * 获取所有的区域信息
+	 * @param modelId 
+	 * @param faId 
+	 * @return
+	 */
+	public List<FreightAreaDetailEntity> queryAllFad(@Param("faId") int faId, @Param("modelId") int modelId);
+	/**
+	 * 获取单个区域
+	 * @return
+	 */
+	public FreightAreaDetailEntity getByFaEntity(FreightAreaDetailEntity faEntity);
+	/**
+	 * 添加区域信息
+	 * @param faEntity
+	 * @return
+	 */
+	public void saveByFaEntity(FreightAreaDetailEntity faEntity);
+	/**
+	 * 修改区域信息
+	 * @param faEntity
+	 * @return
+	 */
+	public void updateByFaEntity(FreightAreaDetailEntity faEntity);
 }
