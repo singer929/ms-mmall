@@ -69,6 +69,11 @@ public class FreightEntity extends BaseEntity {
 	private CategoryEntity freExpress;
 	
 	/**
+	 * 快递是否启用
+	 */
+	private int freightEnable;
+	
+	/**
 	 * 获取主键id
 	 * @return
 	 */
@@ -194,6 +199,22 @@ public class FreightEntity extends BaseEntity {
 	 */
 	public void setFreExpress(CategoryEntity freExpress) {
 		this.freExpress = freExpress;
+	}
+
+	/**
+	 * 获取快递的启用数据
+	 * @return
+	 */
+	public int getFreightEnable() {
+		return freightEnable;
+	}
+
+	/**
+	 * 设置快递的启用数据
+	 * @param freightEnable
+	 */
+	public void setFreightEnable(int freightEnable) {
+		this.freightEnable = freightEnable;
 	}
 
 	

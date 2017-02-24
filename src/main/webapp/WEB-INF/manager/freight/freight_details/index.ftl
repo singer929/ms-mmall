@@ -22,15 +22,9 @@
 			</@ms.contentBody>  
 		</@ms.content>
 		<script>
-		//树形结点
-		function getZtreeId(event,treeId,treeNode){
-			
-				$.post("${managerPath}/freight/form.do",
-						{
-							categoryId:treeNode.categoryId						
-						},
-						function(data,status){});	
-		}
+			function getZtreeId(event,treeId,treeNode){				
+			$("#listFrame").attr("src","${managerPath}/freight/form.do?categoryId="+treeNode.categoryId);							
+			}
 		</script>
 	</body>
 </html>

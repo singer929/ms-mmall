@@ -12,6 +12,7 @@
 		<result column="freight_base_amount" property="freightBaseAmount" />
 		<result column="freight_increase_price" property="freightIncreasePrice" />
 		<result column="freight_increase_amount" property="freightIncreaseAmount" />
+		<result column="freight_enable" property="freightEnable" />
 		<association property="freExpress" column="freight_express_id" 
 			javaType="com.mingsoft.basic.entity.CategoryEntity">
 		  	<id property="categoryId" column="CATEGORY_ID"/>
@@ -41,7 +42,7 @@
 	<select id="queryAllFreight" resultMap="resultMap" parameterType="com.mingsoft.freight.entity.FreightEntity">	
 		SELECT c.CATEGORY_ID,c.CATEGORY_TITLE,
 		fre.freight_city_id,fre.freight_express_id,fre.freight_base_price,fre.freight_base_amount,
-		fre.freight_increase_price,fre.freight_increase_amount
+		fre.freight_increase_price,fre.freight_increase_amount,fre.freight_enable
 		FROM category c 
 		LEFT JOIN freight fre
 		ON c.CATEGORY_ID = fre.freight_express_id and fre.freight_city_id = #{freightCityId}
@@ -60,6 +61,7 @@
 			<if test="freightBaseAmount !=null">freight_base_amount,</if>
 			<if test="freightIncreasePrice !=null">freight_increase_price,</if>
 			<if test="freightIncreaseAmount !=null">freight_increase_amount,</if>
+			<if test="freightEnable !=null">freight_enable,</if>
 		</trim>
 		<!-- 注入控制层字段 -->
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -68,7 +70,8 @@
 			<if test="freightBasePrice !=null">#{freightBasePrice},</if>
 			<if test="freightBaseAmount !=null">#{freightBaseAmount},</if>
 			<if test="freightIncreasePrice !=null">#{freightIncreasePrice},</if>
-			<if test="freightIncreaseAmount !=null">#{freightIncreaseAmount},</if>			
+			<if test="freightIncreaseAmount !=null">#{freightIncreaseAmount},</if>	
+			<if test="freightEnable !=null">#{freightEnable},</if>		
 		</trim>
 		
 	</insert>
@@ -78,10 +81,11 @@
 	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.FreightEntity">
 		update freight
 		<set>
-			<if test="freightBasePrice &gt; 0">freight_base_price=#{freightBasePrice},</if>
-			<if test="freightBaseAmount &gt; 0">freight_base_amount=#{freightBaseAmount},</if>
-			<if test="freightIncreasePrice &gt; 0">freight_increase_price=#{freightIncreasePrice},</if>
-			<if test="freightIncreaseAmount &gt; 0">freight_increase_amount=#{freightIncreaseAmount},</if>
+			<if test="freightBasePrice !=null">freight_base_price=#{freightBasePrice},</if>
+			<if test="freightBaseAmount !=null">freight_base_amount=#{freightBaseAmount},</if>
+			<if test="freightIncreasePrice !=null">freight_increase_price=#{freightIncreasePrice},</if>
+			<if test="freightIncreaseAmount !=null">freight_increase_amount=#{freightIncreaseAmount},</if>
+			<if test="freightEnable != null">freight_enable=#{freightEnable},</if>
 		</set>
 		where freight_express_id = #{freightExpressId} and freight_city_id = #{freightCityId}
 	</update>

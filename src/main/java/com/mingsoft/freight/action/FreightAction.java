@@ -101,7 +101,7 @@ public class FreightAction extends BaseAction {
 		//通过freightCityId查对应的数据
 		List<FreightEntity> entityList = freightBiz.queryAllFreight(freightCityId , modelId);
 		request.setAttribute("freightList", entityList);
-		
+		request.setAttribute("freightCityId", freightCityId);
 		return view("/freight/freight_details/freight_form");
 		
 	}
