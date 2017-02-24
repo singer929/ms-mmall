@@ -9,10 +9,21 @@
 		}
 	</style>
     <@ms.panel> 
-    	<@ms.nav title="区域运费管理"></@ms.nav>
-    	<@ms.table head=['编号,80','快递公司,200','基础运费,150','基础运费数量,150','增长运费,150','增长数量,150']>
+    	<@ms.nav title="区域运费管理"><@ms.saveButton id="saveButton"/></@ms.nav>
+    	<@ms.table head=['编号,80','快递公司,200','基础运费,150','基础运费数量,150','增长运费,150','增长数量,150'] checkbox="ids">
 				<#list faList as faListEntity>
 					<tr>
+						<td>
+							<input type="checkbox" name="ids" id="checkId"
+							<#if faListEntity.fadEnable?has_content>
+								<#if faListEntity.fadEnable = 1>
+									checked="checked"
+								<#else>
+								
+								</#if>
+							</#if>
+							/>
+				        </td>
 				        <td>
 				        	<#if (faListEntity.fadExpress)??>
 				        		${faListEntity.fadExpress.categoryId?default('')}
@@ -30,14 +41,14 @@
 				        <td>
 				        	<#if faListEntity.fadExpress?has_content>
 				        		<input type="text" class="freightInput"
-					        		name="${faListEntity.fadExpress.categoryId?default('')}"
+					        		name="basePrice"
 					        		areaid="188"
+					        		expressId="${faListEntity.fadExpress.categoryId?default('')}"
 					        		<#if faListEntity.fadBasePrice = 0> 
-					        			value = "" 
+					        			value = "0" 
 					        		<#else> 
 					        			value="${faListEntity.fadBasePrice}" 
 					        		</#if> 
-					        		onblur="basePrice(this)"
 				        		/>
 				        	<#else>
 				        		
@@ -46,14 +57,12 @@
 				        <td>
 				        	<#if faListEntity.fadExpress?has_content>
 				        		<input type="text" class="freightInput"
-					        		name="${faListEntity.fadExpress.categoryId?default('')}"
-						        	areaid="188"
+					        		name="baseAmount"
 					        		<#if faListEntity.fadBaseAmount = 0> 
-					        			value = "" 
+					        			value = "0" 
 					        		<#else> 
 					        			value="${faListEntity.fadBaseAmount}" 
 					        		</#if> 
-					        		onblur="baseAmount(this)"
 				        		/>
 				        	<#else>
 				        		
@@ -62,14 +71,12 @@
 				        <td>
 				        	<#if faListEntity.fadExpress?has_content>
 				        		<input type="text" class="freightInput"
-				        			name="${faListEntity.fadExpress.categoryId?default('')}"
-						        	areaid="188"
+				        			name="increasePrice"
 					        		<#if faListEntity.fadIncreasePrice = 0> 
-					        			value = "" 
+					        			value = "0" 
 					        		<#else> 
 					        			value="${faListEntity.fadIncreasePrice}" 
 					        		</#if> 
-					        		onblur="increasePrice(this)"
 				        		/>
 				        	<#else>
 				        		
@@ -78,14 +85,12 @@
 				        <td>
 				        	<#if faListEntity.fadExpress?has_content>
 				        		<input type="text" class="freightInput"
-				        			name="${faListEntity.fadExpress.categoryId?default('')}"
-						        	areaid="188"
+				        			name="increaseAmount"
 					        		<#if faListEntity.fadIncreaseAmount = 0> 
-					        			value = "" 
+					        			value = "0" 
 					        		<#else> 
 					        			value="${faListEntity.fadIncreaseAmount}" 
 					        		</#if> 
-					        		onblur="increaseAmount(this)"
 				        		/>
 				        	<#else>
 				        		
@@ -97,76 +102,35 @@
    </@ms.panel>
 </@ms.html5>
 <script>
-//基础运费的保存和修改
-function basePrice(obj){
-	var basePrice = obj.value;
-	var fadAreaId = obj.getAttribute("areaid");
-	var fadExpressId = obj.name;
-	if(basePrice != ""){
-		$.post("${managerPath}/freightAreaDetail/update.do",
-			{
-				fadBasePrice: basePrice,
-				fadAreaId:fadAreaId,
-				fadExpressId:fadExpressId,
-				freightBasePrice:basePrice,
-				freightExpressId:fadExpressId
-			},
-			function(data,status){}
-		);
-	}
-}
-//基础运费数量的保存和修改
-function baseAmount(obj){
-	var baseAmount = obj.value;
-	var fadAreaId = obj.getAttribute("areaid");
-	var fadExpressId = obj.name;
-	if(baseAmount != ""){
-		$.post("${managerPath}/freightAreaDetail/update.do",
-			{
-				fadBaseAmount: baseAmount,
-				fadAreaId:fadAreaId,
-				fadExpressId:fadExpressId,
-				freightBaseAmount:baseAmount,
-				freightExpressId:fadExpressId
-			},
-			function(data,status){}
-		);
-	}
-}
-//增长运费的保存和修改
-function increasePrice(obj){
-	var increasePrice = obj.value;
-	var fadAreaId = obj.getAttribute("areaid");
-	var fadExpressId = obj.name;
-	if(increasePrice != ""){
-		$.post("${managerPath}/freightAreaDetail/update.do",
-			{
-				fadIncreasePrice: increasePrice,
-				fadAreaId:fadAreaId,
-				fadExpressId:fadExpressId,
-				freightIncreasePrice:increasePrice,
-				freightExpressId:fadExpressId
-			},
-			function(data,status){}
-		);
-	}
-}
-//增长运费数量的保存和修改
-function increaseAmount(obj){
-	var increaseAmount = obj.value;
-	var fadAreaId = obj.getAttribute("areaid");
-	var fadExpressId = obj.name;
-	if(increaseAmount != ""){
-		$.post("${managerPath}/freightAreaDetail/update.do",
-			{
-				fadIncreaseAmount: increaseAmount,
-				fadAreaId:fadAreaId,
-				fadExpressId:fadExpressId,
-				freightIncreaseAmount:increaseAmount,
-				freightExpressId:fadExpressId
-			},
-			function(data,status){}
-		);
-	}
-}
+$(function(){
+	$("#saveButton").click(function(){
+		for(var i=0;i<checkId.length;i++){
+			var fadExpressId = $(checkId[i]).closest("tr").find("input[name=basePrice]").attr("expressId");
+			var fadAreaId = $(checkId[i]).closest("tr").find("input[name=basePrice]").attr("areaid");
+			var fadCheck = false;
+			var fadbasePrice = $(checkId[i]).closest("tr").find("input[name=basePrice]").val();
+			var fadbaseAmount = $(checkId[i]).closest("tr").find("input[name=baseAmount]").val();
+			var fadincreasePrice = $(checkId[i]).closest("tr").find("input[name=increasePrice]").val();
+			var fadincreaseAmount = $(checkId[i]).closest("tr").find("input[name=increaseAmount]").val();
+			if(checkId[i].checked){
+				fadCheck = "checked";
+			
+			}else{
+				fadCheck = "false";
+			}
+			$.post("${managerPath}/freightAreaDetail/update.do",
+				{
+					fadExpressId:fadExpressId,
+					fadAreaId:fadAreaId,
+					fadCheck:fadCheck,
+					fadbasePrice:fadbasePrice,
+					fadbaseAmount:fadbaseAmount,
+					fadincreasePrice:fadincreasePrice,
+					fadincreaseAmount:fadincreaseAmount
+				},
+				function(data,status){}
+			);
+		}
+	});
+});
 </script>

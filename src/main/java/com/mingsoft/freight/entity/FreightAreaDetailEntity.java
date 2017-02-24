@@ -36,6 +36,10 @@ public class FreightAreaDetailEntity extends BaseEntity {
 	 * 增长数量，表示每增加这么多数量增加一次运费
 	 */
 	public double fadIncreaseAmount;
+	/**
+	 * 勾选状态，表示是否勾选
+	 */
+	public int fadEnable;
 	
 	public int getFadId() {
 		return fadId;
@@ -99,6 +103,14 @@ public class FreightAreaDetailEntity extends BaseEntity {
 
 	public void setFadExpressId(int fadExpressId) {
 		this.fadExpressId = fadExpressId;
+	}
+
+	public int getFadEnable() {
+		return fadEnable;
+	}
+
+	public void setFadEnable(int fadEnable) {
+		this.fadEnable = fadEnable;
 	}
 	
 }

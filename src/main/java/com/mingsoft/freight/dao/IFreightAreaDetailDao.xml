@@ -12,6 +12,7 @@
 		<result column="fad_increase_price" property="fadIncreasePrice" />
 		<result column="fad_increase_amount" property="fadIncreaseAmount" />
 		<result column="fad_express_id" property="fadExpressId" />
+		<result column="fad_enable" property="fadEnable" />
 		<association property="fadExpress" column="fad_express_id" 
 			javaType="com.mingsoft.basic.entity.CategoryEntity">
 		  	<id property="categoryId" column="CATEGORY_ID"/>
@@ -23,7 +24,7 @@
 	<select id="queryAllFad" resultMap="resultMap">
 		SELECT c.CATEGORY_ID,c.CATEGORY_TITLE,
 		fad.fad_area_id,fad.fad_express_id,fad.fad_base_price,fad.fad_base_amount,
-		fad.fad_increase_price,fad.fad_increase_amount
+		fad.fad_increase_price,fad.fad_increase_amount,fad.fad_enable
 		FROM category c 
 		LEFT JOIN freight_area_detail fad
 		ON c.CATEGORY_ID = fad.fad_express_id and fad.fad_area_id = #{faId}
@@ -43,6 +44,7 @@
 			<if test="fadIncreasePrice != null">fad_increase_price,</if>
 			<if test="fadIncreaseAmount != null">fad_increase_amount,</if>
 			<if test="fadExpressId != null">fad_express_id,</if>
+			<if test="fadEnable != null">fad_enable,</if>
 		</trim>
 		<!-- 注入控制层字段 -->
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -52,6 +54,7 @@
 			<if test="fadIncreasePrice != null">#{fadIncreasePrice},</if>
 			<if test="fadIncreaseAmount != null">#{fadIncreaseAmount},</if>
 			<if test="fadExpressId != null">#{fadExpressId},</if>
+			<if test="fadEnable != null">#{fadEnable},</if>
 		</trim>	
 	</insert>
 	<!-- 新增区域结束 -->
