@@ -11,8 +11,9 @@
     		<@ms.text name="orderNo" label="订 单 号"/>
     		<@ms.text name="orderUserName" label="收货人"/>
     		<@ms.text name="orderPhone" label="联系电话"/>
-
  			<@ms.select 
+ 				default="请选择"
+ 				defaultValue="-1"
 			    name="orderStatus" 
 			    label="订单状态" 
 			    list=orderStatus
