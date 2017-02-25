@@ -1,10 +1,4 @@
 <@ms.html5>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
-<!-- Latest compiled and minified JavaScript -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
-<!-- Latest compiled and minified Locales -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
     <@ms.nav title="商品管理" back=false>
 	</@ms.nav>
     <@ms.searchForm name="searchForm" action="${managerPath}/mall/order/list.do">
@@ -28,11 +22,10 @@
 	</@ms.searchForm>
     <@ms.panel>
     	<div id="toolbar">
-    		<@ms.delButton value="取消订单" id="delButton" icon="" />
-    		<@ms.updateButton value="发货" id="sendButton" icon="" />
+    		<@ms.updateButton value="批量打印" id="sendButton" icon="" />
     	</div>
-		<table id="testTable"
-			 data-toolbar="#toolbar"
+		<table id="orderTable"
+			data-toolbar="#toolbar"
 			data-detail-view="true" 
 			data-show-refresh="true"
 	        data-show-columns="true"
@@ -47,7 +40,8 @@
 </@ms.html5>	        
  <script>
  		$(function() {
-	        $("#testTable").bootstrapTable({
+ 			//对应bootstrap-table框架的控制
+	        $("#orderTable").bootstrapTable({
 	        		url:"${managerPath}/mall/order/list.do",
 	        		contentType : "application/x-www-form-urlencoded",
 	        		queryParams:function(params) {
@@ -78,14 +72,19 @@
 				    }]
 	        }); 		
  		})
+ 		
+ 		//订单详情
  	   function detailFormatter(index, row) {
-	        return $("#test").tmpl(row);
+	        return $("#orderDetail").tmpl(row);
     	}
+    	
  	   function search() {
- 	   	$("#testTable").bootstrapTable('refresh');
+ 	   	$("#orderTable").bootstrapTable('refresh');
  	   }
+ 	   
+ 	   
  </script>
-<script id="test" type="text/x-jquery-tmpl">
+<script id="orderDetail" type="text/x-jquery-tmpl">
 		<table class="table">
 				{{each goods}} 
 		        <tr>
@@ -105,4 +104,71 @@
 				</td>
 			</tr>
 		</table>
+		<table class="table">
+			<tr>
+				<td>
+				快递公司：<#noparse>${orderExpressTitle}</#noparse><br/>
+				发货单号：<#noparse>${orderExpressNo}</#noparse><br/>
+				发货费用：<#noparse>${orderExpressPrice}</#noparse><br/>
+				</td>
+			</tr>
+		</table>		
+		<table class="table">
+			<tr>
+				<td align="right">
+					<button type="button" class="btn btn-primary expressOrder"  data-order-no="<#noparse>${orderNo}</#noparse>" >发货</button>
+					<button type="button" class="btn btn-primary cancleOrder"   data-order-no="<#noparse>${orderNo}</#noparse>" >取消</button>
+					<button type="button" class="btn btn-primary printOrder"  data-order-no="<#noparse>${orderNo}</#noparse>" >打印</button>
+				</td>
+			</tr>
+		</table>
+</script>
+
+<@ms.modal id="expressOrderWindow"
+        title="订单发货" 
+        resetFrom=true
+        size="M"
+>
+        <@ms.modalBody>
+           <@ms.form  name="expressOrderForm" 
+			 action="${managerPath}/mall/order/express.do" method="post"    class="form-horizontal"  
+			style="form-horizontal" isvalidation=true tooltip=true>
+				<input type="hidden" name="orderNo" id="expressOrderNo"/>
+				<@ms.text
+					name="orderExpressTitle" 
+					label="快递公司" 
+					width="200"   
+					placeholder="这里要改成下拉选择快递公司" 
+					validation={
+					"maxlength":"50","required":"true","data-bv-notempty-message":"必填项目","data-bv-stringlength-message":"15个字符以内!"}/>
+				<@ms.number label="价格"  
+					name="orderExpressPrice" 
+					label="快递价格"
+					min=最小值
+					max=最大值  
+					isFloat=true
+					value="0"
+					help="根据快递公司自动获取费用"
+				/>	
+				<@ms.text
+					name="orderExpressNo" 
+					label="快递单号"
+					width="200"   
+					placeholder="请输入快递单号" 
+					validation={
+					"maxlength":"15","required":"true","data-bv-notempty-message":"必填项目","data-bv-stringlength-message":"15个字符以内!"}/>
+			</@ms.form>
+        </@ms.modalBody>
+        <@ms.modalButton>
+             <@ms.saveButton value="确认发货" postForm="expressOrderForm"/>
+        </@ms.modalButton>
+</@ms.modal>
+
+<script>
+	$(function() {
+		$("#orderTable").delegate(".expressOrder","click",function() {
+			$("#expressOrderNo").val($(this).data("order-no"));
+			$("#expressOrderWindow").modal();
+		});
+	})
 </script>

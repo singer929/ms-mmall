@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.mingsoft.base.constant.e.BaseEnum;
 import com.mingsoft.base.filter.DateValueFilter;
 import com.mingsoft.base.filter.DoubleValueFilter;
+import com.mingsoft.util.StringUtil;
 
 import net.mingsoft.basic.bean.EUListBean;
 import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.biz.IOrderBiz;
+import net.mingsoft.mall.entity.OrderEntity;
 import net.mingsoft.order.constant.e.OrderStatusEnum;
 
 @Controller("managerMallOrder")
@@ -34,6 +36,12 @@ public class OrderAction extends BaseAction {
 	private IOrderBiz mallOrderBiz;
 
 
+	/**
+	 * 订单主界面
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping("/index")
 	public String index(HttpServletRequest request, HttpServletResponse response) {
@@ -41,7 +49,12 @@ public class OrderAction extends BaseAction {
 		return this.view("/mall/order/index");
 	}
 
-
+	/**
+	 * 订单列表
+	 * @param order 搜索条件订单实体
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping("/list")
 	@ResponseBody
 	public void list(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
@@ -61,7 +74,48 @@ public class OrderAction extends BaseAction {
 				new DateValueFilter("yyyy-MM-dd")));
 	}
 
-	private void test(Enum e) {
-
+	/**
+	 * 订单取消
+	 * @param order 根据订单号取消订单
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/cancle")
+	@ResponseBody
+	public void cancle(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
+			HttpServletResponse response) {
+		if(StringUtil.isBlank(order.getOrderNo())) {
+			this.outJson(response, false);
+			return;
+		}
+		OrderEntity _order =  (OrderEntity)mallOrderBiz.getByOrderNo(order.getOrderNo());
+		_order.setOrderStatus(OrderStatusEnum.CLOSE);
+		mallOrderBiz.updateEntity(_order);
+		this.outJson(response, true);
 	}
+	
+	
+	/**
+	 * 订单发货,发货需要选中快递公司，填写快递单号
+	 * @param order 根据订单号发货
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/express")
+	@ResponseBody
+	public void express(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
+			HttpServletResponse response) {
+		if(StringUtil.isBlank(order.getOrderExpressTitle()) || StringUtil.isBlank(order.getOrderExpressNo()) ||order.getOrderExprecessPrice()<0) {
+			this.outJson(response, false);
+			return;
+		}
+		OrderEntity _order =  (OrderEntity)mallOrderBiz.getByOrderNo(order.getOrderNo());
+		_order.setOrderStatus(OrderStatusEnum.SHIPPED); //设置发货状态
+		_order.setOrderExpressTitle(order.getOrderExpressTitle()); //设置快递名称
+		_order.setOrderExpressNo(order.getOrderExpressNo()); //设置快递号
+		_order.setOrderExprecessPrice(order.getOrderExprecessPrice()); //设置快递价格
+		mallOrderBiz.updateEntity(_order);
+		this.outJson(response, true);
+	}
+	
 }
