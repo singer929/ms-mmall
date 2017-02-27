@@ -30,7 +30,6 @@ import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.freight.biz.IFreightBiz;
 import com.mingsoft.freight.dao.IFreightDao;
-import com.mingsoft.freight.entity.FreightAreaEntity;
 import com.mingsoft.freight.entity.FreightEntity;
 
 @Service("freightBizImpl")
@@ -54,8 +53,7 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 	 * 通过城市id查询基础数据
 	 */
 	@Override
-	public List<FreightEntity> queryByCity(int freightCityId) {
-		
+	public List<FreightEntity> queryByCity(int freightCityId) {		
 		return  freightDao.queryByCity(freightCityId);
 	}
 
@@ -63,8 +61,7 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 	 * 保存数据
 	 */
 	@Override
-	public void saveEntity(FreightEntity entity) {
-		
+	public void saveEntity(FreightEntity entity) {		
 		 freightDao.saveEntity(entity);
 	}
 
@@ -74,8 +71,7 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 	 * 
 	 */
 	@Override
-	public void updateEntity(FreightEntity entity) {
-		
+	public void updateEntity(FreightEntity entity) {		
 		  freightDao.updateEntity(entity);
 	}
 
@@ -83,8 +79,7 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 	 * 通过快递公司idfreightExpressId和freightCityId查询运费数据
 	 */
 	@Override
-	public FreightEntity queryByCityExpress(FreightEntity entity) {
-		
+	public FreightEntity queryByCityExpress(FreightEntity entity) {		
 		return freightDao.queryByCityExpress(entity);
 	}
 
@@ -92,13 +87,7 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 	 * 通过快递公司分类categoryModelId和城市编号freightCityId查询运费数据
 	 */
 	@Override
-	public List<FreightEntity> queryAllFreight(int freightCityId, int categoryModelId) {
-		
+	public List<FreightEntity> queryAllFreight(int freightCityId, int categoryModelId) {		
 		return freightDao.queryAllFreight(freightCityId, categoryModelId);
 	}
-
-	
-	
-	
-
 }

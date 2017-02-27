@@ -26,8 +26,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.mingsoft.base.dao.IBaseDao;
-import com.mingsoft.base.entity.BaseEntity;
-import com.mingsoft.freight.entity.FreightAreaEntity;
 import com.mingsoft.freight.entity.FreightEntity;
 
 public interface IFreightDao extends IBaseDao {
@@ -49,7 +47,6 @@ public interface IFreightDao extends IBaseDao {
 	 * @return
 	 */
 	public List<FreightEntity> queryAllFreight(@Param("freightCityId") int freightCityId ,  @Param("categoryModelId") int categoryModelId);
-	
 	
 	/**
 	 * 保存数据

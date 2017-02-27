@@ -72,8 +72,7 @@
 			<if test="freightIncreasePrice !=null">#{freightIncreasePrice},</if>
 			<if test="freightIncreaseAmount !=null">#{freightIncreaseAmount},</if>	
 			<if test="freightEnable !=null">#{freightEnable},</if>		
-		</trim>
-		
+		</trim>		
 	</insert>
 	<!-- 新增用户结束 -->
 	

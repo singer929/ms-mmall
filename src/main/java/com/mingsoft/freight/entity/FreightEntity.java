@@ -215,7 +215,5 @@ public class FreightEntity extends BaseEntity {
 	 */
 	public void setFreightEnable(int freightEnable) {
 		this.freightEnable = freightEnable;
-	}
-
-	
+	}	
 }

@@ -41,10 +41,9 @@ import com.mingsoft.freight.entity.FreightEntity;
 
 import net.mingsoft.basic.util.BasicUtil;
 
-
 /**
  * 运费详情
- * @author ww
+ * @author 伍晶晶
  *
  */
 @Controller()
@@ -70,8 +69,8 @@ public class FreightAction extends BaseAction {
 	 * @param request
 	 * @return
 	 */	
-	@RequestMapping("/list")
-	public String list(@ModelAttribute CategoryEntity categoryEntity, HttpServletResponse response, HttpServletRequest request) {
+	@RequestMapping("/index")
+	public String index(@ModelAttribute CategoryEntity categoryEntity, HttpServletResponse response, HttpServletRequest request) {
 		//创建一个modeId(基于BasicUtil里的方法)
 		int modelId = BasicUtil.getModelCodeId(ModelCode.CITY);
 		//新建一个CategoryEntity实体，以供查询
@@ -102,8 +101,7 @@ public class FreightAction extends BaseAction {
 		List<FreightEntity> entityList = freightBiz.queryAllFreight(freightCityId , modelId);
 		request.setAttribute("freightList", entityList);
 		request.setAttribute("freightCityId", freightCityId);
-		return view("/freight/freight_details/freight_form");
-		
+		return view("/freight/freight_details/form");		
 	}
 	
 	/**
@@ -114,16 +112,15 @@ public class FreightAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public String update(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
+	public void update(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
+		//查找是否存在这条数据
 		FreightEntity entity = freightBiz.queryByCityExpress(freightEntity);
 		if(entity != null){
+			//更新运费数据
 			freightBiz.updateEntity(freightEntity);
 		}else{
+			//保存运费数据
 			freightBiz.saveEntity(freightEntity);
-		}
-		
-		return view("/freight/freight_details/freight_form");
-		
-	}
-	
+		}				
+	}	
 }
