@@ -3,7 +3,7 @@ package com.mingsoft.freight.entity;
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.entity.CategoryEntity;
 
-public class FreightAreaDetailEntity extends BaseEntity {
+public class AreaDetailEntity extends BaseEntity {
 	/**
 	 * 主键
 	 */

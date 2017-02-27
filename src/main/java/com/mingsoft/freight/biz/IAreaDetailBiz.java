@@ -19,50 +19,36 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.entity;
+package com.mingsoft.freight.biz;
 
-import com.mingsoft.base.entity.BaseEntity;
+import java.util.List;
 
+import com.mingsoft.base.biz.IBaseBiz;
+import com.mingsoft.freight.entity.AreaDetailEntity;
 
-public class FreightAreaEntity extends BaseEntity {
+public interface IAreaDetailBiz extends IBaseBiz {
 	/**
-	 * 区域主ID
+	 * 查询所有的区域信息
+	 * @param modelId 
+	 * @param faId 
+	 * @return
 	 */
-	private int faId;
-	
+	public List<AreaDetailEntity> queryAllFad(int faId, int modelId);
 	/**
-	 * 区域名称
+	 * 查询单个区域信息
+	 * @return
 	 */
-	private String faTitle;
-	
+	public AreaDetailEntity getByFaEntity(AreaDetailEntity faEntity);
 	/**
-	 * 物流的地区，不仅仅包括城市，对应分类城市数据
+	 * 添加区域信息
+	 * @param faEntity
+	 * @return
 	 */
-	private String faCityIds;
-	
-	public int getFaId() {
-		return faId;
-	}
-
-	public void setFaId(int faId) {
-		this.faId = faId;
-	}
-
-	public String getFaTitle() {
-		return faTitle;
-	}
-
-	public void setFaTitle(String faTitle) {
-		this.faTitle = faTitle;
-	}
-
-	public String getFaCityIds() {
-		return faCityIds;
-	}
-
-	public void setFaCityIds(String faCityIds) {
-		this.faCityIds = faCityIds;
-	}
-
-	
+	public void saveByFaEntity(AreaDetailEntity faEntity);
+	/**
+	 * 修改区域信息
+	 * @param faEntity
+	 * @return
+	 */
+	public void updateByFaEntity(AreaDetailEntity faEntity);
 }

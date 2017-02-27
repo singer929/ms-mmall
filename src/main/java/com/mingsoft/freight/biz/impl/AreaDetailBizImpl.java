@@ -29,53 +29,54 @@ import org.springframework.stereotype.Service;
 
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
-import com.mingsoft.freight.biz.IFreightAreaBiz;
-import com.mingsoft.freight.dao.IFreightAreaDao;
-import com.mingsoft.freight.entity.FreightAreaEntity;
+import com.mingsoft.freight.biz.IAreaDetailBiz;
+import com.mingsoft.freight.dao.IAreaDetailDao;
+import com.mingsoft.freight.entity.AreaDetailEntity;
+import com.mingsoft.freight.entity.AreaEntity;
 
-@Service("freightAreaBizImpl")
-public class FreightAreaBizImpl extends BaseBizImpl implements IFreightAreaBiz{
+@Service("freightAreaDetailBizImpl")
+public class AreaDetailBizImpl extends BaseBizImpl implements IAreaDetailBiz{
 
 	/**
 	 * 用户持久化层
 	 */
 	@Autowired
-	private IFreightAreaDao freightAreaDao; 
+	private IAreaDetailDao freightAreaDetailDao; 
 	
 	/**
 	 * 获取freightDao
 	 */
 	@Override
 	protected IBaseDao getDao() {
-		return freightAreaDao;
+		return freightAreaDetailDao;
 	}
 	/**
-	 * 查询全部区域信息
-	 */
-	public List<FreightAreaEntity> queryAllArea() {
-		return  (List<FreightAreaEntity>) freightAreaDao.queryAllArea();
-	}
-	
-	
-	/**
-	 * 删除区域信息
+	 * 获取所有的区域信息
 	 */
 	@Override
-	public void delete(String[] faIdsArr) {
-		freightAreaDao.delete(faIdsArr);
+	public List<AreaDetailEntity> queryAllFad(int faId,int modelId) {
+		return freightAreaDetailDao.queryAllFad(faId,modelId);
 	}
-	
 	/**
-	 * 增加区域信息
+	 * 获取单个区域信息
 	 */
-	public void saveAreaEntity(FreightAreaEntity area){
-		freightAreaDao.saveAreaEntity(area);
+	@Override
+	public AreaDetailEntity getByFaEntity(AreaDetailEntity faEntity) {
+		return freightAreaDetailDao.getByFaEntity(faEntity);
 	}
-	
 	/**
-	 * 查找单个区域信息
+	 * 添加区域信息
 	 */
-	public FreightAreaEntity getAreaEntity(FreightAreaEntity newEntity) {
-		return freightAreaDao.getAreaEntity(newEntity);
+	@Override
+	public void saveByFaEntity(AreaDetailEntity faEntity) {
+		freightAreaDetailDao.saveByFaEntity(faEntity);
+	}
+	/**
+	 * 修改区域信息
+	 * @param faEntity
+	 * @return
+	 */
+	public void updateByFaEntity(AreaDetailEntity faEntity) {
+		freightAreaDetailDao.updateByFaEntity(faEntity);
 	}
 }

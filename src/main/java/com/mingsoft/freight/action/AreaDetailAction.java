@@ -36,25 +36,25 @@ import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.constant.ModelCode;
 import com.mingsoft.basic.entity.CategoryEntity;
-import com.mingsoft.freight.biz.IFreightAreaBiz;
-import com.mingsoft.freight.biz.IFreightAreaDetailBiz;
+import com.mingsoft.freight.biz.IAreaBiz;
+import com.mingsoft.freight.biz.IAreaDetailBiz;
 import com.mingsoft.freight.biz.IFreightBiz;
-import com.mingsoft.freight.entity.FreightAreaEntity;
+import com.mingsoft.freight.entity.AreaEntity;
 import com.mingsoft.freight.entity.FreightEntity;
-import com.mingsoft.freight.entity.FreightAreaDetailEntity;
+import com.mingsoft.freight.entity.AreaDetailEntity;
 
 import net.mingsoft.basic.util.BasicUtil;
 
 @Controller
 @RequestMapping("/${managerPath}/freightAreaDetail")
-public class FreightAreaDetailAction extends BaseAction {
+public class AreaDetailAction extends BaseAction {
 	
 	@Autowired
-	private IFreightBiz freightlBiz;
+	private IFreightBiz freightBiz;
 	@Autowired
-	private IFreightAreaBiz freightArealBiz;
+	private IAreaBiz freightAreaBiz;
 	@Autowired
-	private IFreightAreaDetailBiz freightAreaDetailBiz;
+	private IAreaDetailBiz freightAreaDetailBiz;
 	@Autowired
 	private ICategoryBiz categoryBiz;
 	
@@ -66,9 +66,9 @@ public class FreightAreaDetailAction extends BaseAction {
 	@RequestMapping("/index")
 	private String index(HttpServletRequest request){
 		//左侧列表
-		List<FreightAreaEntity> listArea = freightArealBiz.queryAllArea();
+		List<AreaEntity> listArea = freightAreaBiz.queryAllArea();
 		request.setAttribute("listArea", listArea);
-		return view("/freight/areaDetail/index");
+		return view("/freight/area_detail/index");
 	}
 	
 	@RequestMapping("/list")
@@ -76,10 +76,10 @@ public class FreightAreaDetailAction extends BaseAction {
 		//table
 		int modelId = BasicUtil.getModelCodeId(net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
 		int faId = Integer.parseInt(request.getParameter("faId"));
-		List<FreightAreaDetailEntity> faList = freightAreaDetailBiz.queryAllFad(faId,modelId);
+		List<AreaDetailEntity> faList = freightAreaDetailBiz.queryAllFad(faId,modelId);
 		request.setAttribute("faList", faList);
 		request.setAttribute("faId", faId);
-		return view("/freight/areaDetail/areaDetail_list");
+		return view("/freight/area_detail/area_detail_list");
 	}
 	/**
 	 * 区域运费的修改和添加
@@ -88,14 +88,30 @@ public class FreightAreaDetailAction extends BaseAction {
 	 * @param request
 	 */
 	@RequestMapping("/update")
-	private void update(@ModelAttribute FreightAreaDetailEntity faEntity, HttpServletResponse response, HttpServletRequest request){
+	private void update(@ModelAttribute AreaDetailEntity faEntity, @ModelAttribute FreightEntity freightEntity,HttpServletResponse response, HttpServletRequest request){
 		//查询区域信息是否存在
-		FreightAreaDetailEntity freightAreaEntity = freightAreaDetailBiz.getByFaEntity(faEntity);
-		if(freightAreaEntity == null ){
+		AreaDetailEntity FreightAreaDetailEntity = freightAreaDetailBiz.getByFaEntity(faEntity);
+		//修改或插入freight_area_detail表
+		if(FreightAreaDetailEntity == null ){
 			freightAreaDetailBiz.saveByFaEntity(faEntity);
 		}else{
 			freightAreaDetailBiz.updateByFaEntity(faEntity);
 		}
-		
+		//修改或插入freigh表
+		String fadAreaId = request.getParameter("fadAreaId");
+		AreaEntity newEntity = new AreaEntity();
+		newEntity.setFaId(Integer.parseInt(fadAreaId));
+		AreaEntity freightAreaEntity = freightAreaBiz.getAreaEntity(newEntity);
+		String faCityIds = freightAreaEntity.getFaCityIds();
+		String[] faCityId = faCityIds.split(",");
+		for(int i=0;i<faCityId.length;i++){
+			freightEntity.setFreightCityId(Integer.parseInt(faCityId[i]));
+			FreightEntity entity = freightBiz.queryByCityExpress(freightEntity);
+			if(entity == null){
+				freightBiz.saveEntity(freightEntity);
+			}else{
+				freightBiz.updateEntity(freightEntity);
+			}
+		}
 	}
 }

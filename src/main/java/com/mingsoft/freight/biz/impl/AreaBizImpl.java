@@ -19,40 +19,63 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.dao;
+package com.mingsoft.freight.biz.impl;
+
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
-import com.mingsoft.base.entity.BaseEntity;
-import com.mingsoft.freight.entity.FreightAreaEntity;
+import com.mingsoft.freight.biz.IAreaBiz;
+import com.mingsoft.freight.dao.IAreaDao;
+import com.mingsoft.freight.entity.AreaEntity;
 
-public interface IFreightAreaDao extends IBaseDao {
+@Service("freightAreaBizImpl")
+public class AreaBizImpl extends BaseBizImpl implements IAreaBiz{
+
 	/**
-	 * 查询所有区域数据
-	 * @return
+	 * 用户持久化层
 	 */
-	public List<FreightAreaEntity> queryAllArea();
-
+	@Autowired
+	private IAreaDao freightAreaDao; 
+	
+	/**
+	 * 获取freightDao
+	 */
+	@Override
+	protected IBaseDao getDao() {
+		return freightAreaDao;
+	}
+	/**
+	 * 查询全部区域信息
+	 */
+	public List<AreaEntity> queryAllArea() {
+		return  (List<AreaEntity>) freightAreaDao.queryAllArea();
+	}
+	
+	
 	/**
 	 * 删除区域信息
-	 * @param area 
-	 * @return
 	 */
-	public void delete(@Param("faIdsArr") String[] faIdsArr);
+	@Override
+	public void delete(String[] faIdsArr) {
+		freightAreaDao.delete(faIdsArr);
+	}
 	
 	/**
 	 * 增加区域信息
-	 * @param area
 	 */
-	public void saveAreaEntity(FreightAreaEntity faId);
+	public void saveAreaEntity(AreaEntity area){
+		freightAreaDao.saveAreaEntity(area);
+	}
 	
 	/**
-	 * 查询单个区域的信息
-	 * @param newEntity
-	 * @return
+	 * 查找单个区域信息
 	 */
-	public FreightAreaEntity getAreaEntity(FreightAreaEntity newEntity);
+	public AreaEntity getAreaEntity(AreaEntity newEntity) {
+		return freightAreaDao.getAreaEntity(newEntity);
+	}
 }

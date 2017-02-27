@@ -24,31 +24,32 @@ package com.mingsoft.freight.biz;
 import java.util.List;
 
 import com.mingsoft.base.biz.IBaseBiz;
-import com.mingsoft.freight.entity.FreightAreaDetailEntity;
+import com.mingsoft.freight.entity.AreaEntity;
 
-public interface IFreightAreaDetailBiz extends IBaseBiz {
+public interface IAreaBiz extends IBaseBiz {
+	
 	/**
-	 * 查询所有的区域信息
-	 * @param modelId 
-	 * @param faId 
+	 * 查询所有区域信息
 	 * @return
 	 */
-	public List<FreightAreaDetailEntity> queryAllFad(int faId, int modelId);
+	public List<AreaEntity> queryAllArea();
+	
 	/**
-	 * 查询单个区域信息
-	 * @return
+	 * 删除区域信息
+	 * @param area
 	 */
-	public FreightAreaDetailEntity getByFaEntity(FreightAreaDetailEntity faEntity);
+	public void delete(String[] faIdsArr);
+	
 	/**
-	 * 添加区域信息
-	 * @param faEntity
-	 * @return
+	 * 增加区域信息
+	 * @param area
 	 */
-	public void saveByFaEntity(FreightAreaDetailEntity faEntity);
+	public void saveAreaEntity(AreaEntity area);
+	
 	/**
-	 * 修改区域信息
-	 * @param faEntity
-	 * @return
+	 * 查找单个区域信息
+	 * @param area
 	 */
-	public void updateByFaEntity(FreightAreaDetailEntity faEntity);
+	public AreaEntity getAreaEntity(AreaEntity newEntity);
+
 }

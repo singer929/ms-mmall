@@ -42,7 +42,7 @@
 				        	<#if faListEntity.fadExpress?has_content>
 				        		<input type="text" class="freightInput"
 					        		name="basePrice"
-					        		areaid="188"
+					        		areaid="${faId}"
 					        		expressId="${faListEntity.fadExpress.categoryId?default('')}"
 					        		<#if faListEntity.fadBasePrice = 0> 
 					        			value = "0" 
@@ -104,33 +104,45 @@
 <script>
 $(function(){
 	$("#saveButton").click(function(){
+		var fadEnable = 0;
 		for(var i=0;i<checkId.length;i++){
 			var fadExpressId = $(checkId[i]).closest("tr").find("input[name=basePrice]").attr("expressId");
 			var fadAreaId = $(checkId[i]).closest("tr").find("input[name=basePrice]").attr("areaid");
-			var fadCheck = false;
-			var fadbasePrice = $(checkId[i]).closest("tr").find("input[name=basePrice]").val();
-			var fadbaseAmount = $(checkId[i]).closest("tr").find("input[name=baseAmount]").val();
-			var fadincreasePrice = $(checkId[i]).closest("tr").find("input[name=increasePrice]").val();
-			var fadincreaseAmount = $(checkId[i]).closest("tr").find("input[name=increaseAmount]").val();
+			var fadBasePrice = $(checkId[i]).closest("tr").find("input[name=basePrice]").val();
+			var fadBaseAmount = $(checkId[i]).closest("tr").find("input[name=baseAmount]").val();
+			var fadIncreasePrice = $(checkId[i]).closest("tr").find("input[name=increasePrice]").val();
+			var fadIncreaseAmount = $(checkId[i]).closest("tr").find("input[name=increaseAmount]").val();
 			if(checkId[i].checked){
-				fadCheck = "checked";
+				fadEnable = "1";
 			
 			}else{
-				fadCheck = "false";
+				fadEnable = "0";
 			}
 			$.post("${managerPath}/freightAreaDetail/update.do",
 				{
+					//修改或插入freight_area_detail表
 					fadExpressId:fadExpressId,
 					fadAreaId:fadAreaId,
-					fadCheck:fadCheck,
-					fadbasePrice:fadbasePrice,
-					fadbaseAmount:fadbaseAmount,
-					fadincreasePrice:fadincreasePrice,
-					fadincreaseAmount:fadincreaseAmount
+					fadEnable:fadEnable,
+					fadBasePrice:fadBasePrice,
+					fadBaseAmount:fadBaseAmount,
+					fadIncreasePrice:fadIncreasePrice,
+					fadIncreaseAmount:fadIncreaseAmount,
+					//修改或插入freigh表
+					freightEnable : fadEnable,
+					freightExpressId : fadExpressId,
+					freightBasePrice : fadBasePrice,
+					freightBaseAmount : fadBaseAmount,
+					freightIncreasePrice : fadIncreasePrice,
+					freightIncreaseAmount : fadIncreaseAmount	 
 				},
 				function(data,status){}
 			);
 		}
+		$('.ms-notifications').offset({top:43}).notify({
+			type:'success',
+			message: { text:'保存成功！' }
+		}).show();	
 	});
 });
 </script>

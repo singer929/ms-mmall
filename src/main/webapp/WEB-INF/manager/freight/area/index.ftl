@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <@ms.html5>
+	<style>
+		.areaActive{
+			color: #3497db;
+		}
+	</style>
 	<@ms.content>
 		<@ms.contentMenu>
 			<div style="padding:4px 0 5px 24px; border-bottom:2px solid #ddd;">
@@ -9,7 +14,7 @@
 				<@ms.delButton id="delButton"/>
 			</div>
            	<#list listArea as areaEntity>
-           		<div style="padding:3px 0 0 24px;cursor:pointer;" id="${areaEntity.faId?default(0)}" onclick="edit('${areaEntity.faTitle?default(0)}')">
+           		<div style="padding:3px 0 0 24px;cursor:pointer;" class="" id="${areaEntity.faId?default(0)}" onclick="edit(this)" name="${areaEntity.faTitle?default(0)}">
 	        		<input type="checkbox" name="checkbox" id="checkbox" value="${areaEntity.faId?default(0)}">
 	        		${areaEntity.faTitle?default(0)}
         		</div>
@@ -136,7 +141,9 @@
 		$("input[name=ids]").prop("checked",false);
 	});
 	//编辑
-	function edit(faTitle){
+	function edit(obj){
+		$(obj).addClass('areaActive').siblings().removeClass('areaActive');
+		var faTitle = obj.name;
 		$("input[name=faTitle]").val(faTitle);
 		$.post("${managerPath}/freightArea/update.do",
 		   {

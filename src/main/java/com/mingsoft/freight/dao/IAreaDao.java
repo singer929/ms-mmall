@@ -19,37 +19,40 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.biz;
+package com.mingsoft.freight.dao;
 
 import java.util.List;
 
-import com.mingsoft.base.biz.IBaseBiz;
-import com.mingsoft.freight.entity.FreightAreaEntity;
+import org.apache.ibatis.annotations.Param;
 
-public interface IFreightAreaBiz extends IBaseBiz {
-	
+import com.mingsoft.base.dao.IBaseDao;
+import com.mingsoft.base.entity.BaseEntity;
+import com.mingsoft.freight.entity.AreaEntity;
+
+public interface IAreaDao extends IBaseDao {
 	/**
-	 * 查询所有区域信息
+	 * 查询所有区域数据
 	 * @return
 	 */
-	public List<FreightAreaEntity> queryAllArea();
-	
+	public List<AreaEntity> queryAllArea();
+
 	/**
 	 * 删除区域信息
-	 * @param area
+	 * @param area 
+	 * @return
 	 */
-	public void delete(String[] faIdsArr);
+	public void delete(@Param("faIdsArr") String[] faIdsArr);
 	
 	/**
 	 * 增加区域信息
 	 * @param area
 	 */
-	public void saveAreaEntity(FreightAreaEntity area);
+	public void saveAreaEntity(AreaEntity faId);
 	
 	/**
-	 * 查找单个区域信息
-	 * @param area
+	 * 查询单个区域的信息
+	 * @param newEntity
+	 * @return
 	 */
-	public FreightAreaEntity getAreaEntity(FreightAreaEntity newEntity);
-
+	public AreaEntity getAreaEntity(AreaEntity newEntity);
 }

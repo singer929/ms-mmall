@@ -38,18 +38,18 @@ import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.constant.ModelCode;
 import com.mingsoft.basic.entity.CategoryEntity;
-import com.mingsoft.freight.biz.IFreightAreaBiz;
-import com.mingsoft.freight.dao.IFreightAreaDao;
-import com.mingsoft.freight.entity.FreightAreaEntity;
+import com.mingsoft.freight.biz.IAreaBiz;
+import com.mingsoft.freight.dao.IAreaDao;
+import com.mingsoft.freight.entity.AreaEntity;
 
 import net.mingsoft.basic.util.BasicUtil;
 
 @Controller
 @RequestMapping("/${managerPath}/freightArea")
-public class FreightAreaAction extends BaseAction {
+public class AreaAction extends BaseAction {
 
 	@Autowired
-	private IFreightAreaBiz freightAreaBiz;
+	private IAreaBiz freightAreaBiz;
 	@Autowired
 	private ICategoryBiz categoryBiz;
 	
@@ -61,7 +61,7 @@ public class FreightAreaAction extends BaseAction {
 	@RequestMapping("/index")
 	private String index(HttpServletRequest request){
 		//左侧列表
-		List<FreightAreaEntity> listArea = freightAreaBiz.queryAllArea();
+		List<AreaEntity> listArea = freightAreaBiz.queryAllArea();
 		request.setAttribute("listArea", listArea);
 		//树形部分
 		int modelId =  BasicUtil.getModelCodeId(ModelCode.CITY);
@@ -81,8 +81,8 @@ public class FreightAreaAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	private void update(@ModelAttribute FreightAreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		FreightAreaEntity areaEntity = freightAreaBiz.getAreaEntity(area);
+	private void update(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
+		AreaEntity areaEntity = freightAreaBiz.getAreaEntity(area);
 		this.outJson(response, null, true, null,areaEntity.getFaCityIds());
 	}
 	
@@ -91,11 +91,12 @@ public class FreightAreaAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/save")
-	private void save(@ModelAttribute FreightAreaEntity area, HttpServletResponse response, HttpServletRequest request){
+	private void save(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
 		String faTitle = request.getParameter("faTitle");
-		FreightAreaEntity newEntity = new FreightAreaEntity();
+		
+		AreaEntity newEntity = new AreaEntity();
 		newEntity.setFaTitle(faTitle);
-		FreightAreaEntity areaEntity = freightAreaBiz.getAreaEntity(newEntity);
+		AreaEntity areaEntity = freightAreaBiz.getAreaEntity(newEntity);
 		boolean op = false;
 		if(areaEntity == null){
 			freightAreaBiz.saveAreaEntity(area);
@@ -114,7 +115,7 @@ public class FreightAreaAction extends BaseAction {
 	 * @param request
 	 */
 	@RequestMapping("/delete")
-	private void delete(@ModelAttribute FreightAreaEntity area, HttpServletResponse response, HttpServletRequest request){
+	private void delete(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
 		String faIds = request.getParameter("faIds");
 		String [] faIdsArr= faIds.split(",");
 		freightAreaBiz.delete(faIdsArr);
