@@ -31,7 +31,7 @@
 				            	<@ms.number id="freightIncreasePrice" name="freightIncreasePrice"  width="100"  value="${freight.freightIncreasePrice?default('')}" style = "padding-left:0px;" min=0 max=999999 isFloat=true/>
 			            	</td>			           
 			            	<td>
-			            	<@ms.number id="freightIncreaseAmount" name="freightIncreaseAmount"  width="100"  value="${freight.freightIncreaseAmount?default('')}" style = "padding-left:0px;" min=0 max=999999 isFloat=true/>
+			            		<@ms.number id="freightIncreaseAmount" name="freightIncreaseAmount"  width="100"  value="${freight.freightIncreaseAmount?default('')}" style = "padding-left:0px;" min=0 max=999999 isFloat=true/>
 			            	</td>			           	            
 				            <input type="hidden" name="freightCityId" value="${freightCityId?default('')}"/>	
 				        </tr>

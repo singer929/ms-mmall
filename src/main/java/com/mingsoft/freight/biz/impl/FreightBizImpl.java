@@ -22,16 +22,19 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 package com.mingsoft.freight.biz.impl;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.freight.biz.IFreightBiz;
 import com.mingsoft.freight.dao.IFreightDao;
 import com.mingsoft.freight.entity.FreightEntity;
 
+/**
+ * 运费详情业务层实现类
+ * @author 伍晶晶
+ *
+ */
 @Service("freightBizImpl")
 public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 

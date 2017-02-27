@@ -21,12 +21,14 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 
 package com.mingsoft.freight.entity;
 
-import java.util.Date;
-
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.entity.CategoryEntity;
 
-
+/**
+ * 运费详情实体类，继承BasicEntity
+ * @author 伍晶晶
+ *
+ */
 public class FreightEntity extends BaseEntity {
 	
 	/**

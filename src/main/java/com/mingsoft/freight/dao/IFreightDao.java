@@ -22,12 +22,15 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 package com.mingsoft.freight.dao;
 
 import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
-
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.freight.entity.FreightEntity;
 
+/**
+ * 运费详情持久化接口
+ * @author 伍晶晶
+ *
+ */
 public interface IFreightDao extends IBaseDao {
 	
 	/**
