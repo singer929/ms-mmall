@@ -26,6 +26,11 @@ import java.util.List;
 import com.mingsoft.base.biz.IBaseBiz;
 import com.mingsoft.freight.entity.AreaDetailEntity;
 
+/**
+ * 运费模块的区域运费设置业务层
+ * @author 上官德辉
+ *
+ */
 public interface IAreaDetailBiz extends IBaseBiz {
 	/**
 	 * 查询所有的区域信息

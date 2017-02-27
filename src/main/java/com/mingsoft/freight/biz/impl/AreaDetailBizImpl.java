@@ -34,6 +34,11 @@ import com.mingsoft.freight.dao.IAreaDetailDao;
 import com.mingsoft.freight.entity.AreaDetailEntity;
 import com.mingsoft.freight.entity.AreaEntity;
 
+/**
+ * 运费模块区域运费设置业务层实现类
+ * @author 上官德辉
+ *
+ */
 @Service("freightAreaDetailBizImpl")
 public class AreaDetailBizImpl extends BaseBizImpl implements IAreaDetailBiz{
 

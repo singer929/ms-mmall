@@ -31,11 +31,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.basic.action.BaseAction;
-import com.mingsoft.basic.biz.ICategoryBiz;
-import com.mingsoft.basic.constant.ModelCode;
-import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.freight.biz.IAreaBiz;
 import com.mingsoft.freight.biz.IAreaDetailBiz;
 import com.mingsoft.freight.biz.IFreightBiz;
@@ -45,8 +41,13 @@ import com.mingsoft.freight.entity.AreaDetailEntity;
 
 import net.mingsoft.basic.util.BasicUtil;
 
+/**
+ * 运费模块的区域运费设置和修改
+ * @author 上官德辉
+ *
+ */
 @Controller
-@RequestMapping("/${managerPath}/freightAreaDetail")
+@RequestMapping("/${managerPath}/freight/areaDetail")
 public class AreaDetailAction extends BaseAction {
 	
 	@Autowired
@@ -55,8 +56,6 @@ public class AreaDetailAction extends BaseAction {
 	private IAreaBiz freightAreaBiz;
 	@Autowired
 	private IAreaDetailBiz freightAreaDetailBiz;
-	@Autowired
-	private ICategoryBiz categoryBiz;
 	
 	/**
 	 * 加载页面显示所有区域信息
@@ -79,7 +78,7 @@ public class AreaDetailAction extends BaseAction {
 		List<AreaDetailEntity> faList = freightAreaDetailBiz.queryAllFad(faId,modelId);
 		request.setAttribute("faList", faList);
 		request.setAttribute("faId", faId);
-		return view("/freight/area_detail/area_detail_list");
+		return view("/freight/area_detail/list");
 	}
 	/**
 	 * 区域运费的修改和添加

@@ -22,14 +22,10 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 package com.mingsoft.freight.biz;
 
 import java.util.List;
+
 import com.mingsoft.base.biz.IBaseBiz;
 import com.mingsoft.freight.entity.FreightEntity;
 
-/**
- * 运费详情业务层
- * @author 伍晶晶
- *
- */
 public interface IFreightBiz extends IBaseBiz {
 	
 	/**

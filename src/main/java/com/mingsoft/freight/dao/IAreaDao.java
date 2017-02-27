@@ -29,6 +29,11 @@ import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.freight.entity.AreaEntity;
 
+/**
+ * 运费模块区域设置持久化接口
+ * @author 上官德辉
+ *
+ */
 public interface IAreaDao extends IBaseDao {
 	/**
 	 * 查询所有区域数据
@@ -54,5 +59,5 @@ public interface IAreaDao extends IBaseDao {
 	 * @param newEntity
 	 * @return
 	 */
-	public AreaEntity getAreaEntity(AreaEntity newEntity);
+	public AreaEntity getAreaEntity(AreaEntity area);
 }

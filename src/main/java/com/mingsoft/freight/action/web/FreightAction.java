@@ -71,6 +71,8 @@ public class FreightAction extends BaseAction {
 	 * @param freigh
 	 *  <i>freigh参数包含字段信息参考：</i><br/>
 	 *            freightCityId:城市编号<br/>
+	 *            freightExpressId:快递编号<br/>
+	 *            scale：快递的重量<br/>
 	 * <dt><span class="strong">返回：邮费价格</span></dt><br/>
 	 * @param response
 	 * @param request
@@ -78,7 +80,32 @@ public class FreightAction extends BaseAction {
 	@PostMapping("/cost")
 	@ResponseBody
 	public void cost(@ModelAttribute FreightEntity freigh, HttpServletResponse response, HttpServletRequest request) {
-		this.outJson(response, 10.00);
+		FreightEntity entity = freightBiz.queryByCityExpress(freigh);
+		String weigth = request.getParameter("scale");
+		double scale = Double.parseDouble(weigth);
+		boolean op = false;
+		if(entity == null){
+			this.outJson(response, op,"城市不存在");	
+		}else if(scale <= 0){
+			this.outJson(response, op,"重量输入错误");	
+		}else{
+			op = true;
+			double FreightBasePrice = entity.getFreightBasePrice();					//基础运费
+			double FreightBaseAmount = entity.getFreightBaseAmount();				//基础重量
+			double FreightIncreasePrice = entity.getFreightIncreasePrice();			//增长运费
+			double FreightIncreaseAmount = entity.getFreightIncreaseAmount();		//增长数量
+			double surplusWeight = scale - FreightBaseAmount;						//获取超过的部分
+			double IncreasePrice = Math.ceil(surplusWeight/FreightIncreaseAmount);	//获取超过的次数
+			if(surplusWeight<0){
+				String baseAmount =String.valueOf(FreightBaseAmount);
+				this.outJson(response, op, baseAmount);							//如果不超过基础重量，直接输出基础运费
+			}else{
+				double postage = FreightBasePrice+FreightIncreasePrice*IncreasePrice;
+				String cost =String.valueOf(postage);
+				this.outJson(response, op, cost);										//如果超出，输出计算后的运费
+			}
+		}
+		
 	}
 	
 }

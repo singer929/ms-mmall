@@ -3,6 +3,11 @@ package com.mingsoft.freight.entity;
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.entity.CategoryEntity;
 
+/**
+ * 运费模块区域运费设置实体类，继承BasicEntity
+ * @author 上官德辉
+ *
+ */
 public class AreaDetailEntity extends BaseEntity {
 	/**
 	 * 主键

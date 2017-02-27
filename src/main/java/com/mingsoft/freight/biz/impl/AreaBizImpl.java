@@ -33,7 +33,12 @@ import com.mingsoft.freight.biz.IAreaBiz;
 import com.mingsoft.freight.dao.IAreaDao;
 import com.mingsoft.freight.entity.AreaEntity;
 
-@Service("freightAreaBizImpl")
+/**
+ * 运费模块区域设置业务层实现类
+ * @author 上官德辉
+ *
+ */
+@Service("AreaBizImpl")
 public class AreaBizImpl extends BaseBizImpl implements IAreaBiz{
 
 	/**
@@ -75,7 +80,7 @@ public class AreaBizImpl extends BaseBizImpl implements IAreaBiz{
 	/**
 	 * 查找单个区域信息
 	 */
-	public AreaEntity getAreaEntity(AreaEntity newEntity) {
-		return freightAreaDao.getAreaEntity(newEntity);
+	public AreaEntity getAreaEntity(AreaEntity area) {
+		return freightAreaDao.getAreaEntity(area);
 	}
 }

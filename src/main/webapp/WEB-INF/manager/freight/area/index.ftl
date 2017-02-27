@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <@ms.html5>
 	<style>
 		.areaActive{
@@ -14,7 +13,7 @@
 				<@ms.delButton id="delButton"/>
 			</div>
            	<#list listArea as areaEntity>
-           		<div style="padding:3px 0 0 24px;cursor:pointer;" class="" id="${areaEntity.faId?default(0)}" onclick="edit(this)" name="${areaEntity.faTitle?default(0)}">
+    			<div style="padding:3px 0 0 24px;cursor:pointer;" class="" title="${areaEntity.faTitle?default(0)}" id="${areaEntity.faId?default(0)}" onclick="edit(this)" >
 	        		<input type="checkbox" name="checkbox" id="checkbox" value="${areaEntity.faId?default(0)}">
 	        		${areaEntity.faTitle?default(0)}
         		</div>
@@ -25,7 +24,6 @@
 				<span style="font-weight: 700;margin-left:15px;">添加区域</span>
 				<@ms.savebutton id="savebutton" style="float:right;margin-top:-6px;margin-right: 5px;"/>
 			</div>
-			
 			<div style="height:60px;">
 				<span style="font-weight: 700;float:left;margin:5px 0 0 8%;">区域名称:</span>
 				<@ms.text id="faTitle" name="faTitle" value="" width="300"  placeholder="请输入区域名称" />
@@ -86,7 +84,7 @@
 			alert("未选择区域城市，请重新选择")
 			return;
 		}
-		$.post("${managerPath}/freightArea/save.do",
+		$.post("${managerPath}/freight/area/save.do",
 		   {
 				faTitle:faTitle,
 				faCityIds:value
@@ -116,7 +114,7 @@
 		  }
 		}
 		value=value.substring(0,value.length-1);
-		$.post("${managerPath}/freightArea/delete.do",
+		$.post("${managerPath}/freight/area/delete.do",
 		   {
 				faIds:value
 		   }, 
@@ -143,11 +141,12 @@
 	//编辑
 	function edit(obj){
 		$(obj).addClass('areaActive').siblings().removeClass('areaActive');
-		var faTitle = obj.name;
+		var faId = obj.id;
+		var faTitle = obj.getAttribute("title");
 		$("input[name=faTitle]").val(faTitle);
-		$.post("${managerPath}/freightArea/update.do",
+		$.post("${managerPath}/freight/area/update.do",
 		   {
-				faTitle:faTitle
+				faId:faId
 		   }, 
 		   function(data,status){
 		   		if(data.result){

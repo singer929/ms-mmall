@@ -1,4 +1,5 @@
 /**
+
 The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -21,7 +22,6 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 
 package com.mingsoft.freight.action;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,19 +33,22 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.constant.ModelCode;
 import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.freight.biz.IAreaBiz;
-import com.mingsoft.freight.dao.IAreaDao;
 import com.mingsoft.freight.entity.AreaEntity;
 
 import net.mingsoft.basic.util.BasicUtil;
 
+/**
+ * 运费模块区域的设置、添加、修改
+ * @author 上官德辉
+ *
+ */
 @Controller
-@RequestMapping("/${managerPath}/freightArea")
+@RequestMapping("/${managerPath}/freight/area")
 public class AreaAction extends BaseAction {
 
 	@Autowired
@@ -70,9 +73,7 @@ public class AreaAction extends BaseAction {
 		List<CategoryEntity> list = categoryBiz.queryChilds(category);
 		String categoryJson = JSONArray.toJSONString(list);
 		request.setAttribute("categoryJson", categoryJson);
-		//区域名称部分和区域管理部分
-		String faTitle = request.getParameter("faTitle");
-		request.setAttribute("faTitle", faTitle);
+		
 		return view("/freight/area/index");
 	}
 	
@@ -92,11 +93,7 @@ public class AreaAction extends BaseAction {
 	 */
 	@RequestMapping("/save")
 	private void save(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		String faTitle = request.getParameter("faTitle");
-		
-		AreaEntity newEntity = new AreaEntity();
-		newEntity.setFaTitle(faTitle);
-		AreaEntity areaEntity = freightAreaBiz.getAreaEntity(newEntity);
+		AreaEntity areaEntity = freightAreaBiz.getAreaEntity(area);
 		boolean op = false;
 		if(areaEntity == null){
 			freightAreaBiz.saveAreaEntity(area);

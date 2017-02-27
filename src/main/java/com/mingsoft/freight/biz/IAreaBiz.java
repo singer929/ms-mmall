@@ -26,6 +26,11 @@ import java.util.List;
 import com.mingsoft.base.biz.IBaseBiz;
 import com.mingsoft.freight.entity.AreaEntity;
 
+/**
+ * 运费模块区域设置业务层
+ * @author 上官德辉
+ *
+ */
 public interface IAreaBiz extends IBaseBiz {
 	
 	/**
@@ -50,6 +55,6 @@ public interface IAreaBiz extends IBaseBiz {
 	 * 查找单个区域信息
 	 * @param area
 	 */
-	public AreaEntity getAreaEntity(AreaEntity newEntity);
+	public AreaEntity getAreaEntity(AreaEntity area);
 
 }

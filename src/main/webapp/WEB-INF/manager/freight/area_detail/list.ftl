@@ -118,7 +118,7 @@ $(function(){
 			}else{
 				fadEnable = "0";
 			}
-			$.post("${managerPath}/freightAreaDetail/update.do",
+			$.post("${managerPath}/freight/areaDetail/update.do",
 				{
 					//修改或插入freight_area_detail表
 					fadExpressId:fadExpressId,

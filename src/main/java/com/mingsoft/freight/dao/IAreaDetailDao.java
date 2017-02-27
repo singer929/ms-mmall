@@ -28,6 +28,11 @@ import org.apache.ibatis.annotations.Param;
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.freight.entity.AreaDetailEntity;
 
+/**
+ * 运费模块区域运费设置持久化接口
+ * @author 上官德辉
+ *
+ */
 public interface IAreaDetailDao extends IBaseDao {
 	/**
 	 * 获取所有的区域信息
