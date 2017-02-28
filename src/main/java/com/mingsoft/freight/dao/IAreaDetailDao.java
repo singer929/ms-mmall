@@ -41,21 +41,4 @@ public interface IAreaDetailDao extends IBaseDao {
 	 * @return
 	 */
 	public List<AreaDetailEntity> queryAllFad(@Param("faId") int faId, @Param("modelId") int modelId);
-	/**
-	 * 获取单个区域
-	 * @return
-	 */
-	public AreaDetailEntity getByFaEntity(AreaDetailEntity faEntity);
-	/**
-	 * 添加区域信息
-	 * @param faEntity
-	 * @return
-	 */
-	public void saveByFaEntity(AreaDetailEntity faEntity);
-	/**
-	 * 修改区域信息
-	 * @param faEntity
-	 * @return
-	 */
-	public void updateByFaEntity(AreaDetailEntity faEntity);
 }

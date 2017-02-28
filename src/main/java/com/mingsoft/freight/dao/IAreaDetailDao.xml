@@ -33,7 +33,7 @@
 	<!-- 查询区域列表结束 -->
 	
 	<!-- 新增区域开始 -->
-	<insert id="saveByFaEntity" useGeneratedKeys="true" keyProperty="faId"
+	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="faId"
 	parameterType="com.mingsoft.freight.entity.AreaDetailEntity">
 		INSERT INTO freight_area_detail
 		<!-- 添加表字段 -->
@@ -60,7 +60,7 @@
 	<!-- 新增区域结束 -->
 	
 	<!-- 查询区域开始 -->
-	<select id="getByFaEntity" resultMap="resultMap" 
+	<select id="getByEntity" resultMap="resultMap" 
 	parameterType="com.mingsoft.freight.entity.AreaDetailEntity">
 		SELECT * FROM freight_area_detail 
 		WHERE fad_area_id=#{fadAreaId} AND fad_express_id=#{fadExpressId}
@@ -68,7 +68,7 @@
 	<!-- 查询区域结束 -->
 	
 	<!-- 更新区域开始 -->
-	<update id="updateByFaEntity" parameterType="com.mingsoft.freight.entity.AreaDetailEntity">
+	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.AreaDetailEntity">
 		update freight_area_detail
 		<set>
 			<if test="fadBasePrice != null">fad_base_price=#{fadBasePrice},</if>
@@ -83,7 +83,11 @@
 	
 	<!-- 删除区域开始 -->
 	<delete id="delete" >
-		
+		delete from freight_area_detail where fad_area_id in
+	  	<foreach item="areaId" index="index" collection="ids"
+	      	open="(" separator="," close=")">
+	        	#{areaId}
+	  	</foreach>
 	</delete>
 	<!-- 删除区域结束 -->
 </mapper>

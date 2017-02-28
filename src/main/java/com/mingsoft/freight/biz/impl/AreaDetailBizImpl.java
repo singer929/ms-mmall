@@ -62,26 +62,4 @@ public class AreaDetailBizImpl extends BaseBizImpl implements IAreaDetailBiz{
 	public List<AreaDetailEntity> queryAllFad(int faId,int modelId) {
 		return freightAreaDetailDao.queryAllFad(faId,modelId);
 	}
-	/**
-	 * 获取单个区域信息
-	 */
-	@Override
-	public AreaDetailEntity getByFaEntity(AreaDetailEntity faEntity) {
-		return freightAreaDetailDao.getByFaEntity(faEntity);
-	}
-	/**
-	 * 添加区域信息
-	 */
-	@Override
-	public void saveByFaEntity(AreaDetailEntity faEntity) {
-		freightAreaDetailDao.saveByFaEntity(faEntity);
-	}
-	/**
-	 * 修改区域信息
-	 * @param faEntity
-	 * @return
-	 */
-	public void updateByFaEntity(AreaDetailEntity faEntity) {
-		freightAreaDetailDao.updateByFaEntity(faEntity);
-	}
 }

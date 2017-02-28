@@ -24,6 +24,7 @@ package com.mingsoft.freight.biz;
 import java.util.List;
 
 import com.mingsoft.base.biz.IBaseBiz;
+import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.freight.entity.AreaEntity;
 
 /**
@@ -32,29 +33,5 @@ import com.mingsoft.freight.entity.AreaEntity;
  *
  */
 public interface IAreaBiz extends IBaseBiz {
-	
-	/**
-	 * 查询所有区域信息
-	 * @return
-	 */
-	public List<AreaEntity> queryAllArea();
-	
-	/**
-	 * 删除区域信息
-	 * @param area
-	 */
-	public void delete(String[] faIdsArr);
-	
-	/**
-	 * 增加区域信息
-	 * @param area
-	 */
-	public void saveAreaEntity(AreaEntity area);
-	
-	/**
-	 * 查找单个区域信息
-	 * @param area
-	 */
-	public AreaEntity getAreaEntity(AreaEntity area);
 
 }

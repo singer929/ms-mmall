@@ -31,6 +31,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.freight.biz.IAreaBiz;
 import com.mingsoft.freight.biz.IAreaDetailBiz;
@@ -65,11 +66,16 @@ public class AreaDetailAction extends BaseAction {
 	@RequestMapping("/index")
 	private String index(HttpServletRequest request){
 		//左侧列表
-		List<AreaEntity> listArea = freightAreaBiz.queryAllArea();
-		request.setAttribute("listArea", listArea);
+		List<BaseEntity> areas = freightAreaBiz.queryAll();
+		request.setAttribute("areas", areas);
 		return view("/freight/area_detail/index");
 	}
 	
+	/**
+	 * 右侧列表的快递信息
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/list")
 	private String list(HttpServletRequest request){
 		//table
@@ -80,33 +86,35 @@ public class AreaDetailAction extends BaseAction {
 		request.setAttribute("faId", faId);
 		return view("/freight/area_detail/list");
 	}
+	
 	/**
 	 * 区域运费的修改和添加
-	 * @param area
+	 * @param areaDetail
+	 * @param freightEntity
 	 * @param response
 	 * @param request
 	 */
 	@RequestMapping("/update")
-	private void update(@ModelAttribute AreaDetailEntity faEntity, @ModelAttribute FreightEntity freightEntity,HttpServletResponse response, HttpServletRequest request){
+	private void update(@ModelAttribute AreaDetailEntity areaDetail, @ModelAttribute FreightEntity freightEntity,HttpServletResponse response, HttpServletRequest request){
 		//查询区域信息是否存在
-		AreaDetailEntity FreightAreaDetailEntity = freightAreaDetailBiz.getByFaEntity(faEntity);
+		BaseEntity FreightAreaDetailEntity = freightAreaDetailBiz.getEntity(areaDetail);
 		//修改或插入freight_area_detail表
 		if(FreightAreaDetailEntity == null ){
-			freightAreaDetailBiz.saveByFaEntity(faEntity);
+			freightAreaDetailBiz.saveEntity(areaDetail);
 		}else{
-			freightAreaDetailBiz.updateByFaEntity(faEntity);
+			freightAreaDetailBiz.updateEntity(areaDetail);
 		}
 		//修改或插入freigh表
 		String fadAreaId = request.getParameter("fadAreaId");
-		AreaEntity newEntity = new AreaEntity();
-		newEntity.setFaId(Integer.parseInt(fadAreaId));
-		AreaEntity freightAreaEntity = freightAreaBiz.getAreaEntity(newEntity);
-		String faCityIds = freightAreaEntity.getFaCityIds();
+		AreaEntity area = new AreaEntity();
+		area.setFaId(Integer.parseInt(fadAreaId));
+		BaseEntity freightAreaEntity = freightAreaBiz.getEntity(area);
+		String faCityIds = ((AreaEntity) freightAreaEntity).getFaCityIds();
 		String[] faCityId = faCityIds.split(",");
 		for(int i=0;i<faCityId.length;i++){
 			freightEntity.setFreightCityId(Integer.parseInt(faCityId[i]));
-			FreightEntity entity = freightBiz.queryByCityExpress(freightEntity);
-			if(entity == null){
+			FreightEntity temporaryEntity = freightBiz.queryByCityExpress(freightEntity);
+			if(temporaryEntity == null){
 				freightBiz.saveEntity(freightEntity);
 			}else{
 				freightBiz.updateEntity(freightEntity);

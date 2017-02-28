@@ -12,7 +12,7 @@
 				<@ms.addButton id="addButton"/>
 				<@ms.delButton id="delButton"/>
 			</div>
-           	<#list listArea as areaEntity>
+           	<#list areas as areaEntity>
     			<div style="padding:3px 0 0 24px;cursor:pointer;" class="" title="${areaEntity.faTitle?default(0)}" id="${areaEntity.faId?default(0)}" onclick="edit(this)" >
 	        		<input type="checkbox" name="checkbox" id="checkbox" value="${areaEntity.faId?default(0)}">
 	        		${areaEntity.faTitle?default(0)}
@@ -94,7 +94,7 @@
 				   alert("保存成功");
 				   window.location.reload();
 			   	}else{
-				   alert("区域名称已存在，请重新输入");
+				   alert("修改成功");
 				   window.location.reload();
 			   	}
 		   }
@@ -116,7 +116,7 @@
 		value=value.substring(0,value.length-1);
 		$.post("${managerPath}/freight/area/delete.do",
 		   {
-				faIds:value
+				areaIds:value
 		   }, 
 		   function(data,status){
 			   	

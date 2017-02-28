@@ -11,41 +11,39 @@
 	</resultMap>
 	<!-- 将实体属性与表字段对接结束 -->
 	<!-- 查询区域列表开始 -->
-	<select id="queryAllArea" resultMap="resultMap">
+	<select id="queryAll" resultMap="resultMap">
 		select * from freight_area
 	</select>
 	<!-- 查询区域列表结束 -->
 	
 	<!-- 新增区域开始 -->
-	<insert id="saveAreaEntity" useGeneratedKeys="true" keyProperty="faId"
+	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="faId"
 		parameterType="com.mingsoft.freight.entity.AreaEntity">
-		
 		insert into freight_area(fa_title,fa_city_ids) values (#{faTitle},#{faCityIds})
-		
 	</insert>
 	<!-- 新增区域结束 -->
 	
 	<!-- 查询区域开始 -->
-	<select id="getAreaEntity" resultMap="resultMap" 
+	<select id="getByEntity" resultMap="resultMap" 
 	parameterType="com.mingsoft.freight.entity.AreaEntity">
 		select * from freight_area
 		<where> 
 			<if test=" faTitle != null ">and fa_title= #{faTitle}</if>
-			<if test=" faId != null ">and fa_id= #{faId}</if>
+			<if test=" faId &gt; 0 ">and fa_id= #{faId}</if>
 		</where>
 	</select>
 	<!-- 查询区域结束 -->
 	
 	<!-- 更新区域开始 -->
 	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.AreaEntity">
-		update user set people_password = #{peoplePassword}	where people_name = #{peopleName}
+		update freight_area set fa_city_ids = #{faCityIds} where fa_title = #{faTitle}
 	</update>
 	<!-- 更新区域结束 -->
 	
 	<!-- 删除区域开始 -->
 	<delete id="delete" >
 		delete from freight_area where fa_id in
-	  	<foreach item="faId" index="index" collection="faIdsArr"
+	  	<foreach item="faId" index="index" collection="ids"
 	      	open="(" separator="," close=")">
 	        	#{faId}
 	  	</foreach>

@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
+import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.freight.biz.IAreaBiz;
 import com.mingsoft.freight.dao.IAreaDao;
 import com.mingsoft.freight.entity.AreaEntity;
@@ -54,33 +55,5 @@ public class AreaBizImpl extends BaseBizImpl implements IAreaBiz{
 	protected IBaseDao getDao() {
 		return freightAreaDao;
 	}
-	/**
-	 * 查询全部区域信息
-	 */
-	public List<AreaEntity> queryAllArea() {
-		return  (List<AreaEntity>) freightAreaDao.queryAllArea();
-	}
 	
-	
-	/**
-	 * 删除区域信息
-	 */
-	@Override
-	public void delete(String[] faIdsArr) {
-		freightAreaDao.delete(faIdsArr);
-	}
-	
-	/**
-	 * 增加区域信息
-	 */
-	public void saveAreaEntity(AreaEntity area){
-		freightAreaDao.saveAreaEntity(area);
-	}
-	
-	/**
-	 * 查找单个区域信息
-	 */
-	public AreaEntity getAreaEntity(AreaEntity area) {
-		return freightAreaDao.getAreaEntity(area);
-	}
 }

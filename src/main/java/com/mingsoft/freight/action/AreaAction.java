@@ -33,11 +33,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONArray;
+import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.constant.ModelCode;
 import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.freight.biz.IAreaBiz;
+import com.mingsoft.freight.biz.IAreaDetailBiz;
+import com.mingsoft.freight.biz.IFreightBiz;
 import com.mingsoft.freight.entity.AreaEntity;
 
 import net.mingsoft.basic.util.BasicUtil;
@@ -52,7 +55,9 @@ import net.mingsoft.basic.util.BasicUtil;
 public class AreaAction extends BaseAction {
 
 	@Autowired
-	private IAreaBiz freightAreaBiz;
+	private IAreaBiz areaBiz;
+	@Autowired
+	private IAreaDetailBiz areaDetailBiz;
 	@Autowired
 	private ICategoryBiz categoryBiz;
 	
@@ -64,8 +69,8 @@ public class AreaAction extends BaseAction {
 	@RequestMapping("/index")
 	private String index(HttpServletRequest request){
 		//左侧列表
-		List<AreaEntity> listArea = freightAreaBiz.queryAllArea();
-		request.setAttribute("listArea", listArea);
+		List<BaseEntity> areas = areaBiz.queryAll();
+		request.setAttribute("areas", areas);
 		//树形部分
 		int modelId =  BasicUtil.getModelCodeId(ModelCode.CITY);
 		CategoryEntity category = new CategoryEntity();
@@ -73,33 +78,40 @@ public class AreaAction extends BaseAction {
 		List<CategoryEntity> list = categoryBiz.queryChilds(category);
 		String categoryJson = JSONArray.toJSONString(list);
 		request.setAttribute("categoryJson", categoryJson);
-		
 		return view("/freight/area/index");
 	}
 	
 	/**
 	 * 更新区域信息
-	 * @return
+	 * @param area
+	 * @param response
+	 * @param request
 	 */
 	@RequestMapping("/update")
 	private void update(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		AreaEntity areaEntity = freightAreaBiz.getAreaEntity(area);
-		this.outJson(response, null, true, null,areaEntity.getFaCityIds());
+		BaseEntity areaEntity = areaBiz.getEntity(area);
+		this.outJson(response, null, true, null,((AreaEntity) areaEntity).getFaCityIds());
 	}
 	
 	/**
 	 * 保存添加的区域信息
-	 * @return
+	 * @param area
+	 * @param response
+	 * @param request
 	 */
 	@RequestMapping("/save")
 	private void save(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		AreaEntity areaEntity = freightAreaBiz.getAreaEntity(area);
+		String faTitle = area.getFaTitle();
+		AreaEntity areaEntity = new AreaEntity();
+		areaEntity.setFaTitle(faTitle);
+		BaseEntity temporaryEntity = areaBiz.getEntity(areaEntity);
 		boolean op = false;
-		if(areaEntity == null){
-			freightAreaBiz.saveAreaEntity(area);
+		if(temporaryEntity == null){
+			areaBiz.saveEntity(area);
 			op = true;
 			this.outJson(response,op);
 		}else{
+			areaBiz.updateEntity(area);
 			op = false;
 			this.outJson(response,op);
 		}
@@ -113,8 +125,17 @@ public class AreaAction extends BaseAction {
 	 */
 	@RequestMapping("/delete")
 	private void delete(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		String faIds = request.getParameter("faIds");
-		String [] faIdsArr= faIds.split(",");
-		freightAreaBiz.delete(faIdsArr);
+		String areaIds = request.getParameter("areaIds");
+		String[] areaId=areaIds.split(",");
+		int[] ids=new int[areaId.length];
+		for (int i = 0; i < areaId.length; i++) {
+			ids[i]=Integer.parseInt(areaId[i]);
+		}
+		
+		//删除freight_area_detail表
+		areaDetailBiz.delete(ids);
+		//删除区域area表数据
+		areaBiz.delete(ids);
+		
 	}
 }

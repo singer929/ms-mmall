@@ -21,8 +21,6 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 
 package com.mingsoft.freight.action.web;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,20 +31,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.basic.biz.ICategoryBiz;
-import com.mingsoft.basic.constant.ModelCode;
-import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.freight.biz.IFreightBiz;
 import com.mingsoft.freight.entity.FreightEntity;
 
-import net.mingsoft.basic.util.BasicUtil;
-
-
 /**
- * 运费详情
- * @author ww
+ * 运费详情计算前段接口
+ * @author 
  *
  */
 @Controller("webFreight")
@@ -54,17 +46,10 @@ import net.mingsoft.basic.util.BasicUtil;
 public class FreightAction extends BaseAction {
 
 	/**
-	 * 注入用户基础业务层
+	 * 注入城市基础业务层
 	 */
 	@Autowired
 	private IFreightBiz freightBiz;
-	
-	/**
-	 * 业务层的注入
-	 */
-	@Autowired
-	private ICategoryBiz categoryBiz;
-	
 	
 	/**
 	 * 运费
@@ -80,20 +65,20 @@ public class FreightAction extends BaseAction {
 	@PostMapping("/cost")
 	@ResponseBody
 	public void cost(@ModelAttribute FreightEntity freigh, HttpServletResponse response, HttpServletRequest request) {
-		FreightEntity entity = freightBiz.queryByCityExpress(freigh);
+		FreightEntity freightentity = freightBiz.queryByCityExpress(freigh);
 		String weigth = request.getParameter("scale");
 		double scale = Double.parseDouble(weigth);
 		boolean op = false;
-		if(entity == null){
-			this.outJson(response, op,"城市不存在");	
+		if(freightentity == null){
+			this.outJson(response, op,"城市不存在或未设置");
 		}else if(scale <= 0){
-			this.outJson(response, op,"重量输入错误");	
+			this.outJson(response, op,"重量输入错误");
 		}else{
 			op = true;
-			double FreightBasePrice = entity.getFreightBasePrice();					//基础运费
-			double FreightBaseAmount = entity.getFreightBaseAmount();				//基础重量
-			double FreightIncreasePrice = entity.getFreightIncreasePrice();			//增长运费
-			double FreightIncreaseAmount = entity.getFreightIncreaseAmount();		//增长数量
+			double FreightBasePrice = freightentity.getFreightBasePrice();					//基础运费
+			double FreightBaseAmount = freightentity.getFreightBaseAmount();				//基础重量
+			double FreightIncreasePrice = freightentity.getFreightIncreasePrice();			//增长运费
+			double FreightIncreaseAmount = freightentity.getFreightIncreaseAmount();		//增长数量
 			double surplusWeight = scale - FreightBaseAmount;						//获取超过的部分
 			double IncreasePrice = Math.ceil(surplusWeight/FreightIncreaseAmount);	//获取超过的次数
 			if(surplusWeight<0){
