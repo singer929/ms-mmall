@@ -131,7 +131,7 @@ public class SearchAction extends BaseAction {
 	 */
 	@RequestMapping(value = "/{searchId}/search")
 	@ResponseBody
-	public void searchProduct(HttpServletRequest request, @PathVariable int searchId, HttpServletResponse response){
+	public void search(HttpServletRequest request, @PathVariable int searchId, HttpServletResponse response){
 		//获取产品基本字段
 		Map<String, String> productField = getMapByProperties("net/mingsoft/mall/resources/product_field");
 		Map<String, String[]> field = new HashMap<String, String[]>();
@@ -201,7 +201,7 @@ public class SearchAction extends BaseAction {
 			// 自定义字段集合
 			Map<String, String> diyFieldName = new HashMap<String, String>();
 			// 分页连接地址
-			String pageUrl = app.getAppHostUrl() + File.separator + "html" + File.separator + app.getAppId() + File.separator + searchId + File.separator + "searchProduct.do";
+			String pageUrl = app.getAppHostUrl() + File.separator + "mmall" + File.separator + searchId + File.separator + "search.do"; 
 			// 遍历取字段集合
 			for (Entry<String, String[]> entry : field.entrySet()) {
 				if (entry != null) {

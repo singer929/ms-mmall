@@ -4,26 +4,21 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.ui.ModelMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import com.alibaba.fastjson.JSONArray;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import net.mingsoft.mall.biz.IOrderCommentBiz;
-import net.mingsoft.mall.entity.OrderCommentEntity;
-import com.mingsoft.util.PageUtil;
-import com.mingsoft.util.StringUtil;
 
 import net.mingsoft.basic.bean.ListBean;
 import net.mingsoft.basic.util.BasicUtil;
+import net.mingsoft.mall.bean.ProductCommentSummarBean;
+import net.mingsoft.mall.biz.IOrderCommentBiz;
+import net.mingsoft.mall.entity.OrderCommentEntity;
 	
 /**
  * 订单评价管理控制层
@@ -77,5 +72,31 @@ public class OrderCommentAction extends net.mingsoft.mall.action.BaseAction{
 		this.outJson(response, JSONArray.toJSONStringWithDateFormat(list, "yyyy-MM-dd"));
 	}
 	
+	/**
+	 * 商品评论汇总
+	 * @param orderComment 订单评价实体
+	 * <i>orderComment参数包含字段信息参考：</i><br/>
+	 * commentBasicId 商品编号<br/>
+	 * <dt><span class="strong">返回</span></dt><br/>
+	 * [<br/>
+	 * { <br/>
+	 * commenTcount: 评论编号<br/>
+	 * goodRate: 好评率<br/>
+	 * goodCount: 好评<br/>
+	 * generalCount: 中评<br/>
+	 * poorCount: 差评<br/>
+	 * }<br/>
+	 * ]<br/>
+	 * @param response
+	 * @param request
+	 * @param model
+	 */
+	@RequestMapping("/summar")
+	@ResponseBody
+	public void summar(@ModelAttribute OrderCommentEntity orderComment,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
+		//测试代码
+		ProductCommentSummarBean pcsb = new ProductCommentSummarBean();
+		this.outJson(response, pcsb);
+	}
 		
 }
