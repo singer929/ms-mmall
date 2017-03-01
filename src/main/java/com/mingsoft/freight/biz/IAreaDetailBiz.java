@@ -38,6 +38,6 @@ public interface IAreaDetailBiz extends IBaseBiz {
 	 * @param faId 
 	 * @return
 	 */
-	public List<AreaDetailEntity> queryAllFad(int faId, int modelId);
+	public List<AreaDetailEntity> queryFreightAreaDetail(int faId, int modelId);
 	
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import net.mingsoft.basic.bean.ListBean;
 import net.mingsoft.basic.util.BasicUtil;
@@ -80,7 +81,7 @@ public class OrderCommentAction extends net.mingsoft.mall.action.BaseAction{
 	 * <dt><span class="strong">返回</span></dt><br/>
 	 * [<br/>
 	 * { <br/>
-	 * commenTcount: 评论编号<br/>
+	 * commentCount: 评论总数<br/>
 	 * goodRate: 好评率<br/>
 	 * goodCount: 好评<br/>
 	 * generalCount: 中评<br/>
@@ -94,9 +95,34 @@ public class OrderCommentAction extends net.mingsoft.mall.action.BaseAction{
 	@RequestMapping("/summar")
 	@ResponseBody
 	public void summar(@ModelAttribute OrderCommentEntity orderComment,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
-		//测试代码
-		ProductCommentSummarBean pcsb = new ProductCommentSummarBean();
-		this.outJson(response, pcsb);
+		List<OrderCommentEntity> orderComments = orderCommentBiz.queryBycommentBasicId(orderComment);
+		int commentCount = orderComments.size();	//好评数
+		if(commentCount == 0){
+			this.outJson(response, false);
+		}else{
+			int goodCount = 0;		//好评数
+			int generalCount = 0;	//中评数
+			int poorCount = 0;		//差评数
+			for(int i=0;i<commentCount;i++){
+				int points = orderComments.get(i).getCommentPoints();
+				if(points > 0 && points < 3){
+					poorCount++;
+				}else if(points == 3){
+					generalCount++;
+				}else if(points > 3 && points < 6){
+					goodCount++;
+				}
+			}
+			String goodRate = goodCount * 100 / commentCount + "%";
+			//返回数据
+			ProductCommentSummarBean pcsb = new ProductCommentSummarBean();
+			pcsb.setCommentCount(commentCount);
+			pcsb.setGeneralCount(generalCount);
+			pcsb.setGoodCount(goodCount);
+			pcsb.setGoodRate(goodRate);
+			pcsb.setPoorCount(poorCount);
+			this.outJson(response, JSONObject.toJSONString(pcsb));
+		}
 	}
 		
 }

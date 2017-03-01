@@ -33,5 +33,5 @@ import com.mingsoft.freight.entity.AreaEntity;
  *
  */
 public interface IAreaBiz extends IBaseBiz {
-
+	public void deleteArea(int[] ids);
 }

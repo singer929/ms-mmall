@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.base.entity.BaseEntity;
@@ -89,8 +90,7 @@ public class AreaAction extends BaseAction {
 	 */
 	@RequestMapping("/update")
 	private void update(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		BaseEntity areaEntity = areaBiz.getEntity(area);
-		this.outJson(response, null, true, null,((AreaEntity) areaEntity).getFaCityIds());
+		
 	}
 	
 	/**
@@ -100,20 +100,18 @@ public class AreaAction extends BaseAction {
 	 * @param request
 	 */
 	@RequestMapping("/save")
+	@ResponseBody
 	private void save(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
 		String faTitle = area.getFaTitle();
 		AreaEntity areaEntity = new AreaEntity();
 		areaEntity.setFaTitle(faTitle);
 		BaseEntity temporaryEntity = areaBiz.getEntity(areaEntity);
-		boolean op = false;
 		if(temporaryEntity == null){
 			areaBiz.saveEntity(area);
-			op = true;
-			this.outJson(response,op);
+			this.outJson(response,true);
 		}else{
 			areaBiz.updateEntity(area);
-			op = false;
-			this.outJson(response,op);
+			this.outJson(response,false);
 		}
 	}
 	
@@ -131,11 +129,8 @@ public class AreaAction extends BaseAction {
 		for (int i = 0; i < areaId.length; i++) {
 			ids[i]=Integer.parseInt(areaId[i]);
 		}
-		
-		//删除freight_area_detail表
-		areaDetailBiz.delete(ids);
-		//删除区域area表数据
-		areaBiz.delete(ids);
+		//删除freight_area_detail表和freight_area表
+		areaBiz.deleteArea(ids);
 		
 	}
 }

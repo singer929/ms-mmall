@@ -13,7 +13,7 @@
 				<@ms.delButton id="delButton"/>
 			</div>
            	<#list areas as areaEntity>
-    			<div style="padding:3px 0 0 24px;cursor:pointer;" class="" title="${areaEntity.faTitle?default(0)}" id="${areaEntity.faId?default(0)}" onclick="edit(this)" >
+    			<div style="padding:3px 0 0 24px;cursor:pointer;" class="" cityIds="${areaEntity.faCityIds?default(0)}" id="${areaEntity.faId?default(0)}" onclick="edit(this)" >
 	        		<input type="checkbox" name="checkbox" id="checkbox" value="${areaEntity.faId?default(0)}">
 	        		${areaEntity.faTitle?default(0)}
         		</div>
@@ -141,50 +141,41 @@
 	//编辑
 	function edit(obj){
 		$(obj).addClass('areaActive').siblings().removeClass('areaActive');
-		var faId = obj.id;
+		var cityIds = obj.getAttribute("cityIds");
 		var faTitle = obj.getAttribute("title");
 		$("input[name=faTitle]").val(faTitle);
-		$.post("${managerPath}/freight/area/update.do",
-		   {
-				faId:faId
-		   }, 
-		   function(data,status){
-		   		if(data.result){
-		   			var value="";
-					faCityId = data.resultData;
-					var arr = faCityId.split(',');
-					for (var i=0;i<ids.length;i++ ){
-					  if(ids[i].checked){ 					//判断复选框是否选中
-					  	var dataId =$(ids[i]).parent().parent().attr("data-id");
-					 	value=value + dataId+ ","; 	//值的拼凑
-					  }
-					}
-					if(faCityId != value){
-						var valuearr = value.split(',');
-						for(var i=0;i<valuearr.length;i++ ){
-							var columnTitleId = "columnTitle" + valuearr[i];
-							var columnTitle = $('#'+'columnTitle'+valuearr[i]).find("input")
-							columnTitle.prop("checked",false);
-						}
-						for(var i=0;i<arr.length;i++ ){
-							var columnTitleId = "columnTitle" + arr[i];
-							var columnTitle = $('#'+'columnTitle'+arr[i]).find("input")
-							columnTitle.prop("checked",true);
-						}
-					}else{
-						for(var i=0;i<valuearr.length;i++ ){
-							var columnTitleId = "columnTitle" + valuearr[i];
-							var columnTitle = $('#'+'columnTitle'+valuearr[i]).find("input")
-							columnTitle.prop("checked",true);
-						}
-						for(var i=0;i<arr.length;i++ ){
-							var columnTitleId = "columnTitle" + arr[i];
-							var columnTitle = $('#'+'columnTitle'+arr[i]).find("input")
-							columnTitle.prop("checked",false);
-						}
-					}
-				}
-		   }
-		);
+		var value="";
+		var cityIds = obj.getAttribute("cityIds");
+		var arr = cityIds.split(',');
+		for (var i=0;i<ids.length;i++ ){
+		  if(ids[i].checked){ 					//判断复选框是否选中
+		  	var dataId =$(ids[i]).parent().parent().attr("data-id");
+		 	value=value + dataId+ ","; 	//值的拼凑
+		  }
+		}
+		if(cityIds != value){
+			var valuearr = value.split(',');
+			for(var i=0;i<valuearr.length;i++ ){
+				var columnTitleId = "columnTitle" + valuearr[i];
+				var columnTitle = $('#'+'columnTitle'+valuearr[i]).find("input")
+				columnTitle.prop("checked",false);
+			}
+			for(var i=0;i<arr.length;i++ ){
+				var columnTitleId = "columnTitle" + arr[i];
+				var columnTitle = $('#'+'columnTitle'+arr[i]).find("input")
+				columnTitle.prop("checked",true);
+			}
+		}else{
+			for(var i=0;i<valuearr.length;i++ ){
+				var columnTitleId = "columnTitle" + valuearr[i];
+				var columnTitle = $('#'+'columnTitle'+valuearr[i]).find("input")
+				columnTitle.prop("checked",true);
+			}
+			for(var i=0;i<arr.length;i++ ){
+				var columnTitleId = "columnTitle" + arr[i];
+				var columnTitle = $('#'+'columnTitle'+arr[i]).find("input")
+				columnTitle.prop("checked",false);
+			}
+		}
 	}
 </script>

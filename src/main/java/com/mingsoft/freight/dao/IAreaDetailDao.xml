@@ -21,7 +21,7 @@
 	</resultMap>
 	<!-- 将实体属性与表字段对接结束 -->
 	<!-- 查询区域列表开始 -->
-	<select id="queryAllFad" resultMap="resultMap">
+	<select id="queryFreightAreaDetail" resultMap="resultMap">
 		SELECT c.CATEGORY_ID,c.CATEGORY_TITLE,
 		fad.fad_area_id,fad.fad_express_id,fad.fad_base_price,fad.fad_base_amount,
 		fad.fad_increase_price,fad.fad_increase_amount,fad.fad_enable

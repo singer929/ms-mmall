@@ -4,7 +4,6 @@
 	
 	<resultMap id="resultMap" type="net.mingsoft.mall.entity.OrderCommentEntity">
 		<id column="OC_COMMENT_ID" property="ocCommentId" /><!--评论编号 -->
-		<result column="OC_COMMENT_ID" property="ocCommentId" /><!--评论编号 -->
 		<result column="OC_ORDER_ID" property="ocOrderId" /><!--订单编号 -->
 		<result column="OC_IMPRESSION" property="ocImpression" /><!--印象 -->
 		<result column="OC_PRODUCT" property="ocProduct" /><!--商品符合度 -->
@@ -119,5 +118,8 @@
 		</where>		
 		order by OC_COMMENT_ID desc
 	</select>
-	
+	<!-- 根据id查询所有当前商品评论 -->
+	<select id="queryBycommentBasicId" resultMap="resultMap" parameterType="net.mingsoft.mall.entity.OrderCommentEntity">
+		select * from comment where COMMENT_BASICID = #{commentBasicId}
+	</select>
 </mapper>

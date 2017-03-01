@@ -41,7 +41,7 @@ public class ProductCommentSummarBean {
 	/**
 	 * 评论总数
 	 */
-	private int commenTcount;
+	private int commentCount;
 	
 	/**
 	 * 好评率
@@ -63,12 +63,12 @@ public class ProductCommentSummarBean {
 	 */
 	private int poorCount;
 
-	public int getCommenTcount() {
-		return commenTcount;
+	public int getCommentCount() {
+		return commentCount;
 	}
 
-	public void setCommenTcount(int commenTcount) {
-		this.commenTcount = commenTcount;
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
 	}
 
 	public String getGoodRate() {

@@ -10,7 +10,8 @@
 	</style>
     <@ms.panel> 
     	<@ms.nav title="区域运费管理"><@ms.saveButton id="saveButton"/></@ms.nav>
-    	<@ms.table head=['编号,80','快递公司,200','基础运费,150','基础运费数量,150','增长运费,150','增长数量,150'] checkbox="ids">
+    	<@ms.form name="areaDetailForm">
+    		<@ms.table head=['编号,80','快递公司,200','基础运费,150','基础运费数量,150','增长运费,150','增长数量,150'] checkbox="ids">
 				<#list faList as faListEntity>
 					<tr>
 						<td>
@@ -99,6 +100,7 @@
 					</tr>
 				</#list>
 			</@ms.table>
+		</@ms.form>
    </@ms.panel>
 </@ms.html5>
 <script>

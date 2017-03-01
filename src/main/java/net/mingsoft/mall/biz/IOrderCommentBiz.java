@@ -44,4 +44,10 @@ public interface IOrderCommentBiz extends ICommentBiz {
 	 * @return
 	 */
 	List query(OrderCommentEntity orderComment);
+	/**
+	 * 根据id查询当前商品的评论
+	 * @param orderComment
+	 * @return
+	 */
+	public List<OrderCommentEntity> queryBycommentBasicId(OrderCommentEntity orderComment);
 }

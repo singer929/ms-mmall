@@ -40,5 +40,5 @@ public interface IAreaDetailDao extends IBaseDao {
 	 * @param faId 
 	 * @return
 	 */
-	public List<AreaDetailEntity> queryAllFad(@Param("faId") int faId, @Param("modelId") int modelId);
+	public List<AreaDetailEntity> queryFreightAreaDetail(@Param("faId") int faId, @Param("modelId") int modelId);
 }

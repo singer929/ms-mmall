@@ -70,9 +70,9 @@ public class FreightAction extends BaseAction {
 		double scale = Double.parseDouble(weigth);
 		boolean op = false;
 		if(freightentity == null){
-			this.outJson(response, op,"城市不存在或未设置");
+			this.outJson(response, op,getResString("")); 
 		}else if(scale <= 0){
-			this.outJson(response, op,"重量输入错误");
+			this.outJson(response, op,getResString(""));
 		}else{
 			op = true;
 			double FreightBasePrice = freightentity.getFreightBasePrice();					//基础运费

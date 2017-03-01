@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.action.BaseAction;
@@ -81,7 +82,7 @@ public class AreaDetailAction extends BaseAction {
 		//table
 		int modelId = BasicUtil.getModelCodeId(net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
 		int faId = Integer.parseInt(request.getParameter("faId"));
-		List<AreaDetailEntity> faList = freightAreaDetailBiz.queryAllFad(faId,modelId);
+		List<AreaDetailEntity> faList = freightAreaDetailBiz.queryFreightAreaDetail(faId,modelId);
 		request.setAttribute("faList", faList);
 		request.setAttribute("faId", faId);
 		return view("/freight/area_detail/list");

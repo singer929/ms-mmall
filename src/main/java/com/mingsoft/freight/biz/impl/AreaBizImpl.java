@@ -22,17 +22,15 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 package com.mingsoft.freight.biz.impl;
 
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
-import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.freight.biz.IAreaBiz;
 import com.mingsoft.freight.dao.IAreaDao;
-import com.mingsoft.freight.entity.AreaEntity;
+import com.mingsoft.freight.dao.IAreaDetailDao;
 
 /**
  * 运费模块区域设置业务层实现类
@@ -43,17 +41,28 @@ import com.mingsoft.freight.entity.AreaEntity;
 public class AreaBizImpl extends BaseBizImpl implements IAreaBiz{
 
 	/**
-	 * 用户持久化层
+	 * 持久化层
 	 */
 	@Autowired
-	private IAreaDao freightAreaDao; 
+	private IAreaDao areaDao; 
+	@Autowired
+	private IAreaDetailDao areaDetailDao; 
 	
 	/**
-	 * 获取freightDao
+	 * 获取AreaDao
 	 */
 	@Override
 	protected IBaseDao getDao() {
-		return freightAreaDao;
+		return areaDao;
+	}
+	/**
+	 * 删除freight_area_detail表和freight_area表
+	 */
+	@Override
+	public void deleteArea(int[] ids) {
+		areaDetailDao.delete(ids);
+		areaDao.delete(ids);
+		
 	}
 	
 }
