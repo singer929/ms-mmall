@@ -226,5 +226,43 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 		mallOrderBiz.saveEntity(order, cartIds);
 		this.outJson(response, order);
 	}
+	
+	/**
+	 * 确认收货<i>参数：</i><br/>
+	 * 
+	 * @param order
+	 *            <i>order参数包含字段信息参考：</i><br/>
+	 *            "orderNo": "订单编号", <br/>
+	 *            <dt><span class="strong">返回</span></dt><br/>
+	 *            //订单列表 "orderId": 订单自增长编号, <br/>
+	 *            "orderPeopleId": 用户编号, <br/>
+	 *            "orderNo": "订单号", <br/>
+	 *            "orderTime": "下单日期", <br/>
+	 *            "orderPrice": 订单金额, <br/>
+	 *            "orderUserName": "收货人", <br/>
+	 *            "orderPhone": "联系电话", <br/>
+	 *            "orderAddress": "收货地址", <br/>
+	 *            "orderDescription": "订单描述留言", <br/>
+	 *            "orderExpress": 快递方式, <br/>
+	 *            "orderExpressTitle": 快递方式-送货上门, <br/>
+	 *            "orderPayment": 支付方式－数值, <br/>
+	 *            "orderPaymentTitle": "支付方式－面付", <br/>
+	 *            "orderStatus": 订单状态－数值, <br/>
+	 *            "orderStatusTitle": "订单状态－已付款", <br/>
+	 *            "orderCategoryId": 订单分类－平台自定义, <br/>
+	 *            "orderModelId": 所属模块-平台自定义, <br/>
+	 *            "peopleUser": {<br/>
+	 *            "peopleUserIcon": "头像", <br/>
+	 *            "peopleUserNickName": "昵称", <br/>
+	 *            "peopleUserRealName": "真实姓名", <br/>                
+	 * @param order
+	 * @param request
+	 * @param response
+	 */
+	public void confirm(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
+			HttpServletResponse response) {
+		
+		order.setOrderStatus(OrderStatusEnum.SUCCESS);
+	}
 
 }
