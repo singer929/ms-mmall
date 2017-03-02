@@ -27,7 +27,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.basic.biz.ICategoryBiz;
@@ -119,4 +122,45 @@ public class FreightAction extends BaseAction {
 			freightBiz.saveEntity(freightEntity);
 		}				
 	}	
+	
+	/**
+	 * 运费
+	 * @param freigh
+	 *  <i>freigh参数包含字段信息参考：</i><br/>
+	 *            freightCityId:城市编号<br/>
+	 *            freightExpressId:快递编号<br/>
+	 *            scale：快递的重量<br/>
+	 * <dt><span class="strong">返回：邮费价格</span></dt><br/>
+	 * @param response
+	 * @param request
+	 */
+	@PostMapping("/cost")
+	@ResponseBody
+	public void cost(@ModelAttribute FreightEntity freigh, HttpServletResponse response, HttpServletRequest request) {
+		FreightEntity freightentity = freightBiz.queryByCityExpress(freigh);
+		String weigth = request.getParameter("scale");
+		double scale = Double.parseDouble(weigth);
+		boolean op = false;
+		if(freightentity == null){
+			this.outJson(response, op,getResString("")); 
+		}else if(scale <= 0){
+			this.outJson(response, op,getResString(""));
+		}else{
+			op = true;
+			double FreightBasePrice = freightentity.getFreightBasePrice();					//基础运费
+			double FreightBaseAmount = freightentity.getFreightBaseAmount();				//基础重量
+			double FreightIncreasePrice = freightentity.getFreightIncreasePrice();			//增长运费
+			double FreightIncreaseAmount = freightentity.getFreightIncreaseAmount();		//增长数量
+			double surplusWeight = scale - FreightBaseAmount;						//获取超过的部分
+			double IncreasePrice = Math.ceil(surplusWeight/FreightIncreaseAmount);	//获取超过的次数
+			if(surplusWeight<0){
+				String baseAmount =String.valueOf(FreightBaseAmount);
+				this.outJson(response, op, baseAmount);							//如果不超过基础重量，直接输出基础运费
+			}else{
+				double postage = FreightBasePrice+FreightIncreasePrice*IncreasePrice;
+				String cost =String.valueOf(postage);
+				this.outJson(response, op, cost);										//如果超出，输出计算后的运费
+			}
+		}
+	}
 }

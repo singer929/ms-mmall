@@ -99,5 +99,11 @@ public class OrderBizImpl extends net.mingsoft.order.biz.impl.OrderBizImpl imple
 		return mallOrderDao.getByOrderNo(orderNo);
 	}
 
+	@Override
+	public void editOrderStatus(net.mingsoft.order.entity.OrderEntity orderEntity) {
+		mallOrderDao.editOrderStatus(orderEntity);
+		
+	}
+
 	
 }

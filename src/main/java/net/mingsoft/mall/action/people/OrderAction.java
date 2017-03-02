@@ -47,7 +47,9 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 	@Resource(name = "mallOrderBiz")
 	private IOrderBiz mallOrderBiz;
 	
-
+	@Autowired
+	private IOrderBiz orderBiz;
+	
 	
 
 	/**
@@ -259,10 +261,13 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 	 * @param request
 	 * @param response
 	 */
+	@RequestMapping("/confirm")
 	public void confirm(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
 			HttpServletResponse response) {
-		
-		order.setOrderStatus(OrderStatusEnum.SUCCESS);
+		net.mingsoft.order.entity.OrderEntity orderEntity = orderBiz.getByOrderNo(order.getOrderNo());
+		orderEntity.setOrderStatus(OrderStatusEnum.SUCCESS);
+		orderBiz.editOrderStatus(orderEntity);
+		this.outJson(response, orderEntity);
 	}
 
 }

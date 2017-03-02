@@ -22,5 +22,5 @@ public interface IOrderBiz extends net.mingsoft.order.biz.IOrderBiz {
 
 	List query(OrderEntity entity);
 
-	
+	public void editOrderStatus(net.mingsoft.order.entity.OrderEntity orderEntity);
 }

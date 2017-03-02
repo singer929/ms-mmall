@@ -17,4 +17,6 @@ public interface IOrderDao extends IBaseDao {
 	 * @return 订单实体
 	 */
 	 OrderEntity getByOrderNo(@Param("orderNo") String orderNo);
+	 
+	 public void editOrderStatus(net.mingsoft.order.entity.OrderEntity orderEntity);
 }

@@ -98,10 +98,12 @@
 			open="(" separator="," close=")">#{item}</foreach>
 		</where>
 	</delete>
+	
 	<!--查询全部-->	
 	<select id="queryAll" resultMap="resultMap">
 		select * from mall_order_comment order by OC_COMMENT_ID desc
 	</select>
+	
 	<!--条件查询-->	
 	<select id="query" resultMap="resultMap">
 		select *,people_user.PU_NICKNAME from mall_order_comment 
@@ -118,6 +120,7 @@
 		</where>		
 		order by OC_COMMENT_ID desc
 	</select>
+	
 	<!-- 根据id查询所有当前商品评论 -->
 	<select id="queryBycommentBasicId" resultMap="resultMap" parameterType="net.mingsoft.mall.entity.OrderCommentEntity">
 		select * from comment where COMMENT_BASICID = #{commentBasicId}

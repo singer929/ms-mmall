@@ -89,7 +89,7 @@ public class AreaDetailAction extends BaseAction {
 	}
 	
 	/**
-	 * 区域运费的修改和添加
+	 * 区域运费的修改
 	 * @param areaDetail
 	 * @param freightEntity
 	 * @param response
@@ -97,15 +97,37 @@ public class AreaDetailAction extends BaseAction {
 	 */
 	@RequestMapping("/update")
 	private void update(@ModelAttribute AreaDetailEntity areaDetail, @ModelAttribute FreightEntity freightEntity,HttpServletResponse response, HttpServletRequest request){
-		//查询区域信息是否存在
-		BaseEntity FreightAreaDetailEntity = freightAreaDetailBiz.getEntity(areaDetail);
-		//修改或插入freight_area_detail表
-		if(FreightAreaDetailEntity == null ){
-			freightAreaDetailBiz.saveEntity(areaDetail);
-		}else{
-			freightAreaDetailBiz.updateEntity(areaDetail);
+		//修改freight_area_detail表
+		freightAreaDetailBiz.updateEntity(areaDetail);
+		//修改freigh表
+		String fadAreaId = request.getParameter("fadAreaId");
+		AreaEntity area = new AreaEntity();
+		area.setFaId(Integer.parseInt(fadAreaId));
+		BaseEntity freightAreaEntity = freightAreaBiz.getEntity(area);
+		String faCityIds = ((AreaEntity) freightAreaEntity).getFaCityIds();
+		String[] faCityId = faCityIds.split(",");
+		for(int i=0;i<faCityId.length;i++){
+			freightEntity.setFreightCityId(Integer.parseInt(faCityId[i]));
+			FreightEntity temporaryEntity = freightBiz.queryByCityExpress(freightEntity);
+			if(temporaryEntity == null){
+				freightBiz.saveEntity(freightEntity);
+			}else{
+				freightBiz.updateEntity(freightEntity);
+			}
 		}
-		//修改或插入freigh表
+	}
+	/**
+	 * 区域运费的插入
+	 * @param areaDetail
+	 * @param freightEntity
+	 * @param response
+	 * @param request
+	 */
+	@RequestMapping("/save")
+	private void save(@ModelAttribute AreaDetailEntity areaDetail, @ModelAttribute FreightEntity freightEntity,HttpServletResponse response, HttpServletRequest request){
+		//插入freigh_detail表
+		freightAreaDetailBiz.saveEntity(areaDetail);
+		//插入freigh表
 		String fadAreaId = request.getParameter("fadAreaId");
 		AreaEntity area = new AreaEntity();
 		area.setFaId(Integer.parseInt(fadAreaId));
