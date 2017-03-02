@@ -35,6 +35,13 @@ public interface IFreightBiz extends IBaseBiz {
 	public List<FreightEntity> queryByCity(int freightCityId);
 	
 	/**
+	 * 通过城市id查询启用数据
+	 * @param freightCityId
+	 * @return
+	 */
+	public List<FreightEntity> queryByCityEnable(int freightCityId);
+	
+	/**
 	 * 通过快递公司idfreightExpressId和freightCityId查询运费数据
 	 * @return
 	 */

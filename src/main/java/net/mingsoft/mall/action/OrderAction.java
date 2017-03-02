@@ -2,6 +2,7 @@ package net.mingsoft.mall.action;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.mingsoft.base.constant.e.BaseEnum;
 import com.mingsoft.base.filter.DateValueFilter;
 import com.mingsoft.base.filter.DoubleValueFilter;
+import com.mingsoft.basic.biz.ICategoryBiz;
+import com.mingsoft.basic.entity.CategoryEntity;
+import com.mingsoft.freight.biz.IFreightBiz;
+import com.mingsoft.freight.entity.FreightEntity;
 import com.mingsoft.util.StringUtil;
 
 import net.mingsoft.basic.bean.EUListBean;
@@ -34,6 +40,10 @@ public class OrderAction extends BaseAction {
 
 	@Resource(name = "mallOrderBiz")
 	private IOrderBiz mallOrderBiz;
+	@Autowired
+	private ICategoryBiz categoryBiz;
+	@Autowired
+	private IFreightBiz freightBiz;
 
 
 	/**
@@ -115,6 +125,31 @@ public class OrderAction extends BaseAction {
 		_order.setOrderExpressNo(order.getOrderExpressNo()); //设置快递号
 		_order.setOrderExprecessPrice(order.getOrderExprecessPrice()); //设置快递价格
 		mallOrderBiz.updateEntity(_order);
+		this.outJson(response, true);
+	}
+	
+	/**
+	 * 返回已启用的快递公司名称集合
+	 * @param order
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/delivery")
+	@ResponseBody
+	public void delivery(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
+			HttpServletResponse response) {
+		int freightCityId = Integer.parseInt(request.getParameter("orderExpressCityId"));		 
+		List<FreightEntity> freight = freightBiz.queryByCityEnable(freightCityId);
+		int[] expressCompanyIds = new int[freight.size()];
+		for( int i = 0 ; i<freight.size() ; i++){
+			expressCompanyIds[i] = freight.get(i).getFreightExpressId();
+		}
+		List<String> expressCompanyTitles = new ArrayList();
+		for( int i = 0 ; i<freight.size() ; i++){
+			expressCompanyTitles.add(((CategoryEntity) categoryBiz.getEntity(expressCompanyIds[i])).getCategoryTitle());
+		}
+		request.setAttribute("expressCompanyTitles", expressCompanyTitles);
+		request.setAttribute("expressCompanyIds", expressCompanyIds);
 		this.outJson(response, true);
 	}
 	

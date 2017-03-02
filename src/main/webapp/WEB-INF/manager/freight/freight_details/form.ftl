@@ -71,9 +71,14 @@
     					freightBaseAmount : freightBaseAmount,
     					freightIncreasePrice : freightIncreasePrice,
     					freightIncreaseAmount : freightIncreaseAmount	    					
-    				}
-    			)
+    				},
+    				function(data,status){}
+    			);
     		}
+    		$('.ms-notifications').offset({top:43}).notify({
+				type:'success',
+				message: { text:'保存成功！' }
+			}).show();
 		}
 		//更新数据后刷新页面
 		location.reload();

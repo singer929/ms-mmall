@@ -13,7 +13,6 @@
 			    list=orderStatus
 			    listKey="id" 
 			    listValue="name"
-			    value="${productShelf?default('')}"
 			/>			
 			
 			<@ms.searchFormButton>
@@ -78,9 +77,9 @@
 	        return $("#orderDetail").tmpl(row);
     	}
     	
- 	   function search() {
- 	   	$("#orderTable").bootstrapTable('refresh');
- 	   }
+		function search() {
+			$("#orderTable").bootstrapTable('refresh');
+		}
  	   
  	   
  </script>
@@ -116,9 +115,15 @@
 		<table class="table">
 			<tr>
 				<td align="right">
-					<button type="button" class="btn btn-primary expressOrder"  data-order-no="<#noparse>${orderNo}</#noparse>" >发货</button>
-					<button type="button" class="btn btn-primary cancleOrder"   data-order-no="<#noparse>${orderNo}</#noparse>" >取消</button>
-					<button type="button" class="btn btn-primary printOrder"  data-order-no="<#noparse>${orderNo}</#noparse>" >打印</button>
+					{{if <#noparse>orderStatusTitle</#noparse> =="待发货" || <#noparse>orderStatusTitle</#noparse> =="已付款"}}
+						<button id ="delivery" type="button" class="btn btn-primary expressOrder"  data-order-no="<#noparse>${orderNo}</#noparse>" data-order-express-city-id="<#noparse>${orderExpressCityId}</#noparse>">发货</button>		
+					{{/if}}
+					{{if <#noparse>orderStatusTitle</#noparse> =="待付款"}}
+						<button type="button" class="btn btn-primary cancleOrder"   data-order-no="<#noparse>${orderNo}</#noparse>" >取消</button>					
+					{{/if}}
+					{{if <#noparse>orderStatusTitle</#noparse> =="已付款" || <#noparse>orderStatusTitle</#noparse> =="已发货" || <#noparse>orderStatusTitle</#noparse> =="交易成功" || <#noparse>orderStatusTitle</#noparse> =="交易关闭" || <#noparse>orderStatusTitle</#noparse> =="待发货"}}
+						<button type="button" class="btn btn-primary printOrder"  data-order-no="<#noparse>${orderNo}</#noparse>" >打印</button>					
+					{{/if}}
 				</td>
 			</tr>
 		</table>
@@ -134,13 +139,12 @@
 			 action="${managerPath}/mall/order/express.do" method="post"    class="form-horizontal"  
 			style="form-horizontal" isvalidation=true tooltip=true>
 				<input type="hidden" name="orderNo" id="expressOrderNo"/>
-				<@ms.text
-					name="orderExpressTitle" 
-					label="快递公司" 
-					width="200"   
-					placeholder="这里要改成下拉选择快递公司" 
-					validation={
-					"maxlength":"50","required":"true","data-bv-notempty-message":"必填项目","data-bv-stringlength-message":"15个字符以内!"}/>
+				<@ms.select 
+	 				width="200"
+				    name="expresscompany" 
+				    label="快递公司" 
+				    list=expressCompanyTitles
+				    />
 				<@ms.number label="价格"  
 					name="orderExpressPrice" 
 					label="快递价格"
@@ -169,6 +173,15 @@
 		$("#orderTable").delegate(".expressOrder","click",function() {
 			$("#expressOrderNo").val($(this).data("order-no"));
 			$("#expressOrderWindow").modal();
-		});
-	})
+			var orderExpressCityId = $("#delivery").attr("data-order-express-city-id");
+			$.post("${managerPath}/mall/order/delivery.do",
+				{
+					orderExpressCityId:orderExpressCityId
+				},				
+				function(data,status){
+				
+				}
+			);
+		})		
+	});
 </script>

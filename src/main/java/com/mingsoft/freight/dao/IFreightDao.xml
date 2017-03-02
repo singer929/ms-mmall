@@ -30,6 +30,15 @@
 	<!-- 查询用户列表结束 -->
 	
 	<!-- 查询基础数据开始 -->
+	<select id="queryByCityEnable" resultMap="resultMap" parameterType="int">	
+		select * from freight 		
+		<where> 
+			and freight_city_id= #{freightCityId} and	freight_enable= 1	
+		</where>
+	</select>
+	<!-- 查询用户列表结束 -->
+	
+	<!-- 查询基础数据开始 -->
 	<select id="queryByCityExpress" resultMap="resultMap" parameterType="com.mingsoft.freight.entity.FreightEntity">	
 		select * from freight 		
 		<where> 

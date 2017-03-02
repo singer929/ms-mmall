@@ -93,4 +93,12 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 	public List<FreightEntity> queryAllFreight(int freightCityId, int categoryModelId) {		
 		return freightDao.queryAllFreight(freightCityId, categoryModelId);
 	}
+
+	/**
+	 * 通过城市id查询启用数据
+	 */
+	@Override
+	public List<FreightEntity> queryByCityEnable(int freightCityId) {
+		return freightDao.queryByCityEnable(freightCityId);
+	}
 }
