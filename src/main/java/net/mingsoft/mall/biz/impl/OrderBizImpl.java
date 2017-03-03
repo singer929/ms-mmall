@@ -98,7 +98,9 @@ public class OrderBizImpl extends net.mingsoft.order.biz.impl.OrderBizImpl imple
 		// TODO Auto-generated method stub
 		return mallOrderDao.getByOrderNo(orderNo);
 	}
-
+	/**
+	 * 根据订单号修改订单状态
+	 */
 	@Override
 	public void editOrderStatus(net.mingsoft.order.entity.OrderEntity orderEntity) {
 		mallOrderDao.editOrderStatus(orderEntity);

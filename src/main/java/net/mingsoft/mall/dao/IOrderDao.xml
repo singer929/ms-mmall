@@ -108,14 +108,21 @@
 	</select>
 	<!-- 查询订单结束 -->
 
-<!-- 查询订单开始 -->
+	<!-- 查询订单开始 -->
 	<select id="getByOrderNo" resultMap="resultMap"
 		parameterType="String">
-		select `order`.*,people_user.* from `order`
+		select `order`.*,people_user.* ,mall_order_comment.OC_COMMENT_ID from `order`
 		left join people on ORDER_PEOPLEID=PEOPLE_ID 
 		left join people_user on ORDER_PEOPLEID = PU_PEOPLE_ID
+		left join mall_order_comment on OC_ORDER_ID=ORDER_ID 
 		where ORDER_NO = #{orderNo}
 	</select>
 	<!-- 查询订单结束 -->
+	
+	<!-- 修改订单状态开始 -->
+	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.AreaDetailEntity">
+		update `order` set  ORDER_STATUS = #{orderStatus} where ORDER_NO = #{orderNo}
+	</update>
+	<!-- 修改订单状态结束 -->
 
 </mapper>

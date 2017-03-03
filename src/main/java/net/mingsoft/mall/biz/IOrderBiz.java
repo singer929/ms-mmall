@@ -21,6 +21,10 @@ public interface IOrderBiz extends net.mingsoft.order.biz.IOrderBiz {
 	int saveEntity(OrderEntity order, int[] cartIds);
 
 	List query(OrderEntity entity);
-
+	
+	/**
+	 * 根据订单号修改订单状态
+	 * @param orderEntity
+	 */
 	public void editOrderStatus(net.mingsoft.order.entity.OrderEntity orderEntity);
 }

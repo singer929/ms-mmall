@@ -83,18 +83,7 @@ public class AreaAction extends BaseAction {
 	}
 	
 	/**
-	 * 更新区域信息
-	 * @param area
-	 * @param response
-	 * @param request
-	 */
-	@RequestMapping("/update")
-	private void update(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		
-	}
-	
-	/**
-	 * 保存添加的区域信息
+	 * 保存和修改添加的区域信息
 	 * @param area
 	 * @param response
 	 * @param request
