@@ -129,28 +129,23 @@ public class FreightAction extends BaseAction {
 	 * @param freigh
 	 *  <i>freigh参数包含字段信息参考：</i><br/>
 	 *            freightCityId:城市编号<br/>
-	 *            ExpressTitle:快递编号<br/>
+	 *            freightExpressId:快递编号<br/>
 	 *            scale：快递的重量<br/>
 	 * <dt><span class="strong">返回：邮费价格</span></dt><br/>
 	 * @param response
 	 * @param request
 	 */
-	@PostMapping("/cost")
+	@RequestMapping("/cost")
 	@ResponseBody
 	public void cost(@ModelAttribute FreightEntity freigh, HttpServletResponse response, HttpServletRequest request) {
-		String ExpressTitle = request.getParameter("ExpressTitle");
-		CategoryEntity categoryEntity = new CategoryEntity();
-		categoryEntity.setCategoryTitle(ExpressTitle);
-		FreightEntity freightEntity = (FreightEntity) categoryBiz.getEntity(categoryEntity);
-		freigh.setFreightExpressId(freightEntity.getFreightExpressId());
 		FreightEntity freightentity = freightBiz.queryByCityExpress(freigh);
 		String weigth = request.getParameter("scale");
 		double scale = Double.parseDouble(weigth);
 		boolean op = false;
 		if(freightentity == null){
-			this.outJson(response, op,getResString("")); 
+			this.outJson(response, op); 
 		}else if(scale <= 0){
-			this.outJson(response, op,getResString(""));
+			this.outJson(response, op);
 		}else{
 			op = true;
 			double FreightBasePrice = freightentity.getFreightBasePrice();					//基础运费

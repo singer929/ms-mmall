@@ -62,7 +62,7 @@ public class FreightAction extends BaseAction {
 	 * @param response
 	 * @param request
 	 */
-	@PostMapping("/cost")
+	@RequestMapping("/cost")
 	@ResponseBody
 	public void cost(@ModelAttribute FreightEntity freigh, HttpServletResponse response, HttpServletRequest request) {
 		FreightEntity freightentity = freightBiz.queryByCityExpress(freigh);
@@ -70,9 +70,9 @@ public class FreightAction extends BaseAction {
 		double scale = Double.parseDouble(weigth);
 		boolean op = false;
 		if(freightentity == null){
-			this.outJson(response, op,getResString("")); 
+			this.outJson(response, op); 
 		}else if(scale <= 0){
-			this.outJson(response, op,getResString(""));
+			this.outJson(response, op);
 		}else{
 			op = true;
 			double FreightBasePrice = freightentity.getFreightBasePrice();					//基础运费

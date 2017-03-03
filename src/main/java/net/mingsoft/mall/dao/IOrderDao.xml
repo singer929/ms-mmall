@@ -21,6 +21,7 @@
 		<result column="PEOPLE_NAME" property="peopleName" />
 		<result column="ORDER_USERNAME" property="orderUserName" />
 		<result column="ORDER_EXPRESS" property="orderExpress" />
+		<result column="ORDER_EXPRECESS_PRICE" property="orderExprecessPrice" />
 		<result column="ORDER_EXPRESS_TITLE" property="orderExpressTitle" />
 		<result column="ORDER_EXPRESS_NO" property="orderExpressNo" />
 		<result column="ORDER_EXPRESS_CITY_ID" property="orderExpressCityId" />
