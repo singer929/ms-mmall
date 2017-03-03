@@ -3,6 +3,7 @@ package net.mingsoft.mall.action;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import com.mingsoft.freight.biz.IFreightBiz;
 import com.mingsoft.freight.entity.FreightEntity;
 import com.mingsoft.util.StringUtil;
 
+import net.mingsoft.base.util.JSONArray;
 import net.mingsoft.basic.bean.EUListBean;
 import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.biz.IOrderBiz;
@@ -129,7 +131,7 @@ public class OrderAction extends BaseAction {
 	}
 	
 	/**
-	 * 返回已启用的快递公司名称集合
+	 * 返回已启用的快递公司名称与id集合
 	 * @param order
 	 * @param request
 	 * @param response
@@ -138,19 +140,29 @@ public class OrderAction extends BaseAction {
 	@ResponseBody
 	public void delivery(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
 			HttpServletResponse response) {
-		int freightCityId = Integer.parseInt(request.getParameter("orderExpressCityId"));		 
-		List<FreightEntity> freight = freightBiz.queryByCityEnable(freightCityId);
-		int[] expressCompanyIds = new int[freight.size()];
+		int freightCityId = Integer.parseInt(request.getParameter("orderExpressCityId"));		 //获取orderExpressCityId
+		List<FreightEntity> freight = freightBiz.queryByCityEnable(freightCityId);				//根据orderExpressCityId查询freight表中的启用数据
+		int[] expressCompanyIds = new int[freight.size()];					
 		for( int i = 0 ; i<freight.size() ; i++){
-			expressCompanyIds[i] = freight.get(i).getFreightExpressId();
+			expressCompanyIds[i] = freight.get(i).getFreightExpressId();						//根据获取启用数据的集合遍历出expressCompanyIds集合
 		}
 		List<String> expressCompanyTitles = new ArrayList();
-		for( int i = 0 ; i<freight.size() ; i++){
+		for( int i = 0 ; i<freight.size() ; i++){												//通过id获取快递公司名称集合
 			expressCompanyTitles.add(((CategoryEntity) categoryBiz.getEntity(expressCompanyIds[i])).getCategoryTitle());
 		}
-		request.setAttribute("expressCompanyTitles", expressCompanyTitles);
-		request.setAttribute("expressCompanyIds", expressCompanyIds);
-		this.outJson(response, true);
+		List<Map> company = new ArrayList<Map>();
+		int key;  
+        Object value;  
+		for(int i = 0 ; i<freight.size() ; i++){					//将expressCompanyIds集合与快递公司名称集合组合成map数据
+			Map valueMap = new HashMap();
+			key = expressCompanyIds[i];
+			value = expressCompanyTitles.get(i);
+			valueMap.put("expressCompanyId", key);
+			valueMap.put("expressCompanyTitle", value);
+			company.add(valueMap);
+		}
+		String jsonStr = JSONArray.toJSONString(company);
+		this.outJson(response,jsonStr); 
 	}
 	
 }

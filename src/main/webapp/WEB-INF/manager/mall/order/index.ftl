@@ -89,7 +89,7 @@
 		        <tr>
 		            <td width="70"><img src="<#noparse>${$value.goodsThumbnail}</#noparse>" width="62" height="62"/></td>
 		            <td><#noparse>${$value.goodsName}</#noparse> <#noparse>${$value.goodsProductDetailText}</#noparse></td>
-		            <td>x<#noparse>${$value.goodsNum}</#noparse></td>
+		            <td class="goodsNum">x<#noparse>${$value.goodsNum}</#noparse></td>
 		        </tr>
 		        {{/each}}
 		</table>
@@ -141,9 +141,12 @@
 				<input type="hidden" name="orderNo" id="expressOrderNo"/>
 				<@ms.select 
 	 				width="200"
+	 				default="请选择快递公司"
 				    name="expresscompany" 
 				    label="快递公司" 
-				    list=expressCompanyTitles
+				    list=expresscompany
+				    listKey="id" 
+			    	listValue="name"
 				    />
 				<@ms.number label="价格"  
 					name="orderExpressPrice" 
@@ -179,9 +182,31 @@
 					orderExpressCityId:orderExpressCityId
 				},				
 				function(data,status){
-				
+					for( var i=0 ; i<data.length ; i++){
+						var value = data[i];
+						$("select[name=expresscompany]").append("<option value = "+value.expressCompanyId+">"+value.expressCompanyTitle+"</option>");
+					}
 				}
 			);
+		})
+		$("select[name=expresscompany]").on("change",function(){
+			var freightExpressId = $("select[name=expresscompany]").find("option:selected").val();
+			var freightCityId = $("#delivery").attr("data-order-express-city-id");
+			var nums = $(".table").find(".goodsNum").text();
+			var scale = nums.substring(1,nums.length);
+			if(freightExpressId != ""){
+				$.post("${managerPath}/freight/cost.do",
+					{
+						freightExpressId:freightExpressId,
+						scale:scale,
+						freightCityId:freightCityId
+					},				
+					function(data,status){
+						var cost = data.resuleMsg;
+						$("input[name=orderExpressPrice]").val(cost);
+					}
+				);
+			}
 		})		
 	});
 </script>
