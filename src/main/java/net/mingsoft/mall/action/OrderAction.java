@@ -35,6 +35,11 @@ import net.mingsoft.mall.biz.IOrderBiz;
 import net.mingsoft.mall.entity.OrderEntity;
 import net.mingsoft.order.constant.e.OrderStatusEnum;
 
+/**
+ * 订单查询，发货，取消功能
+ * @author 伍晶晶
+ *
+ */
 @Controller("managerMallOrder")
 @RequestMapping("/${managerPath}/mall/order")
 @Scope("request")
@@ -46,7 +51,6 @@ public class OrderAction extends BaseAction {
 	private ICategoryBiz categoryBiz;
 	@Autowired
 	private IFreightBiz freightBiz;
-
 
 	/**
 	 * 订单主界面
@@ -106,7 +110,6 @@ public class OrderAction extends BaseAction {
 		this.outJson(response, true);
 	}
 	
-	
 	/**
 	 * 订单发货,发货需要选中快递公司，填写快递单号
 	 * @param order 根据订单号发货
@@ -142,13 +145,11 @@ public class OrderAction extends BaseAction {
 			HttpServletResponse response) {
 		int freightCityId = Integer.parseInt(request.getParameter("orderExpressCityId"));//获取orderExpressCityId
 		List<FreightEntity> freight = freightBiz.queryByCityEnable(freightCityId);//根据orderExpressCityId查询freight表中的启用数据
-		int[] expressCompanyIds = new int[freight.size()];					
+		int[] expressCompanyIds = new int[freight.size()];	
+		List<String> expressCompanyTitles = new ArrayList();
 		for( int i = 0 ; i<freight.size() ; i++){
 			expressCompanyIds[i] = freight.get(i).getFreightExpressId();//根据获取启用数据的集合遍历出expressCompanyIds集合
-		}
-		List<String> expressCompanyTitles = new ArrayList();
-		for( int i = 0 ; i<freight.size() ; i++){//通过id获取快递公司名称集合
-			expressCompanyTitles.add(((CategoryEntity) categoryBiz.getEntity(expressCompanyIds[i])).getCategoryTitle());
+			expressCompanyTitles.add(((CategoryEntity) categoryBiz.getEntity(expressCompanyIds[i])).getCategoryTitle());//通过id获取快递公司名称集合
 		}
 		List<Map> company = new ArrayList<Map>();
 		int key;  
@@ -164,5 +165,4 @@ public class OrderAction extends BaseAction {
 		String jsonStr = JSONArray.toJSONString(company);
 		this.outJson(response,jsonStr); 
 	}
-	
 }

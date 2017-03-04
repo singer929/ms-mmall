@@ -182,10 +182,10 @@
 					orderExpressCityId:orderExpressCityId
 				},				
 				function(data,status){
-					$("select[name=expresscompany]").find("option").remove();
+					$("select[name=expresscompany]").find("option").remove();		//移除上次添加的<option>元素
 					for( var i=0 ; i<data.length ; i++){
 						var value = data[i];
-						$("select[name=expresscompany]").append("<option value = "+value.expressCompanyId+">"+value.expressCompanyTitle+"</option>");
+						$("select[name=expresscompany]").append("<option value = "+value.expressCompanyId+">"+value.expressCompanyTitle+"</option>");		//添加<option>元素
 					}
 				}
 			);
@@ -194,7 +194,12 @@
 			var freightExpressId = $("select[name=expresscompany]").find("option:selected").val();
 			var freightCityId = $("#delivery").attr("data-order-express-city-id");
 			var nums = $(".table").find(".goodsNum").text();
-			var scale = nums.substring(1,nums.length);
+			var numlist = new Array(50);
+			numlist = nums.split("x");		//分割（x1x1）的类型字符串
+			var scale = 0;
+			for(var i=1 ; i<numlist.length ; i++){
+				scale += parseInt(numlist[i]);
+			}
 			if(freightExpressId != ""){
 				$.post("${managerPath}/freight/cost.do",
 					{
