@@ -21,14 +21,13 @@
 		<result column="PEOPLE_NAME" property="peopleName" />
 		<result column="ORDER_USERNAME" property="orderUserName" />
 		<result column="ORDER_EXPRESS" property="orderExpress" />
-		<result column="ORDER_EXPRECESS_PRICE" property="orderExprecessPrice" />
+		<result column="ORDER_EXPRESS_PRICE" property="orderExpressPrice" />
 		<result column="ORDER_EXPRESS_TITLE" property="orderExpressTitle" />
 		<result column="ORDER_EXPRESS_NO" property="orderExpressNo" />
 		<result column="ORDER_EXPRESS_CITY_ID" property="orderExpressCityId" />
 		<result column="ORDER_JUDGE" property="orderJudge" />
 		<result column="ORDER_JUDGE_DATE" property="orderJudgeDatetime" />
 		<result column="goods_total_num" property="goodsTotalNum" />
-		<result column="STATUS_CATEGORY_TITLE" property="orderStatusTitle" />
 		<result column="STATUS_CATEGORY_TITLE" property="orderStatusTitle" />
 		<result column="OC_COMMENT_ID" property="commentId" />
 		<association property="category" column="ORDER_CATEGORYID"

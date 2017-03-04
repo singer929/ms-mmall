@@ -182,6 +182,7 @@
 					orderExpressCityId:orderExpressCityId
 				},				
 				function(data,status){
+					$("select[name=expresscompany]").find("option").remove();
 					for( var i=0 ; i<data.length ; i++){
 						var value = data[i];
 						$("select[name=expresscompany]").append("<option value = "+value.expressCompanyId+">"+value.expressCompanyTitle+"</option>");
@@ -202,10 +203,12 @@
 						freightCityId:freightCityId
 					},				
 					function(data,status){
-						var cost = data.resuleMsg;
+						var cost = data.resultMsg;
 						$("input[name=orderExpressPrice]").val(cost);
 					}
 				);
+			}else{
+				$("input[name=orderExpressPrice]").val("0");
 			}
 		})		
 	});

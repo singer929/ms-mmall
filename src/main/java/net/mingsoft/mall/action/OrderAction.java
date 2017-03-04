@@ -117,7 +117,7 @@ public class OrderAction extends BaseAction {
 	@ResponseBody
 	public void express(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
 			HttpServletResponse response) {
-		if(StringUtil.isBlank(order.getOrderExpressTitle()) || StringUtil.isBlank(order.getOrderExpressNo()) ||order.getOrderExprecessPrice()<0) {
+		if(StringUtil.isBlank(order.getOrderExpressTitle()) || StringUtil.isBlank(order.getOrderExpressNo()) ||order.getOrderExpressPrice()<0) {
 			this.outJson(response, false);
 			return;
 		}
@@ -125,7 +125,7 @@ public class OrderAction extends BaseAction {
 		_order.setOrderStatus(OrderStatusEnum.SHIPPED); //设置发货状态
 		_order.setOrderExpressTitle(order.getOrderExpressTitle()); //设置快递名称
 		_order.setOrderExpressNo(order.getOrderExpressNo()); //设置快递号
-		_order.setOrderExprecessPrice(order.getOrderExprecessPrice()); //设置快递价格
+		_order.setOrderExpressPrice(order.getOrderExpressPrice()); //设置快递价格
 		mallOrderBiz.updateEntity(_order);
 		this.outJson(response, true);
 	}
@@ -140,20 +140,20 @@ public class OrderAction extends BaseAction {
 	@ResponseBody
 	public void delivery(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
 			HttpServletResponse response) {
-		int freightCityId = Integer.parseInt(request.getParameter("orderExpressCityId"));		 //获取orderExpressCityId
-		List<FreightEntity> freight = freightBiz.queryByCityEnable(freightCityId);				//根据orderExpressCityId查询freight表中的启用数据
+		int freightCityId = Integer.parseInt(request.getParameter("orderExpressCityId"));//获取orderExpressCityId
+		List<FreightEntity> freight = freightBiz.queryByCityEnable(freightCityId);//根据orderExpressCityId查询freight表中的启用数据
 		int[] expressCompanyIds = new int[freight.size()];					
 		for( int i = 0 ; i<freight.size() ; i++){
-			expressCompanyIds[i] = freight.get(i).getFreightExpressId();						//根据获取启用数据的集合遍历出expressCompanyIds集合
+			expressCompanyIds[i] = freight.get(i).getFreightExpressId();//根据获取启用数据的集合遍历出expressCompanyIds集合
 		}
 		List<String> expressCompanyTitles = new ArrayList();
-		for( int i = 0 ; i<freight.size() ; i++){												//通过id获取快递公司名称集合
+		for( int i = 0 ; i<freight.size() ; i++){//通过id获取快递公司名称集合
 			expressCompanyTitles.add(((CategoryEntity) categoryBiz.getEntity(expressCompanyIds[i])).getCategoryTitle());
 		}
 		List<Map> company = new ArrayList<Map>();
 		int key;  
         Object value;  
-		for(int i = 0 ; i<freight.size() ; i++){					//将expressCompanyIds集合与快递公司名称集合组合成map数据
+		for(int i = 0 ; i<freight.size() ; i++){//将expressCompanyIds集合与快递公司名称集合组合成map数据
 			Map valueMap = new HashMap();
 			key = expressCompanyIds[i];
 			value = expressCompanyTitles.get(i);
