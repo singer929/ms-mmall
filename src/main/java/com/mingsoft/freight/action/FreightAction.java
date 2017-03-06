@@ -81,7 +81,7 @@ public class FreightAction extends BaseAction {
 		//返回给前端数据categoryJson，具体指的是查询后的数据
 		String str = JSONArray.toJSONString(list);
 		request.setAttribute("categoryJson", str);		
-		return view("/freight/freight_details/index");
+		return view("/freight/details/index");
 	}
 	
 	/**
@@ -101,7 +101,7 @@ public class FreightAction extends BaseAction {
 		List<FreightEntity> entityList = freightBiz.queryAllFreight(freightCityId , modelId);
 		request.setAttribute("freightList", entityList);
 		request.setAttribute("freightCityId", freightCityId);
-		return view("/freight/freight_details/form");		
+		return view("/freight/details/form");		
 	}
 	
 	/**
@@ -113,15 +113,19 @@ public class FreightAction extends BaseAction {
 	 */
 	@RequestMapping("/update")
 	public void update(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
-		//查找是否存在这条数据
-		FreightEntity result = freightBiz.queryByCityExpress(freightEntity);
-		if(result != null){
-			//更新运费数据
-			freightBiz.updateEntity(freightEntity);
-		}else{
-			//保存运费数据
-			freightBiz.saveEntity(freightEntity);
-		}				
+		freightBiz.updateEntity(freightEntity);
+	}
+	
+	/**
+	 * 保存运费基本数据
+	 * @param freightEntity
+	 * @param response
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/save")
+	public void save(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
+		freightBiz.saveEntity(freightEntity);
 	}	
 	
 	/**
@@ -141,13 +145,11 @@ public class FreightAction extends BaseAction {
 		FreightEntity freightentity = freightBiz.queryByCityExpress(freigh);
 		String weigth = request.getParameter("scale");
 		double scale = Double.parseDouble(weigth);
-		boolean op = false;
 		if(freightentity == null){
-			this.outJson(response, op); 
+			this.outJson(response, false); 
 		}else if(scale <= 0){
-			this.outJson(response, op);
+			this.outJson(response, false);
 		}else{
-			op = true;
 			double FreightBasePrice = freightentity.getFreightBasePrice();					//基础运费
 			double FreightBaseAmount = freightentity.getFreightBaseAmount();				//基础重量
 			double FreightIncreasePrice = freightentity.getFreightIncreasePrice();			//增长运费
@@ -156,11 +158,11 @@ public class FreightAction extends BaseAction {
 			double IncreasePrice = Math.ceil(surplusWeight/FreightIncreaseAmount);	//获取超过的次数
 			if(surplusWeight<0){
 				String baseAmount =String.valueOf(FreightBaseAmount);
-				this.outJson(response, op, baseAmount);							//如果不超过基础重量，直接输出基础运费
+				this.outJson(response, true, baseAmount);							//如果不超过基础重量，直接输出基础运费
 			}else{
 				double postage = FreightBasePrice+FreightIncreasePrice*IncreasePrice;
 				String cost =String.valueOf(postage);
-				this.outJson(response, op, cost);										//如果超出，输出计算后的运费
+				this.outJson(response, true, cost);										//如果超出，输出计算后的运费
 			}
 		}
 		

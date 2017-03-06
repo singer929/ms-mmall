@@ -49,7 +49,7 @@
 	
 	<!-- 查询城市列表开始 -->
 	<select id="queryAllFreight" resultMap="resultMap" parameterType="com.mingsoft.freight.entity.FreightEntity">	
-		SELECT c.CATEGORY_ID,c.CATEGORY_TITLE,
+		SELECT c.CATEGORY_ID,c.CATEGORY_TITLE,fre.freight_id,
 		fre.freight_city_id,fre.freight_express_id,fre.freight_base_price,fre.freight_base_amount,
 		fre.freight_increase_price,fre.freight_increase_amount,fre.freight_enable
 		FROM category c 

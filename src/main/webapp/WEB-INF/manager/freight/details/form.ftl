@@ -11,6 +11,7 @@
 		           	<#list freightList as freight>
 			        	<tr> 
 			        		<td>
+			        			<input type="hidden" name="freightId" value="${freight.freightId?default('')}"/>
 								<input type="checkbox" name="ids" value="${freight.freExpress.categoryId?default('')}" id = "checkedId" 
 									<#if freight.freightEnable?has_content>
 										<#if freight.freightEnable == 1>
@@ -33,7 +34,8 @@
 			            	<td>
 			            		<@ms.number id="freightIncreaseAmount" name="freightIncreaseAmount"  width="100"  value="${freight.freightIncreaseAmount?default('')}" style = "padding-left:0px;" min=0 max=999999 isFloat=true/>
 			            	</td>			           	            
-				            <input type="hidden" name="freightCityId" value="${freightCityId?default('')}"/>	
+				            <input type="hidden" name="freightCityId" value="${freightCityId?default('')}"/>
+				            	
 				        </tr>
 			        </#list>
 	           	<#else>
@@ -50,6 +52,7 @@
 		var checked = 0;	    		
 		for(var i = 0 ; i < checkedId.length ; i++){
 			var freightCityId = $("input[name = freightCityId]").val();
+			var freightId = $("input[name = freightId]").val();
     		var freightExpressId = $(checkedId[i]).closest("tr").find(".categoryId").text();
     		var freightBasePrice = $(checkedId[i]).closest("tr").find("input[name = freightBasePrice]").val();
     		var freightBaseAmount = $(checkedId[i]).closest("tr").find("input[name = freightBaseAmount]").val();
@@ -62,23 +65,38 @@
 			}
 			//判断所有的值是否合法或为空
 			if((freightBasePrice >=0 && freightBasePrice != "" && freightBasePrice <= 999999) && (freightBaseAmount >=0 && freightBaseAmount != "" && freightBaseAmount <= 999999) && (freightIncreasePrice >=0 && freightIncreasePrice != "" && freightIncreasePrice <= 999999) && (freightIncreaseAmount >=0 && freightIncreaseAmount != "" && freightIncreaseAmount <= 999999) ){
-    			$.post("${managerPath}/freight/update.do",
-    				{
-    					freightEnable : checked,
-    					freightCityId : freightCityId,
-    					freightExpressId : freightExpressId,
-    					freightBasePrice : freightBasePrice,
-    					freightBaseAmount : freightBaseAmount,
-    					freightIncreasePrice : freightIncreasePrice,
-    					freightIncreaseAmount : freightIncreaseAmount	    					
-    				},
-    				function(data,status){}
-    			);
+    			if(freightId > 0){			//判断是否保存过这条数据，为真则更新数据
+    				$.post("${managerPath}/freight/update.do",
+	    				{
+	    					freightEnable : checked,
+	    					freightCityId : freightCityId,
+	    					freightExpressId : freightExpressId,
+	    					freightBasePrice : freightBasePrice,
+	    					freightBaseAmount : freightBaseAmount,
+	    					freightIncreasePrice : freightIncreasePrice,
+	    					freightIncreaseAmount : freightIncreaseAmount	    					
+	    				},
+	    				function(data,status){}
+	    			);
+    			}else{				//保存数据
+    				$.post("${managerPath}/freight/save.do",
+	    				{
+	    					freightEnable : checked,
+	    					freightCityId : freightCityId,
+	    					freightExpressId : freightExpressId,
+	    					freightBasePrice : freightBasePrice,
+	    					freightBaseAmount : freightBaseAmount,
+	    					freightIncreasePrice : freightIncreasePrice,
+	    					freightIncreaseAmount : freightIncreaseAmount	    					
+	    				},
+	    				function(data,status){}
+	    			);
+    			}
     		}
     		$('.ms-notifications').offset({top:43}).notify({
 				type:'success',
 				message: { text:'保存成功！' }
-			}).show();
+			}).show();	
 		}
 		//更新数据后刷新页面
 		location.reload();

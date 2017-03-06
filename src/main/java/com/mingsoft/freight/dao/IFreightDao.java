@@ -58,18 +58,4 @@ public interface IFreightDao extends IBaseDao {
 	 */
 	public List<FreightEntity> queryAllFreight(@Param("freightCityId") int freightCityId ,  @Param("categoryModelId") int categoryModelId);
 	
-	
-	/**
-	 * 保存数据
-	 * @param entity
-	 * @return
-	 */
-	public void saveEntity(FreightEntity entity);
-	
-	/**
-	 * 通过快递公司idfreightExpressId和freightCityId更新运费数据
-	 * @param entity
-	 * @return
-	 */
-	public void updateEntity(FreightEntity entity);
 }

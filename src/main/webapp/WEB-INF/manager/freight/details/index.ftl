@@ -17,6 +17,7 @@
 	</@ms.panel>
 </@ms.html5>
 <script>
+	//获取树节点的城市ID categoryId追加一个src
 	function getZtreeId(event,treeId,treeNode){				
 		$("#listFrame").attr("src","${managerPath}/freight/form.do?categoryId="+treeNode.categoryId);							
 	}
