@@ -14,7 +14,7 @@
 			<#list faList as faListEntity>
 				<tr>
 					<td>
-						<input type="checkbox" name="ids" id="checkId"
+						<input type="checkbox" name="ids"
 						<#if faListEntity.fadEnable?has_content>
 							<#if faListEntity.fadEnable = 1>
 								checked="checked"
@@ -105,63 +105,56 @@
 <script>
 $(function(){
 	$("#saveButton").click(function(){
-		var fadEnable = 0;
-		for(var i=0;i<checkId.length;i++){
-			var fadId = $(checkId[i]).closest("tr").find("input[name=fadBasePrice]").attr("fadId");
-			var fadExpressId = $(checkId[i]).closest("tr").find("input[name=fadBasePrice]").attr("expressId");
-			var fadAreaId = $(checkId[i]).closest("tr").find("input[name=fadBasePrice]").attr("areaid");
-			var fadBasePrice = $(checkId[i]).closest("tr").find("input[name=fadBasePrice]").val();
-			var fadBaseAmount = $(checkId[i]).closest("tr").find("input[name=fadBaseAmount]").val();
-			var fadIncreasePrice = $(checkId[i]).closest("tr").find("input[name=fadIncreasePrice]").val();
-			var fadIncreaseAmount = $(checkId[i]).closest("tr").find("input[name=fadIncreaseAmount]").val();
-			if(checkId[i].checked){
-				fadEnable = "1";
-			}else{
-				fadEnable = "0";
+		var edit = [];
+		var add = [];
+		$(".table-hover input[name=ids]").each(function(){
+			var fadEnable = 0;
+			var fadId = $(this).closest("tr").find("input[name=fadBasePrice]").attr("fadId");
+			var fadExpressId = $(this).closest("tr").find("input[name=fadBasePrice]").attr("expressId");
+			var fadAreaId = $(this).closest("tr").find("input[name=fadBasePrice]").attr("areaid");
+			var fadBasePrice = $(this).closest("tr").find("input[name=fadBasePrice]").val();
+			var fadBaseAmount = $(this).closest("tr").find("input[name=fadBaseAmount]").val();
+			var fadIncreasePrice = $(this).closest("tr").find("input[name=fadIncreasePrice]").val();
+			var fadIncreaseAmount = $(this).closest("tr").find("input[name=fadIncreaseAmount]").val();
+			if($(this).is(':checked')){ 					//判断复选框是否选中
+				fadEnable = 1;
+		  	}else{
+		  		fadEnable = 0;
+		  	}
+		  	var obj = new Object();
+			obj.fadExpressId=fadExpressId;
+			obj.fadAreaId=fadAreaId;
+			obj.fadEnable=fadEnable;
+			obj.fadBasePrice=fadBasePrice;
+			obj.fadBaseAmount=fadBaseAmount;
+			obj.fadIncreasePrice=fadIncreasePrice;
+			obj.fadIncreaseAmount=fadIncreaseAmount;
+			if(fadId>0){
+				edit.push(obj);
 			}
-			if(fadId > 0){
-				$.post("${managerPath}/freight/areaDetail/update.do",
-					{
-						//修改或插入freight_area_detail表
-						fadExpressId:fadExpressId,
-						fadAreaId:fadAreaId,
-						fadEnable:fadEnable,
-						fadBasePrice:fadBasePrice,
-						fadBaseAmount:fadBaseAmount,
-						fadIncreasePrice:fadIncreasePrice,
-						fadIncreaseAmount:fadIncreaseAmount,
-						//修改或插入freigh表
-						freightEnable : fadEnable,
-						freightExpressId : fadExpressId,
-						freightBasePrice : fadBasePrice,
-						freightBaseAmount : fadBaseAmount,
-						freightIncreasePrice : fadIncreasePrice,
-						freightIncreaseAmount : fadIncreaseAmount	 
-					},
-					function(data,status){}
-				);
-			}else{
-				$.post("${managerPath}/freight/areaDetail/save.do",
-					{
-						//修改或插入freight_area_detail表
-						fadExpressId:fadExpressId,
-						fadAreaId:fadAreaId,
-						fadEnable:fadEnable,
-						fadBasePrice:fadBasePrice,
-						fadBaseAmount:fadBaseAmount,
-						fadIncreasePrice:fadIncreasePrice,
-						fadIncreaseAmount:fadIncreaseAmount,
-						//修改或插入freigh表
-						freightEnable : fadEnable,
-						freightExpressId : fadExpressId,
-						freightBasePrice : fadBasePrice,
-						freightBaseAmount : fadBaseAmount,
-						freightIncreasePrice : fadIncreasePrice,
-						freightIncreaseAmount : fadIncreaseAmount	 
-					},
-					function(data,status){}
-				);
+			if(fadId=0){
+				add.push(obj);
 			}
+			
+		})
+		var editStr = JSON.stringify(edit);
+		var addStr = JSON.stringify(add);
+		if(edit.length>0){
+			$.post("${managerPath}/freight/areaDetail/update.do",
+				{
+					str:editStr
+				},
+				function(data,status){}
+			);
+		}
+		if(add.length>0){
+			$.post("${managerPath}/freight/areaDetail/save.do",
+				{
+					str:addStr
+					
+				},
+				function(data,status){}
+			);
 		}
 		$('.ms-notifications').offset({top:43}).notify({
 			type:'success',

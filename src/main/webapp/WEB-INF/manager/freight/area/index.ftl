@@ -45,7 +45,7 @@
 						</@ms.table>
 						<script id="beforedareaAddTree" type="text/x-jquery-tmpl">
 							<td>
-								<input type="checkbox" id="ids" name="ids">
+								<input type="checkbox"  name="ids" id="ids">
 							</td>
 						</script>
 					</@ms.form>
@@ -72,13 +72,12 @@
 			alert("区域名称不能为空，请重新输入")
 			return;
 		}
-		
-		for (var i=0;i<ids.length;i++ ){
-		  if(ids[i].checked){ 					//判断复选框是否选中
-		  	var dataId =$(ids[i]).parent().parent().attr("data-id");
-		 	value=value + dataId+ ","; 	//值的拼凑
-		  }
-		}
+		$("#tableConterent input[type=checkbox]").each(function(){
+			if($(this).is(':checked')){ 					//判断复选框是否选中
+		  		var dataId =$(this).parent().parent().attr("data-id");
+		 		value=value + dataId+ ","; 	//值的拼凑
+		  	}
+		})
 		value=value.substring(0,value.length-1);
 		if(value == ""){
 			alert("未选择区域城市，请重新选择")
@@ -145,14 +144,13 @@
 		var faTitle = obj.getAttribute("title");
 		$("input[name=faTitle]").val(faTitle);
 		var value="";
-		var cityIds = obj.getAttribute("cityIds");
 		var arr = cityIds.split(',');
-		for (var i=0;i<ids.length;i++ ){
-		  if(ids[i].checked){ 					//判断复选框是否选中
-		  	var dataId =$(ids[i]).parent().parent().attr("data-id");
-		 	value=value + dataId+ ","; 	//值的拼凑
-		  }
-		}
+		$("#tableConterent input[type=checkbox]").each(function(){
+			if($(this).is(':checked')){ 					//判断复选框是否选中
+		  		var dataId =$(this).parent().parent().attr("data-id");
+		 		value=value + dataId+ ","; 	//值的拼凑
+		  	}
+		})
 		if(cityIds != value){
 			var valuearr = value.split(',');
 			for(var i=0;i<valuearr.length;i++ ){

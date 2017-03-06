@@ -265,9 +265,14 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 	public void confirm(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
 			HttpServletResponse response) {
 		net.mingsoft.order.entity.OrderEntity orderEntity = orderBiz.getByOrderNo(order.getOrderNo());
-		orderEntity.setOrderStatus(OrderStatusEnum.SUCCESS);
-		orderBiz.editOrderStatus(orderEntity);
-		this.outJson(response, orderEntity);
+		if(orderEntity != null){
+			orderEntity.setOrderStatus(OrderStatusEnum.SUCCESS);
+			orderBiz.editOrderStatus(orderEntity);
+			this.outJson(response, orderEntity);
+		}else{
+			this.outJson(response, false);
+		}
+		
 	}
 
 }

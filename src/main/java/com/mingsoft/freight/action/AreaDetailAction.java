@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.freight.biz.IAreaBiz;
@@ -96,25 +97,38 @@ public class AreaDetailAction extends BaseAction {
 	 * @param request
 	 */
 	@RequestMapping("/update")
-	private void update(@ModelAttribute AreaDetailEntity areaDetail, @ModelAttribute FreightEntity freightEntity,HttpServletResponse response, HttpServletRequest request){
-		//修改freight_area_detail表
-		freightAreaDetailBiz.updateEntity(areaDetail);
-		//修改freigh表
-		String fadAreaId = request.getParameter("fadAreaId");
-		AreaEntity area = new AreaEntity();
-		area.setFaId(Integer.parseInt(fadAreaId));
-		BaseEntity freightAreaEntity = freightAreaBiz.getEntity(area);
-		String faCityIds = ((AreaEntity) freightAreaEntity).getFaCityIds();
-		String[] faCityId = faCityIds.split(",");
-		for(int i=0;i<faCityId.length;i++){
-			freightEntity.setFreightCityId(Integer.parseInt(faCityId[i]));
-			FreightEntity temporaryEntity = freightBiz.queryByCityExpress(freightEntity);
-			if(temporaryEntity == null){
-				freightBiz.saveEntity(freightEntity);
-			}else{
-				freightBiz.updateEntity(freightEntity);
+	private void update(HttpServletResponse response, HttpServletRequest request){
+		String str = request.getParameter("str");
+		List<AreaDetailEntity> areaDetailList = JSONArray.parseArray(str, AreaDetailEntity.class);
+		for(int i=0;i<areaDetailList.size();i++){
+			AreaDetailEntity areaDetailEntity = areaDetailList.get(i);
+			//修改freight_area_detail表
+			freightAreaDetailBiz.updateEntity(areaDetailEntity);
+			//修改freigh表
+			int fadAreaId = areaDetailEntity.fadAreaId;
+			AreaEntity area = new AreaEntity();
+			area.setFaId(fadAreaId);
+			BaseEntity freightAreaEntity = freightAreaBiz.getEntity(area);
+			String faCityIds = ((AreaEntity) freightAreaEntity).getFaCityIds();
+			String[] faCityId = faCityIds.split(",");
+			FreightEntity freightEntity = new FreightEntity();
+			freightEntity.setFreightEnable(areaDetailEntity.getFadEnable());
+			freightEntity.setFreightExpressId(areaDetailEntity.getFadExpressId());
+			freightEntity.setFreightBaseAmount(areaDetailEntity.getFadBaseAmount());
+			freightEntity.setFreightBasePrice(areaDetailEntity.getFadBasePrice());
+			freightEntity.setFreightIncreaseAmount(areaDetailEntity.getFadIncreaseAmount());
+			freightEntity.setFreightIncreasePrice(areaDetailEntity.getFadIncreasePrice());
+			for(int j=0;j<faCityId.length;j++){
+				freightEntity.setFreightCityId(Integer.parseInt(faCityId[j]));
+				FreightEntity temporaryEntity = freightBiz.queryByCityExpress(freightEntity);
+				if(temporaryEntity == null){
+					freightBiz.saveEntity(freightEntity);
+				}else{
+					freightBiz.updateEntity(freightEntity);
+				}
 			}
 		}
+		
 	}
 	/**
 	 * 区域运费的插入
@@ -124,23 +138,35 @@ public class AreaDetailAction extends BaseAction {
 	 * @param request
 	 */
 	@RequestMapping("/save")
-	private void save(@ModelAttribute AreaDetailEntity areaDetail, @ModelAttribute FreightEntity freightEntity,HttpServletResponse response, HttpServletRequest request){
-		//插入freigh_detail表
-		freightAreaDetailBiz.saveEntity(areaDetail);
-		//插入freigh表
-		String fadAreaId = request.getParameter("fadAreaId");
-		AreaEntity area = new AreaEntity();
-		area.setFaId(Integer.parseInt(fadAreaId));
-		BaseEntity freightAreaEntity = freightAreaBiz.getEntity(area);
-		String faCityIds = ((AreaEntity) freightAreaEntity).getFaCityIds();
-		String[] faCityId = faCityIds.split(",");
-		for(int i=0;i<faCityId.length;i++){
-			freightEntity.setFreightCityId(Integer.parseInt(faCityId[i]));
-			FreightEntity temporaryEntity = freightBiz.queryByCityExpress(freightEntity);
-			if(temporaryEntity == null){
-				freightBiz.saveEntity(freightEntity);
-			}else{
-				freightBiz.updateEntity(freightEntity);
+	private void save(HttpServletResponse response, HttpServletRequest request){
+		String str = request.getParameter("str");
+		List<AreaDetailEntity> areaDetailList = JSONArray.parseArray(str, AreaDetailEntity.class);
+		for(int i=0;i<areaDetailList.size();i++){
+			AreaDetailEntity areaDetailEntity = areaDetailList.get(i);
+			//插入freight_area_detail表
+			freightAreaDetailBiz.updateEntity(areaDetailEntity);
+			//插入freigh表
+			int fadAreaId = areaDetailEntity.fadAreaId;
+			AreaEntity area = new AreaEntity();
+			area.setFaId(fadAreaId);
+			BaseEntity freightAreaEntity = freightAreaBiz.getEntity(area);
+			String faCityIds = ((AreaEntity) freightAreaEntity).getFaCityIds();
+			String[] faCityId = faCityIds.split(",");
+			FreightEntity freightEntity = new FreightEntity();
+			freightEntity.setFreightEnable(areaDetailEntity.getFadEnable());
+			freightEntity.setFreightExpressId(areaDetailEntity.getFadExpressId());
+			freightEntity.setFreightBaseAmount(areaDetailEntity.getFadBaseAmount());
+			freightEntity.setFreightBasePrice(areaDetailEntity.getFadBasePrice());
+			freightEntity.setFreightIncreaseAmount(areaDetailEntity.getFadIncreaseAmount());
+			freightEntity.setFreightIncreasePrice(areaDetailEntity.getFadIncreasePrice());
+			for(int j=0;j<faCityId.length;j++){
+				freightEntity.setFreightCityId(Integer.parseInt(faCityId[j]));
+				FreightEntity temporaryEntity = freightBiz.queryByCityExpress(freightEntity);
+				if(temporaryEntity == null){
+					freightBiz.saveEntity(freightEntity);
+				}else{
+					freightBiz.updateEntity(freightEntity);
+				}
 			}
 		}
 	}

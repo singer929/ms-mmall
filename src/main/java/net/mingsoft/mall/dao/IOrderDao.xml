@@ -120,9 +120,10 @@
 	<!-- 查询订单结束 -->
 	
 	<!-- 修改订单状态开始 -->
-	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.AreaDetailEntity">
+	<update id="editOrderStatus" parameterType="com.mingsoft.freight.entity.AreaDetailEntity">
 		update `order` set  ORDER_STATUS = #{orderStatus} where ORDER_NO = #{orderNo}
 	</update>
-	<!-- 修改订单状态结束 -->
+	<!-- 修改订单状态结束 --> 
+	
 
 </mapper>
