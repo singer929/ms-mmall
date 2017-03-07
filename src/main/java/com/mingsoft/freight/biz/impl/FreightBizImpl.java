@@ -83,4 +83,30 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 	public List<FreightEntity> queryByCityEnable(int freightCityId) {
 		return freightDao.queryByCityEnable(freightCityId);
 	}
+
+	@Override
+	public String cost(FreightEntity freightentity, double scale) {
+		if(freightentity == null){
+			return "false"; 
+		}else if(scale <= 0){
+			return "false"; 
+		}else{
+			double FreightBasePrice = freightentity.getFreightBasePrice();					//基础运费
+			double FreightBaseAmount = freightentity.getFreightBaseAmount();				//基础重量
+			double FreightIncreasePrice = freightentity.getFreightIncreasePrice();			//增长运费
+			double FreightIncreaseAmount = freightentity.getFreightIncreaseAmount();		//增长数量
+			double surplusWeight = scale - FreightBaseAmount;								//获取超过的部分
+			if(surplusWeight<0){
+				String baseAmount =String.valueOf(FreightBaseAmount);
+				return baseAmount;															//如果不超过基础重量，直接输出基础运费
+			}else if(FreightIncreaseAmount != 0){
+				double IncreasePrice = Math.ceil(surplusWeight/FreightIncreaseAmount);		//获取超过的次数
+				double postage = FreightBasePrice+FreightIncreasePrice*IncreasePrice;
+				String cost =String.valueOf(postage);
+				return cost;																//如果超出，输出计算后的运费
+			}else{
+				return "false"; 
+			}
+		}
+	}
 }

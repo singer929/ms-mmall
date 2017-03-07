@@ -145,26 +145,11 @@ public class FreightAction extends BaseAction {
 		FreightEntity freightentity = freightBiz.queryByCityExpress(freigh);
 		String weigth = request.getParameter("scale");
 		double scale = Double.parseDouble(weigth);
-		if(freightentity == null){
-			this.outJson(response, false); 
-		}else if(scale <= 0){
+		String cost = freightBiz.cost(freightentity,scale);
+		if(cost == "false"){
 			this.outJson(response, false);
 		}else{
-			double FreightBasePrice = freightentity.getFreightBasePrice();					//基础运费
-			double FreightBaseAmount = freightentity.getFreightBaseAmount();				//基础重量
-			double FreightIncreasePrice = freightentity.getFreightIncreasePrice();			//增长运费
-			double FreightIncreaseAmount = freightentity.getFreightIncreaseAmount();		//增长数量
-			double surplusWeight = scale - FreightBaseAmount;						//获取超过的部分
-			double IncreasePrice = Math.ceil(surplusWeight/FreightIncreaseAmount);	//获取超过的次数
-			if(surplusWeight<0){
-				String baseAmount =String.valueOf(FreightBaseAmount);
-				this.outJson(response, true, baseAmount);							//如果不超过基础重量，直接输出基础运费
-			}else{
-				double postage = FreightBasePrice+FreightIncreasePrice*IncreasePrice;
-				String cost =String.valueOf(postage);
-				this.outJson(response, true, cost);										//如果超出，输出计算后的运费
-			}
+			this.outJson(response, cost);
 		}
-		
 	}
 }

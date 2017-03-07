@@ -556,7 +556,7 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 			
 			int index = sort.indexOf("-");
 			if (index == -1){
-				orderBy = sort;
+				orderBy = "product_" + sort;
 			}
 			else {
 				String[] arr = sort.split("-");

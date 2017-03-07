@@ -29,10 +29,14 @@ import org.springframework.stereotype.Service;
 
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
+import com.mingsoft.base.entity.BaseEntity;
+import com.mingsoft.freight.biz.IAreaBiz;
 import com.mingsoft.freight.biz.IAreaDetailBiz;
+import com.mingsoft.freight.biz.IFreightBiz;
 import com.mingsoft.freight.dao.IAreaDetailDao;
 import com.mingsoft.freight.entity.AreaDetailEntity;
 import com.mingsoft.freight.entity.AreaEntity;
+import com.mingsoft.freight.entity.FreightEntity;
 
 /**
  * 运费模块区域运费设置业务层实现类
@@ -47,6 +51,10 @@ public class AreaDetailBizImpl extends BaseBizImpl implements IAreaDetailBiz{
 	 */
 	@Autowired
 	private IAreaDetailDao freightAreaDetailDao; 
+	@Autowired
+	private IFreightBiz freightBiz;
+	@Autowired
+	private IAreaBiz freightAreaBiz;
 	
 	/**
 	 * 获取freightDao
@@ -61,5 +69,31 @@ public class AreaDetailBizImpl extends BaseBizImpl implements IAreaDetailBiz{
 	@Override
 	public List<AreaDetailEntity> queryFreightAreaDetail(int faId,int modelId) {
 		return freightAreaDetailDao.queryFreightAreaDetail(faId,modelId);
+	}
+	@Override
+	public void saveOrUpdate(AreaDetailEntity areaDetailEntity) {
+		int fadAreaId = areaDetailEntity.fadAreaId;
+		AreaEntity area = new AreaEntity();
+		area.setFaId(fadAreaId);
+		BaseEntity freightAreaEntity = freightAreaBiz.getEntity(area);
+		String faCityIds = ((AreaEntity) freightAreaEntity).getFaCityIds();
+		String[] faCityId = faCityIds.split(",");
+		FreightEntity freightEntity = new FreightEntity();
+		freightEntity.setFreightEnable(areaDetailEntity.getFadEnable());
+		freightEntity.setFreightExpressId(areaDetailEntity.getFadExpressId());
+		freightEntity.setFreightBaseAmount(areaDetailEntity.getFadBaseAmount());
+		freightEntity.setFreightBasePrice(areaDetailEntity.getFadBasePrice());
+		freightEntity.setFreightIncreaseAmount(areaDetailEntity.getFadIncreaseAmount());
+		freightEntity.setFreightIncreasePrice(areaDetailEntity.getFadIncreasePrice());
+		for(int j=0;j<faCityId.length;j++){
+			freightEntity.setFreightCityId(Integer.parseInt(faCityId[j]));
+			FreightEntity temporaryEntity = freightBiz.queryByCityExpress(freightEntity);
+			if(temporaryEntity == null){
+				freightBiz.saveEntity(freightEntity);
+			}else{
+				freightBiz.updateEntity(freightEntity);
+			}
+		}
+		
 	}
 }

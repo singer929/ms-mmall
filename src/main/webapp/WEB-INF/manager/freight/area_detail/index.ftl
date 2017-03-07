@@ -27,6 +27,7 @@
 	</@ms.panel>
 </@ms.html5>
 <script>
+	//页面跳转时修改ID
 	function getFaId(obj){
 		$("#listFrame").attr("src","${managerPath}/freight/areaDetail/list.do?faId="+obj.id);
 		$(obj).addClass('areaActive').siblings().removeClass('areaActive');

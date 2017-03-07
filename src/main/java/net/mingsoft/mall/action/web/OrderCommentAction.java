@@ -96,33 +96,33 @@ public class OrderCommentAction extends net.mingsoft.mall.action.BaseAction{
 	@ResponseBody
 	public void summar(@ModelAttribute OrderCommentEntity orderComment,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
 		List<OrderCommentEntity> orderComments = orderCommentBiz.queryBycommentBasicId(orderComment);
-		int commentCount = orderComments.size();	//好评数
-		if(commentCount == 0){
-			this.outJson(response, false);
-		}else{
-			int goodCount = 0;		//好评数
-			int generalCount = 0;	//中评数
-			int poorCount = 0;		//差评数
-			for(int i=0;i<commentCount;i++){
-				int points = orderComments.get(i).getCommentPoints();
-				if(points > 0 && points < 3){
-					poorCount++;
-				}else if(points == 3){
-					generalCount++;
-				}else if(points > 3 && points < 6){
-					goodCount++;
-				}
+		int commentCount = orderComments.size();	//评论总数
+		int goodCount = 0;		//好评数，评分为4、5的评价
+		int generalCount = 0;	//中评数，评分为3的评价
+		int poorCount = 0;		//差评数，评分为1、2的评价
+		for(int i=0;i<commentCount;i++){
+			int points = orderComments.get(i).getCommentPoints();
+			if(points > 0 && points < 3){  
+				poorCount++;
+			}else if(points == 3){
+				generalCount++;
+			}else if(points > 3 && points < 6){
+				goodCount++;
 			}
+		}
+		ProductCommentSummarBean pcsb = new ProductCommentSummarBean();
+		pcsb.setCommentCount(commentCount);
+		pcsb.setGeneralCount(generalCount);
+		pcsb.setGoodCount(goodCount);
+		pcsb.setPoorCount(poorCount);
+		if(commentCount == 0){			//没有评论时
+			pcsb.setGoodRate("0%");			
+			this.outJson(response, JSONObject.toJSONString(pcsb));
+		}else{							//正常返回
 			String goodRate = goodCount * 100 / commentCount + "%";
-			//返回数据
-			ProductCommentSummarBean pcsb = new ProductCommentSummarBean();
-			pcsb.setCommentCount(commentCount);
-			pcsb.setGeneralCount(generalCount);
-			pcsb.setGoodCount(goodCount);
 			pcsb.setGoodRate(goodRate);
-			pcsb.setPoorCount(poorCount);
 			this.outJson(response, JSONObject.toJSONString(pcsb));
 		}
-	}
 		
+	}
 }

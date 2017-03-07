@@ -28,9 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.base.entity.BaseEntity;
@@ -38,8 +36,6 @@ import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.freight.biz.IAreaBiz;
 import com.mingsoft.freight.biz.IAreaDetailBiz;
 import com.mingsoft.freight.biz.IFreightBiz;
-import com.mingsoft.freight.entity.AreaEntity;
-import com.mingsoft.freight.entity.FreightEntity;
 import com.mingsoft.freight.entity.AreaDetailEntity;
 
 import net.mingsoft.basic.util.BasicUtil;
@@ -53,8 +49,6 @@ import net.mingsoft.basic.util.BasicUtil;
 @RequestMapping("/${managerPath}/freight/areaDetail")
 public class AreaDetailAction extends BaseAction {
 	
-	@Autowired
-	private IFreightBiz freightBiz;
 	@Autowired
 	private IAreaBiz freightAreaBiz;
 	@Autowired
@@ -85,7 +79,6 @@ public class AreaDetailAction extends BaseAction {
 		int faId = Integer.parseInt(request.getParameter("faId"));
 		List<AreaDetailEntity> faList = freightAreaDetailBiz.queryFreightAreaDetail(faId,modelId);
 		request.setAttribute("faList", faList);
-		request.setAttribute("faId", faId);
 		return view("/freight/area_detail/list");
 	}
 	
@@ -105,28 +98,8 @@ public class AreaDetailAction extends BaseAction {
 			//修改freight_area_detail表
 			freightAreaDetailBiz.updateEntity(areaDetailEntity);
 			//修改freigh表
-			int fadAreaId = areaDetailEntity.fadAreaId;
-			AreaEntity area = new AreaEntity();
-			area.setFaId(fadAreaId);
-			BaseEntity freightAreaEntity = freightAreaBiz.getEntity(area);
-			String faCityIds = ((AreaEntity) freightAreaEntity).getFaCityIds();
-			String[] faCityId = faCityIds.split(",");
-			FreightEntity freightEntity = new FreightEntity();
-			freightEntity.setFreightEnable(areaDetailEntity.getFadEnable());
-			freightEntity.setFreightExpressId(areaDetailEntity.getFadExpressId());
-			freightEntity.setFreightBaseAmount(areaDetailEntity.getFadBaseAmount());
-			freightEntity.setFreightBasePrice(areaDetailEntity.getFadBasePrice());
-			freightEntity.setFreightIncreaseAmount(areaDetailEntity.getFadIncreaseAmount());
-			freightEntity.setFreightIncreasePrice(areaDetailEntity.getFadIncreasePrice());
-			for(int j=0;j<faCityId.length;j++){
-				freightEntity.setFreightCityId(Integer.parseInt(faCityId[j]));
-				FreightEntity temporaryEntity = freightBiz.queryByCityExpress(freightEntity);
-				if(temporaryEntity == null){
-					freightBiz.saveEntity(freightEntity);
-				}else{
-					freightBiz.updateEntity(freightEntity);
-				}
-			}
+			freightAreaDetailBiz.saveOrUpdate(areaDetailEntity);
+			
 		}
 		
 	}
@@ -146,28 +119,7 @@ public class AreaDetailAction extends BaseAction {
 			//插入freight_area_detail表
 			freightAreaDetailBiz.updateEntity(areaDetailEntity);
 			//插入freigh表
-			int fadAreaId = areaDetailEntity.fadAreaId;
-			AreaEntity area = new AreaEntity();
-			area.setFaId(fadAreaId);
-			BaseEntity freightAreaEntity = freightAreaBiz.getEntity(area);
-			String faCityIds = ((AreaEntity) freightAreaEntity).getFaCityIds();
-			String[] faCityId = faCityIds.split(",");
-			FreightEntity freightEntity = new FreightEntity();
-			freightEntity.setFreightEnable(areaDetailEntity.getFadEnable());
-			freightEntity.setFreightExpressId(areaDetailEntity.getFadExpressId());
-			freightEntity.setFreightBaseAmount(areaDetailEntity.getFadBaseAmount());
-			freightEntity.setFreightBasePrice(areaDetailEntity.getFadBasePrice());
-			freightEntity.setFreightIncreaseAmount(areaDetailEntity.getFadIncreaseAmount());
-			freightEntity.setFreightIncreasePrice(areaDetailEntity.getFadIncreasePrice());
-			for(int j=0;j<faCityId.length;j++){
-				freightEntity.setFreightCityId(Integer.parseInt(faCityId[j]));
-				FreightEntity temporaryEntity = freightBiz.queryByCityExpress(freightEntity);
-				if(temporaryEntity == null){
-					freightBiz.saveEntity(freightEntity);
-				}else{
-					freightBiz.updateEntity(freightEntity);
-				}
-			}
+			freightAreaDetailBiz.saveOrUpdate(areaDetailEntity);
 		}
 	}
 }

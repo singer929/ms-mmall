@@ -52,4 +52,9 @@ public interface IFreightBiz extends IBaseBiz {
 	 * @return
 	 */
 	public List<FreightEntity> queryAllFreight(int freightCityId , int categoryModelId);
+	
+	/**
+	 * 计算运费
+	 */
+	public String cost(FreightEntity freightentity,double scale );
 }

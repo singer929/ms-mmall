@@ -42,8 +42,7 @@
 			        	<#if faListEntity.fadExpress?has_content>
 			        		<input type="text" class="freightInput"
 				        		name="fadBasePrice"
-				        		areaid="${faId}"
-				        		fadId="${faListEntity.fadId?default('')}"
+				        		areaid="${faListEntity.fadAreaId?default('')}"
 				        		expressId="${faListEntity.fadExpress.categoryId?default('')}"
 				        		<#if faListEntity.fadBasePrice = 0> 
 				        			value = "0" 
@@ -109,7 +108,6 @@ $(function(){
 		var add = [];
 		$(".table-hover input[name=ids]").each(function(){
 			var fadEnable = 0;
-			var fadId = $(this).closest("tr").find("input[name=fadBasePrice]").attr("fadId");
 			var fadExpressId = $(this).closest("tr").find("input[name=fadBasePrice]").attr("expressId");
 			var fadAreaId = $(this).closest("tr").find("input[name=fadBasePrice]").attr("areaid");
 			var fadBasePrice = $(this).closest("tr").find("input[name=fadBasePrice]").val();
@@ -129,10 +127,10 @@ $(function(){
 			obj.fadBaseAmount=fadBaseAmount;
 			obj.fadIncreasePrice=fadIncreasePrice;
 			obj.fadIncreaseAmount=fadIncreaseAmount;
-			if(fadId>0){
+			if(fadAreaId>0){
 				edit.push(obj);
 			}
-			if(fadId=0){
+			if(fadAreaId=0){
 				add.push(obj);
 			}
 			
@@ -156,6 +154,7 @@ $(function(){
 				function(data,status){}
 			);
 		}
+		//保存成功提示
 		$('.ms-notifications').offset({top:43}).notify({
 			type:'success',
 			message: { text:'保存成功！' }
