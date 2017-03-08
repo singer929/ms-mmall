@@ -21,6 +21,8 @@ import net.mingsoft.mall.biz.IOrderCommentBiz;
 import net.mingsoft.mall.entity.OrderCommentEntity;
 
 import com.mingsoft.base.entity.ListJson;
+import com.mingsoft.basic.biz.IBasicBiz;
+import com.mingsoft.basic.entity.BasicEntity;
 import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
 
@@ -44,6 +46,12 @@ public class OrderCommentAction extends net.mingsoft.people.action.BaseAction{
 	 */	
 	@Autowired
 	private IOrderCommentBiz orderCommentBiz;
+	
+	/**
+	 * 注入基础业务层
+	 */
+	@Autowired
+	private IBasicBiz basicBiz;
 	
 	
 	/**
@@ -109,6 +117,10 @@ public class OrderCommentAction extends net.mingsoft.people.action.BaseAction{
 	@ResponseBody
 	public void save(@ModelAttribute OrderCommentEntity orderComment, HttpServletResponse response, HttpServletRequest request) {
 		orderComment.setCommentPoints(orderComment.getOcProduct());
+		int commentId = orderComment.getCommentId();
+		BasicEntity basicEntity = (BasicEntity) basicBiz.getEntity(commentId);
+		int basicComment = basicEntity.getBasicComment() + 1;
+		basicEntity.setBasicComment(basicComment);
 		if(orderComment.getCommentBasicId() <= 0){
 			this.outJson(response, null,false);
 			return;			
@@ -159,6 +171,7 @@ public class OrderCommentAction extends net.mingsoft.people.action.BaseAction{
 			return;			
 		}
 		orderComment.setCommentPeopleId(this.getPeopleBySession().getPeopleId());
+		
 		orderCommentBiz.saveComment(orderComment);
 		this.outJson(response, orderComment);
 	}

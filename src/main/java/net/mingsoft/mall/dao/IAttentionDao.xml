@@ -6,7 +6,7 @@
 		BASIC_ID,BASIC_TITLE,BASIC_DESCRIPTION,
 		BASIC_THUMBNAILS,BASIC_HIT,BASIC_SORT,BASIC_DATETIME,
 		BASIC_UPDATETIME,BASIC_PEOPLEID,BASIC_CATEGORYID,
-		BASIC_APPID,BASIC_MODELID,product_basicID,
+		BASIC_APPID,BASIC_MODELID,BASIC_COMMENT,product_basicID,
 		product_price,product_cost_price,product_inventory,
 		product_appID,product_code,product_linkUrl,
 		product_sale,ba_id,ba_peopleID,
