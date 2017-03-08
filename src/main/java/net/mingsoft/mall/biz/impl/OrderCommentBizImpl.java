@@ -59,8 +59,4 @@ public class OrderCommentBizImpl extends CommentBizImpl implements IOrderComment
 		return orderCommentDao.query(orderComment);
 	}
 
-	@Override
-	public List<OrderCommentEntity> queryBycommentBasicId(OrderCommentEntity orderComment) {
-		return orderCommentDao.queryBycommentBasicId(orderComment);
-	}	
 }

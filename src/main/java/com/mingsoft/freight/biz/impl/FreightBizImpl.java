@@ -85,27 +85,29 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 	}
 
 	@Override
-	public String cost(FreightEntity freightentity, double scale) {
+	public double cost(FreightEntity freightentity, double scale) {
 		if(freightentity == null){
-			return "false"; 
+			return -1;
 		}else if(scale <= 0){
-			return "false"; 
-		}else{
-			double FreightBasePrice = freightentity.getFreightBasePrice();					//基础运费
-			double FreightBaseAmount = freightentity.getFreightBaseAmount();				//基础重量
-			double FreightIncreasePrice = freightentity.getFreightIncreasePrice();			//增长运费
-			double FreightIncreaseAmount = freightentity.getFreightIncreaseAmount();		//增长数量
-			double surplusWeight = scale - FreightBaseAmount;								//获取超过的部分
-			if(surplusWeight<0){
-				String baseAmount =String.valueOf(FreightBaseAmount);
-				return baseAmount;															//如果不超过基础重量，直接输出基础运费
-			}else if(FreightIncreaseAmount != 0){
-				double IncreasePrice = Math.ceil(surplusWeight/FreightIncreaseAmount);		//获取超过的次数
-				double postage = FreightBasePrice+FreightIncreasePrice*IncreasePrice;
-				String cost =String.valueOf(postage);
-				return cost;																//如果超出，输出计算后的运费
+			return -1;
+		}else if(freightentity.getFreightEnable() == 0){
+			return -1;
+		}
+		else{
+			double freightBasePrice = freightentity.getFreightBasePrice();					//基础运费
+			double freightBaseAmount = freightentity.getFreightBaseAmount();				//基础重量
+			double freightIncreasePrice = freightentity.getFreightIncreasePrice();			//增长运费
+			double freightIncreaseAmount = freightentity.getFreightIncreaseAmount();		//增长数量
+			double surplusWeight = scale - freightBaseAmount;								//获取超过的部分
+			if(surplusWeight < 0){
+				return freightBaseAmount;													//如果不超过基础重量，直接输出基础运费
+			}else if(freightIncreaseAmount != 0){
+				double IncreasePrice = Math.ceil(surplusWeight/freightIncreaseAmount);		//获取超过的次数
+				return freightBasePrice+freightIncreasePrice*IncreasePrice;																//如果超出，输出计算后的运费
+			}else if(freightIncreaseAmount == 0){
+				return freightBaseAmount;
 			}else{
-				return "false"; 
+				return -1;
 			}
 		}
 	}

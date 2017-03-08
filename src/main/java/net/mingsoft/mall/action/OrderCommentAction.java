@@ -51,7 +51,7 @@ public class OrderCommentAction extends net.mingsoft.mall.action.BaseAction{
 	@RequestMapping("/list")
 	public String list(@ModelAttribute OrderCommentEntity orderComment,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
 		BasicUtil.startPage();
-		List orderCommentList = orderCommentBiz.query(orderComment);
+		List<?> orderCommentList = orderCommentBiz.query(orderComment);
 		BasicUtil.endPage(orderCommentList);
 		model.addAttribute("orderCommentList", orderCommentList);	
 		return view("/mall/order_comment/order_comment_list");

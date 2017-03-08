@@ -40,8 +40,6 @@ import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.constant.ModelCode;
 import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.freight.biz.IAreaBiz;
-import com.mingsoft.freight.biz.IAreaDetailBiz;
-import com.mingsoft.freight.biz.IFreightBiz;
 import com.mingsoft.freight.entity.AreaEntity;
 
 import net.mingsoft.basic.util.BasicUtil;
@@ -57,8 +55,6 @@ public class AreaAction extends BaseAction {
 
 	@Autowired
 	private IAreaBiz areaBiz;
-	@Autowired
-	private IAreaDetailBiz areaDetailBiz;
 	@Autowired
 	private ICategoryBiz categoryBiz;
 	

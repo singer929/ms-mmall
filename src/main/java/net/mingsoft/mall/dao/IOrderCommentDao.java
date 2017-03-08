@@ -40,10 +40,5 @@ public interface IOrderCommentDao extends IBaseDao {
 	 * @return
 	 */
 	List query(OrderCommentEntity orderComment);
-	/**
-	 * 根据ID查询当前商品的评论
-	 * @param orderComment
-	 * @return
-	 */
-	List<OrderCommentEntity> queryBycommentBasicId(OrderCommentEntity orderComment);
+	
 }

@@ -145,8 +145,8 @@ public class FreightAction extends BaseAction {
 		FreightEntity freightentity = freightBiz.queryByCityExpress(freigh);
 		String weigth = request.getParameter("scale");
 		double scale = Double.parseDouble(weigth);
-		String cost = freightBiz.cost(freightentity,scale);
-		if(cost == "false"){
+		double cost = freightBiz.cost(freightentity,scale);
+		if(cost == -1){
 			this.outJson(response, false);
 		}else{
 			this.outJson(response, cost);

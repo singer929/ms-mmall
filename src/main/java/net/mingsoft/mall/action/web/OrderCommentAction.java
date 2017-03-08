@@ -95,7 +95,7 @@ public class OrderCommentAction extends net.mingsoft.mall.action.BaseAction{
 	@RequestMapping("/summar")
 	@ResponseBody
 	public void summar(@ModelAttribute OrderCommentEntity orderComment,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
-		List<OrderCommentEntity> orderComments = orderCommentBiz.queryBycommentBasicId(orderComment);
+		List<OrderCommentEntity> orderComments = orderCommentBiz.query(orderComment);
 		int commentCount = orderComments.size();	//评论总数
 		int goodCount = 0;		//好评数，评分为4、5的评价
 		int generalCount = 0;	//中评数，评分为3的评价

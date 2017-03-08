@@ -63,6 +63,7 @@ public class AreaDetailBizImpl extends BaseBizImpl implements IAreaDetailBiz{
 	protected IBaseDao getDao() {
 		return freightAreaDetailDao;
 	}
+	
 	/**
 	 * 获取所有的区域信息
 	 */
@@ -70,6 +71,7 @@ public class AreaDetailBizImpl extends BaseBizImpl implements IAreaDetailBiz{
 	public List<AreaDetailEntity> queryFreightAreaDetail(int faId,int modelId) {
 		return freightAreaDetailDao.queryFreightAreaDetail(faId,modelId);
 	}
+	
 	@Override
 	public void saveOrUpdate(AreaDetailEntity areaDetailEntity) {
 		int fadAreaId = areaDetailEntity.fadAreaId;

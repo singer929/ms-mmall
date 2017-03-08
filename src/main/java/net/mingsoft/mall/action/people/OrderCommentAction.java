@@ -95,6 +95,7 @@ public class OrderCommentAction extends net.mingsoft.people.action.BaseAction{
 	 * <dt><span class="strong">返回</span></dt><br/>
 	 * { <br/>
 	 * ocCommentId: 评论编号<br/>
+	 * 
 	 * ocOrderId: 订单编号<br/>
 	 * ocImpression: 印象<br/>
 	 * ocProduct: 商品符合度<br/>
@@ -107,11 +108,11 @@ public class OrderCommentAction extends net.mingsoft.people.action.BaseAction{
 	@PostMapping("/save")
 	@ResponseBody
 	public void save(@ModelAttribute OrderCommentEntity orderComment, HttpServletResponse response, HttpServletRequest request) {
+		orderComment.setCommentPoints(orderComment.getOcProduct());
 		if(orderComment.getCommentBasicId() <= 0){
 			this.outJson(response, null,false);
 			return;			
 		}
-		
 		//验证印象的值是否合法			
 		if(StringUtil.isBlank(orderComment.getOcImpression())){
 			this.outJson(response, null,false,getResString("err.empty", this.getResString("oc.impression")));
@@ -211,6 +212,7 @@ public class OrderCommentAction extends net.mingsoft.people.action.BaseAction{
 	@ResponseBody	 
 	public void update(@ModelAttribute OrderCommentEntity orderComment, HttpServletResponse response,
 			HttpServletRequest request) {
+		orderComment.setCommentPoints(orderComment.getOcProduct());
 		//验证印象的值是否合法			
 		if(StringUtil.isBlank(orderComment.getOcImpression())){
 			this.outJson(response, null,false,getResString("err.empty", this.getResString("oc.impression")));

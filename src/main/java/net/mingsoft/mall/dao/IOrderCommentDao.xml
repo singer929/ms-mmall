@@ -121,8 +121,4 @@
 		order by OC_COMMENT_ID desc
 	</select>
 	
-	<!-- 根据id查询所有当前商品评论 -->
-	<select id="queryBycommentBasicId" resultMap="resultMap" parameterType="net.mingsoft.mall.entity.OrderCommentEntity">
-		select * from comment where COMMENT_BASICID = #{commentBasicId}
-	</select>
 </mapper>

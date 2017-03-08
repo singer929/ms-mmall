@@ -56,5 +56,5 @@ public interface IFreightBiz extends IBaseBiz {
 	/**
 	 * 计算运费
 	 */
-	public String cost(FreightEntity freightentity,double scale );
+	public double cost(FreightEntity freightentity,double scale);
 }
