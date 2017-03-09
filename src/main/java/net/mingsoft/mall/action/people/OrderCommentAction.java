@@ -113,14 +113,18 @@ public class OrderCommentAction extends net.mingsoft.people.action.BaseAction{
 	 * commentPicture:晒图<br/>
 	 * }<br/>
 	 */
-	@PostMapping("/save")
+	@RequestMapping("/save")//PostMapping
 	@ResponseBody
 	public void save(@ModelAttribute OrderCommentEntity orderComment, HttpServletResponse response, HttpServletRequest request) {
 		orderComment.setCommentPoints(orderComment.getOcProduct());
-		int commentId = orderComment.getCommentId();
-		BasicEntity basicEntity = (BasicEntity) basicBiz.getEntity(commentId);
+		int commentBasicId = orderComment.getCommentBasicId();
+		//根据获取的commentBasicId查询到basicEntity
+		BasicEntity basicEntity = (BasicEntity) basicBiz.getEntity(commentBasicId);
+		//评论数加1
 		int basicComment = basicEntity.getBasicComment() + 1;
 		basicEntity.setBasicComment(basicComment);
+		//更新basicEntity
+		basicBiz.updateBasic(basicEntity);
 		if(orderComment.getCommentBasicId() <= 0){
 			this.outJson(response, null,false);
 			return;			

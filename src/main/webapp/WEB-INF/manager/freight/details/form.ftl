@@ -11,7 +11,7 @@
 		           	<#list freightList as freight>
 			        	<tr> 
 			        		<td>
-			        			<input type="hidden" name="freightId" value="${freight.freightId?default('')}"/>
+			        			<input type="hidden" name="freightId" value="${freight.freightId?default('0')}"/>
 								<input type="checkbox" name="ids" value="${freight.freExpress.categoryId?default('')}" id = "checkedId" 
 									<#if freight.freightEnable?has_content>
 										<#if freight.freightEnable == 1>
@@ -49,7 +49,9 @@
 </@ms.html5>
  <script>   	
 	function save(){  		
-		var checked = 0;	    		
+		var checked = 0;	
+		var update = [];
+		var save = [];   		
 		for(var i = 0 ; i < checkedId.length ; i++){
 			var freightCityId = $("input[name = freightCityId]").val();
 			var freightId = $("input[name = freightId]").val();
@@ -58,46 +60,53 @@
     		var freightBaseAmount = $(checkedId[i]).closest("tr").find("input[name = freightBaseAmount]").val();
     		var freightIncreasePrice = $(checkedId[i]).closest("tr").find("input[name = freightIncreasePrice]").val(); 
     		var freightIncreaseAmount = $(checkedId[i]).closest("tr").find("input[name = freightIncreaseAmount]").val(); 
-			if(checkedId[i].checked){
+			if(checkedId[i].checked){		//选框是否勾选
 				checked = 1;    					    				   					
 			}else{
 				checked = 0;	    				
 			}
-			//判断所有的值是否合法或为空
-			if((freightBasePrice >=0 && freightBasePrice != "" && freightBasePrice <= 999999) && (freightBaseAmount >=0 && freightBaseAmount != "" && freightBaseAmount <= 999999) && (freightIncreasePrice >=0 && freightIncreasePrice != "" && freightIncreasePrice <= 999999) && (freightIncreaseAmount >=0 && freightIncreaseAmount != "" && freightIncreaseAmount <= 999999) ){
-    			if(freightId > 0){			//判断是否保存过这条数据，为真则更新数据
-    				$.post("${managerPath}/freight/update.do",
-	    				{
-	    					freightEnable : checked,
-	    					freightCityId : freightCityId,
-	    					freightExpressId : freightExpressId,
-	    					freightBasePrice : freightBasePrice,
-	    					freightBaseAmount : freightBaseAmount,
-	    					freightIncreasePrice : freightIncreasePrice,
-	    					freightIncreaseAmount : freightIncreaseAmount	    					
-	    				},
-	    				function(data,status){}
-	    			);
-    			}else{				//保存数据
-    				$.post("${managerPath}/freight/save.do",
-	    				{
-	    					freightEnable : checked,
-	    					freightCityId : freightCityId,
-	    					freightExpressId : freightExpressId,
-	    					freightBasePrice : freightBasePrice,
-	    					freightBaseAmount : freightBaseAmount,
-	    					freightIncreasePrice : freightIncreasePrice,
-	    					freightIncreaseAmount : freightIncreaseAmount	    					
-	    				},
-	    				function(data,status){}
-	    			);
-    			}
-    		}
-    		$('.ms-notifications').offset({top:43}).notify({
-				type:'success',
-				message: { text:'保存成功！' }
-			}).show();	
+			var obj = new Object();			//新建一个对象
+			obj.freightCityId = freightCityId;
+			obj.freightExpressId = freightExpressId;
+			obj.freightEnable = checked;
+			obj.freightBasePrice = freightBasePrice;
+			obj.freightBaseAmount = freightBaseAmount;
+			obj.freightIncreasePrice = freightIncreasePrice;
+			obj.freightIncreaseAmount = freightIncreaseAmount;
+			if((freightId > 0) && (freightBasePrice >=0 && freightBasePrice != "" && freightBasePrice <= 999999) && (freightBaseAmount >=0 && freightBaseAmount != "" && freightBaseAmount <= 999999) && (freightIncreasePrice >=0 && freightIncreasePrice != "" && freightIncreasePrice <= 999999) && (freightIncreaseAmount >=0 && freightIncreaseAmount != "" && freightIncreaseAmount <= 999999)){
+				update.push(obj);
+			}else if((freightId == 0) && (freightBasePrice >=0 && freightBasePrice != "" && freightBasePrice <= 999999) && (freightBaseAmount >=0 && freightBaseAmount != "" && freightBaseAmount <= 999999) && (freightIncreasePrice >=0 && freightIncreasePrice != "" && freightIncreasePrice <= 999999) && (freightIncreaseAmount >=0 && freightIncreaseAmount != "" && freightIncreaseAmount <= 999999)){
+				save.push(obj);
+			}else{
+				break;
+			}
 		}
+		var updateStr = JSON.stringify(update);
+		var saveStr = JSON.stringify(save);
+		//判断所有的值是否合法或为空
+		if((update.length == checkedId.length) || (save.length == checkedId.length)){
+			if(update.length > 0){			//判断是否保存过这条数据，为真则更新数据
+				$.post("${managerPath}/freight/update.do",
+    				{
+    					string:updateStr	    					
+    				},
+    				function(data,status){}
+    			);
+			}
+			if(save.length > 0){				//保存数据
+				$.post("${managerPath}/freight/save.do",
+    				{
+    					string:saveStr	    					
+    				},
+    				function(data,status){}
+    			);
+			}
+		}
+		
+		$('.ms-notifications').offset({top:43}).notify({
+			type:'success',
+			message: { text:'保存成功！' }
+		}).show();	
 		//更新数据后刷新页面
 		location.reload();
 	};   	

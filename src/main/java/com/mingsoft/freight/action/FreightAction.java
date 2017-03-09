@@ -38,6 +38,7 @@ import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.constant.ModelCode;
 import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.freight.biz.IFreightBiz;
+import com.mingsoft.freight.entity.AreaDetailEntity;
 import com.mingsoft.freight.entity.FreightEntity;
 import net.mingsoft.basic.util.BasicUtil;
 
@@ -112,8 +113,13 @@ public class FreightAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public void update(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
-		freightBiz.updateEntity(freightEntity);
+	public void update( HttpServletResponse response, HttpServletRequest request) {
+		String str = request.getParameter("string");
+		List<FreightEntity> freightList = JSONArray.parseArray(str, FreightEntity.class);
+		for(int i=0;i<freightList.size();i++){
+			FreightEntity freightEntity = freightList.get(i);			
+			freightBiz.updateEntity(freightEntity);
+		}
 	}
 	
 	/**
@@ -124,8 +130,14 @@ public class FreightAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/save")
-	public void save(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
-		freightBiz.saveEntity(freightEntity);
+	public void save(HttpServletResponse response, HttpServletRequest request) {
+		String str = request.getParameter("string");
+		List<FreightEntity> freightList = JSONArray.parseArray(str, FreightEntity.class);
+		for(int i=0;i<freightList.size();i++){
+			FreightEntity freightEntity = freightList.get(i);			
+			freightBiz.saveEntity(freightEntity);
+		}
+		
 	}	
 	
 	/**
