@@ -61,6 +61,15 @@
 			<result column="PU_NICKNAME" property="peopleUserNickName" />
 			<result column="PU_ICON" property="peopleUserIcon" />
 		</association>
+		<association property="productEntity" 
+			javaType="net.mingsoft.mall.entity.ProductEntity">			<!-- 将实体的属性与表的字段对接 -->	
+		  	<id column="product_basicID" property="productId" />		<!-- 产品ID -->	
+		  	<result column="product_inventory" property="productStock"/><!-- 产品库存 -->	
+		</association>
+		<association property="cartEntity" 
+			javaType="net.mingsoft.mall.entity.CartEntity">			<!-- 将实体的属性与表的字段对接 -->	
+		  	<result column="CART_NUM" property="cartNum"/><!-- 产品库存 -->	
+		</association>
 		<collection property="goods" ofType="net.mingsoft.mall.entity.GoodsEntity" column="ORDER_ID"
 			 select="net.mingsoft.mall.dao.IGoodsDao.queryByOrderId" />
 	</resultMap>
@@ -120,10 +129,25 @@
 	<!-- 查询订单结束 -->
 	
 	<!-- 修改订单状态开始 -->
-	<update id="editOrderStatus" parameterType="com.mingsoft.freight.entity.AreaDetailEntity">
+	<update id="editOrderStatus" parameterType="net.mingsoft.mall.entity.OrderEntity">
 		update `order` set  ORDER_STATUS = #{orderStatus} where ORDER_NO = #{orderNo}
 	</update>
 	<!-- 修改订单状态结束 --> 
 	
+	<!-- 获取商品开始 -->
+	<select id="getEntityById" resultMap="resultMap"
+		parameterType= "int">
+		SELECT * FROM mall_product 
+		JOIN order_cart 
+		ON CART_BASICID = product_basicID
+		WHERE CART_ID = #{cartId}
+	</select>
+	<!-- 获取商品结束 -->
+	
+	<!-- 修改商品库存开始 -->
+	<update id="editProductStockByEntity" parameterType="int">
+		update mall_product set product_inventory = #{productStock} where product_basicID = #{productId}
+	</update>
+	<!-- 修改商品库存开始 -->
 
 </mapper>

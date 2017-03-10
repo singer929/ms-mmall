@@ -107,5 +107,17 @@ public class OrderBizImpl extends net.mingsoft.order.biz.impl.OrderBizImpl imple
 		
 	}
 
+	@Override
+	public OrderEntity getEntityById(int id) {
+		return mallOrderDao.getEntityById(id);
+		
+	}
+
+	@Override
+	public void editProductStockByEntity(int productId, int productStock) {
+		mallOrderDao.editProductStockByEntity(productId,productStock);
+		
+	}
+
 	
 }

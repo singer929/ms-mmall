@@ -23,4 +23,15 @@ public interface IOrderDao extends IBaseDao {
 	  * @param orderEntity
 	  */
 	 public void editOrderStatus(net.mingsoft.order.entity.OrderEntity orderEntity);
+	 
+	 /**
+	 * 根据ID查找product
+	 * @param id
+	 */
+	public OrderEntity getEntityById(@Param("cartId") int cartId);
+	
+	/**
+	 * 修改库存
+	 */
+	public void editProductStockByEntity(@Param("productId") int  productId,@Param("productStock") int  productStock);
 }

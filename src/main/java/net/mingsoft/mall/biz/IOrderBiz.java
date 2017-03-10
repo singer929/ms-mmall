@@ -27,4 +27,16 @@ public interface IOrderBiz extends net.mingsoft.order.biz.IOrderBiz {
 	 * @param orderEntity
 	 */
 	public void editOrderStatus(net.mingsoft.order.entity.OrderEntity orderEntity);
+	
+	/**
+	 * 根据ID查找product
+	 * @param id
+	 * @return 
+	 */
+	public OrderEntity getEntityById(int id);
+	
+	/**
+	 * 修改库存
+	 */
+	public void editProductStockByEntity(int productId, int productStock);
 }

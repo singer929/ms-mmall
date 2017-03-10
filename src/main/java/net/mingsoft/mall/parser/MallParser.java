@@ -459,14 +459,17 @@ public class MallParser extends IGeneralParser {
 			if (StringUtil.isBlank(order)) {
 				order = "desc";
 			}
-			PageHelper.startPage(this.curPageNo, size, false);
+			//获取商品总数
+			List<ProductEntity> tempList = productBiz.queryList(app.getAppId(), columnIds, orderBy,
+					order.equals("desc") ? true : false, ProductEnum.ON_SHELF.toInt(), flag, noFlag);
+			PageHelper.startPage(this.curPageNo, size, false).size();
 			List<ProductEntity> productList = productBiz.queryList(app.getAppId(), columnIds, orderBy,
 					order.equals("desc") ? true : false, ProductEnum.ON_SHELF.toInt(), flag, noFlag);
 			PageInfo _page = new PageInfo(productList);
 			if (_page.getSize() > 0) {
-				if (page==null)  {
-					page = new PageUtilHtml(curPageNo, size, (int)_page.getSize(), listLinkPath);
-				}
+				//修改
+				page = new PageUtilHtml(curPageNo, size, tempList.size(), listLinkPath);
+				
 				htmlContent = new net.mingsoft.mall.parser.impl.ListSpecificationParser(app, htmlContent, productList,
 						this.getWebsiteUrl(), property, true, fieldBiz, contentBiz).parse();
 			}

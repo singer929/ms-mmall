@@ -28,6 +28,7 @@ import net.mingsoft.order.constant.ModelCode;
 import net.mingsoft.order.constant.e.OrderStatusEnum;
 import net.mingsoft.order.entity.GoodsEntity;
 import net.mingsoft.mall.entity.OrderEntity;
+import net.mingsoft.mall.entity.ProductEntity;
 
 /**
  * 商城订单管理控制层
@@ -225,6 +226,12 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 			return;
 		}
 		order.setOrderModelId(this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL_ORDER));
+		for(int i = 0;i<cartIds.length;i++){
+			OrderEntity productEntity = orderBiz.getEntityById(cartIds[i]);
+			int productId = productEntity.getProductEntity().getProductId();
+			int productStock= productEntity.getProductEntity().getProductStock()+productEntity.getCartEntity().getCartNum();
+			orderBiz.editProductStockByEntity(productId,productStock);
+		}
 		mallOrderBiz.saveEntity(order, cartIds);
 		this.outJson(response, order);
 	}
