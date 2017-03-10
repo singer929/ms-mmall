@@ -616,11 +616,11 @@ public class MallParser extends IGeneralParser {
 			int size = StringUtil.string2Int(property.get(ListParser.LIST_SIZE));
 			// 数据库中该栏目下商品的总数
 			List<ProductEntity> productCount =  productBiz.queryList(app.getAppId(), columnIds, null, false,ProductEnum.ON_SHELF.toInt(), null, null);
-			// 当用户知道的显示数量小于0或大于文章实际总数时
+			// 当用户知道的显示数量小于0或大于商品实际总数时
 			if (size <= 0 || size > productCount.size()) {
 				size = productCount.size();
 			}
-			// 如果文章总数为0则分页数量为1
+			// 如果商品总数为0则分页数量为1
 			if (size == 0) {
 				pageSize = 1;
 				return pageSize;

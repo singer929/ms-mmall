@@ -29,8 +29,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonAnyFormatVisitor;
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.freight.biz.IAreaBiz;
@@ -38,6 +40,7 @@ import com.mingsoft.freight.biz.IAreaDetailBiz;
 import com.mingsoft.freight.biz.IFreightBiz;
 import com.mingsoft.freight.entity.AreaDetailEntity;
 
+import net.mingsoft.basic.bean.EUListBean;
 import net.mingsoft.basic.util.BasicUtil;
 
 /**
@@ -70,16 +73,16 @@ public class AreaDetailAction extends BaseAction {
 	/**
 	 * 右侧列表的快递信息
 	 * @param request
-	 * @return
 	 */
 	@RequestMapping("/list")
-	private String list(HttpServletRequest request){
+	@ResponseBody
+	private void list(HttpServletResponse response,HttpServletRequest request){
 		//table
 		int modelId = BasicUtil.getModelCodeId(net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
 		int faId = Integer.parseInt(request.getParameter("faId"));
 		List<AreaDetailEntity> faList = freightAreaDetailBiz.queryFreightAreaDetail(faId,modelId);
-		request.setAttribute("faList", faList);
-		return view("/freight/area_detail/list");
+		EUListBean _list = new EUListBean(faList, faList.size());
+		this.outJson(response, JSONArray.toJSONString(_list));
 	}
 	
 	/**
@@ -90,6 +93,7 @@ public class AreaDetailAction extends BaseAction {
 	 * @param request
 	 */
 	@RequestMapping("/update")
+	@ResponseBody
 	private void update(HttpServletResponse response, HttpServletRequest request){
 		String str = request.getParameter("str");
 		List<AreaDetailEntity> areaDetailList = JSONArray.parseArray(str, AreaDetailEntity.class);
@@ -111,6 +115,7 @@ public class AreaDetailAction extends BaseAction {
 	 * @param request
 	 */
 	@RequestMapping("/save")
+	@ResponseBody
 	private void save(HttpServletResponse response, HttpServletRequest request){
 		String str = request.getParameter("str");
 		List<AreaDetailEntity> areaDetailList = JSONArray.parseArray(str, AreaDetailEntity.class);
