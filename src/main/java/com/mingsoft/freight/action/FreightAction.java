@@ -89,8 +89,15 @@ public class FreightAction extends BaseAction {
 		return view("/freight/details/index");
 	}
 	
+	/**
+	 * 返回右边一个页面
+	 * @param freightEntity
+	 * @param response
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/form")
-	public String right(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
+	public String form(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
 		String categoryId = request.getParameter("categoryId");
 		request.setAttribute(categoryId, categoryId);
 		return view("/freight/details/form");		
@@ -103,7 +110,7 @@ public class FreightAction extends BaseAction {
 	 * @param request
 	 */
 	@RequestMapping("/list")
-	public void form(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
+	public void list(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
 		//将前端传过来的categoryId转成int类型
 		int freightCityId = Integer.parseInt(request.getParameter("categoryId"));
 		//创建一个modeId(基于BasicUtil里的方法)快递分类id
