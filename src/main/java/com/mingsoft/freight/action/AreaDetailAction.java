@@ -71,6 +71,17 @@ public class AreaDetailAction extends BaseAction {
 	}
 	
 	/**
+	 * 访问右侧页面
+	 * @param request
+	 */
+	@RequestMapping("/right")
+	private String right(HttpServletResponse response,HttpServletRequest request){
+		String faId = request.getParameter("faId");
+		request.setAttribute("faId", faId);
+		return view("/freight/area_detail/list");
+	}
+	
+	/**
 	 * 右侧列表的快递信息
 	 * @param request
 	 */
