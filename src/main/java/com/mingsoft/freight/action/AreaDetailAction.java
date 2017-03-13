@@ -91,9 +91,11 @@ public class AreaDetailAction extends BaseAction {
 		//table
 		int modelId = BasicUtil.getModelCodeId(net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
 		int faId = Integer.parseInt(request.getParameter("faId"));
-		List<AreaDetailEntity> faList = freightAreaDetailBiz.queryFreightAreaDetail(faId,modelId);
-		EUListBean _list = new EUListBean(faList, faList.size());
-		this.outJson(response, JSONArray.toJSONString(_list));
+		if(faId != 0){
+			List<AreaDetailEntity> faList = freightAreaDetailBiz.queryFreightAreaDetail(faId,modelId);
+			EUListBean _list = new EUListBean(faList, faList.size());
+			this.outJson(response, JSONArray.toJSONString(_list));
+		}
 	}
 	
 	/**

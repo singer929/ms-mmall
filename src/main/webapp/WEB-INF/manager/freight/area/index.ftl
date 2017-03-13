@@ -13,7 +13,7 @@
 				<@ms.delButton id="delButton"/>
 			</div>
            	<#list areas as areaEntity>
-    			<div style="padding:3px 0 0 24px;cursor:pointer;" class="" cityIds="${areaEntity.faCityIds?default(0)}" id="${areaEntity.faId?default(0)}" onclick="edit(this)" >
+    			<div style="padding:3px 0 0 24px;cursor:pointer;" class="" cityIds="${areaEntity.faCityIds?default(0)}" title="${areaEntity.faTitle?default(0)}" id="${areaEntity.faId?default(0)}" onclick="edit(this)" >
 	        		<input type="checkbox" name="checkbox" id="checkbox" value="${areaEntity.faId?default(0)}">
 	        		${areaEntity.faTitle?default(0)}
         		</div>

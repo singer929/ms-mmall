@@ -9,7 +9,7 @@
 			<div style="margin-top:10px;"></div>
            	<#list areas as areaEntity>
            		<#if areaEntity_index == 0>
-	           		<div style="padding:3px 0 0 40px;cursor:pointer;" class="areaActive" id="${areaEntity.faId?default(0)}" onclick="getFaId(this)">
+	           		<div style="padding:3px 0 0 40px;cursor:pointer;" class="" id="${areaEntity.faId?default(0)}" onclick="getFaId(this)">
 		        		${areaEntity.faTitle?default(0)}
 	        		</div>
         		<#else>
@@ -21,7 +21,7 @@
 		</@ms.contentMenu>
 		<@ms.contentBody width="85%" style="overflow-y: hidden;">
 			<@ms.contentPanel  style="margin:0;padding:0;overflow-y: hidden;">
-	           	<iframe src="${managerPath}/freight/areaDetail/right.do?faId=3" style="width:100%;maring:0;padding:0;border:none;height:100%;background-repeat: no-repeat;  background-position: center;" id="listFrame" target="listFrame" ></iframe>
+	           	<iframe src="${managerPath}/freight/areaDetail/right.do?faId=0" style="width:100%;maring:0;padding:0;border:none;height:100%;background-repeat: no-repeat;  background-position: center;" id="listFrame" target="listFrame" ></iframe>
 			</@ms.contentPanel>
 		</@ms.contentBody>
 	</@ms.panel>

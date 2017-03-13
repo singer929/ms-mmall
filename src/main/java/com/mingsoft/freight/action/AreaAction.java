@@ -65,9 +65,7 @@ public class AreaAction extends BaseAction {
 	 */
 	@RequestMapping("/index")
 	private String index(HttpServletRequest request){
-		//左侧列表
-		List<BaseEntity> areas = areaBiz.queryAll();
-		request.setAttribute("areas", areas);
+		areaList(request);
 		//树形部分
 		int modelId =  BasicUtil.getModelCodeId(ModelCode.CITY);
 		CategoryEntity category = new CategoryEntity();
@@ -76,6 +74,18 @@ public class AreaAction extends BaseAction {
 		String categoryJson = JSONArray.toJSONString(list);
 		request.setAttribute("categoryJson", categoryJson);
 		return view("/freight/area/index");
+	}
+	
+	/**
+	 * 查询所有区域
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/areaList")
+	private void areaList(HttpServletRequest request){
+		//左侧列表
+		List<BaseEntity> areas = areaBiz.queryAll();
+		request.setAttribute("areas", areas);
 	}
 	
 	/**
