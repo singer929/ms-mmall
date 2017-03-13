@@ -89,7 +89,7 @@ public class AreaDetailBizImpl extends BaseBizImpl implements IAreaDetailBiz{
 		freightEntity.setFreightIncreasePrice(areaDetailEntity.getFadIncreasePrice());
 		for(int j=0;j<faCityId.length;j++){
 			freightEntity.setFreightCityId(Integer.parseInt(faCityId[j]));
-			FreightEntity temporaryEntity = freightBiz.queryByCityExpress(freightEntity);
+			FreightEntity temporaryEntity = (FreightEntity) freightBiz.query(freightEntity);
 			if(temporaryEntity == null){
 				freightBiz.saveEntity(freightEntity);
 			}else{

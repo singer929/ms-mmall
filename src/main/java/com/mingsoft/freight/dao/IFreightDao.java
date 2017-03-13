@@ -33,24 +33,11 @@ import com.mingsoft.freight.entity.FreightEntity;
 public interface IFreightDao extends IBaseDao {
 	
 	/**
-	 * 通过城市id查询基础数据
-	 * @param freightCityId
-	 * @return
-	 */
-	public List<FreightEntity> queryByCity(int freightCityId);
-	
-	/**
 	 * 通过城市id查询启用数据
 	 * @param freightCityId
 	 * @return
 	 */
 	public List<FreightEntity> queryByCityEnable(int freightCityId);
-	
-	/**
-	 * 通过城市id与快递id查询基础数据
-	 * @return
-	 */
-	public FreightEntity queryByCityExpress(FreightEntity entity);
 	
 	/**
 	 * 通过城市id与快递分类id查询基础数据

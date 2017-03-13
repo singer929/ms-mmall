@@ -29,23 +29,11 @@ import com.mingsoft.freight.entity.FreightEntity;
 public interface IFreightBiz extends IBaseBiz {
 	
 	/**
-	 * 通过城市id查询基础数据
-	 * @return
-	 */
-	public List<FreightEntity> queryByCity(int freightCityId);
-	
-	/**
 	 * 通过城市id查询启用数据
 	 * @param freightCityId
 	 * @return
 	 */
 	public List<FreightEntity> queryByCityEnable(int freightCityId);
-	
-	/**
-	 * 通过快递公司idfreightExpressId和freightCityId查询运费数据
-	 * @return
-	 */
-	public FreightEntity queryByCityExpress(FreightEntity entity);
 	
 	/**
 	 * 通过快递公司分类categoryModelId和城市编号freightCityId查询运费数据

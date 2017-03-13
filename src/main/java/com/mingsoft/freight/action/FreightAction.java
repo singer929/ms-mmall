@@ -33,6 +33,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.base.entity.BaseEntity;
+import com.mingsoft.base.filter.DateValueFilter;
+import com.mingsoft.base.filter.DoubleValueFilter;
 import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.constant.ModelCode;
@@ -40,6 +42,8 @@ import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.freight.biz.IFreightBiz;
 import com.mingsoft.freight.entity.AreaDetailEntity;
 import com.mingsoft.freight.entity.FreightEntity;
+
+import net.mingsoft.basic.bean.EUListBean;
 import net.mingsoft.basic.util.BasicUtil;
 
 /**
@@ -85,24 +89,29 @@ public class FreightAction extends BaseAction {
 		return view("/freight/details/index");
 	}
 	
+	@RequestMapping("/form")
+	public String right(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
+		String categoryId = request.getParameter("categoryId");
+		request.setAttribute(categoryId, categoryId);
+		return view("/freight/details/form");		
+	}
+	
 	/**
 	 * 右边页面显示数据
 	 * @param freightEntity 前端传过来的城市id
 	 * @param response
 	 * @param request
-	 * @return
 	 */
-	@RequestMapping("/form")
-	public String form(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
+	@RequestMapping("/list")
+	public void form(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
 		//将前端传过来的categoryId转成int类型
 		int freightCityId = Integer.parseInt(request.getParameter("categoryId"));
 		//创建一个modeId(基于BasicUtil里的方法)快递分类id
 		int modelId = BasicUtil.getModelCodeId(net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
 		//通过freightCityId查对应的数据
 		List<FreightEntity> entityList = freightBiz.queryAllFreight(freightCityId , modelId);
-		request.setAttribute("freightList", entityList);
-		request.setAttribute("freightCityId", freightCityId);
-		return view("/freight/details/form");		
+		EUListBean _list = new EUListBean(entityList, (int) BasicUtil.endPage(entityList).getTotal());
+		this.outJson(response, net.mingsoft.base.util.JSONArray.toJSONString(_list, new DoubleValueFilter()));
 	}
 	
 	/**
@@ -137,7 +146,6 @@ public class FreightAction extends BaseAction {
 			FreightEntity freightEntity = freightList.get(i);			
 			freightBiz.saveEntity(freightEntity);
 		}
-		
 	}	
 	
 	/**
@@ -154,7 +162,7 @@ public class FreightAction extends BaseAction {
 	@RequestMapping("/cost")
 	@ResponseBody
 	public void cost(@ModelAttribute FreightEntity freigh, HttpServletResponse response, HttpServletRequest request) {
-		FreightEntity freightentity = freightBiz.queryByCityExpress(freigh);
+		FreightEntity freightentity = (FreightEntity) freightBiz.query(freigh);
 		String weigth = request.getParameter("scale");
 		double scale = Double.parseDouble(weigth);
 		double cost = freightBiz.cost(freightentity,scale);
