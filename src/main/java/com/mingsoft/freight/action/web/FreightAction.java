@@ -65,7 +65,7 @@ public class FreightAction extends BaseAction {
 	@RequestMapping("/cost")
 	@ResponseBody
 	public void cost(@ModelAttribute FreightEntity freigh, HttpServletResponse response, HttpServletRequest request) {
-		FreightEntity freightentity = (FreightEntity) freightBiz.query(freigh);
+		FreightEntity freightentity = (FreightEntity) freightBiz.getEntity(freigh);
 		String weigth = request.getParameter("scale");
 		double scale = Double.parseDouble(weigth);
 		double cost = freightBiz.cost(freightentity,scale);

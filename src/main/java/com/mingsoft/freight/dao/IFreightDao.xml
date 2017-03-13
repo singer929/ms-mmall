@@ -31,7 +31,7 @@
 	<!-- 查询用户列表结束 -->
 	
 	<!-- 查询基础数据开始 -->
-	<select id="query" resultMap="resultMap" parameterType="com.mingsoft.freight.entity.FreightEntity">	
+	<select id="getByEntity" resultMap="resultMap" parameterType="com.mingsoft.freight.entity.FreightEntity">	
 		select * from freight 		
 		<where> 
 			<if test=" freightExpressId != null">and freight_express_id = #{freightExpressId}</if>
