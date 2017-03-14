@@ -1,29 +1,28 @@
 <@ms.html5>
 	<style>
-		.areaActive{
-			color: #3497db;
-		}
+		#areaList {padding-left:20px;}
+		#areaList li{line-height:25px;cursor: pointer;}
+		#areaList li.sel{color:blue}
 	</style>
 	<@ms.content>
 		<@ms.contentMenu>
-			<div style="padding:4px 0 5px 24px; border-bottom:2px solid #ddd;">
+			<div style="padding:5px 0 5px 24px; border-bottom:2px solid #ddd;">
 				<input type="checkbox" name="checkboxAll" id="checkboxAll" value="">
-				<span style="margin-right:37px;">全部</span>
+				<span style="margin-right:10%;">全部</span>
 				<@ms.addButton id="addButton"/>
 				<@ms.delButton id="delButton"/>
 			</div>
+       		<ul id="areaList">
            	<#list areas as areaEntity>
-    			<div style="padding:3px 0 0 24px;cursor:pointer;" class="" cityIds="${areaEntity.faCityIds?default(0)}" title="${areaEntity.faTitle?default(0)}" id="${areaEntity.faId?default(0)}" onclick="edit(this)" >
-	        		<input type="checkbox" name="checkbox" id="checkbox" value="${areaEntity.faId?default(0)}">
+        		<li data-id="${areaEntity.faId?default(0)}" data-ids="${areaEntity.faCityIds?default(0)}" data-title="${areaEntity.faTitle?default(0)}">
+        			<input type="checkbox" name="checkbox" value="${areaEntity.faId?default(0)}">
 	        		${areaEntity.faTitle?default(0)}
-        		</div>
+	        	</li>
 	        </#list>
+	        </ul>
 		</@ms.contentMenu>
-		<@ms.contentBody width="85%" style="overflow-y: hidden;">
-			<div style="border-bottom:2px solid #ddd;height:45px;padding-top:10px;">
-				<span style="font-weight: 700;margin-left:15px;">添加区域</span>
-				<@ms.savebutton id="savebutton" style="float:right;margin-top:-6px;margin-right: 5px;"/>
-			</div>
+		<@ms.panel style="width: 85%;right: 0; position: absolute;">
+			<@ms.nav title="区域信息" style="width: 85%;"><@ms.savebutton id="savebutton"/></@ms.nav>
 			<div style="height:60px;">
 				<span style="font-weight: 700;float:left;margin:5px 0 0 8%;">区域名称:</span>
 				<@ms.text id="faTitle" name="faTitle" value="" width="300"  placeholder="请输入区域名称" />
@@ -51,7 +50,7 @@
 					</@ms.form>
 				</div>
 			</div>
-		</@ms.contentBody>          
+		</@ms.panel>
 	</@ms.content>
 	<!--删除区域-->    
 	<@ms.modal modalName="delete" title="删除区域">
@@ -106,12 +105,12 @@
 	//确认删除
 	$(".rightDelete").click(function(){			//删除区域信息
 		var value="";
-		for (var i=0;i<checkbox.length;i++ ){
-		  if(checkbox[i].checked){ 				//判断复选框是否选中
-		 	faId=$(checkbox[i]).val(); 			//值的拼凑
-		 	value=value + faId+ ","; 
-		  }
-		}
+		$("input[name=checkbox]").each(function(){
+			if($(this).is(':checked')){ 					//判断复选框是否选中
+		  		var faId =$(this).val();
+		 		value=value + faId+ ","; 	//值的拼凑
+		  	}
+		})
 		value=value.substring(0,value.length-1);
 		$.post("${managerPath}/freight/area/delete.do",
 		   {
@@ -138,10 +137,11 @@
 		$("input[name=ids]").prop("checked",false);
 	});
 	//编辑
-	function edit(obj){
-		$(obj).addClass('areaActive').siblings().removeClass('areaActive');
-		var cityIds = obj.getAttribute("cityIds");
-		var faTitle = obj.getAttribute("title");
+	$("#areaList li").click(function(){
+		$("#areaList li").removeClass("sel");
+		$(this).addClass("sel");
+		var cityIds = $(this).data("ids");
+		var faTitle = $(this).data("title");
 		$("input[name=faTitle]").val(faTitle);
 		var value="";
 		var arr = cityIds.split(',');
@@ -175,5 +175,5 @@
 				columnTitle.prop("checked",false);
 			}
 		}
-	}
+	});
 </script>

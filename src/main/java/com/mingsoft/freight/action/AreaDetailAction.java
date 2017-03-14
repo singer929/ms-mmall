@@ -21,6 +21,7 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
 
 package com.mingsoft.freight.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -40,6 +42,7 @@ import com.mingsoft.freight.biz.IAreaBiz;
 import com.mingsoft.freight.biz.IAreaDetailBiz;
 import com.mingsoft.freight.biz.IFreightBiz;
 import com.mingsoft.freight.entity.AreaDetailEntity;
+import com.mingsoft.freight.entity.AreaEntity;
 
 import net.mingsoft.basic.bean.EUListBean;
 import net.mingsoft.basic.util.BasicUtil;
@@ -90,7 +93,7 @@ public class AreaDetailAction extends BaseAction {
 	}
 	
 	/**
-	 * 区域运费的修改
+	 * 区域运费增加和修改
 	 * @param areaDetail
 	 * @param freightEntity
 	 * @param response
@@ -100,36 +103,9 @@ public class AreaDetailAction extends BaseAction {
 	@ResponseBody
 	private void update(HttpServletResponse response, HttpServletRequest request){
 		String str = request.getParameter("str");
-		
 		List<AreaDetailEntity> areaDetailList = JSONArray.parseArray(str, AreaDetailEntity.class);
 		for(int i=0;i<areaDetailList.size();i++){
 			AreaDetailEntity areaDetailEntity = areaDetailList.get(i);
-			//修改freight_area_detail表
-			freightAreaDetailBiz.updateEntity(areaDetailEntity);
-			//修改freigh表
-			freightAreaDetailBiz.saveOrUpdate(areaDetailEntity);
-			
-		}
-		
-	}
-	/**
-	 * 区域运费的插入
-	 * @param areaDetail
-	 * @param freightEntity
-	 * @param response
-	 * @param request
-	 */
-	@RequestMapping("/save")
-	@ResponseBody
-	private void save(HttpServletResponse response, HttpServletRequest request){
-		String str = request.getParameter("str");
-		//a[0]=1 a[1]=1,2  b[0]=1 b[1]=2
-		List<AreaDetailEntity> areaDetailList = JSONArray.parseArray(str, AreaDetailEntity.class);
-		for(int i=0;i<areaDetailList.size();i++){
-			AreaDetailEntity areaDetailEntity = areaDetailList.get(i);
-			//插入freight_area_detail表
-			freightAreaDetailBiz.updateEntity(areaDetailEntity);
-			//插入freigh表
 			freightAreaDetailBiz.saveOrUpdate(areaDetailEntity);
 		}
 	}
