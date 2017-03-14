@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonAnyFormatVisitor;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.action.BaseAction;
 import com.mingsoft.freight.biz.IAreaBiz;
@@ -70,16 +71,6 @@ public class AreaDetailAction extends BaseAction {
 		return view("/freight/area_detail/index");
 	}
 	
-	/**
-	 * 访问右侧页面
-	 * @param request
-	 */
-	@RequestMapping("/right")
-	private String right(HttpServletResponse response,HttpServletRequest request){
-		String faId = request.getParameter("faId");
-		request.setAttribute("faId", faId);
-		return view("/freight/area_detail/list");
-	}
 	
 	/**
 	 * 右侧列表的快递信息
@@ -105,10 +96,11 @@ public class AreaDetailAction extends BaseAction {
 	 * @param response
 	 * @param request
 	 */
-	@RequestMapping("/update")
+	@RequestMapping("/saveOrUpdate")
 	@ResponseBody
 	private void update(HttpServletResponse response, HttpServletRequest request){
 		String str = request.getParameter("str");
+		
 		List<AreaDetailEntity> areaDetailList = JSONArray.parseArray(str, AreaDetailEntity.class);
 		for(int i=0;i<areaDetailList.size();i++){
 			AreaDetailEntity areaDetailEntity = areaDetailList.get(i);
@@ -131,6 +123,7 @@ public class AreaDetailAction extends BaseAction {
 	@ResponseBody
 	private void save(HttpServletResponse response, HttpServletRequest request){
 		String str = request.getParameter("str");
+		//a[0]=1 a[1]=1,2  b[0]=1 b[1]=2
 		List<AreaDetailEntity> areaDetailList = JSONArray.parseArray(str, AreaDetailEntity.class);
 		for(int i=0;i<areaDetailList.size();i++){
 			AreaDetailEntity areaDetailEntity = areaDetailList.get(i);
