@@ -74,14 +74,13 @@ public class AreaDetailBizImpl extends BaseBizImpl implements IAreaDetailBiz{
 	
 	@Override
 	public void saveOrUpdate(AreaDetailEntity areaDetailEntity) {
-		int fadAreaId = areaDetailEntity.fadAreaId;
-		if(fadAreaId>0){
+		if(areaDetailEntity.fadId >0){
 			freightAreaDetailDao.updateEntity(areaDetailEntity);
 		}else{
 			freightAreaDetailDao.saveEntity(areaDetailEntity);
 		}
 		AreaEntity area = new AreaEntity();
-		area.setFaId(fadAreaId);
+		area.setFaId(areaDetailEntity.fadAreaId);
 		BaseEntity freightAreaEntity = freightAreaBiz.getEntity(area);
 		String faCityIds = ((AreaEntity) freightAreaEntity).getFaCityIds();
 		String[] faCityId = faCityIds.split(",");

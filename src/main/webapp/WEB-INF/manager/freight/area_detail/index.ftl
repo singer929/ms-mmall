@@ -25,6 +25,8 @@
 		</@ms.panel>
 </@ms.html5>
 <script>
+	var areaId = 0;
+	//判定输入的数据
 	function ValidateNumber(e, pnumber) { 
 		if (!/^\d+[.]?\d*$/.test(pnumber)) { 
 			e.value = /^\d+[.]?\d*/.exec(e.value); 
@@ -32,12 +34,13 @@
 		return false; 
 	} 
 	$(function() {
-		$("#areaList li:first").addClass("sel");
 		$("#areaList li").click(function() {
 			$("#areaList li").removeClass("sel");
 			$(this).addClass("sel");
 			$("#areaDetailTable").bootstrapTable("refresh",{query: {faId:$(this).data("id")}});
+			areaId = $(".sel").data("id");   //获取区域ID
 		});
+		$('#areaList li:first').click();
 		//加载对应区域的详细列表
 		$("#areaDetailTable").bootstrapTable({
 			url:"${managerPath}/freight/areaDetail/list.do",
@@ -48,6 +51,7 @@
 		    columns: 
 		    [{	
 		    	checkbox: true,
+		    	class: 'text-center',
 		    	formatter: function (value, row, index) {
 		    		if(row.fadEnable == 1){
 		    			return {
@@ -57,16 +61,18 @@
 	           }
 		    },{
 		        field: 'fadExpress.categoryId',
+		        class: 'text-center',
 		        title: '快递编号'
 		    }, {
 		        field: 'fadExpress.categoryTitle',
+		        class: 'text-center',
 		        title: '快递公司'
 		    }, {
 		        field: 'fadBasePrice',
 		        title: '基础运费',
 		        class: 'text-center',
 		       	formatter: function (value, row, index) {
-	                return "<input type='number' class='btn btn-default' min='0' onkeyup='return ValidateNumber(this,value)' name='fadBasePrice' areaid="+row.fadAreaId+" expressId="+row.fadExpressId+" value="+value+">";
+	                return "<input type='number' class='btn btn-default' min='0' onkeyup='return ValidateNumber(this,value)' fadId="+row.fadId+" expressId="+row.fadExpress.categoryId+" name='fadBasePrice' areaid="+areaId+" value="+value+">";
 	           }
 		    }, {
 		        field: 'fadBaseAmount',
@@ -118,6 +124,7 @@
 		  		fadEnable = 0;
 		  	}
 		  	var obj = new Object();
+		  	obj.fadId=$(this).closest("tr").find("input[name=fadBasePrice]").attr("fadId");
 			obj.fadExpressId=$(this).closest("tr").find("input[name=fadBasePrice]").attr("expressId");
 			obj.fadAreaId=$(this).closest("tr").find("input[name=fadBasePrice]").attr("areaid");
 			obj.fadEnable=fadEnable
