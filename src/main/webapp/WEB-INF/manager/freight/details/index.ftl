@@ -1,76 +1,97 @@
 <@ms.html5>
-	<@ms.panel>	
-	 	<@ms.contentMenu>
-			 <!-- 树形模块菜单开始 -->
-			<#if categoryJson?has_content && categoryJson!="[]">
-				<@ms.tree  treeId="inputTree" json="${categoryJson?default('')}" addNodesName="全部"  jsonId="categoryId" jsonPid="categoryCategoryId" jsonName="categoryTitle"   showIcon="true" expandAll="true" getZtreeId="getZtreeId(event,treeId,treeNode);"  id="listCity"/>
-			<#else> 
-				<@ms.nodata content="暂无栏目"/>
-			</#if>
-			<!-- 树形模块菜单结束 -->
-		</@ms.contentMenu>
-	    <@ms.contentBody width="85%" style="overflow-y: hidden;">
-			<@ms.contentPanel  style="margin:0;padding:0;overflow-y: hidden;">
-		    <@ms.saveButton id = "save"  onclick="save()"/> 
-	           <table id="freightTable"
-					data-toolbar="#toolbar"
-					data-show-refresh="true"
-			        data-show-columns="true"
-			        data-show-export="true"
-					data-method="post" 
-					data-pagination="true"
-					data-side-pagination="server">
-				</table>
-			</@ms.contentPanel>	
-		</@ms.contentBody>  		
+ 	<@ms.contentMenu>
+ 		<@ms.nav title="城市列表" style="position: relative;"></@ms.nav>
+		 <!-- 树形模块菜单开始 -->
+		<#if categoryJson?has_content && categoryJson!="[]">
+			<@ms.tree  treeId="inputTree" json="${categoryJson?default('')}" addNodesName="全部"  jsonId="categoryId" jsonPid="categoryCategoryId" jsonName="categoryTitle"   showIcon="true" expandAll="true" getZtreeId="getZtreeId(event,treeId,treeNode);"  id="listCity"/>
+		<#else> 
+			<@ms.nodata content="暂无栏目"/>
+		</#if>
+		<!-- 树形模块菜单结束 -->
+	</@ms.contentMenu>
+	<@ms.panel style="width: 85%;right: 0; position: absolute;">	
+		<@ms.nav title="城市快递费用详情表" style="width: 85%;"><@ms.saveButton id = "save"  onclick="save()"/> </@ms.nav>
+       	<table id="freightTable"
+			data-toolbar="#toolbar"
+	        data-show-export="true"
+	        data-show-refresh="true"
+       	 	data-show-columns="true"
+			data-method="post" 
+			data-side-pagination="server">
+		</table>
 	</@ms.panel>
 </@ms.html5>
 <script>
 	//获取树节点的城市ID categoryId追加一个src
 	function getZtreeId(event,treeId,treeNode){				
-		//对应bootstrap-table框架的控制
-        $("#freightTable").bootstrapTable({
-        		url:"${managerPath}/freight/list.do?categoryId="+treeNode.categoryId,
-        		contentType : "application/x-www-form-urlencoded",
-			    columns: [{ 
-			    	checkbox: true,
-			    	formatter: function (value, row, index){
-			    		if(row.freEnable == 1){
-			    			return{
-			    				checked: true
-			    			};
-			    		}
-			    	}
-			    },{
-			        field: 'freightId',
-			        title: '编号'
-			    }, {
-			        field: 'freExpress.categoryTitle',
-			        title: '快递公司'
-			    }, {
-			        field: 'freightBasePrice',
-			        formatter:function(value,row,index){return "<input type=text name = 'freightBasePrice' freightCityId="+row.freightCityId+" freightId="+row.freightId+" expressId="+row.freExpress.categoryId+" style= 'width:100px;' value="+value+">"},
-			        title: '基础运费'
-			    }, {
-			        field: 'freightBaseAmount',
-			        formatter:function(value,row,index){return "<input type=text name = 'freightBaseAmount' style= 'width:100px;' value="+value+">"},
-			        title: '基础运费数量'
-			    }, {
-			        field: 'freightIncreasePrice',
-			        formatter:function(value,row,index){return "<input type=text name = 'freightIncreasePrice' style= 'width:100px;' value="+value+">"},
-			        title: '增长运费'
-			    }, {
-			        field: 'freightIncreaseAmount',
-			        formatter:function(value,row,index){return "<input type=text name = 'freightIncreaseAmount' style= 'width:100px;' value="+value+">"},
-			        title: '增长数量'
-			    }]
-        }); 		
+		$("#freightTable").bootstrapTable("refresh",{query: {categoryId:treeNode.categoryId}});
 	}
+	//对应bootstrap-table框架的控制
+    $("#freightTable").bootstrapTable({
+		url:"${managerPath}/freight/list.do",
+		queryParams:function(params) {
+			return {categoryId:${list[0].categoryId?default(0)}};
+		},
+		contentType : "application/x-www-form-urlencoded",
+	    columns: [{ 
+	    	checkbox: true,
+	    	formatter: function (value, row, index){
+	    		if(row.freightEnable == 1){
+	    			return{checked: true};
+	    		}
+	    	}
+	    },{
+	    	align: 'center',
+	        field: 'freightId',
+	        title: '编号'
+	    }, {
+	    	align: 'center',
+	        field: 'freExpress.categoryTitle',
+	        title: '快递公司'
+	    }, {
+	    	align: 'center',
+	        field: 'freightBasePrice',
+	        formatter:function(value,row,index){return "<input type=number min= 0 max= 999999 class='form-control' name = 'freightBasePrice' freightCityId="+row.freightCityId+" freightId="+row.freightId+" expressId="+row.freExpress.categoryId+" style='text-align: center;' value="+value+">"},
+	        title: '基础运费'
+	    }, {
+	    	align: 'center',
+	        field: 'freightBaseAmount',
+	        formatter:function(value,row,index){return "<input type=number min= 0 max= 999999 class='form-control' name = 'freightBaseAmount' style='text-align: center; ' value="+value+">"},
+	        title: '基础运费数量'
+	    }, {
+	    	align: 'center',
+	        field: 'freightIncreasePrice',
+	        formatter:function(value,row,index){return "<input type=number min= 0 max= 999999 class='form-control' name = 'freightIncreasePrice' style='text-align: center; ' value="+value+">"},
+	        title: '增长运费'
+	    }, {
+	    	align: 'center',
+	        field: 'freightIncreaseAmount',
+	        formatter:function(value,row,index){return "<input type=number min= 0 max= 999999 class='form-control' name = 'freightIncreaseAmount' style='text-align: center; ' value="+value+">"},
+	        title: '增长数量'
+		}]
+    }); 		
+	
 	function save(){  		
 		var checked = 0;	
 		var update = [];
 		var save = []; 
 		var list = $("input[name =btSelectItem]");
+		var flag = true;
+		$("input[type=number]").each(function(){
+			var number = $(this).val();
+			var char = number.split("e");	//文本框含有"e"时,char长度不为0;
+			if(number < 0 || isNaN(number) || number > 999999 || char[0] == "" || char.length > 1){
+				flag = false;
+			}
+		});
+		
+		if(!flag){
+			 $('.ms-notifications').offset({top:43}).notify({
+    		    type:'warning',
+			    message: { text:'保存失败，输入类型错误'}
+			 }).show();
+			return;
+		}
 		$("input[name =btSelectItem]").each(function(){	//记录的条数	
 			var freightCityId = $(this).closest("tr").find("input[name=freightBasePrice]").attr("freightCityId");
 			var freightId = $(this).closest("tr").find("input[name=freightBasePrice]").attr("freightId");
@@ -97,9 +118,10 @@
 			}else if((freightId == 0) && (freightBasePrice >=0 && freightBasePrice != "" && freightBasePrice <= 999999) && (freightBaseAmount >=0 && freightBaseAmount != "" && freightBaseAmount <= 999999) && (freightIncreasePrice >=0 && freightIncreasePrice != "" && freightIncreasePrice <= 999999) && (freightIncreaseAmount >=0 && freightIncreaseAmount != "" && freightIncreaseAmount <= 999999)){
 				save.push(obj);
 			}else{
-				
+				return false;
 			}
 		})
+		
 		var updateStr = JSON.stringify(update);
 		var saveStr = JSON.stringify(save);
 		//判断所有的值是否合法或为空
@@ -121,12 +143,9 @@
     			);
 			}
 		}
-		
 		$('.ms-notifications').offset({top:43}).notify({
 			type:'success',
 			message: { text:'保存成功！' }
 		}).show();	
-		//更新数据后刷新页面
-		location.reload();
 	}; 
 </script>

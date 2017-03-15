@@ -85,22 +85,9 @@ public class FreightAction extends BaseAction {
 		List<CategoryEntity> list = categoryBiz.queryChilds(category);	
 		//返回给前端数据categoryJson，具体指的是查询后的数据
 		String str = JSONArray.toJSONString(list);
-		request.setAttribute("categoryJson", str);		
+		request.setAttribute("categoryJson", str);
+		request.setAttribute("list", list);
 		return view("/freight/details/index");
-	}
-	
-	/**
-	 * 返回右边一个页面
-	 * @param freightEntity
-	 * @param response
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/form")
-	public String form(@ModelAttribute FreightEntity freightEntity, HttpServletResponse response, HttpServletRequest request) {
-		String categoryId = request.getParameter("categoryId");
-		request.setAttribute(categoryId, categoryId);
-		return view("/freight/details/form");		
 	}
 	
 	/**
