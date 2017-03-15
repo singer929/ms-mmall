@@ -74,7 +74,7 @@ public class AreaDetailBizImpl extends BaseBizImpl implements IAreaDetailBiz{
 	
 	@Override
 	public void saveOrUpdate(AreaDetailEntity areaDetailEntity) {
-		if(areaDetailEntity.fadId >0){
+		if(freightAreaDetailDao.getByEntity(areaDetailEntity) !=null){
 			freightAreaDetailDao.updateEntity(areaDetailEntity);
 		}else{
 			freightAreaDetailDao.saveEntity(areaDetailEntity);
