@@ -22,11 +22,13 @@
 	</@ms.panel>
 </@ms.html5>
 <script>
-	//获取树节点的城市ID categoryId追加一个src
+	//获取树节点的城市ID categoryId
 	function getZtreeId(event,treeId,treeNode){				
-		$("#freightTable").bootstrapTable("refresh",{query: {categoryId:treeNode.categoryId}});
+		$("#freightTable").bootstrapTable("refresh",{query: {categoryId:treeNode.categoryId}});		//刷新右侧数据
+		$("#treeDomeinputTree").attr("data-id",treeNode.categoryId);  //点击追加一个对应的城市id
 	}
 	//对应bootstrap-table框架的控制
+	var categoryId = ${list[0].categoryId?default(0)};  //默认城市id
     $("#freightTable").bootstrapTable({
 		url:"${managerPath}/freight/list.do",
 		queryParams:function(params) {
@@ -51,7 +53,7 @@
 	    }, {
 	    	align: 'center',
 	        field: 'freightBasePrice',
-	        formatter:function(value,row,index){return "<input type=number min= 0 max= 999999 class='form-control' name = 'freightBasePrice' freightCityId="+row.freightCityId+" freightId="+row.freightId+" expressId="+row.freExpress.categoryId+" style='text-align: center;' value="+value+">"},
+	        formatter:function(value,row,index){return "<input type=number min= 0 max= 999999 class='form-control' name = 'freightBasePrice'  freightId="+row.freightId+" expressId="+row.freExpress.categoryId+" style='text-align: center;' value="+value+">"},
 	        title: '基础运费'
 	    }, {
 	    	align: 'center',
@@ -70,7 +72,6 @@
 	        title: '增长数量'
 		}]
     }); 		
-	
 	function save(){  		
 		var checked = 0;	
 		var update = [];
@@ -84,7 +85,6 @@
 				flag = false;
 			}
 		});
-		
 		if(!flag){
 			 $('.ms-notifications').offset({top:43}).notify({
     		    type:'warning',
@@ -93,7 +93,10 @@
 			return;
 		}
 		$("input[name =btSelectItem]").each(function(){	//记录的条数	
-			var freightCityId = $(this).closest("tr").find("input[name=freightBasePrice]").attr("freightCityId");
+			var freightCityId = $("#treeDomeinputTree").attr("data-id");
+			if(freightCityId == undefined){	//没有获取到追加的值，就赋一个默认值
+				freightCityId = categoryId;
+			}
 			var freightId = $(this).closest("tr").find("input[name=freightBasePrice]").attr("freightId");
     		var freightExpressId = $(this).closest("tr").find("input[name=freightBasePrice]").attr("expressId");
     		var freightBasePrice = $(this).closest("tr").find("input[name = freightBasePrice]").val();
@@ -113,15 +116,14 @@
 			obj.freightBaseAmount = freightBaseAmount;
 			obj.freightIncreasePrice = freightIncreasePrice;
 			obj.freightIncreaseAmount = freightIncreaseAmount;
-			if((freightId > 0) && (freightBasePrice >=0 && freightBasePrice != "" && freightBasePrice <= 999999) && (freightBaseAmount >=0 && freightBaseAmount != "" && freightBaseAmount <= 999999) && (freightIncreasePrice >=0 && freightIncreasePrice != "" && freightIncreasePrice <= 999999) && (freightIncreaseAmount >=0 && freightIncreaseAmount != "" && freightIncreaseAmount <= 999999)){
+			if(freightId > 0){	//有id则是更新数据
 				update.push(obj);
-			}else if((freightId == 0) && (freightBasePrice >=0 && freightBasePrice != "" && freightBasePrice <= 999999) && (freightBaseAmount >=0 && freightBaseAmount != "" && freightBaseAmount <= 999999) && (freightIncreasePrice >=0 && freightIncreasePrice != "" && freightIncreasePrice <= 999999) && (freightIncreaseAmount >=0 && freightIncreaseAmount != "" && freightIncreaseAmount <= 999999)){
-				save.push(obj);
+			}else if(freightId == 0){
+				save.push(obj);		//无id保存数据
 			}else{
 				return false;
 			}
 		})
-		
 		var updateStr = JSON.stringify(update);
 		var saveStr = JSON.stringify(save);
 		//判断所有的值是否合法或为空
