@@ -56,7 +56,7 @@ public class ProductSpecificationDetailEntity extends BaseEntity{
 	/**
 	 * 库存
 	 */
-	private String stock;
+	private int stock;
 	
 	/**
 	 * 价格
@@ -102,11 +102,11 @@ public class ProductSpecificationDetailEntity extends BaseEntity{
 		this.specValues = specValues;
 	}
 
-	public String getStock() {
+	public int getStock() {
 		return stock;
 	}
 
-	public void setStock(String stock) {
+	public void setStock(int stock) {
 		this.stock = stock;
 	}
 

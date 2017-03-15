@@ -128,12 +128,6 @@
 	</select>
 	<!-- 查询订单结束 -->
 	
-	<!-- 修改订单状态开始 -->
-	<update id="editOrderStatus" parameterType="net.mingsoft.mall.entity.OrderEntity">
-		update `order` set  ORDER_STATUS = #{orderStatus} where ORDER_NO = #{orderNo}
-	</update>
-	<!-- 修改订单状态结束 --> 
-	
 	<!-- 获取商品开始 -->
 	<select id="getEntityById" resultMap="resultMap"
 		parameterType= "int">

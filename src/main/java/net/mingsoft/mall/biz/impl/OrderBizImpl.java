@@ -12,9 +12,11 @@ import com.mingsoft.util.StringUtil;
 import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.biz.IOrderBiz;
 import net.mingsoft.mall.dao.IOrderProductDao;
+import net.mingsoft.mall.dao.IProductSpecificationDetailDao;
 import net.mingsoft.mall.entity.GoodsEntity;
 import net.mingsoft.mall.entity.OrderEntity;
 import net.mingsoft.mall.entity.OrderProductEntity;
+import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
 import net.mingsoft.order.constant.e.OrderStatusEnum;
 import net.mingsoft.order.dao.ICartDao;
 import net.mingsoft.order.dao.IGoodsDao;
@@ -32,6 +34,9 @@ public class OrderBizImpl extends net.mingsoft.order.biz.impl.OrderBizImpl imple
 
 	@Autowired
 	private ICartDao cartDao;
+	
+	@Autowired
+	private IProductSpecificationDetailDao productSpecificationDetailDao;
 
 	@Resource(name = "mallCartDao")
 	private net.mingsoft.mall.dao.ICartDao mallCartDao;
@@ -82,8 +87,13 @@ public class OrderBizImpl extends net.mingsoft.order.biz.impl.OrderBizImpl imple
 			ope.setOpGoodsId(goods.getGoodsId());
 			ope.setOpPeopleId(order.getOrderPeopleId());
 			orderProductDao.updateEntity(ope);
+			OrderProductEntity temp = (OrderProductEntity) orderProductDao.getByEntity(ope);
+			if(temp != null){
+				ProductSpecificationDetailEntity psdEntity = (ProductSpecificationDetailEntity) productSpecificationDetailDao.getEntity(temp.getOpProductDetailId());
+				psdEntity.setStock(psdEntity.getStock() - goods.getGoodsNum());
+				productSpecificationDetailDao.updateEntity(psdEntity);
+			}
 		}
-
 		return order.getOrderId();
 	}
 
@@ -97,14 +107,6 @@ public class OrderBizImpl extends net.mingsoft.order.biz.impl.OrderBizImpl imple
 	public net.mingsoft.mall.entity.OrderEntity getByOrderNo(String orderNo) {
 		// TODO Auto-generated method stub
 		return mallOrderDao.getByOrderNo(orderNo);
-	}
-	/**
-	 * 根据订单号修改订单状态
-	 */
-	@Override
-	public void editOrderStatus(net.mingsoft.order.entity.OrderEntity orderEntity) {
-		mallOrderDao.editOrderStatus(orderEntity);
-		
 	}
 
 	@Override

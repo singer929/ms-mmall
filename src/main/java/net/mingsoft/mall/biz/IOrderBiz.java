@@ -23,12 +23,6 @@ public interface IOrderBiz extends net.mingsoft.order.biz.IOrderBiz {
 	List query(OrderEntity entity);
 	
 	/**
-	 * 根据订单号修改订单状态
-	 * @param orderEntity
-	 */
-	public void editOrderStatus(net.mingsoft.order.entity.OrderEntity orderEntity);
-	
-	/**
 	 * 根据ID查找product
 	 * @param id
 	 * @return 

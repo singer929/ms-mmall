@@ -49,6 +49,13 @@
 		update mall_order_product set OP_GOODS_ID=#{opGoodsId},OP_STATUS=1 where OP_PEOPLE_ID=#{opPeopleId} and OP_GOODS_ID=#{cartId} and OP_STATUS=0
 	</update>
 	
+	<!-- 获取单个 -->
+	<select id="getByEntity" parameterType="net.mingsoft.mall.entity.OrderProductEntity" resultMap="resultMap">
+		select * from mall_order_product
+		<where>
+			<if test="opGoodsId != null">and OP_GOODS_ID=#{opGoodsId}</if>
+		</where>
+	</select>
 
 	<!--查询 -->
 	<select id="query" parameterType="net.mingsoft.mall.entity.OrderProductEntity" resultMap="resultMap">

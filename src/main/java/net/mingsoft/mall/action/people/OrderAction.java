@@ -227,10 +227,10 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 		}
 		order.setOrderModelId(this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL_ORDER));
 		for(int i = 0;i<cartIds.length;i++){
-			OrderEntity productEntity = orderBiz.getEntityById(cartIds[i]);
+			OrderEntity productEntity = mallOrderBiz.getEntityById(cartIds[i]);
 			int productId = productEntity.getProductEntity().getProductId();
 			int productStock= productEntity.getProductEntity().getProductStock()+productEntity.getCartEntity().getCartNum();
-			orderBiz.editProductStockByEntity(productId,productStock);
+			mallOrderBiz.editProductStockByEntity(productId,productStock);
 		}
 		mallOrderBiz.saveEntity(order, cartIds);
 		this.outJson(response, order);
@@ -274,7 +274,7 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 		net.mingsoft.order.entity.OrderEntity orderEntity = orderBiz.getByOrderNo(order.getOrderNo());
 		if(orderEntity != null){
 			orderEntity.setOrderStatus(OrderStatusEnum.SUCCESS);
-			orderBiz.editOrderStatus(orderEntity);
+			orderBiz.updateEntity(orderEntity);
 			this.outJson(response, orderEntity);
 		}else{
 			this.outJson(response, false);

@@ -25,6 +25,12 @@
 		</@ms.panel>
 </@ms.html5>
 <script>
+	function ValidateNumber(e, pnumber) { 
+		if (!/^\d+[.]?\d*$/.test(pnumber)) { 
+			e.value = /^\d+[.]?\d*/.exec(e.value); 
+		} 
+		return false; 
+	} 
 	$(function() {
 		$("#areaList li:first").addClass("sel");
 		$("#areaList li").click(function() {
@@ -60,7 +66,7 @@
 		        title: '基础运费',
 		        class: 'text-center',
 		       	formatter: function (value, row, index) {
-	                return "<input type='number' class='btn btn-default' min='0' name='fadBasePrice' areaid="+row.fadAreaId+" expressId="+row.fadExpressId+" value="+value+">";
+	                return "<input type='number' class='btn btn-default' min='0' onkeyup='return ValidateNumber(this,value)' name='fadBasePrice' areaid="+row.fadAreaId+" expressId="+row.fadExpressId+" value="+value+">";
 	           }
 		    }, {
 		        field: 'fadBaseAmount',
@@ -91,7 +97,7 @@
 		var flag = true;
 		$(".table-hover input[type=number]").each(function(){
 			var val = $(this).val();
-			if(val < 0 || isNaN(val)){
+			if(val < 0){
 				flag = false;
 			}
 		});
@@ -106,25 +112,19 @@
 		var addOrEdit = [];
 		$(".table-hover input[name=btSelectItem]").each(function(){
 			var fadEnable = 0;
-			var fadExpressId = $(this).closest("tr").find("input[name=fadBasePrice]").attr("expressId");
-			var fadAreaId = $(this).closest("tr").find("input[name=fadBasePrice]").attr("areaid");
-			var fadBasePrice = $(this).closest("tr").find("input[name=fadBasePrice]").val();
-			var fadBaseAmount = $(this).closest("tr").find("input[name=fadBaseAmount]").val();
-			var fadIncreasePrice = $(this).closest("tr").find("input[name=fadIncreasePrice]").val();
-			var fadIncreaseAmount = $(this).closest("tr").find("input[name=fadIncreaseAmount]").val();
 			if($(this).is(':checked')){ 					//判断复选框是否选中
 				fadEnable = 1;
 		  	}else{
 		  		fadEnable = 0;
 		  	}
 		  	var obj = new Object();
-			obj.fadExpressId=fadExpressId;
-			obj.fadAreaId=fadAreaId;
-			obj.fadEnable=fadEnable;
-			obj.fadBasePrice=fadBasePrice;
-			obj.fadBaseAmount=fadBaseAmount;
-			obj.fadIncreasePrice=fadIncreasePrice;
-			obj.fadIncreaseAmount=fadIncreaseAmount;
+			obj.fadExpressId=$(this).closest("tr").find("input[name=fadBasePrice]").attr("expressId");
+			obj.fadAreaId=$(this).closest("tr").find("input[name=fadBasePrice]").attr("areaid");
+			obj.fadEnable=fadEnable
+			obj.fadBasePrice=$(this).closest("tr").find("input[name=fadBasePrice]").val();
+			obj.fadBaseAmount=$(this).closest("tr").find("input[name=fadBaseAmount]").val();
+			obj.fadIncreasePrice=$(this).closest("tr").find("input[name=fadIncreasePrice]").val();
+			obj.fadIncreaseAmount=$(this).closest("tr").find("input[name=fadIncreaseAmount]").val();
 			addOrEdit.push(obj);
 		})
 		var str = JSON.stringify(addOrEdit);
