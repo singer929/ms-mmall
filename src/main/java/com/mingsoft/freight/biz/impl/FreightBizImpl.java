@@ -68,6 +68,18 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 		return freightDao.queryByCityEnable(freightCityId);
 	}
 
+	/**
+	 * 保存或更新运费基础数据
+	 */
+	@Override
+	public void saveOrUpdate(FreightEntity freightEntity) {
+		if(freightDao.getByEntity(freightEntity) != null){
+			freightDao.updateEntity(freightEntity);
+		}else{
+			freightDao.saveEntity(freightEntity);
+		}
+		
+	}
 	@Override
 	public double cost(FreightEntity freightentity, double scale) {
 		if(freightentity == null){
@@ -95,4 +107,5 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 			}
 		}
 	}
+
 }

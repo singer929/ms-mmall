@@ -42,6 +42,12 @@ public interface IFreightBiz extends IBaseBiz {
 	public List<FreightEntity> queryAllFreight(int freightCityId , int categoryModelId);
 	
 	/**
+	 * 保存或更新运费基础数据
+	 * @param freightEntity
+	 */
+	public void saveOrUpdate(FreightEntity freightEntity);
+	
+	/**
 	 * 计算运费
 	 */
 	public double cost(FreightEntity freightentity,double scale);

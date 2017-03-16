@@ -3,7 +3,7 @@
  		<@ms.nav title="城市列表" style="position: relative;"></@ms.nav>
 		 <!-- 树形模块菜单开始 -->
 		<#if categoryJson?has_content && categoryJson!="[]">
-			<@ms.tree  treeId="inputTree" json="${categoryJson?default('')}" addNodesName="全部"  jsonId="categoryId" jsonPid="categoryCategoryId" jsonName="categoryTitle"   showIcon="true" expandAll="true" getZtreeId="getZtreeId(event,treeId,treeNode);"  id="listCity"/>
+			<@ms.tree  treeId="inputTree" json="${categoryJson?default('')}"   jsonId="categoryId" jsonPid="categoryCategoryId" jsonName="categoryTitle"   showIcon="true" expandAll="true" getZtreeId="getZtreeId(event,treeId,treeNode);"  id="listCity"/>
 		<#else> 
 			<@ms.nodata content="暂无栏目"/>
 		</#if>
@@ -38,13 +38,13 @@
 	    columns: [{ 
 	    	checkbox: true,
 	    	formatter: function (value, row, index){
-	    		if(row.freightEnable == 1){
+	    		if(row.freightEnable == 1){		//快递启用则勾选复选框
 	    			return{checked: true};
 	    		}
 	    	}
 	    },{
 	    	align: 'center',
-	        field: 'freightId',
+	        field: 'freExpress.categoryId',
 	        title: '编号'
 	    }, {
 	    	align: 'center',
@@ -74,8 +74,7 @@
     }); 		
 	function save(){  		
 		var checked = 0;	
-		var update = [];
-		var save = []; 
+		var saveOrUpdate = []; 
 		var list = $("input[name =btSelectItem]");
 		var flag = true;
 		$("input[type=number]").each(function(){
@@ -90,7 +89,7 @@
     		    type:'warning',
 			    message: { text:'保存失败，输入类型错误'}
 			 }).show();
-			return;
+			return;		//异常则结束整个操作
 		}
 		$("input[name =btSelectItem]").each(function(){	//记录的条数	
 			var freightCityId = $("#treeDomeinputTree").attr("data-id");
@@ -116,35 +115,15 @@
 			obj.freightBaseAmount = freightBaseAmount;
 			obj.freightIncreasePrice = freightIncreasePrice;
 			obj.freightIncreaseAmount = freightIncreaseAmount;
-			if(freightId > 0){	//有id则是更新数据
-				update.push(obj);
-			}else if(freightId == 0){
-				save.push(obj);		//无id保存数据
-			}else{
-				return false;
-			}
+			saveOrUpdate.push(obj);		//对象的值赋值给数据
 		})
-		var updateStr = JSON.stringify(update);
-		var saveStr = JSON.stringify(save);
-		//判断所有的值是否合法或为空
-		if((update.length == list.length) || (save.length == list.length)){
-			if(update.length > 0){			//判断是否保存过这条数据，为真则更新数据
-				$.post("${managerPath}/freight/update.do",
-    				{
-    					string:updateStr	    					
-    				},
-    				function(data,status){}
-    			);
-			}
-			if(save.length > 0){				//保存数据
-				$.post("${managerPath}/freight/save.do",
-    				{
-    					string:saveStr	    					
-    				},
-    				function(data,status){}
-    			);
-			}
-		}
+		var saveOrUpdateStr = JSON.stringify(saveOrUpdate);
+		$.post("${managerPath}/freight/saveOrUpdate.do",
+			{
+				string:saveOrUpdateStr	    					
+			},
+			function(data,status){}
+		);
 		$('.ms-notifications').offset({top:43}).notify({
 			type:'success',
 			message: { text:'保存成功！' }

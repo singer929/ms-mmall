@@ -68,7 +68,7 @@ public class FreightAction extends BaseAction {
 	private ICategoryBiz categoryBiz;
 	
 	/**
-	 * 左边城市列表
+	 * 城市列表和基本框架
 	 * @param categoryEntity 新建实体，查询条件
 	 * @param response
 	 * @param request
@@ -87,11 +87,11 @@ public class FreightAction extends BaseAction {
 		String str = JSONArray.toJSONString(list);
 		request.setAttribute("categoryJson", str);
 		request.setAttribute("list", list);
-		return view("/freight/details/index");
+		return view("/freight/index");
 	}
 	
 	/**
-	 * 右边页面显示数据
+	 * 框架里显示的数据
 	 * @param freightEntity 前端传过来的城市id
 	 * @param response
 	 * @param request
@@ -109,38 +109,21 @@ public class FreightAction extends BaseAction {
 	}
 	
 	/**
-	 * 更新运费基本数据
+	 * 更新和保存运费基本数据
 	 * @param freightEntity
 	 * @param response
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/update")
-	public void update( HttpServletResponse response, HttpServletRequest request) {
+	@RequestMapping("/saveOrUpdate")
+	public void saveOrUpdate( HttpServletResponse response, HttpServletRequest request) {
 		String str = request.getParameter("string");
 		List<FreightEntity> freightList = JSONArray.parseArray(str, FreightEntity.class);
 		for(int i=0;i<freightList.size();i++){
 			FreightEntity freightEntity = freightList.get(i);			
-			freightBiz.updateEntity(freightEntity);
+			freightBiz.saveOrUpdate(freightEntity);
 		}
 	}
-	
-	/**
-	 * 保存运费基本数据
-	 * @param freightEntity
-	 * @param response
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/save")
-	public void save(HttpServletResponse response, HttpServletRequest request) {
-		String str = request.getParameter("string");
-		List<FreightEntity> freightList = JSONArray.parseArray(str, FreightEntity.class);
-		for(int i=0;i<freightList.size();i++){
-			FreightEntity freightEntity = freightList.get(i);			
-			freightBiz.saveEntity(freightEntity);
-		}
-	}	
 	
 	/**
 	 * 运费
