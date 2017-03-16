@@ -26,13 +26,11 @@
 </@ms.html5>
 <script>
 	var areaId = 0;
-	//判定输入的数据
-	function ValidateNumber(e, pnumber) { 
-		if (!/^\d+[.]?\d*$/.test(pnumber)) { 
-			e.value = /^\d+[.]?\d*/.exec(e.value); 
-		} 
-		return false; 
-	} 
+	function onlyNum(){
+  		if(!(event.keyCode==46)&&!(event.keyCode==8)&&!(event.keyCode==37)&&!(event.keyCode==39))
+		  	if(!((event.keyCode>=48&&event.keyCode<=57)||(event.keyCode>=96&&event.keyCode<=105)))
+		    	event.returnValue=false;
+	}
 	$(function() {
 		$("#areaList li").click(function() {
 			$("#areaList li").removeClass("sel");
@@ -72,28 +70,28 @@
 		        title: '基础运费',
 		        class: 'text-center',
 		       	formatter: function (value, row, index) {
-	                return "<input type='number' class='btn btn-default' min='0' onkeyup='return ValidateNumber(this,value)' fadId="+row.fadId+" expressId="+row.fadExpress.categoryId+" name='fadBasePrice' areaid="+areaId+" value="+value+">";
+	                return "<input type='number' class='btn btn-default' onkeydown='onlyNum()' min='0' max='9999' fadId="+row.fadId+" expressId="+row.fadExpress.categoryId+" name='fadBasePrice' areaid="+areaId+" value="+value+">";
 	           }
 		    }, {
 		        field: 'fadBaseAmount',
 		        title: '基础数量',
 		        class: 'text-center',
 		        formatter: function (value, row, index) {
-	                return "<input type='number' class='btn btn-default' min='0' name='fadBaseAmount' value="+value+">";
+	                return "<input type='number' class='btn btn-default' onkeydown='onlyNum()' min='0' max='9999' name='fadBaseAmount' value="+value+">";
 	           }
 		    }, {
 		        field: 'fadIncreasePrice',
 		        title: '增长运费',
 		        class: 'text-center',
 		        formatter: function (value, row, index) {
-	                return "<input type='number' class='btn btn-default' min='0' name='fadIncreasePrice' value="+value+">";
+	                return "<input type='number' class='btn btn-default' onkeydown='onlyNum()' min='0' max='9999' name='fadIncreasePrice' value="+value+">";
 	           }
 		    }, {
 		        field: 'fadIncreaseAmount',
 		        title: '增长数量',
 		        class: 'text-center',
 		        formatter: function (value, row, index) {
-	                return "<input type='number' class='btn btn-default' min='0' name='fadIncreaseAmount' value="+value+">";
+	                return "<input type='number' class='btn btn-default' onkeydown='onlyNum()' min='0' max='9999' name='fadIncreaseAmount' value="+value+">";
 	           }
 		    }]
 	    });	
@@ -103,7 +101,7 @@
 		var flag = true;
 		$(".table-hover input[type=number]").each(function(){
 			var val = $(this).val();
-			if(val < 0){
+			if(val < 0 || val > 9999){
 				flag = false;
 			}
 		});
@@ -111,7 +109,7 @@
 		if(!flag){
 			 $('.ms-notifications').offset({top:43}).notify({
     		    type:'warning',
-			    message: { text:'保存失败，输入类型错误'}
+			    message: { text:'保存失败，输入值错误'}
 			 }).show();
 			return;
 		}

@@ -229,7 +229,7 @@ public class OrderAction extends net.mingsoft.people.action.BaseAction {
 		for(int i = 0;i<cartIds.length;i++){
 			OrderEntity productEntity = mallOrderBiz.getEntityById(cartIds[i]);
 			int productId = productEntity.getProductEntity().getProductId();
-			int productStock= productEntity.getProductEntity().getProductStock()+productEntity.getCartEntity().getCartNum();
+			int productStock= productEntity.getProductEntity().getProductStock()-productEntity.getCartEntity().getCartNum();
 			mallOrderBiz.editProductStockByEntity(productId,productStock);
 		}
 		mallOrderBiz.saveEntity(order, cartIds);
