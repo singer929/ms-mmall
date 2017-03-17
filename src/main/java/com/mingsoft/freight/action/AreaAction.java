@@ -41,6 +41,7 @@ import com.mingsoft.basic.constant.ModelCode;
 import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.freight.biz.IAreaBiz;
 import com.mingsoft.freight.entity.AreaEntity;
+import com.mingsoft.util.StringUtil;
 
 import net.mingsoft.basic.util.BasicUtil;
 
@@ -65,7 +66,6 @@ public class AreaAction extends BaseAction {
 	 */
 	@RequestMapping("/index")
 	private String index(HttpServletRequest request){
-		areaList(request);
 		//树形部分
 		int modelId =  BasicUtil.getModelCodeId(ModelCode.CITY);
 		CategoryEntity category = new CategoryEntity();
@@ -82,14 +82,15 @@ public class AreaAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/areaList")
-	private void areaList(HttpServletRequest request){
+	@ResponseBody
+	private void areaList(HttpServletResponse response,HttpServletRequest request){
 		//左侧列表
 		List<BaseEntity> areas = areaBiz.queryAll();
-		request.setAttribute("areas", areas);
+		this.outJson(response, areas);
 	}
 	
 	/**
-	 * 保存和修改添加的区域信息
+	 * 保存区域信息
 	 * @param area
 	 * @param response
 	 * @param request
@@ -97,17 +98,21 @@ public class AreaAction extends BaseAction {
 	@RequestMapping("/save")
 	@ResponseBody
 	private void save(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
-		String faTitle = area.getFaTitle();
-		AreaEntity areaEntity = new AreaEntity();
-		areaEntity.setFaTitle(faTitle);
-		BaseEntity temporaryEntity = areaBiz.getEntity(areaEntity);
-		if(temporaryEntity == null){
-			areaBiz.saveEntity(area);
-			this.outJson(response,true);
-		}else{
-			areaBiz.updateEntity(area);
-			this.outJson(response,false);
-		}
+		areaBiz.saveEntity(area);
+		this.outJson(response,true);
+	}
+	
+	/**
+	 * 修改区域信息
+	 * @param area
+	 * @param response
+	 * @param request
+	 */
+	@RequestMapping("/update")
+	@ResponseBody
+	private void update(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
+		areaBiz.updateEntity(area);
+		this.outJson(response,true);
 	}
 	
 	/**
@@ -120,12 +125,8 @@ public class AreaAction extends BaseAction {
 	private void delete(@ModelAttribute AreaEntity area, HttpServletResponse response, HttpServletRequest request){
 		String areaIds = request.getParameter("areaIds");
 		String[] areaId=areaIds.split(",");
-		int[] ids=new int[areaId.length];
-		for (int i = 0; i < areaId.length; i++) {
-			ids[i]=Integer.parseInt(areaId[i]);
-		}
+		int[] ids = StringUtil.stringsToInts(areaId);
 		//删除freight_area_detail表和freight_area表
 		areaBiz.deleteArea(ids);
-		
 	}
 }

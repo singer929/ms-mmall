@@ -36,7 +36,12 @@
 	
 	<!-- 更新区域开始 -->
 	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.AreaEntity">
-		update freight_area set fa_city_ids = #{faCityIds} where fa_title = #{faTitle}
+		update freight_area 
+		<set>
+			<if test="faTitle !=null">fa_title= #{faTitle},</if>
+			<if test="faCityIds !=null">fa_city_ids= #{faCityIds},</if>
+		</set>
+		where fa_id = #{faId}
 	</update>
 	<!-- 更新区域结束 -->
 	

@@ -6,48 +6,39 @@
 	</style>
 	<@ms.content>
 		<@ms.contentMenu>
-			<div style="padding:5px 0 5px 24px; border-bottom:2px solid #ddd;">
+			<div style="padding:5px 0 5px 20px; border-bottom:2px solid #ddd;">
 				<input type="checkbox" name="checkboxAll" id="checkboxAll" value="">
-				<span style="margin-right:10%;">全部</span>
+				<span style="margin-right:18%;">全部</span>
 				<@ms.addButton id="addButton"/>
 				<@ms.delButton id="delButton"/>
 			</div>
-       		<ul id="areaList">
-           	<#list areas as areaEntity>
-        		<li data-id="${areaEntity.faId?default(0)}" data-ids="${areaEntity.faCityIds?default(0)}" data-title="${areaEntity.faTitle?default(0)}">
-        			<input type="checkbox" name="checkbox" value="${areaEntity.faId?default(0)}">
-	        		${areaEntity.faTitle?default(0)}
-	        	</li>
-	        </#list>
-	        </ul>
+       		<ul id="areaList" class="listParam"></ul>
 		</@ms.contentMenu>
 		<@ms.panel style="width: 85%;right: 0; position: absolute;">
 			<@ms.nav title="区域信息" style="width: 85%;"><@ms.savebutton id="savebutton"/></@ms.nav>
 			<div style="height:60px;">
-				<span style="font-weight: 700;float:left;margin:5px 0 0 8%;">区域名称:</span>
+				<span style="font-weight:700;float:left;margin:5px 0 0 8%;">区域名称:</span>
 				<@ms.text id="faTitle" name="faTitle" value="" width="300"  placeholder="请输入区域名称" />
 			</div>
 			<div>
 				<span style="font-weight: 700;margin:5px 0 0 7%;">请选择区域:</span>
-				<div style="border:2px solid #ddd;width:60%;height:450px;margin:-2% 0 0 15%;overflow:scroll;">
-					<@ms.form name="areaForm"  isvalidation=true >
-			    		<@ms.table head=['编号,100','操作,150','城市名称'] id="tableConterent">
-							<#if categoryJson?has_content && categoryJson!="[]">
-						    	<@ms.treeTable treeId="areaAddTree" tmplBefored="true" tmplAfter="false" tbodyId="tableConterent" json="${categoryJson?default('')}" jsonName="categoryTitle" jsonId="categoryId" jsonPid="categoryCategoryId"/>
-						  	<#else>
-						     	<tr>
-						            <td colspan="3" class="text-center" >
-						            	<@ms.nodata/>
-									</td>
-						      	</tr>                          
-							</#if>
-						</@ms.table>
-						<script id="beforedareaAddTree" type="text/x-jquery-tmpl">
-							<td>
-								<input type="checkbox"  name="ids" id="ids">
-							</td>
-						</script>
-					</@ms.form>
+				<div style="height:500px;margin:-2% 0 0 15%;overflow:scroll;">
+		    		<#if categoryJson?has_content && categoryJson!="[]">
+						<@ms.tree  
+							treeId="areaTree" 
+							json="${categoryJson?default('')}" 
+							ischeck="true"
+							jsonId="categoryId" 
+							jsonPid="categoryCategoryId" 
+							jsonName="categoryTitle"   
+							showIcon="false" 
+							expandAll="true" 
+							getZtreeId="getZtreeId(event,treeId,treeNode);"  
+							id="cityList"
+						/>
+					<#else> 
+						<@ms.nodata content="暂无栏目"/>
+					</#if>
 				</div>
 			</div>
 		</@ms.panel>
@@ -62,41 +53,100 @@
 		</@ms.modalButton>
 	</@ms.modal>
 </@ms.html5>
-<script>
+<script id="myTemplate" type="text/x-jquery-tmpl">	
+	<#noparse>
+	<li class="xin" data-id="${faId}" data-ids="${faCityIds}" data-title="${faTitle}">
+		<input type="checkbox" name="checkbox" value="${faId}">
+		${faTitle}
+	</li>
+	</#noparse>
+</script>
+<script type="text/javascript">
+	//左侧
+	$(function(){
+		areaList();
+	});	
+	function areaList(){
+		var areaList = [] 	 		
+		$.post("${managerPath}/freight/area/areaList.do",{},	
+			function(data,status){	
+				for(var i = 0;i < data.length;i++){	
+					areaList[i] ={	
+						faId:data[i].faId,	
+						faCityIds:data[i].faCityIds,	
+						faTitle:data[i].faTitle	
+					}
+				}
+				$(".xin").remove();
+				$("#myTemplate").tmpl(areaList).appendTo('.listParam');			//通过tmpl追加数据		
+			}
+		);
+	}
 	//保存
 	$("#savebutton").click(function(){
-		var value="";
+		var treeObj = $.fn.zTree.getZTreeObj("treeDomeareaTree");
+		var nodes = treeObj.getCheckedNodes(true);
+		var ids="";
+		var faId="";
+		for(var i=0;i<nodes.length;i++){
+			ids = ids + nodes[i].categoryId + ",";
+		}
+		ids = ids.substring(0,ids.length-1);
 		var faTitle = $("input[name=faTitle]").val();
 		if(faTitle == ""){
-			alert("区域名称不能为空，请重新输入")
+			$('.ms-notifications').offset({top:43}).notify({
+    		    type:'warning',
+			    message: { text:'区域名称不能为空，请重新输入'}
+			 }).show();
 			return;
 		}
-		$("#tableConterent input[type=checkbox]").each(function(){
-			if($(this).is(':checked')){ 					//判断复选框是否选中
-		  		var dataId =$(this).parent().parent().attr("data-id");
-		 		value=value + dataId+ ","; 	//值的拼凑
+		if(ids == ""){
+			$('.ms-notifications').offset({top:43}).notify({
+    		    type:'warning',
+			    message: { text:'未选择区域城市，请重新选择'}
+			 }).show();
+			return;
+		}
+		//判断是否选中
+		$("#areaList li").each(function(){
+			if($(this).hasClass("sel")){ 	
+				faId =$(this).data("id")
 		  	}
-		})
-		value=value.substring(0,value.length-1);
-		if(value == ""){
-			alert("未选择区域城市，请重新选择")
-			return;
+		});
+		if(faId>0){
+			$.post("${managerPath}/freight/area/update.do",
+			   {
+			   		faId:faId,
+					faTitle:faTitle,
+					faCityIds:ids
+			   }, 
+			   function(data,status){
+					//保存成功提示
+					$('.ms-notifications').offset({top:43}).notify({
+						type:'success',
+						message: { text:'保存成功！' }
+					}).show();
+					onAddClick();
+					areaList();
+			   }
+			);
+		}else{
+			$.post("${managerPath}/freight/area/save.do",
+			   {
+					faTitle:faTitle,
+					faCityIds:ids
+			   }, 
+			   function(data,status){
+				   //保存成功提示
+					$('.ms-notifications').offset({top:43}).notify({
+						type:'success',
+						message: { text:'保存成功！' }
+					}).show();
+					onAddClick();
+					areaList();
+			   }
+			);
 		}
-		$.post("${managerPath}/freight/area/save.do",
-		   {
-				faTitle:faTitle,
-				faCityIds:value
-		   }, 
-		   function(data,status){
-			   	if(data.result){
-				   alert("保存成功");
-				   window.location.reload();
-			   	}else{
-				   alert("修改成功");
-				   window.location.reload();
-			   	}
-		   }
-		);
 	});
 	//删除
 	$("#delButton").click(function(){
@@ -104,6 +154,7 @@
 	});
 	//确认删除
 	$(".rightDelete").click(function(){			//删除区域信息
+		$(".delete").modal("hide");
 		var value="";
 		$("input[name=checkbox]").each(function(){
 			if($(this).is(':checked')){ 					//判断复选框是否选中
@@ -116,11 +167,9 @@
 		   {
 				areaIds:value
 		   }, 
-		   function(data,status){
-			   	
-		   }
+		   function(data,status){}
 		);
-		window.location.reload();
+		areaList();
 	});
 	//全选
 	$("#checkboxAll").click(function(){
@@ -132,48 +181,27 @@
 		}
 	});
 	//添加
-	$("#addButton").click(function(){
+	$("#addButton").click(onAddClick);
+	function onAddClick(){
+		var treeObj = $.fn.zTree.getZTreeObj("treeDomeareaTree");
+		treeObj.checkAllNodes(false);
 		$("input[name=faTitle]").val("");
 		$("input[name=ids]").prop("checked",false);
-	});
+		$("#areaList li").removeClass("sel");
+	}
+	
 	//编辑
-	$("#areaList li").click(function(){
+	$(".listParam").delegate("li","click",function(){
+		var treeObj = $.fn.zTree.getZTreeObj("treeDomeareaTree");
 		$("#areaList li").removeClass("sel");
 		$(this).addClass("sel");
 		var cityIds = $(this).data("ids");
 		var faTitle = $(this).data("title");
 		$("input[name=faTitle]").val(faTitle);
-		var value="";
 		var arr = cityIds.split(',');
-		$("#tableConterent input[type=checkbox]").each(function(){
-			if($(this).is(':checked')){ 					//判断复选框是否选中
-		  		var dataId =$(this).parent().parent().attr("data-id");
-		 		value=value + dataId+ ","; 	//值的拼凑
-		  	}
-		})
-		if(cityIds != value){
-			var valuearr = value.split(',');
-			for(var i=0;i<valuearr.length;i++ ){
-				var columnTitleId = "columnTitle" + valuearr[i];
-				var columnTitle = $('#'+'columnTitle'+valuearr[i]).find("input")
-				columnTitle.prop("checked",false);
-			}
-			for(var i=0;i<arr.length;i++ ){
-				var columnTitleId = "columnTitle" + arr[i];
-				var columnTitle = $('#'+'columnTitle'+arr[i]).find("input")
-				columnTitle.prop("checked",true);
-			}
-		}else{
-			for(var i=0;i<valuearr.length;i++ ){
-				var columnTitleId = "columnTitle" + valuearr[i];
-				var columnTitle = $('#'+'columnTitle'+valuearr[i]).find("input")
-				columnTitle.prop("checked",true);
-			}
-			for(var i=0;i<arr.length;i++ ){
-				var columnTitleId = "columnTitle" + arr[i];
-				var columnTitle = $('#'+'columnTitle'+arr[i]).find("input")
-				columnTitle.prop("checked",false);
-			}
+		treeObj.checkAllNodes(false);
+		for(var i=0;i<arr.length;i++ ){
+			treeObj.checkNode(treeObj.getNodeByParam("categoryId",arr[i]));
 		}
 	});
 </script>

@@ -41,7 +41,7 @@ public interface IAreaDetailBiz extends IBaseBiz {
 	public List<AreaDetailEntity> queryFreightAreaDetail(int faId, int modelId);
 	
 	/**
-	 * 修改或保存 freught中的数据
+	 * 修改或保存 freight中的数据
 	 * @param areaDetailEntity
 	 */
 	public void saveOrUpdate(AreaDetailEntity areaDetailEntity);
