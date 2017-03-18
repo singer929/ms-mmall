@@ -74,16 +74,19 @@ public class AreaDetailBizImpl extends BaseBizImpl implements IAreaDetailBiz{
 	
 	@Override
 	public void saveOrUpdate(AreaDetailEntity areaDetailEntity) {
+		//保存或修改区域表
 		if(freightAreaDetailDao.getByEntity(areaDetailEntity) !=null){
 			freightAreaDetailDao.updateEntity(areaDetailEntity);
 		}else{
 			freightAreaDetailDao.saveEntity(areaDetailEntity);
 		}
+		//保存或修改区域运费表
 		AreaEntity area = new AreaEntity();
 		area.setFaId(areaDetailEntity.fadAreaId);
 		BaseEntity freightAreaEntity = freightAreaBiz.getEntity(area);
 		String faCityIds = ((AreaEntity) freightAreaEntity).getFaCityIds();
 		String[] faCityId = faCityIds.split(",");
+		//给区域运费实体赋值
 		FreightEntity freightEntity = new FreightEntity();
 		freightEntity.setFreightEnable(areaDetailEntity.getFadEnable());
 		freightEntity.setFreightExpressId(areaDetailEntity.getFadExpressId());

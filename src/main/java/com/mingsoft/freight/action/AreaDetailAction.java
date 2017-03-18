@@ -95,7 +95,7 @@ public class AreaDetailAction extends BaseAction {
 	 */
 	@RequestMapping("/saveOrUpdate")
 	@ResponseBody
-	private void update(HttpServletResponse response, HttpServletRequest request){
+	private void saveOrUpdate(HttpServletResponse response, HttpServletRequest request){
 		String str = request.getParameter("str");
 		List<AreaDetailEntity> areaDetailList = JSONArray.parseArray(str, AreaDetailEntity.class);
 		for(int i=0;i<areaDetailList.size();i++){

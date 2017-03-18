@@ -193,7 +193,7 @@
 		 */
 		getZtreeId${treeId}(event,treeId,treeNode);
 -->
-<#-- 树形控件,以input下拉框的形式显示(官网:http://www.ztree.me/v3/main.php#_zTreeInfo) -->
+<#-- 树形控件 -->
 <#-- treeId(必须):树形加载和控制区域的ID,一张页面同时加载多个树形时必须用该值进行区分 -->
 <#-- json(必须):需要加载成树形的数据,数据结构为:[{categoryId:1,categoryCategoryId:0,categoryTitle:""},{categoryId:2,categoryCategoryId:1,categoryTitle:""}] -->
 <#-- jsonId(必须):json数据中ID名称,如:categoryId -->
@@ -203,6 +203,7 @@
 <#-- addNodesName:增加顶级根节点,直接传入根节点名称即可。如:顶级分类 -->
 <#-- expandAll:控制节点数据显示的时候是全部展开还是全部折叠(true[默认]:全部展开,false:全部折叠)。 -->
 <#-- showIcon:是否显示文件夹图标,true:显示;false(默认)：不显示 -->
+<#-- ischeck:是否有复选框,true:显示;false(默认)：不显示 -->
 <#-- 内置函数调用方法说明：
 				调用对象的函数名:	zTreeObj${treeId}(treeId为自定义的ID名称);
 					/**

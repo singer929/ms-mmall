@@ -70,15 +70,8 @@
 		var areaList = [] 	 		
 		$.post("${managerPath}/freight/area/areaList.do",{},	
 			function(data,status){	
-				for(var i = 0;i < data.length;i++){	
-					areaList[i] ={	
-						faId:data[i].faId,	
-						faCityIds:data[i].faCityIds,	
-						faTitle:data[i].faTitle	
-					}
-				}
 				$(".xin").remove();
-				$("#myTemplate").tmpl(areaList).appendTo('.listParam');			//通过tmpl追加数据		
+				$("#myTemplate").tmpl(data).appendTo('.listParam');			//通过tmpl追加数据
 			}
 		);
 	}
@@ -107,12 +100,10 @@
 			 }).show();
 			return;
 		}
+		
 		//判断是否选中
-		$("#areaList li").each(function(){
-			if($(this).hasClass("sel")){ 	
-				faId =$(this).data("id")
-		  	}
-		});
+	  	faId = $("#areaList li.sel").data("id");
+	  	
 		if(faId>0){
 			$.post("${managerPath}/freight/area/update.do",
 			   {
@@ -172,14 +163,15 @@
 		areaList();
 	});
 	//全选
-	$("#checkboxAll").click(function(){
-		var ck = $("#checkbox").is(':checked')
-		if($("input[name=checkbox]").is(':checked')){
-			$("input[name=checkbox]").prop("checked",false);
-		}else{
-			$("input[name=checkbox]").prop("checked",true);
-		}
-	});
+	$(function() {
+		$("input[name=checkboxAll]").on("click",function(){  
+			if(this.checked){   
+				$("input[name=checkbox]").each(function(){this.checked=true;});
+			}else{   
+				$("input[name=checkbox]").each(function(){this.checked=false;});   
+			}
+		});			
+	})
 	//添加
 	$("#addButton").click(onAddClick);
 	function onAddClick(){
