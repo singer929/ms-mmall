@@ -24,13 +24,13 @@ import com.mingsoft.base.filter.DateValueFilter;
 import com.mingsoft.base.filter.DoubleValueFilter;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.entity.CategoryEntity;
-import com.mingsoft.freight.biz.IFreightBiz;
-import com.mingsoft.freight.entity.FreightEntity;
 import com.mingsoft.util.StringUtil;
 
 import net.mingsoft.base.util.JSONArray;
 import net.mingsoft.basic.bean.EUListBean;
 import net.mingsoft.basic.util.BasicUtil;
+import net.mingsoft.freight.biz.IFreightBiz;
+import net.mingsoft.freight.entity.FreightEntity;
 import net.mingsoft.mall.biz.IOrderBiz;
 import net.mingsoft.mall.entity.OrderEntity;
 import net.mingsoft.order.constant.e.OrderStatusEnum;

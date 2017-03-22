@@ -19,36 +19,15 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.biz;
+package net.mingsoft.freight.dao;
 
-import java.util.List;
+import com.mingsoft.base.dao.IBaseDao;
 
-import com.mingsoft.base.biz.IBaseBiz;
-import com.mingsoft.freight.entity.FreightEntity;
-
-public interface IFreightBiz extends IBaseBiz {
+/**
+ * 运费模块区域设置持久化接口
+ * @author 上官德辉
+ *
+ */
+public interface IAreaDao extends IBaseDao {
 	
-	/**
-	 * 通过城市id查询启用数据
-	 * @param freightCityId
-	 * @return
-	 */
-	public List<FreightEntity> queryByCityEnable(int freightCityId);
-	
-	/**
-	 * 通过快递公司分类categoryModelId和城市编号freightCityId查询运费数据
-	 * @return
-	 */
-	public List<FreightEntity> queryAllFreight(int freightCityId , int categoryModelId);
-	
-	/**
-	 * 保存或更新运费基础数据
-	 * @param freightEntity
-	 */
-	public void saveOrUpdate(FreightEntity freightEntity);
-	
-	/**
-	 * 计算运费
-	 */
-	public double cost(FreightEntity freightentity,double scale);
 }

@@ -19,7 +19,7 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.entity;
+package net.mingsoft.freight.entity;
 
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.entity.CategoryEntity;

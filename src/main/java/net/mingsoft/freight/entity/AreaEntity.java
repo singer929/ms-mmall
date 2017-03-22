@@ -19,26 +19,54 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.dao;
+package net.mingsoft.freight.entity;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
-import com.mingsoft.base.dao.IBaseDao;
-import com.mingsoft.freight.entity.AreaDetailEntity;
+import com.mingsoft.base.entity.BaseEntity;
 
 /**
- * 运费模块区域运费设置持久化接口
+ * 运费模块区域设置实体类，继承BasicEntity
  * @author 上官德辉
  *
  */
-public interface IAreaDetailDao extends IBaseDao {
+public class AreaEntity extends BaseEntity {
 	/**
-	 * 获取所有的区域信息
-	 * @param modelId 
-	 * @param faId 
-	 * @return
+	 * 区域主ID
 	 */
-	public List<AreaDetailEntity> queryFreightAreaDetail(@Param("faId") int faId, @Param("modelId") int modelId);
+	private int faId;
+	
+	/**
+	 * 区域名称
+	 */
+	private String faTitle;
+	
+	/**
+	 * 物流的地区，不仅仅包括城市，对应分类城市数据
+	 */
+	private String faCityIds;
+	
+	public int getFaId() {
+		return faId;
+	}
+
+	public void setFaId(int faId) {
+		this.faId = faId;
+	}
+
+	public String getFaTitle() {
+		return faTitle;
+	}
+
+	public void setFaTitle(String faTitle) {
+		this.faTitle = faTitle;
+	}
+
+	public String getFaCityIds() {
+		return faCityIds;
+	}
+
+	public void setFaCityIds(String faCityIds) {
+		this.faCityIds = faCityIds;
+	}
+
+	
 }

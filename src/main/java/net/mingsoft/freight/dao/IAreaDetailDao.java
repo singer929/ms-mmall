@@ -19,50 +19,27 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.biz.impl;
+package net.mingsoft.freight.dao;
 
+import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
-import com.mingsoft.freight.biz.IAreaBiz;
-import com.mingsoft.freight.dao.IAreaDao;
-import com.mingsoft.freight.dao.IAreaDetailDao;
+
+import net.mingsoft.freight.entity.AreaDetailEntity;
 
 /**
- * 运费模块区域设置业务层实现类
+ * 运费模块区域运费设置持久化接口
  * @author 上官德辉
  *
  */
-@Service("AreaBizImpl")
-public class AreaBizImpl extends BaseBizImpl implements IAreaBiz{
-
+public interface IAreaDetailDao extends IBaseDao {
 	/**
-	 * 持久化层
+	 * 获取所有的区域信息
+	 * @param modelId 
+	 * @param faId 
+	 * @return
 	 */
-	@Autowired
-	private IAreaDao areaDao; 
-	@Autowired
-	private IAreaDetailDao areaDetailDao; 
-	
-	/**
-	 * 获取AreaDao
-	 */
-	@Override
-	protected IBaseDao getDao() {
-		return areaDao;
-	}
-	/**
-	 * 删除freight_area_detail表和freight_area表
-	 */
-	@Override
-	public void deleteArea(int[] ids) {
-		areaDetailDao.delete(ids);
-		areaDao.delete(ids);
-		
-	}
-	
+	public List<AreaDetailEntity> queryFreightAreaDetail(@Param("faId") int faId, @Param("modelId") int modelId);
 }

@@ -19,31 +19,37 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.biz;
+package net.mingsoft.freight.biz;
 
 import java.util.List;
 
 import com.mingsoft.base.biz.IBaseBiz;
-import com.mingsoft.freight.entity.AreaDetailEntity;
 
-/**
- * 运费模块的区域运费设置业务层
- * @author 上官德辉
- *
- */
-public interface IAreaDetailBiz extends IBaseBiz {
+import net.mingsoft.freight.entity.FreightEntity;
+
+public interface IFreightBiz extends IBaseBiz {
+	
 	/**
-	 * 查询所有的区域信息
-	 * @param modelId 
-	 * @param faId 
+	 * 通过城市id查询启用数据
+	 * @param freightCityId
 	 * @return
 	 */
-	public List<AreaDetailEntity> queryFreightAreaDetail(int faId, int modelId);
+	public List<FreightEntity> queryByCityEnable(int freightCityId);
 	
 	/**
-	 * 修改或保存 freight中的数据
-	 * @param areaDetailEntity
+	 * 通过快递公司分类categoryModelId和城市编号freightCityId查询运费数据
+	 * @return
 	 */
-	public void saveOrUpdate(AreaDetailEntity areaDetailEntity);
+	public List<FreightEntity> queryAllFreight(int freightCityId , int categoryModelId);
 	
+	/**
+	 * 保存或更新运费基础数据
+	 * @param freightEntity
+	 */
+	public void saveOrUpdate(FreightEntity freightEntity);
+	
+	/**
+	 * 计算运费
+	 */
+	public double cost(FreightEntity freightentity,double scale);
 }

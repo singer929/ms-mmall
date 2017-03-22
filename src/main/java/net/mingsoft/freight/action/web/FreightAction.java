@@ -19,7 +19,7 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.action.web;
+package net.mingsoft.freight.action.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,8 +31,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mingsoft.basic.action.BaseAction;
-import com.mingsoft.freight.biz.IFreightBiz;
-import com.mingsoft.freight.entity.FreightEntity;
+
+import net.mingsoft.freight.biz.IFreightBiz;
+import net.mingsoft.freight.entity.FreightEntity;
 
 /**
  * 运费详情计算前段接口

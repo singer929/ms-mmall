@@ -19,15 +19,15 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.dao;
+package net.mingsoft.freight.biz;
 
-import com.mingsoft.base.dao.IBaseDao;
+import com.mingsoft.base.biz.IBaseBiz;
 
 /**
- * 运费模块区域设置持久化接口
+ * 运费模块区域设置业务层
  * @author 上官德辉
  *
  */
-public interface IAreaDao extends IBaseDao {
-	
+public interface IAreaBiz extends IBaseBiz {
+	public void deleteArea(int[] ids);
 }

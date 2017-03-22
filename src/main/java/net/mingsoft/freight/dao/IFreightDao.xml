@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 管理员持久化层XML配置继承IRoleDao -->
-<mapper namespace="com.mingsoft.freight.dao.IFreightDao">
+<mapper namespace="net.mingsoft.freight.dao.IFreightDao">
 
 	<!-- 将实体属性与表字段对接开始 -->
-	<resultMap id="resultMap" type="com.mingsoft.freight.entity.FreightEntity">
+	<resultMap id="resultMap" type="net.mingsoft.freight.entity.FreightEntity">
 		<id column="freight_id" property="freightId" />
 		<result column="freight_city_id" property="freightCityId" />
 		<result column="freight_express_id" property="freightExpressId" />
@@ -31,7 +31,7 @@
 	<!-- 查询用户列表结束 -->
 	
 	<!-- 查询基础数据开始 -->
-	<select id="getByEntity" resultMap="resultMap" parameterType="com.mingsoft.freight.entity.FreightEntity">	
+	<select id="getByEntity" resultMap="resultMap" parameterType="net.mingsoft.freight.entity.FreightEntity">	
 		select * from freight 		
 		<where> 
 			<if test=" freightExpressId != null">and freight_express_id = #{freightExpressId}</if>
@@ -41,7 +41,7 @@
 	<!-- 查询用户列表结束 -->
 	
 	<!-- 查询城市列表开始 -->
-	<select id="queryAllFreight" resultMap="resultMap" parameterType="com.mingsoft.freight.entity.FreightEntity">	
+	<select id="queryAllFreight" resultMap="resultMap" parameterType="net.mingsoft.freight.entity.FreightEntity">	
 		SELECT c.CATEGORY_ID,c.CATEGORY_TITLE,fre.freight_id,
 		fre.freight_city_id,fre.freight_express_id,fre.freight_base_price,fre.freight_base_amount,
 		fre.freight_increase_price,fre.freight_increase_amount,fre.freight_enable
@@ -53,7 +53,7 @@
 	<!-- 查询城市列表结束 -->
 	
 	<!-- 新增用户开始 -->
-	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="peopleId" parameterType="com.mingsoft.freight.entity.FreightEntity">
+	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="peopleId" parameterType="net.mingsoft.freight.entity.FreightEntity">
 		insert into freight
 		<!-- 添加表字段 -->
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -79,7 +79,7 @@
 	<!-- 新增用户结束 -->
 	
 	<!-- 更新用户开始 -->
-	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.FreightEntity">
+	<update id="updateEntity" parameterType="net.mingsoft.freight.entity.FreightEntity">
 		update freight
 		<set>
 			<if test="freightBasePrice !=null">freight_base_price=#{freightBasePrice},</if>

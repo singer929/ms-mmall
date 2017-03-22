@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 管理员持久化层XML配置继承IRoleDao -->
-<mapper namespace="com.mingsoft.freight.dao.IAreaDao">
+<mapper namespace="net.mingsoft.freight.dao.IAreaDao">
 
 	<!-- 将实体属性与表字段对接开始 -->
-	<resultMap id="resultMap" type="com.mingsoft.freight.entity.AreaEntity">
+	<resultMap id="resultMap" type="net.mingsoft.freight.entity.AreaEntity">
 		<id column="fa_id" property="faId" />
 		<result column="fa_title" property="faTitle" />
 		<result column="fa_city_ids" property="faCityIds" />
@@ -18,14 +18,14 @@
 	
 	<!-- 新增区域开始 -->
 	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="faId"
-		parameterType="com.mingsoft.freight.entity.AreaEntity">
+		parameterType="net.mingsoft.freight.entity.AreaEntity">
 		insert into freight_area(fa_title,fa_city_ids) values (#{faTitle},#{faCityIds})
 	</insert>
 	<!-- 新增区域结束 -->
 	
 	<!-- 查询区域开始 -->
 	<select id="getByEntity" resultMap="resultMap" 
-	parameterType="com.mingsoft.freight.entity.AreaEntity">
+	parameterType="net.mingsoft.freight.entity.AreaEntity">
 		select * from freight_area
 		<where> 
 			<if test=" faTitle != null ">and fa_title= #{faTitle}</if>
@@ -35,7 +35,7 @@
 	<!-- 查询区域结束 -->
 	
 	<!-- 更新区域开始 -->
-	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.AreaEntity">
+	<update id="updateEntity" parameterType="net.mingsoft.freight.entity.AreaEntity">
 		update freight_area 
 		<set>
 			<if test="faTitle !=null">fa_title= #{faTitle},</if>

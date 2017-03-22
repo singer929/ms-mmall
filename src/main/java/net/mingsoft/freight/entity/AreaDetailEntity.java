@@ -1,4 +1,4 @@
-package com.mingsoft.freight.entity;
+package net.mingsoft.freight.entity;
 
 import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.entity.CategoryEntity;

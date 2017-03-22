@@ -19,30 +19,32 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.dao;
+package net.mingsoft.freight.biz;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
+import com.mingsoft.base.biz.IBaseBiz;
 
-import com.mingsoft.base.dao.IBaseDao;
-import com.mingsoft.base.entity.BaseEntity;
-import com.mingsoft.freight.entity.AreaEntity;
-import com.mingsoft.freight.entity.FreightEntity;
+import net.mingsoft.freight.entity.AreaDetailEntity;
 
-public interface IFreightDao extends IBaseDao {
-	
+/**
+ * 运费模块的区域运费设置业务层
+ * @author 上官德辉
+ *
+ */
+public interface IAreaDetailBiz extends IBaseBiz {
 	/**
-	 * 通过城市id查询启用数据
-	 * @param freightCityId
+	 * 查询所有的区域信息
+	 * @param modelId 
+	 * @param faId 
 	 * @return
 	 */
-	public List<FreightEntity> queryByCityEnable(int freightCityId);
+	public List<AreaDetailEntity> queryFreightAreaDetail(int faId, int modelId);
 	
 	/**
-	 * 通过城市id与快递分类id查询基础数据
-	 * @return
+	 * 修改或保存 freight中的数据
+	 * @param areaDetailEntity
 	 */
-	public List<FreightEntity> queryAllFreight(@Param("freightCityId") int freightCityId ,  @Param("categoryModelId") int categoryModelId);
+	public void saveOrUpdate(AreaDetailEntity areaDetailEntity);
 	
 }

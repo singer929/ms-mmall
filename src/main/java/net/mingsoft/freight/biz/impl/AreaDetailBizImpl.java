@@ -19,7 +19,7 @@ The MIT License (MIT) * Copyright (c) 2016 铭飞科技(mingsoft.net)
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.mingsoft.freight.biz.impl;
+package net.mingsoft.freight.biz.impl;
 
 
 import java.util.List;
@@ -30,13 +30,14 @@ import org.springframework.stereotype.Service;
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.base.entity.BaseEntity;
-import com.mingsoft.freight.biz.IAreaBiz;
-import com.mingsoft.freight.biz.IAreaDetailBiz;
-import com.mingsoft.freight.biz.IFreightBiz;
-import com.mingsoft.freight.dao.IAreaDetailDao;
-import com.mingsoft.freight.entity.AreaDetailEntity;
-import com.mingsoft.freight.entity.AreaEntity;
-import com.mingsoft.freight.entity.FreightEntity;
+
+import net.mingsoft.freight.biz.IAreaBiz;
+import net.mingsoft.freight.biz.IAreaDetailBiz;
+import net.mingsoft.freight.biz.IFreightBiz;
+import net.mingsoft.freight.dao.IAreaDetailDao;
+import net.mingsoft.freight.entity.AreaDetailEntity;
+import net.mingsoft.freight.entity.AreaEntity;
+import net.mingsoft.freight.entity.FreightEntity;
 
 /**
  * 运费模块区域运费设置业务层实现类

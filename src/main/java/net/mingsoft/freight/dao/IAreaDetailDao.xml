@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 管理员持久化层XML配置继承IRoleDao -->
-<mapper namespace="com.mingsoft.freight.dao.IAreaDetailDao">
+<mapper namespace="net.mingsoft.freight.dao.IAreaDetailDao">
 
 	<!-- 将实体属性与表字段对接开始 -->
-	<resultMap id="resultMap" type="com.mingsoft.freight.entity.AreaDetailEntity">
+	<resultMap id="resultMap" type="net.mingsoft.freight.entity.AreaDetailEntity">
 		<id column="fad_id" property="fadId" />
 		<result column="fad_area_id" property="fadAreaId" />
 		<result column="fad_base_price" property="fadBasePrice" />
@@ -34,7 +34,7 @@
 	
 	<!-- 新增区域开始 -->
 	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="faId"
-	parameterType="com.mingsoft.freight.entity.AreaDetailEntity">
+	parameterType="net.mingsoft.freight.entity.AreaDetailEntity">
 		INSERT INTO freight_area_detail
 		<!-- 添加表字段 -->
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -61,14 +61,14 @@
 	
 	<!-- 查询区域开始 -->
 	<select id="getByEntity" resultMap="resultMap" 
-	parameterType="com.mingsoft.freight.entity.AreaDetailEntity">
+	parameterType="net.mingsoft.freight.entity.AreaDetailEntity">
 		SELECT * FROM freight_area_detail 
 		WHERE fad_area_id=#{fadAreaId} AND fad_express_id=#{fadExpressId}
 	</select>
 	<!-- 查询区域结束 -->
 	
 	<!-- 更新区域开始 -->
-	<update id="updateEntity" parameterType="com.mingsoft.freight.entity.AreaDetailEntity">
+	<update id="updateEntity" parameterType="net.mingsoft.freight.entity.AreaDetailEntity">
 		update freight_area_detail
 		<set>
 			<if test="fadBasePrice != null">fad_base_price=#{fadBasePrice},</if>
