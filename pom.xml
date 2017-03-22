@@ -59,6 +59,7 @@
 		<ms.mattention.version>1.0.0-SNAPSHOT</ms.mattention.version>
 		<ms.morder.version>1.0.0-SNAPSHOT</ms.morder.version>
 		<ms.mcomment.version>1.0.0-SNAPSHOT</ms.mcomment.version>
+		<ms.mfreight.version>1.0.0-SNAPSHOT</ms.mfreight.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -169,6 +170,19 @@
 			<groupId>net.mingsoft</groupId>
 			<artifactId>ms-mcomment</artifactId>
 			<version>${ms.mcomment.version}</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>net.mingsoft</groupId>
+			<artifactId>ms-mfreight</artifactId>
+			<version>${ms.mfreight.version}</version>
+			<classifier>classes</classifier>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.mingsoft</groupId>
+			<artifactId>ms-mfreight</artifactId>
+			<version>${ms.mfreight.version}</version>
 			<type>war</type>
 		</dependency>
 		<!-- <dependency> <groupId>net.mingsoft</groupId> <artifactId>ms-iweixiao</artifactId> 
@@ -302,7 +316,7 @@
 					<arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--  plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
 				<version>1.6.7</version>
@@ -326,7 +340,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin-->
 		</plugins>
 		<defaultGoal>compile</defaultGoal>
 		<finalName>ms-mmall</finalName>
