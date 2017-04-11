@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-<#include "${managerViewPath}/include/macro.ftl"/>
-<#include "${managerViewPath}/include/meta.ftl"/>
-</head>
-<body>	
+<@html5>
 <@ms.content>
 <@ms.contentBody >
 	<@ms.contentNav title="栏目管理" >
@@ -58,7 +52,7 @@
 	   	<!--删除栏目-->    
 		<@ms.modal modalName="delete" title="删除栏目">
 			  <@ms.modalBody>
-			  		确定要删除所选的栏目吗?
+			  		确定要删除所选的栏目包括吗?
 		     </@ms.modalBody>
 			 <@ms.modalButton>
 		 		<@ms.button class="btn btn-danger rightDelete" value="确定"/>
@@ -80,16 +74,25 @@ $(function(){
 	$(".rightDelete").on("click",function(){
 		$(this).request({url: base+"${baseManager}/mall/column/"+columnId+"/delete.do",type:"json",method:"post",func:function(msg) {
 			var columnJson = $.parseJSON(msg.resultMsg);
-			if(columnJson==false){
-				alert("请先删除子栏目");
-				$(".delete").modal("hide");
-			}else{
+			if(columnJson==true){
 				alert("删除成功");
 				location.reload();
 			}
 		}});
 	});
 });
+<script>
+	var actegoryId = this.columnBiz.queryChild(categoryId,websiteId,Integer.valueof(getModelCodeId(requset)),null);
+	if(this.columnBiz.queryChild(categoryId, websiteId, Integer.valueOf(getModelCodeId(request)), null).size() > 0) {
+		for(var i = 0;i < actegoryId.size();i++) {
+			this.columnBiz.deleteCategory(actegoryId.get(i));
+		}
+		outJson(response, ModelCode.CMS_COLUMN, true, "true");
+	}else {
+		this.columnBiz.deleteCategory(categoryId);
+		outJson(response, ModelCode.CMS_COLUMN, true, "true");
+	}
+</script>
 
 
 function editclumnTree(obj){
@@ -102,11 +105,10 @@ function deleteclumnTree(obj){
 	$(".delete").modal();
 }
 </script>
-</body>
 
 
 
-</html>
+</@html5>
 
 
 

@@ -12,7 +12,7 @@
 					<tr>
 						<td><input type="checkbox" name="categoryId" value="${brand.categoryId}"/></td>
 						<td><img src="${base}/${brand.categorySmallImg?default('')}" width="100" width="30"/></td>
-						<td><a href="${managerPath}/mall/brand/edit.do?categoryId=${brand.categoryId}">${brand.categoryTitle?default('')}</a></td>
+						<td><a href="${managerPath}/mall/brand/edit.do?categoryId=${brand.categoryId}" target="_self">${brand.categoryTitle?default('')}</a></td>
 					</tr>
 				</#list>
 	      	<#else>

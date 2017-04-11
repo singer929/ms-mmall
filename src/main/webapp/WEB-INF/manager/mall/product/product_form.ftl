@@ -231,7 +231,7 @@
 				return;
 			}
 
-			var reditUrl = '${managerPath}/mall/product/list.do?${params}';
+			var reditUrl = '${managerPath}/mall/product/index.do';
 			window.location.href = reditUrl;
 		});
 

@@ -108,11 +108,6 @@ public class ColumnAction extends BaseAction{
 		this.outJson(response, net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY, true, "", JSONObject.toJSON(list).toString());
 	}
 	
-
-	
-	
-
-
 	/**
 	 * 栏目添加跳转页面
 	 * 
@@ -237,7 +232,6 @@ public class ColumnAction extends BaseAction{
         fileName.mkdir();
 	}
 	
-	
 	/**
 	 * 根据栏目ID删除栏目记录
 	 * @param categoryId 栏目ID
@@ -251,14 +245,20 @@ public class ColumnAction extends BaseAction{
 		int websiteId = this.getAppId(request);
 		// 查询该栏目是否有子栏目,如果存在子栏目则返回错误提示，否则删除该栏目
 		if (columnBiz.queryChild(categoryId, websiteId,this.getModelCodeId(request),null).size() > 0) {
-			this.outJson(response, ModelCode.CMS_COLUMN, true, "false");
-		} else {
+			// 删除栏目下的所有子节点
+			List<ColumnEntity> actegoryIdList = new ArrayList<ColumnEntity>();
+			actegoryIdList = columnBiz.queryChild(categoryId, websiteId,this.getModelCodeId(request),null);
+			int listSizes = actegoryIdList.size();
+			for(int i = 0; i < listSizes; i++) {
+				columnBiz.deleteCategory(actegoryIdList.get(i).getCategoryId());
+				this.outJson(response, ModelCode.CMS_COLUMN, true, "true");
+			}
+			//删除父级栏目
 			columnBiz.deleteCategory(categoryId);
 			this.outJson(response, ModelCode.CMS_COLUMN, true, "true");
 		}
 	}
-	
-	
+		
 	/**
 	 * 根据栏目ID进行栏目删除确认，如果有子栏目则不能被删除
 	 * @param categoryId 栏目ID
@@ -276,7 +276,6 @@ public class ColumnAction extends BaseAction{
 			this.outJson(response, ModelCode.CMS_COLUMN, true, "true");
 		}
 	}
-
 	
 	/**
 	 * 栏目更新页面跳转
@@ -316,13 +315,11 @@ public class ColumnAction extends BaseAction{
 	 */
 	@RequestMapping("/list")
 	public String list(HttpServletRequest request) {
-			
 		// 站点ID有session获取
 		int websiteId = this.getAppId(request);
 		// 需要打开的栏目节点树的栏目ID
 		int categoryId = 0;
 		List<ColumnEntity> list = new ArrayList<ColumnEntity>();
-		
 		Object cId = request.getParameter("categoryId");
 		if (!StringUtil.isBlank(cId)) {
 			categoryId = Integer.parseInt(cId.toString());
@@ -356,7 +353,6 @@ public class ColumnAction extends BaseAction{
 		this.outJson(response, ModelCode.CMS_COLUMN, true, "", JSONObject.toJSON(list).toString());
 	}
 	
-	
 	/**
 	 * 栏目添加
 	 * 
@@ -382,7 +378,6 @@ public class ColumnAction extends BaseAction{
 		this.columnPath(request,column);
 		this.outJson(response, ModelCode.CMS_COLUMN, true,null,JSONArray.toJSONString(column.getCategoryId()));
 	}
-	
 	
 	/**
 	 * 更新栏目
@@ -421,6 +416,5 @@ public class ColumnAction extends BaseAction{
 			}
 		}
 		this.outJson(response, ModelCode.CMS_COLUMN, true,null,JSONArray.toJSONString(column.getCategoryId()));
-	
 	}
 }
