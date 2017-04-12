@@ -36,7 +36,7 @@
 				data-method="post" 
 				data-detail-formatter="detailFormatter" 
 				data-pagination="true"
-				data-page-size="4"
+				data-page-size="10"
 				data-side-pagination="server">
 			</table>
 		</@ms.panel>	

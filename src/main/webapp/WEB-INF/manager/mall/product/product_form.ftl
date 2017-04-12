@@ -178,13 +178,13 @@
 		$('#productForm').data('bootstrapValidator').validate();
 		var isValid = $('#productForm').data('bootstrapValidator').isValid();
 		if (!isValid){
-			alert('数据提交失败：请检查输入的数据!');
+			<@ms.notify msg="数据提交失败：请检查输入的数据!" type="fail"/>
 			return;
 		}
 		
 		var isSpecDetailValid = checkSpecDetail();
-		if (!isSpecDetailValid) {
-			alert('商品规格下的价格和库存不能为空!');
+		if (isSpecDetailValid) {
+			<@ms.notify msg="商品规格下的价格和库存不能为空!" type="fail"/>
 			return;
 		}
 	
@@ -227,7 +227,8 @@
 		$.post('${managerPath}/mall/product/${autoCURD}.do', {jsonStr:paramStr}, function(data, status){
 			if (status != 'success') return;
 			if (data.result == false){
-				alert(data.resultMsg);
+				var src = data.resultMsg;
+				<@ms.notify msg=src type="warning"/>
 				return;
 			}
 
@@ -384,7 +385,7 @@
 
     	var result = SpecMgr.init(${product.basicId}, data);
         if (!result){
-            alert('规格数据解析失败!');
+            <@ms.notify msg="规格数据解析失败" type="fail"/>
             return;
         }
 
@@ -508,7 +509,7 @@
             // 现有规格名字重复则不允许设置
             if (SpecMgr.productSpecs[value]){
             	$(this).val(oldSpecName).trigger('change');
-            	alert('不允许设置两个相同的规格!');
+            	<@ms.notify msg="不允许设置两个相同的规格!" type="warning"/>
             	return;
             }
             
@@ -660,7 +661,7 @@
                         PluploaderMgr.createInstance(triggerId, imgId, successCallback);
                     }
                     else {
-                        alert("该属性已存在");
+                        <@ms.notify msg="该属性已存在" type="warning"/>
                     }
                 }
             }
@@ -857,18 +858,17 @@
 
     	 //判断库存必须为整数
         if(key=="stock" && !validator.isInt(value)){
-            alert("请输入整数");
-            
+            <@ms.notify msg="请输入整数" type="warning"/>
             return false;
         }
         //判断价格必须为数字，且只有一个小数点
         if(key=="price" && !validator.isCurrency(value)){
-            alert("请输入正确价格")
+            <@ms.notify msg="请输入正确价格" type="warning"/>
             return false;
         }
         //判断编号值不能为特殊字符
         if(key=="code" && !validator.isAlphanumeric(value)){
-            alert("不能输入特殊字符")
+            <@ms.notify msg="不能输入特殊字符" type="warning"/>
             return false;
         }
 
