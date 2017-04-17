@@ -245,15 +245,8 @@ public class ColumnAction extends BaseAction{
 		int websiteId = this.getAppId(request);
 		// 查询该栏目是否有子栏目,如果存在子栏目则返回错误提示，否则删除该栏目
 		if (columnBiz.queryChild(categoryId, websiteId,this.getModelCodeId(request),null).size() > 0) {
-			// 删除栏目下的所有子节点
-			List<ColumnEntity> actegoryIdList = new ArrayList<ColumnEntity>();
-			actegoryIdList = columnBiz.queryChild(categoryId, websiteId,this.getModelCodeId(request),null);
-			int listSizes = actegoryIdList.size();
-			for(int i = 0; i < listSizes; i++) {
-				columnBiz.deleteCategory(actegoryIdList.get(i).getCategoryId());
-				this.outJson(response, ModelCode.CMS_COLUMN, true, "true");
-			}
-			//删除父级栏目
+			this.outJson(response, ModelCode.CMS_COLUMN, true, "false");
+		} else {
 			columnBiz.deleteCategory(categoryId);
 			this.outJson(response, ModelCode.CMS_COLUMN, true, "true");
 		}
