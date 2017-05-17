@@ -183,7 +183,7 @@
 		}
 		
 		var isSpecDetailValid = checkSpecDetail();
-		if (isSpecDetailValid) {
+		if (!isSpecDetailValid) {
 			<@ms.notify msg="商品规格下的价格和库存不能为空!" type="fail"/>
 			return;
 		}
