@@ -166,10 +166,7 @@
 		})
 		//增加按钮
 		$("#addBtn").click(function(){
-			var categoryTitle = $(".categoryTitle").attr("categoryTitle");
-			var basicCategoryId = $(".categoryTitle").attr("basicCategoryId");
-			var url = "${managerPath}/mall/product/add.do?basicCategoryId="+basicCategoryId+"&column.categoryTitle="+categoryTitle;
-			location.href = url;
+			location.href = "${managerPath}/mall/product/add.do";
 		})
 		//搜索按钮触发
 		$("#submitSearch").click(function(){
