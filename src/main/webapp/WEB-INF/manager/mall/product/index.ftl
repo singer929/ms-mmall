@@ -44,7 +44,8 @@
 <!--JQ特效部分-->
 <script>
 	$(function(){
-	var a;	
+		var categoryId ;
+		var categoryTitle;
 		$(".categoryTree").height($(document).height());
 		$("#searchForm").width("85%");
 		$("#listFrame").height($(document).height());
@@ -54,7 +55,8 @@
 			callback: {
 				onClick: function(event, treeId, treeNode) {
 					var basicCategoryId = treeNode.id;
-					a = basicCategoryId;
+					categoryId = basicCategoryId;
+					categoryTitle = treeNode.name;
     	 			var params = $('#productListTable').bootstrapTable('getOptions');
     	 			params.queryParams = function(params) {  
     	 				$.extend(params,{basicCategoryId:basicCategoryId});
@@ -137,7 +139,6 @@
 					css:{"color":"red"}
 					};
 				}
-	    		
 	    	},{
 	        	field: 'productStock',
 	        	title: '库存',
@@ -166,14 +167,15 @@
 		})
 		//增加按钮
 		$("#addBtn").click(function(){
-			location.href = "${managerPath}/mall/product/add.do";
+			var url = "${managerPath}/mall/product/add.do?basicCategoryId="+categoryId+"&column.categoryTitle="+categoryTitle;
+			location.href = url;
 		})
 		//搜索按钮触发
 		$("#submitSearch").click(function(){
 			var search = $("form[name='searchForm']").serializeJSON();
 			var params = $('#productListTable').bootstrapTable('getOptions');
 			params.queryParams = function(params) {  
-		 		$.extend(params,search,{basicCategoryId:a});
+		 		$.extend(params,search,{basicCategoryId:categoryId});
 	        	return params;  
 			}  
 			$("#productListTable").bootstrapTable('refresh', {query:$("form[name='searchForm']").serializeJSON()});
