@@ -188,6 +188,22 @@
 				}
 			);
 		})
+		
+		//取消订单
+		$("#orderTable").delegate(".cancleOrder","click",function() {
+			var orderNo = $(this).attr("data-order-no");
+			$.post("${managerPath}/mall/order/cancle.do",
+				{
+					orderNo:orderNo
+				},				
+				function(data,status){
+					if(data.result){
+						$("#orderTable").bootstrapTable('refresh');
+					}
+				}
+			);
+		})
+		
 		$("select[name=expresscompany]").on("change",function(){
 			var freightExpressId = $("select[name=expresscompany]").find("option:selected").val();
 			var freightCityId = $("#delivery").attr("data-order-express-city-id");
