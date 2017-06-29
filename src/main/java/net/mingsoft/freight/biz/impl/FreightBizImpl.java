@@ -97,7 +97,7 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 			double freightIncreaseAmount = freightentity.getFreightIncreaseAmount();		//增长数量
 			double surplusWeight = scale - freightBaseAmount;								//获取超过的部分
 			if(surplusWeight < 0){
-				return freightBaseAmount;													//如果不超过基础重量，直接输出基础运费
+				return freightBasePrice;													//如果不超过基础重量，直接输出基础运费
 			}else if(freightIncreaseAmount != 0){
 				double IncreasePrice = Math.ceil(surplusWeight/freightIncreaseAmount);		//获取超过的次数
 				return freightBasePrice+freightIncreasePrice*IncreasePrice;																//如果超出，输出计算后的运费
