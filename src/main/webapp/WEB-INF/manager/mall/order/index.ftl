@@ -222,7 +222,7 @@
 						freightCityId:freightCityId
 					},				
 					function(data,status){
-						var cost = data.resultMsg;
+						var cost = data;
 						$("input[name=orderExpressPrice]").val(cost);
 					}
 				);
