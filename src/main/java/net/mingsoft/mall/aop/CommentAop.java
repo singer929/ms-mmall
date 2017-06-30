@@ -51,8 +51,8 @@ public class CommentAop extends BaseAop {
 	@Around("save()")
 	public Object save(ProceedingJoinPoint jp) throws Throwable {
 		OrderCommentEntity comment = this.getType(jp, OrderCommentEntity.class);
-		Object obj = jp.proceed();
-		if(comment.getCommentBasicId() > 0) {
+		Object obj = jp.proceed(); 
+		if(comment != null && comment.getCommentBasicId() > 0) {
 			CommentSumeryBean csb =  commentBiz.sumery(comment);
 			ProductEntity product = (ProductEntity) productBiz.getEntity(comment.getCommentBasicId());
 			product.setProductGood(csb.getCommentPointsCount()/(csb.getCommentCount()*5));
