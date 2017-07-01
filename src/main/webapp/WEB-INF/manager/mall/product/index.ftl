@@ -128,10 +128,10 @@
 	        	align: 'center',
 	        	formatter: function (value, row, index){
 	    			if(row.productShelf == 1){		
-	    				return"上架";
+	    				return"<span style='color:green'>上架</span>";
 	    			}
 	    			else if(row.productShelf == 0){
-	    				return"下架";
+	    				return"<span style='color:red'>下架</span>";
 	    			}
 	    		},
 	    		cellStyle:function(row,index) {

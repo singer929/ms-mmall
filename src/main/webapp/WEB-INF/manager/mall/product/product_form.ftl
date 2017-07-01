@@ -42,7 +42,7 @@
 			</@ms.formRow>
 			<!-- 装自定义模型数据的地方 -->
 			<div id="contentModelFiled"></div>
-			<@ms.radio label="开售时间" direction=true name="productShelf" list=[{"id":"1","text":"立刻"},{"id":"2","text":"放入仓库"}] listKey="id" listValue="text" value="${product.productShelf}"/>
+			<@ms.radio label="开售时间" direction=true name="productShelf" list=[{"id":"1","text":"立刻"},{"id":"0","text":"放入仓库"}] listKey="id" listValue="text" value="${product.productShelf}"/>
 			
                 <!--规格设置-->
                 <div class="form-group ms-form-group has-feedback"> 
@@ -196,6 +196,14 @@
 			basicTypes.push($(this).val());    
 		});
 		
+		//获取上下架信息
+		var _productShelf="";
+		$("[name='productShelf']").each(function(){
+			if($(this).is(':checked')){
+				_productShelf = $(this).val();
+			}
+		});
+		
 		// 产品数据
 		var productParams = {
 			basicId: ${product.basicId},
@@ -209,11 +217,12 @@
 			productStock: $("[name='productStock']").val(),
 			productCode: $('#productCode').val(),
 			basicThumbnails: $('#basicThumbnails').val(),
-			//productShelf: {code: $("[name='productShelf'][checked='checked']").val()},
+			productShelf:_productShelf,
 			productContent: UE.getEditor('editor_productContent').getContent()
 		};
-		params.product = productParams;
 		
+		
+		params.product = productParams;
 		// 自定义模型数据
 		var customParams = {};
 		$('#contentModelFiled').find('[name]').each(function(){
