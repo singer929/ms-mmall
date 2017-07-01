@@ -90,17 +90,16 @@ public class CartBizImpl extends BaseBizImpl implements ICartBiz {
 			if (product == null) {
 				return 0;
 			}
+			ProductSpecificationDetailEntity detail = (ProductSpecificationDetailEntity) detailDao.getEntity(cart.getCartProductDetailId());
 			cart.setCartTitle(product.getBasicTitle());
 			cart.setCartUrl(product.getProductLinkUrl());
-			cart.setCartPrice(product.getProductPrice());
+			cart.setCartPrice(detail.getPrice());
 			cart.setCartDiscount(product.getProductCostPrice());
 			cart.setCartThumbnail(product.getBasicThumbnails());
 			cartDao.saveEntity(cart);
 
 			if (cart.getCartProductDetailId() > 0) {
 				// 根据商品规格信息取出标题与图片
-				ProductSpecificationDetailEntity detail = (ProductSpecificationDetailEntity) detailDao
-						.getEntity(cart.getCartProductDetailId());
 				op.setOpTitle(detail.getSpecValues()); // 前端不需要商品名字
 				String[] temp = detail.getSpecValues().split(",");
 				for (String _temp : temp) {
@@ -113,7 +112,6 @@ public class CartBizImpl extends BaseBizImpl implements ICartBiz {
 				op.setOpGoodsId(cart.getCartId());
 				orderProductDao.saveEntity(op);
 			}
-			
 			return cart.getCartId();
 		}
 
