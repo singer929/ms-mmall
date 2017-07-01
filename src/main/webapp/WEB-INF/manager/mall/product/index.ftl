@@ -167,7 +167,11 @@
 		})
 		//增加按钮
 		$("#addBtn").click(function(){
-			var url = "${managerPath}/mall/product/add.do?basicCategoryId="+categoryId+"&column.categoryTitle="+categoryTitle;
+			if(categoryId == null){
+				var url = "${managerPath}/mall/product/add.do";
+			}else{
+				var url = "${managerPath}/mall/product/add.do?basicCategoryId="+categoryId+"&column.categoryTitle="+categoryTitle;
+			}
 			location.href = url;
 		})
 		//搜索按钮触发
