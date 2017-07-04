@@ -90,28 +90,37 @@ public class CartBizImpl extends BaseBizImpl implements ICartBiz {
 			if (product == null) {
 				return 0;
 			}
-			ProductSpecificationDetailEntity detail = (ProductSpecificationDetailEntity) detailDao.getEntity(cart.getCartProductDetailId());
-			cart.setCartTitle(product.getBasicTitle());
-			cart.setCartUrl(product.getProductLinkUrl());
-			cart.setCartPrice(detail.getPrice());
-			cart.setCartDiscount(product.getProductCostPrice());
-			cart.setCartThumbnail(product.getBasicThumbnails());
-			cartDao.saveEntity(cart);
+			if(product.getProductSpecificationId() != 0){
+				ProductSpecificationDetailEntity detail = (ProductSpecificationDetailEntity) detailDao.getEntity(cart.getCartProductDetailId());
+				cart.setCartTitle(product.getBasicTitle());
+				cart.setCartUrl(product.getProductLinkUrl());
+				cart.setCartPrice(detail.getPrice());
+				cart.setCartDiscount(product.getProductCostPrice());
+				cart.setCartThumbnail(product.getBasicThumbnails());
+				cartDao.saveEntity(cart);
 
-			if (cart.getCartProductDetailId() > 0) {
-				// 根据商品规格信息取出标题与图片
-				op.setOpTitle(detail.getSpecValues()); // 前端不需要商品名字
-				String[] temp = detail.getSpecValues().split(",");
-				for (String _temp : temp) {
-					if (_temp.split(":").length > 2) {
-						op.setOpThumbnail(_temp.split(":")[2]);
-						op.setOpTitle(_temp.split(":")[0] + ":" + _temp.split(":")[1]);
-						break;
+				if (cart.getCartProductDetailId() > 0) {
+					// 根据商品规格信息取出标题与图片
+					op.setOpTitle(detail.getSpecValues()); // 前端不需要商品名字
+					String[] temp = detail.getSpecValues().split(",");
+					for (String _temp : temp) {
+						if (_temp.split(":").length > 2) {
+							op.setOpThumbnail(_temp.split(":")[2]);
+							op.setOpTitle(_temp.split(":")[0] + ":" + _temp.split(":")[1]);
+							break;
+						}
 					}
+					op.setOpGoodsId(cart.getCartId());
+					orderProductDao.saveEntity(op);
 				}
-				op.setOpGoodsId(cart.getCartId());
-				orderProductDao.saveEntity(op);
+			}else{
+				cart.setCartTitle(product.getBasicTitle());
+				cart.setCartUrl(product.getProductLinkUrl());
+				cart.setCartDiscount(product.getProductCostPrice());
+				cart.setCartThumbnail(product.getBasicThumbnails());
+				cartDao.saveEntity(cart);
 			}
+			
 			return cart.getCartId();
 		}
 
