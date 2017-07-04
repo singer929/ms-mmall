@@ -184,7 +184,7 @@
 		
 		var isSpecDetailValid = checkSpecDetail();
 		if (!isSpecDetailValid) {
-			<@ms.notify msg="商品规格下的价格和库存不能为空!" type="fail"/>
+			<@ms.notify msg="商品规格下的价格和库存不能为空或负值!" type="fail"/>
 			return;
 		}
 	
@@ -256,8 +256,8 @@
 	function checkSpecDetail() {
 		for (var i in SpecMgr.specDetails){
 			var detailData = SpecMgr.specDetails[i];
-			if (!detailData.price) return false;
-			if (!detailData.stock) return false;
+			if (!detailData.price || detailData.price<0) return false;
+			if (!detailData.stock || detailData.stock<0) return false;
 		}
 		
 		return true;
