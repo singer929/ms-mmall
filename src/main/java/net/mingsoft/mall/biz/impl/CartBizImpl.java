@@ -90,6 +90,7 @@ public class CartBizImpl extends BaseBizImpl implements ICartBiz {
 			if (product == null) {
 				return 0;
 			}
+			// 判断商品有无规格
 			if(product.getProductSpecificationId() != 0){
 				ProductSpecificationDetailEntity detail = (ProductSpecificationDetailEntity) detailDao.getEntity(cart.getCartProductDetailId());
 				cart.setCartTitle(product.getBasicTitle());
@@ -98,7 +99,6 @@ public class CartBizImpl extends BaseBizImpl implements ICartBiz {
 				cart.setCartDiscount(product.getProductCostPrice());
 				cart.setCartThumbnail(product.getBasicThumbnails());
 				cartDao.saveEntity(cart);
-
 				if (cart.getCartProductDetailId() > 0) {
 					// 根据商品规格信息取出标题与图片
 					op.setOpTitle(detail.getSpecValues()); // 前端不需要商品名字
@@ -116,11 +116,11 @@ public class CartBizImpl extends BaseBizImpl implements ICartBiz {
 			}else{
 				cart.setCartTitle(product.getBasicTitle());
 				cart.setCartUrl(product.getProductLinkUrl());
+				cart.setCartPrice(product.getProductPrice());
 				cart.setCartDiscount(product.getProductCostPrice());
 				cart.setCartThumbnail(product.getBasicThumbnails());
 				cartDao.saveEntity(cart);
 			}
-			
 			return cart.getCartId();
 		}
 
