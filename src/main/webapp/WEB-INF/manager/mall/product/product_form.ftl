@@ -236,8 +236,7 @@
 		$.post('${managerPath}/mall/product/${autoCURD}.do', {jsonStr:paramStr}, function(data, status){
 			if (status != 'success') return;
 			if (data.result == false){
-				var src = data.resultMsg;
-				<@ms.notify msg=src type="warning"/>
+				<@ms.notify msg="商品规格下的价格、库存不能为负值" type="warning"/>
 				return;
 			}
 
@@ -787,8 +786,8 @@
 
     //基础列的设置
     const BASE_TH =
-        '<td class="base-td"><input type="text" class="form-control" value="{0}" data-type="price" onblur="onChangeData(this)"></td>' +
-        '<td><input type="text" class="form-control" value="{1}" data-type="stock" onblur="onChangeData(this)"></td>' +
+        '<td class="base-td"><input type="number" class="form-control" value="{0}" data-type="price" onblur="onChangeData(this)" min=0.0></td>' +
+        '<td><input type="number" class="form-control" value="{1}" data-type="stock" onblur="onChangeData(this)" min=0></td>' +
         '<td><input type="text" class="form-control" value="{2}" data-type="code" onblur="onChangeData(this)"></td>' +
         '<td>{3}</td></tr>';
 

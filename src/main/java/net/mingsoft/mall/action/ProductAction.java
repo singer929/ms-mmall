@@ -44,6 +44,7 @@ import net.mingsoft.mall.biz.IProductSpecificationBiz;
 import net.mingsoft.mall.constant.ModelCode;
 import net.mingsoft.mall.constant.e.ProductEnum;
 import net.mingsoft.mall.entity.ProductEntity;
+import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
 
 /**
  * 
@@ -286,7 +287,20 @@ public class ProductAction extends BaseAction {
 			this.outJson(response, ModelCode.MALL_PRODUCT, false, getResString("mall.err.parse"));
 			return;
 		}
+		// 判断规格商品库存、价格为负值
+		List<ProductSpecificationDetailEntity> ProductSpecificationDetail = data.getDetailList();
+		for(int i=0;i<ProductSpecificationDetail.size();i++){
+			if(ProductSpecificationDetail.get(i).getStock()<0){
+				this.outJson(response, ModelCode.MALL_PRODUCT, false, getResString("mall.err.data.type"));
+				return;
+			}
+			if(ProductSpecificationDetail.get(i).getPrice()<0){
+				this.outJson(response, ModelCode.MALL_PRODUCT, false, getResString("mall.err.data.type"));
+				return;
+			}
+		}
 		ProductEntity product = data.getProduct();
+		product.setProductShelf(ProductEnum.ON_SHELF);		// 强制写死上架
 		// 判断提交数据是否符合规范
 		if (!checkForm(product, response)) {
 			return;
@@ -416,6 +430,18 @@ public class ProductAction extends BaseAction {
 		// 判断提交数据是否符合规范
 		if (!checkForm(product, response)) {
 			return;
+		}
+		// 判断规格商品库存、价格为负值
+		List<ProductSpecificationDetailEntity> ProductSpecificationDetail = data.getDetailList();
+		for(int i=0;i<ProductSpecificationDetail.size();i++){
+			if(ProductSpecificationDetail.get(i).getStock()<0){
+				this.outJson(response, ModelCode.MALL_PRODUCT, false, getResString("mall.err.data.type"));
+				return;
+			}
+			if(ProductSpecificationDetail.get(i).getPrice()<0){
+				this.outJson(response, ModelCode.MALL_PRODUCT, false, getResString("mall.err.data.type"));
+				return;
+			}
 		}
 		int appId = getManagerBySession(request).getBasicId();
 		// 产品所属的栏目实体
