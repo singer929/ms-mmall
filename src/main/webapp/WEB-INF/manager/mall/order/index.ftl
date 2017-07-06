@@ -181,6 +181,7 @@
 				},				
 				function(data,status){
 					$("select[name=expresscompany]").find("option").remove();		//移除上次添加的<option>元素
+					$("select[name=expresscompany]").html("<option value='-1'>请选择快递公司</option>");
 					for( var i=0 ; i<data.length ; i++){
 						var value = data[i];
 						$("select[name=expresscompany]").append("<option value = "+value.expressCompanyId+">"+value.expressCompanyTitle+"</option>");		//添加<option>元素
