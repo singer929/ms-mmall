@@ -5,7 +5,6 @@
     <@ms.panel>
    			<@ms.form isvalidation=true name="categoryForm"   action="${managerPath}/mall/brand/${autoCURD}.do"  redirect="${managerPath}/mall/brand/list.do">
 				    		<input type="hidden" name="categoryId" id="categoryId"  value="${category.categoryId}"/>
-				    		<input type="hidden" name="categoryParentId" id="categoryParentId"  value=""/>
 					    	<@ms.formRow label="商品分类" width="300">
 					            	<@ms.inputTree  
 					            		treeId="inputTree" 
@@ -34,7 +33,6 @@
 <script> 
 	function isSelf(event,treeId,treeNode) {
 		var children = treeNode.children;
-		$("#categoryParentId").val(treeNode.categoryCategoryId);
 		if (children!=null && children.length > 0) {
 			<@ms.notify msg="请选择的子分类"/>
 			return false;

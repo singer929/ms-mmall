@@ -182,6 +182,13 @@ public class BrandAction extends BaseAction {
 		if (!checkForm(category, response)) {
 			return;
 		}
+		CategoryEntity categoryEntity = categoryBiz.getCategory(category.getCategoryCategoryId());
+		String categoryParentId = Integer.toString(categoryEntity.getCategoryId());
+		//判断categoryEntity中categoryParentId是否有值,有则累加
+		if(!StringUtil.isBlank(categoryEntity.getCategoryParentId())){
+			categoryParentId = categoryEntity.getCategoryParentId() + ","+ categoryParentId;
+		}
+		category.setCategoryParentId(categoryParentId);
 		category.setCategoryDateTime(new Timestamp(System.currentTimeMillis()));
 		category.setCategoryAppId(this.getAppId(request));
 		category.setCategoryModelId(this.getModelCodeId(request));
@@ -205,6 +212,13 @@ public class BrandAction extends BaseAction {
 		if (!checkForm(category, response)) {
 			return;
 		}
+		CategoryEntity categoryEntity = categoryBiz.getCategory(category.getCategoryCategoryId());
+		String categoryParentId = Integer.toString( categoryEntity.getCategoryId());
+		//判断categoryEntity中categoryParentId是否有值,有则累加
+		if(!StringUtil.isBlank(categoryEntity.getCategoryParentId())){
+			categoryParentId = categoryEntity.getCategoryParentId() + ","+ categoryParentId;
+		}
+		category.setCategoryParentId(categoryParentId);
 		categoryBiz.updateCategoryEntity(category);
 		this.outJson(response, ModelCode.MALL_BRAND, true, null, JSONArray.toJSONString(category.getCategoryId()));
 
