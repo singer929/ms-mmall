@@ -102,7 +102,7 @@ public class FreightBizImpl extends BaseBizImpl implements IFreightBiz{
 				double IncreasePrice = Math.ceil(surplusWeight/freightIncreaseAmount);		//获取超过的次数
 				return freightBasePrice+freightIncreasePrice*IncreasePrice;																//如果超出，输出计算后的运费
 			}else if(freightIncreaseAmount == 0){
-				return freightBaseAmount;
+				return freightBasePrice;
 			}else{
 				return -1;
 			}
