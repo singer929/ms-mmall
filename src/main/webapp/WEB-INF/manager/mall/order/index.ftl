@@ -207,6 +207,10 @@
 		
 		$("select[name=expresscompany]").on("change",function(){
 			var freightExpressId = $("select[name=expresscompany]").find("option:selected").val();
+			if(freightExpressId == -1){
+				$("input[name=orderExpressPrice]").val(0);
+				return;
+			}
 			var freightCityId = $("#delivery").attr("data-order-express-city-id");
 			var nums = $(".table").find(".goodsNum").text();
 			var numlist = [];
