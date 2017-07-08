@@ -1,5 +1,6 @@
 package net.mingsoft.mall.action.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -55,13 +56,16 @@ public class BrandAction extends BaseAction {
 	@ResponseBody
 	public void list(@ModelAttribute CategoryEntity category, HttpServletRequest request,
 			HttpServletResponse response) {
-		
-		// 查询指定的appId下的分类
-		category.setCategoryAppId(BasicUtil.getAppId());
-		category.setCategoryModelId(BasicUtil.getModelCodeId(ModelCode.MALL_BRAND));
-		List list = categoryBiz.query(category);
+		List list = new ArrayList();
+		if(category.getCategoryCategoryId() > 0){
+			list = categoryBiz.queryChildrenCategory(category.getCategoryCategoryId(), BasicUtil.getAppId(), BasicUtil.getModelCodeId(ModelCode.MALL_BRAND));
+		}else{
+			// 查询指定的appId下的分类
+			category.setCategoryAppId(BasicUtil.getAppId());
+			category.setCategoryModelId(BasicUtil.getModelCodeId(ModelCode.MALL_BRAND));
+			list = categoryBiz.query(category);
+		}
 		String jsonStr = JSON.toJSONString(list);
-		
 		this.outJson(response, jsonStr);
 	}
 }
