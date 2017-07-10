@@ -7,7 +7,7 @@
     		<@ms.text name="orderPhone" label="联系电话"/>
  			<@ms.select 
  				default="请选择"
- 				defaultValue="-1"
+ 				value="-1"
 			    name="orderStatus" 
 			    label="订单状态" 
 			    list=orderStatus
@@ -43,9 +43,7 @@
         $("#orderTable").bootstrapTable({
         		url:"${managerPath}/mall/order/list.do",
         		contentType : "application/x-www-form-urlencoded",
-        		queryParams:function(params) {
-					return  $.param(params)+"&pageSize="+ params.limit+"&pageNo="+(params.offset+1)+"&"+$("#searchForm").serialize();
-				},
+        		queryParamsType : "undefined",
 			    columns: [{ checkbox: true},{
 			        field: 'orderNo',
 			        title: '订单号'
@@ -78,7 +76,13 @@
 	}
 	
 	function search() {
-		$("#orderTable").bootstrapTable('refresh');
+		var search = $("form[name='searchForm']").serializeJSON();
+		var params = $("#orderTable").bootstrapTable('getOptions');
+		params.queryParams = function(params) {  
+		 	$.extend(params,search);
+	        	return params;  
+			}  
+		$("#orderTable").bootstrapTable('refresh', {query:$("form[name='searchForm']").serializeJSON()});
 	}	   
  </script>
 <script id="orderDetail" type="text/x-jquery-tmpl">
