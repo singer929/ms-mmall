@@ -43,8 +43,9 @@
         $("#orderTable").bootstrapTable({
         		url:"${managerPath}/mall/order/list.do",
         		contentType : "application/x-www-form-urlencoded",
+        		queryParamsType : "undefined",
         		queryParams:function(params) {
-					return  $.param(params)+"&"+$("#searchForm").serialize();
+					return  $.extend(params,$("form[name='searchForm']").serializeJSON());
 				},
 			    columns: [{ checkbox: true},{
 			        field: 'orderNo',
@@ -79,12 +80,12 @@
 	
 	function search() {
 		var search = $("form[name='searchForm']").serializeJSON();
-		var params = $("#orderTable").bootstrapTable('getOptions');
-		params.queryParams = function(params) {  
-		 	$.extend(params,search);
-	        	return params;  
-			}  
-		$("#orderTable").bootstrapTable('refresh', {query:$("form[name='searchForm']").serializeJSON()});
+        var params = $('#orderTable').bootstrapTable('getOptions');
+        params.queryParams = function(params) {  
+        	$.extend(params,search);
+	        return params;  
+       	}  
+   	 	$("#orderTable").bootstrapTable('refresh', {query:$("form[name='searchForm']").serializeJSON()});
 	}	   
  </script>
 <script id="orderDetail" type="text/x-jquery-tmpl">
