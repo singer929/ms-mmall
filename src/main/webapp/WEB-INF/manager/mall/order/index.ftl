@@ -43,7 +43,9 @@
         $("#orderTable").bootstrapTable({
         		url:"${managerPath}/mall/order/list.do",
         		contentType : "application/x-www-form-urlencoded",
-        		queryParamsType : "undefined",
+        		queryParams:function(params) {
+					return  $.param(params)+"&"+$("#searchForm").serialize();
+				},
 			    columns: [{ checkbox: true},{
 			        field: 'orderNo',
 			        title: '订单号'
