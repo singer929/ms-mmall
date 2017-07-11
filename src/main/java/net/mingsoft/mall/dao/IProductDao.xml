@@ -883,6 +883,7 @@
 				</if>
 			</if>
 		</if>
+		GROUP BY p.product_basicID
 		<!-- 是否采用分页 -->
 		<if test="page!=null">
 			limit ${page.pageNo*page.pageSize},#{page.pageSize};

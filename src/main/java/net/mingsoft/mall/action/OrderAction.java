@@ -124,9 +124,11 @@ public class OrderAction extends BaseAction {
 			this.outJson(response, false);
 			return;
 		}
+		int expressCompanyId =Integer.parseInt(request.getParameter("expresscompany")) ;
+		CategoryEntity categoryEntity = categoryBiz.getCategory(expressCompanyId);
 		OrderEntity _order =  (OrderEntity)mallOrderBiz.getByOrderNo(order.getOrderNo());
 		_order.setOrderStatus(OrderStatusEnum.SHIPPED); //设置发货状态
-		_order.setOrderExpressTitle(order.getOrderExpressTitle()); //设置快递名称
+		_order.setOrderExpressTitle(categoryEntity.getCategoryTitle()); //设置快递名称
 		_order.setOrderExpressNo(order.getOrderExpressNo()); //设置快递号
 		_order.setOrderExpressPrice(order.getOrderExpressPrice()); //设置快递价格
 		mallOrderBiz.updateEntity(_order);

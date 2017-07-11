@@ -141,7 +141,7 @@
 >
     <@ms.modalBody>
        <@ms.form  name="expressOrderForm" 
-		 action="${managerPath}/mall/order/express.do" method="post"    class="form-horizontal"  
+		 action="${managerPath}/mall/order/express.do" method="post" redirect="${managerPath}/mall/order/index.do"  class="form-horizontal"  
 		style="form-horizontal" isvalidation=true tooltip=true>
 			<input type="hidden" name="orderNo" id="expressOrderNo"/>
 			<@ms.select 
@@ -159,6 +159,7 @@
 				min=最小值
 				max=最大值  
 				isFloat=true
+				readonly="false"
 				value="0"
 				help="根据快递公司自动获取费用"
 			/>	
