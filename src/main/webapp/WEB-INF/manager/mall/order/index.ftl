@@ -58,7 +58,7 @@
 			        field: 'orderPrice',
 			        title: '订单总额'
 			    }, {
-			        field: 'orderExprecessPrice',
+			        field: 'orderExpressPrice',
 			        title: '运费金额'
 			    }, {
 			        field: 'orderStatusTitle',
