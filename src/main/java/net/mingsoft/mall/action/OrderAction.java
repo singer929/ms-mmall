@@ -120,14 +120,11 @@ public class OrderAction extends BaseAction {
 	@ResponseBody
 	public void express(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
 			HttpServletResponse response) {
-		if(Integer.parseInt(request.getParameter("expresscompany")) < 0 || StringUtil.isBlank(order.getOrderExpressNo()) ||order.getOrderExpressPrice()<0) {
+		if(StringUtil.isBlank(order.getOrderExpressType()) || StringUtil.isBlank(order.getOrderExpressNo()) ||order.getOrderExpressPrice()<0) {
 			this.outJson(response, false);
 			return;
 		}
 		OrderEntity _order =  (OrderEntity)mallOrderBiz.getByOrderNo(order.getOrderNo());
-		int expressCompanyId =Integer.parseInt(request.getParameter("expresscompany"));
-		CategoryEntity categoryEntity = categoryBiz.getCategory(expressCompanyId);
-		_order.setOrderExpressTitle(categoryEntity.getCategoryTitle()); //设置快递名称
 		_order.setOrderStatus(OrderStatusEnum.SHIPPED); //设置发货状态
 		_order.setOrderExpressNo(order.getOrderExpressNo()); //设置快递号
 		_order.setOrderExpressPrice(order.getOrderExpressPrice()); //设置快递价格

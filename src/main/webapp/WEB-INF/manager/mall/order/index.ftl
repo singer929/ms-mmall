@@ -147,7 +147,7 @@
 			<@ms.select 
  				width="200"
  				default="请选择快递公司"
-			    name="expresscompany" 
+			    name="orderExpressType" 
 			    label="快递公司" 
 			    list=expresscompany
 			    listKey="id" 
@@ -188,11 +188,11 @@
 					orderExpressCityId:orderExpressCityId
 				},				
 				function(data,status){
-					$("select[name=expresscompany]").find("option").remove();		//移除上次添加的<option>元素
-					$("select[name=expresscompany]").html("<option value='-1'>请选择快递公司</option>");
+					$("select[name=orderExpressType]").find("option").remove();		//移除上次添加的<option>元素
+					$("select[name=orderExpressType]").html("<option value=''>请选择快递公司</option>");
 					for( var i=0 ; i<data.length ; i++){
 						var value = data[i];
-						$("select[name=expresscompany]").append("<option value = "+value.expressCompanyId+">"+value.expressCompanyTitle+"</option>");		//添加<option>元素
+						$("select[name=orderExpressType]").append("<option value = "+value.expressCompanyTitle+" data-id="+value.expressCompanyId+">"+value.expressCompanyTitle+"</option>");		//添加<option>元素
 					}
 				}
 			);
@@ -213,8 +213,8 @@
 			);
 		})
 		
-		$("select[name=expresscompany]").on("change",function(){
-			var freightExpressId = $("select[name=expresscompany]").find("option:selected").val();
+		$("select[name=orderExpressType]").on("change",function(){
+			var freightExpressId = $("select[name=orderExpressType]").find("option:selected").attr("data-id");
 			if(freightExpressId == -1){
 				$("input[name=orderExpressPrice]").val(0);
 				return;
