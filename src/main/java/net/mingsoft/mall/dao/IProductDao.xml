@@ -281,7 +281,10 @@
 
 	<!-- 根据更新时间查询商品列表信息开始 -->
 	<select id="queryListByTime" resultMap="resultMap">
-		select * from v_mall_product where 1=1
+		select * from basic
+		JOIN 
+		mall_product ON basic.BASIC_ID = mall_product.product_basicID
+		where 1=1
 		<if test="appId != null">
 			and product_appId= #{appId}
 		</if>
@@ -1174,7 +1177,9 @@
 	<select id="queryByCategoryForBean" resultMap="productBeanMap">
 		select
 		<include refid="bean_column_list" />
-		from v_mall_product
+		from basic
+		JOIN 
+		mall_product ON basic.BASIC_ID = mall_product.product_basicID
 		<if test="contentModelTableName!=null">
 			left join ${contentModelTableName} cmt on
 			cmt.basicid=basic_id
@@ -1185,7 +1190,10 @@
 				open="" separator="" close="">
 				UNION ALL (select
 				<include refid="bean_column_list" />
-				from v_mall_product where
+				from basic
+				JOIN 
+				mall_product ON basic.BASIC_ID = mall_product.product_basicID 
+				where
 				BASIC_CATEGORYID=#{category.categoryId}
 				order by basic_id desc limit
 				${page.pageNo*page.pageSize},#{page.pageSize})
