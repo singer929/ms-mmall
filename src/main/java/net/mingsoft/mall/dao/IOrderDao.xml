@@ -82,6 +82,7 @@
 		left join people_user on ORDER_PEOPLEID = PU_PEOPLE_ID
 		left join mall_order_comment on OC_ORDER_ID=ORDER_ID 
 		<where>
+			and DEL=0
 			and order_appId=#{orderAppId}
 			and order_modelId=#{orderModelId}
 			<if test="orderNo!=null and orderNo!=''">
@@ -124,7 +125,7 @@
 		left join people on ORDER_PEOPLEID=PEOPLE_ID 
 		left join people_user on ORDER_PEOPLEID = PU_PEOPLE_ID
 		left join mall_order_comment on OC_ORDER_ID=ORDER_ID 
-		where ORDER_NO = #{orderNo}
+		where ORDER_NO = #{orderNo} and DEL=0
 	</select>
 	<!-- 查询订单结束 -->
 	
@@ -134,7 +135,7 @@
 		SELECT * FROM mall_product 
 		JOIN order_cart 
 		ON CART_BASICID = product_basicID
-		WHERE CART_ID = #{cartId}
+		WHERE CART_ID = #{cartId} and DEL=0
 	</select>
 	<!-- 获取商品结束 -->
 	
