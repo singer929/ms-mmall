@@ -135,7 +135,7 @@
 		SELECT * FROM mall_product 
 		JOIN order_cart 
 		ON CART_BASICID = product_basicID
-		WHERE CART_ID = #{cartId} and DEL=0
+		WHERE CART_ID = #{cartId}
 	</select>
 	<!-- 获取商品结束 -->
 	
