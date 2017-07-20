@@ -5,6 +5,7 @@ package net.mingsoft.mall.entity;
 
 import java.math.BigDecimal;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.mingsoft.basic.entity.BasicEntity;
 import com.mingsoft.basic.entity.ColumnEntity;
 
@@ -352,6 +353,8 @@ public class ProductEntity extends BasicEntity{
 		this.productShelf = productShelf;
 	}
 	
+	
+	@JSONField(deserialize = false)
 	public void setProductShelf(ProductEnum productShelf) {
 		this.productShelf = productShelf.toInt();
 	}

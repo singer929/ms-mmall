@@ -237,6 +237,7 @@ public interface IProductDao extends IBaseDao {
 	 *            是否进行降序
 	 * @return 商品列表
 	 */
+	@Deprecated
 	public List<ProductEntity> queryProducntSpecificationList(@Param("appId") Integer appId,
 			@Param("basicCategoryIds") int[] basicCategoryIds, @Param("begin") int begin,
 			@Param("count") int count, @Param("orderBy") String orderBy, @Param("order") boolean order,
