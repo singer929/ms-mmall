@@ -42,7 +42,7 @@ public  enum ModelCode implements BaseEnum{
 	 */
 	ORDER_STATUS("06960000"),
 	/**
-	 * 商品管理
+	 * 商城
 	 */
 	MALL("06000000"),
 	
@@ -78,7 +78,7 @@ public  enum ModelCode implements BaseEnum{
 	/**
 	 * 商品分类属性管理
 	 */
-	MALL_CATEGORY_TYPE("06700000")
+	MALL_CATEGORY_TYPE("06990300")
 	;
 
 	ModelCode(String code) {

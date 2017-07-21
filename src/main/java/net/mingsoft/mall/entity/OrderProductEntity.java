@@ -72,16 +72,6 @@ public class OrderProductEntity extends BaseEntity {
 	 * 对应购物车编号-临时使用
 	 */
 	private int cartId;
-	
-	/**
-	 * 价格
-	 */
-	private double opPrice;
-	
-	/**
-	 * 数量
-	 */
-	private int opNum;
 
 	public OrderProductEntity() {
 	}
@@ -217,21 +207,6 @@ public class OrderProductEntity extends BaseEntity {
 		this.cartId = cartId;
 	}
 
-	public double getOpPrice() {
-		return opPrice;
-	}
-
-	public void setOpPrice(double opPrice) {
-		this.opPrice = opPrice;
-	}
-
-	public int getOpNum() {
-		return opNum;
-	}
-
-	public void setOpNum(int opNum) {
-		this.opNum = opNum;
-	}
 	
 	
 }

@@ -8,8 +8,6 @@
 			OP_PRODUCT_DETAIL_ID,
 			OP_TITLE,
 			OP_THUMBNAIL,
-			OP_PRICE,
-			OP_NUM,
 			OP_STATUS,
 		</trim>
 	</sql>
@@ -18,8 +16,6 @@
 		<result column="OP_PRODUCT_ID" property="opProductId" /><!--商品编号、对应baisc_id -->
 		<result column="OP_PRODUCT_DETAIL_ID" property="opProductDetailId" /><!--商品规格编号 -->
 		<result column="OP_TITLE" property="opTitle" /><!--标题 -->
-		<result column="OP_PRICE" property="opPrice" /><!--价格 -->
-		<result column="OP_NUM" property="opNum" /><!--数量 -->
 		<result column="OP_STATUS" property="opStatus" /><!--商品状态0购物车 1订单 -->
 	</resultMap>
 
