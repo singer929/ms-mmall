@@ -69,7 +69,7 @@ public  enum ModelCode implements BaseEnum{
 	/**
 	 * 商城订单
 	 */
-	MALL_ORDER("06970000"),
+	MALL_ORDER("06050000"),
 	
 	/**
 	 * 限时抢购
