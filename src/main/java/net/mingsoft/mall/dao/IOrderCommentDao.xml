@@ -22,17 +22,19 @@
 		<result column="COMMENT_POINTS" property="commentPoints" />
 		<result column="COMMENT_BASICID" property="commentBasicId" />
 		<result column="COMMENT_IS_ANONYMOUS" property="isAnonymous"/>
+		<result column="BASIC_TITLE" property="basicTitle"/>
 		<association property="commentPeopleUser" javaType="com.mingsoft.people.entity.PeopleUserEntity">
+			<id column="PEOPLE_ID" property="peopleId" /><!-- 将实体的ID属性与表的ID字段对接 -->
 			<result property="peopleUserNickName" column="PU_NICKNAME"/>
 		</association>
 	</resultMap>
+	
 	
 	<!--保存-->	
 	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="ocCommentId"
 		parameterType="net.mingsoft.mall.entity.OrderCommentEntity" >
 		insert into mall_order_comment
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="commentId != null">OC_COMMENT_ID,</if>
 			<if test="ocOrderId != null">OC_ORDER_ID,</if>
 			<if test="ocImpression != null">OC_IMPRESSION,</if>
 			<if test="ocProduct != null">OC_PRODUCT,</if>
@@ -41,7 +43,6 @@
 			<if test="ocServiceDescribe != null">OC_SERVICE_DESCRIBE,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="commentId != null">#{commentId},</if>
 			<if test="ocOrderId != null">#{ocOrderId},</if>
 			<if test="ocImpression != null">#{ocImpression},</if>
 			<if test="ocProduct != null">#{ocProduct},</if>
@@ -105,18 +106,23 @@
 	</select>
 	
 	<!--条件查询-->	
-	<select id="query" resultMap="resultMap">
-		select *,people_user.PU_NICKNAME from mall_order_comment 
-		left join comment on OC_COMMENT_ID = COMMENT_ID  
-		left join people_user on PU_PEOPLE_ID = COMMENT_PEOPLEID
+	<select id="query" resultMap="resultMap" parameterType="net.mingsoft.mall.entity.OrderCommentEntity">
+		SELECT mall_order_comment.*,PU_NICKNAME,COMMENT_CONTENT,BASIC_TITLE
+		FROM mall_order_comment
+		LEFT JOIN `comment` ON OC_COMMENT_ID = COMMENT_ID
+		LEFT JOIN people_user ON COMMENT_PEOPLEID = PU_PEOPLE_ID
+		JOIN `basic` ON COMMENT_BASICID = BASIC_ID
 		<where>
-			<if test="ocOrderId != null"> and OC_ORDER_ID=#{ocOrderId} </if>				
+			 and COMMENT_APPID=BASIC_APPID
+			 and COMMENT_APPID=#{commentAppId}
+			<if test="ocOrderId &gt; 0"> and OC_ORDER_ID=#{ocOrderId} </if>				
 			<if test="ocImpression != null"> and OC_IMPRESSION=#{ocImpression} </if>				
 			<if test="ocProduct != null"> and OC_PRODUCT=#{ocProduct} </if>				
 			<if test="ocService != null"> and OC_SERVICE=#{ocService} </if>				
 			<if test="ocLogistics != null"> and OC_LOGISTICS=#{ocLogistics} </if>				
 			<if test="ocServiceDescribe != null"> and OC_SERVICE_DESCRIBE=#{ocServiceDescribe} </if>				
-			<if test="commentBasicId != null"> and COMMENT_BASICID=#{commentBasicId} </if>				
+			<if test="commentAudit &gt; -1"> and COMMENT_AUDIT=#{commentAudit} </if>	
+			<if test="basicTitle != null and basicTitle !=''"> and BASIC_TITLE like CONCAT('%',#{basicTitle},'%')</if>				
 		</where>		
 		order by OC_COMMENT_ID desc
 	</select>
