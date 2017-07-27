@@ -29,6 +29,8 @@ import net.mingsoft.comment.biz.ICommentBiz;
 import net.mingsoft.basic.bean.ListBean;
 import com.mingsoft.base.filter.DateValueFilter;
 import com.mingsoft.base.filter.DoubleValueFilter;
+import com.mingsoft.mdiy.entity.SearchEntity;
+
 import net.mingsoft.basic.bean.EUListBean;
 	
 /**
@@ -91,6 +93,10 @@ public class OrderCommentAction extends net.mingsoft.mall.action.BaseAction{
 	@RequestMapping("/list")
 	@ResponseBody
 	public void list(@ModelAttribute OrderCommentEntity orderComment,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
+		if(orderComment == null){
+			orderComment = new OrderCommentEntity();
+		}
+		orderComment.setCommentAppId(BasicUtil.getAppId());
 		BasicUtil.startPage();
 		List orderCommentList = orderCommentBiz.query(orderComment);
 		this.outJson(response, net.mingsoft.base.util.JSONArray.toJSONString(new EUListBean(orderCommentList,(int)BasicUtil.endPage(orderCommentList).getTotal()),new DoubleValueFilter(),new DateValueFilter()));
