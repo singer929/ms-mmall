@@ -14,9 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alipay.util.AlipayNotify;
-import com.mingsoft.bank.biz.IBankPayBiz;
-import com.mingsoft.bank.constant.e.BankPayEnum;
-import com.mingsoft.bank.entity.BankPayEntity;
+import net.mingsoft.bank.biz.IPayBiz;
+import net.mingsoft.bank.constant.e.BankPayEnum;
+import net.mingsoft.bank.entity.PayEntity;
 
 import net.mingsoft.mall.action.BaseAction;
 import net.mingsoft.order.biz.IOrderBiz;
@@ -34,7 +34,7 @@ import net.mingsoft.order.entity.OrderEntity;
 public class OrderAction extends BaseAction {
 
 	@Autowired
-	private IBankPayBiz bankPayBiz;
+	private IPayBiz bankPayBiz;
 	
 	@Autowired
 	private IOrderBiz orderBiz;
@@ -101,7 +101,7 @@ public class OrderAction extends BaseAction {
 		String trade_status = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"), "UTF-8");
 
 		// 获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
-		BankPayEntity bpe = (BankPayEntity) bankPayBiz.getEntity(new BankPayEntity(this.getAppId(request), BankPayEnum.ALIPAY.toString()));
+		PayEntity bpe = (PayEntity) bankPayBiz.getEntity(new PayEntity(this.getAppId(request), BankPayEnum.ALIPAY.toString()));
 		params.put("ckey", bpe.getBankPayKey());
 		params.put("cpartner", bpe.getBankPayPartner());
 		LOG.debug("支付回调");

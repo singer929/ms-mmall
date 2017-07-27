@@ -36,7 +36,8 @@
 		<@ms.modalBody>是否通过选中记录
 			<@ms.modalButton>
 				<!--模态框按钮组-->
-				<@ms.button  value="确认通过？"  id="auditOrderCommentBtn"  />
+				<@ms.button  value="不通过"  id="noAuditOrderCommentBtn"  />
+				<@ms.button  value="通过"  id="auditOrderCommentBtn"  />
 			</@ms.modalButton>
 		</@ms.modalBody>
 	</@ms.modal>
@@ -82,6 +83,7 @@
 				    	}]
 	    })
 	})
+	
 	//审查按钮
 	$("#audit").click(function(){
 		//获取checkbox选中的数据
@@ -94,10 +96,28 @@
 		}
 	})
 	
-	$("#auditOrderCommentBtn").click(function(){
+	//不通过按钮
+	$("#noAuditOrderCommentBtn").click(function(){
 		var rows = $("#orderCommentList").bootstrapTable("getSelections");
+		for(var i = 0 ; i++ ; i < rows.length){
+			rows[i].commentAudit = 2;
+		}
 		$(this).text("正在审核...");
 		$(this).attr("disabled","true");
+		update(rows);
+	});
+	
+	//通过按钮
+	$("#auditOrderCommentBtn").click(function(){
+		var rows = $("#orderCommentList").bootstrapTable("getSelections");
+		for(var i = 0 ; i++ ; i < rows.length){
+			rows[i].commentAudit = 1;
+		}
+		$(this).text("正在审核...");
+		$(this).attr("disabled","true");
+		update(rows);
+	});
+	function update(rows){
 		$.ajax({
 			type: "post",
 			url: "${managerPath}/mall/orderComment/update.do",
@@ -113,7 +133,8 @@
 				location.reload();
 			}
 		})
-	});
+	}
+	
 	//查询功能
 	function search(){
 		var search = $("form[name='searchForm']").serializeJSON();
