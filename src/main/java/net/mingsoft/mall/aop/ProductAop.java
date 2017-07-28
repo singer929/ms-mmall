@@ -40,14 +40,14 @@ public class ProductAop extends BaseAop {
 
 	@Around("saveOrUpdate()")
 	public Object saveOrUpdate(ProceedingJoinPoint pjp) throws Throwable {
-		ProductEntity product = this.getType(pjp, ProductEntity.class);
-				if (!StringUtil.isBlank(product.getBasicType())) {
-					basicTypeBiz.deleteByBasicId(product.getBasicId());
-					int ids[]=StringUtil.stringsToInts(product.getBasicType().split(","));
-					for (int id:ids) {
-						basicTypeBiz.saveEntity(new BasicTypeEntity(product.getBasicId(),id));
-			}
-		}
+//		ProductEntity product = this.getType(pjp, ProductEntity.class);
+//				if (!StringUtil.isBlank(product.getBasicType())) {
+//					basicTypeBiz.deleteByBasicId(product.getBasicId());
+//					int ids[]=StringUtil.stringsToInts(product.getBasicType().split(","));
+//					for (int id:ids) {
+//						basicTypeBiz.saveEntity(new BasicTypeEntity(product.getBasicId(),id));
+//			}
+//		}
 
 		return pjp.proceed();
 	}
