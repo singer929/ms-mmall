@@ -280,23 +280,6 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 		}
 	}
 	
-	@Override
-	public List<ProductEntity> queryProducntSpecificationList(Integer appId,int[] basicCategoryIds,int begin,int count,String orderBy,boolean order,String flag,String noFlag){
-		if(basicCategoryIds==null){
-			return this.productDao.queryProducntSpecificationList(appId,null,begin, count, orderBy, order,flag,noFlag);
-		}
-		return this.productDao.queryProducntSpecificationList(appId,basicCategoryIds,begin, count, orderBy, order,flag,noFlag);
-	}
-
-	@Override
-	public int getProducntSpecificationCount(int[] basicCategoryIds,
-			Integer appId,String flag ,String noFlag) {
-		// TODO Auto-generated method stub
-		if(basicCategoryIds==null){
-			return this.productDao.getProducntSpecificationCount(null, appId,flag,noFlag);
-		}
-		return this.productDao.getProducntSpecificationCount(basicCategoryIds, appId,flag,noFlag);
-	}
 
 	@Override
 	public List<ProductEntity> queryProducntSpecificationByDateAndByColumnId(

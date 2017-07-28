@@ -52,19 +52,19 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	 * 产品关联规格 持久层
 	 */
 	@Autowired
-	private IProductSpecificationDao productSpecDao;
+	private IProductSpecificationDao productSpecificationDao;
 
 	/**
 	 * 产品关联规格商品详情 持久层
 	 */
 	@Autowired
-	private IProductSpecificationDetailDao detailDao;
+	private IProductSpecificationDetailDao productSpecificationDetailDao;
 	
 	/**
 	 * 规格数据 持久层
 	 */
 	@Autowired
-	private ISpecificationDao specDao;
+	private ISpecificationDao specificationDao;
 	
 	/**
 	 * 商品数据层
@@ -79,21 +79,21 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	 *            产品Id
 	 */
 	public void deleteEntityByProductIds(int[] productIds) {
-		this.productSpecDao.deleteEntityByProductIds(productIds);
+		this.productSpecificationDao.deleteEntityByProductIds(productIds);
 	}
 
 	public IProductSpecificationDao getProductSpecificationsDao() {
-		return productSpecDao;
+		return productSpecificationDao;
 	}
 
 	@Autowired
 	public void setProductSpecificationsDao(IProductSpecificationDao productSpecificationsDao) {
-		this.productSpecDao = productSpecificationsDao;
+		this.productSpecificationDao = productSpecificationsDao;
 	}
 
 	@Override
 	protected IBaseDao getDao() {
-		return productSpecDao;
+		return productSpecificationDao;
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	 */
 	private void saveSpecs (List<SpecificationEntity> list, int appId) {
 		
-		List<SpecificationEntity> dbList = specDao.queryAll();
+		List<SpecificationEntity> dbList = specificationDao.queryAll();
 		for (SpecificationEntity se : list){
 			
 			se.setAppId(appId);
@@ -140,7 +140,7 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 			}
 			if (isInDb) continue;
 			// 不在DB中则插入数据
-			specDao.saveEntity(se); 
+			specificationDao.saveEntity(se); 
 		}
 	}
 	
@@ -152,14 +152,14 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	private void saveProductSpecs(int productId, List<ProductSpecificationEntity> list) {
 		
 		// 清空当前productId的规格数据
-		productSpecDao.deleteEntityByProductIds(new int[]{productId});
+		productSpecificationDao.deleteEntityByProductIds(new int[]{productId});
 		// 将productId 赋值给实体
 		for (ProductSpecificationEntity ps : list){
 			ps.setProductId(productId);
 		}
 		if (list != null && list.size() > 0){
 			// 添加新数据
-			productSpecDao.saveBatch(list);
+			productSpecificationDao.saveBatch(list);
 		}
 	}
 	
@@ -171,7 +171,7 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	public void saveProductSpecDetails(int productId, List<ProductSpecificationDetailEntity> list) {
 		
 		// 删除原来数据
-		detailDao.deleteEntityByProductIds(new int[]{productId});
+		productSpecificationDetailDao.deleteEntityByProductIds(new int[]{productId});
 		
 		for (ProductSpecificationDetailEntity pse : list){
 			pse.setProductId(productId);
@@ -179,7 +179,7 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 		
 		if (list != null && list.size() > 0){
 			// 保存新数据
-			detailDao.saveBatch(list);
+			productSpecificationDetailDao.saveBatch(list);
 		}
 	}
 	
@@ -192,9 +192,9 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	public String getDataStrByProductId(int productId) {
 		
 		//List<SpecificationEntity> specList = specDao.queryByProductId(productId);
-		List<SpecificationEntity> specList = specDao.queryAll();
-		List<ProductSpecificationEntity> productSpecList = productSpecDao.queryByProductId(productId);
-		List<ProductSpecificationDetailEntity> detailList =  detailDao.queryEntitiesByProductId(productId);
+		List<SpecificationEntity> specList = specificationDao.queryAll();
+		List<ProductSpecificationEntity> productSpecList = productSpecificationDao.queryByProductId(productId);
+		List<ProductSpecificationDetailEntity> detailList =  productSpecificationDetailDao.queryEntitiesByProductId(productId);
 		
 		// 构建发给前段的数据
 		ProductSpecData data = new ProductSpecData();
@@ -212,15 +212,15 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	public List<ProductEntity> queryBySpecValues(List<ProductSpecificationEntity> list) {
 		
 		// 先查询所有id
-		List<Integer> ids = productSpecDao.queryByProductSpec(new ProductSpecificationEntity());
+		List<Integer> ids = productSpecificationDao.queryByProductSpec(new ProductSpecificationEntity());
 		
 		for (int i = 0; i < list.size(); i ++){
 			ProductSpecificationEntity productSpec = list.get(i);
 			if (i == 0){
-				ids = productSpecDao.queryByProductSpec(productSpec);
+				ids = productSpecificationDao.queryByProductSpec(productSpec);
 			}
 			else{
-				List<Integer> tmpIds = productSpecDao.queryByProductSpec(productSpec);
+				List<Integer> tmpIds = productSpecificationDao.queryByProductSpec(productSpec);
 				for (Integer id : ids){
 					
 					Boolean find = false;

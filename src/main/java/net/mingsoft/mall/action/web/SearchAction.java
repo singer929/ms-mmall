@@ -11,8 +11,10 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,11 +37,15 @@ import com.mingsoft.util.FileUtil;
 import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
 
+import net.mingsoft.base.elasticsearch.bean.SearchBean;
 import net.mingsoft.basic.util.BasicUtil;
+import net.mingsoft.basic.util.ElasticsearchUtil;
 import net.mingsoft.mall.action.BaseAction;
 import net.mingsoft.mall.biz.IProductBiz;
 import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.mall.parser.MallParser;
+import net.mingsoft.mall.search.IProductSearch;
+import net.mingsoft.mall.search.mapping.ProductMapping;
 
 /**
  * 
@@ -122,6 +128,9 @@ public class SearchAction extends BaseAction {
 	
 	@Autowired
 	private ICategoryBiz categoryBiz;
+	
+	@Autowired
+	private IProductSearch productSearch;
 	
 	/**
 	 * 自定义搜索接口
@@ -403,4 +412,19 @@ public class SearchAction extends BaseAction {
 			}
 			return null;
 		}
+		
+		/**
+		 * 搜索引擎检索
+		 * @param request
+		 * @param response
+		 */
+		@SuppressWarnings("rawtypes")
+		@RequestMapping(value = "/search")
+		@ResponseBody
+		public void search(@ModelAttribute SearchBean search, HttpServletRequest request,  HttpServletResponse response){
+			Map field = new HashMap();
+			List products =  ElasticsearchUtil.search(productSearch, search.getKeyworkd(), field,search.getOrderBy(), search.getOrder().equalsIgnoreCase("asc")?SortOrder.ASC:SortOrder.DESC, search.getPageNumber(), search.getPageSize());
+			this.outJson(response, products);
+		}
+		
 }

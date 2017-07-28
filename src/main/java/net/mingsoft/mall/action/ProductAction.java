@@ -45,6 +45,7 @@ import net.mingsoft.mall.constant.ModelCode;
 import net.mingsoft.mall.constant.e.ProductEnum;
 import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
+import net.mingsoft.mall.search.mapping.ProductMapping;
 
 /**
  * 
@@ -274,7 +275,7 @@ public class ProductAction extends BaseAction {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public void update1(String jsonStr, HttpServletRequest request, HttpServletResponse response){
+	public void update(String jsonStr, HttpServletRequest request, HttpServletResponse response){
 		
 		if (StringUtil.isBlank(jsonStr)){
 			this.outJson(response, ModelCode.MALL_PRODUCT, false, getResString("err.empty", getResString("mall.param.string")));
@@ -409,7 +410,7 @@ public class ProductAction extends BaseAction {
 	 */
 	@ResponseBody
 	@RequestMapping("/save")
-	public void save1(String jsonStr, HttpServletRequest request, HttpServletResponse response) {
+	public void save(String jsonStr, HttpServletRequest request, HttpServletResponse response) {
 		
 		// 字符串为空
 		if (StringUtil.isBlank(jsonStr)) {
@@ -488,7 +489,6 @@ public class ProductAction extends BaseAction {
 			// 向新增内容模型表中插入数据
 			fieldBiz.insertBySQL(contentModel.getCmTableName(), param);
 		}
-
 		this.outJson(response, ModelCode.MALL_PRODUCT, true, String.valueOf(product.getBasicId()));
 	}
 }

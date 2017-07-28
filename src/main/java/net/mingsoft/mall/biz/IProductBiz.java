@@ -172,27 +172,6 @@ public interface IProductBiz extends IBasicBiz {
 	 */
 	public void updateProductShelf(String[] productIds,ProductEnum productShelf);
 	
-	/**
-	 * 查询产品的规格产品列表
-	 * @param appId 应用id
-	 * @param basicCategoryIds 分类id集合
-	 * @param begin 开始位置
-	 * @param count  查询总数
-	 * @param orderBy 依据排序字段
-	 * @param order  是否降序 false：升序 true:降序
-	 * @return 产品列表数据
-	 */
-	public List<ProductEntity> queryProducntSpecificationList(Integer appId,int[] basicCategoryIds,int begin,int count,String orderBy,boolean order,String flag,String noFlag);
-	
-	/**
-	 * 根据产品的推荐属性和不推荐属性查找商品规格总数
-	 * @param basicCategoryIds 分类id
-	 * @param appId 应用id
-	 * @param flag  商品推荐属性
-	 * @param noFlag 商品部推荐属性
-	 * @return 产品总数
-	 */
-	public int getProducntSpecificationCount( int[] basicCategoryIds,Integer appId,String flag ,String noFlag);
 	
 	/**
 	 * 根据时间和分类id集合查询商品规格商品

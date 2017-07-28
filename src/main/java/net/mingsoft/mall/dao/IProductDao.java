@@ -220,39 +220,6 @@ public interface IProductDao extends IBaseDao {
 	public int getCountByShelf(@Param("appId") Integer appId, @Param("productShelf") Integer productShelf,
 			@Param("categoryId") Integer categoryId);
 
-	/**
-	 * 获取商品的规格列表
-	 * 
-	 * @param appId
-	 *            应用
-	 * @param basicCategoryIds
-	 *            分类集合
-	 * @param begin
-	 *            开始位置
-	 * @param count
-	 *            查询总数
-	 * @param orderBy
-	 *            已经排序字段
-	 * @param order
-	 *            是否进行降序
-	 * @return 商品列表
-	 */
-	@Deprecated
-	public List<ProductEntity> queryProducntSpecificationList(@Param("appId") Integer appId,
-			@Param("basicCategoryIds") int[] basicCategoryIds, @Param("begin") int begin,
-			@Param("count") int count, @Param("orderBy") String orderBy, @Param("order") boolean order,
-			@Param("flag") String flag, @Param("noFlag") String noFlag);
-
-	/**
-	 * 获取商品的规格商品总数
-	 * 
-	 * @param basicCategoryIds
-	 *            分类集合
-	 * @param appId应用id
-	 * @return 总数
-	 */
-	public int getProducntSpecificationCount(@Param("basicCategoryIds") int[] basicCategoryIds,
-			@Param("appId") Integer appId, @Param("flag") String flag, @Param("noFlag") String noFlag);
 
 	/**
 	 * 根据时间和栏目id查询商品的规格商品
