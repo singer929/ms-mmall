@@ -21,6 +21,7 @@ import com.mingsoft.util.StringUtil;
 import net.mingsoft.basic.bean.EUListBean;
 import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.comment.biz.ICommentBiz;
+import net.mingsoft.comment.entity.CommentEntity;
 import net.mingsoft.mall.biz.IOrderCommentBiz;
 import net.mingsoft.mall.entity.OrderCommentEntity;
 	
@@ -166,7 +167,6 @@ public class OrderCommentAction extends net.mingsoft.mall.action.BaseAction{
 					this.outJson(response, null, false, getResString("err.length", this.getResString("oc.service.describe"), "1", "255"));
 					return;			
 				}
-				orderComments.get(i).setCommentAudit(1);
 				commentBiz.updateEntity(orderComments.get(i));
 			}
 			this.outJson(response, true);
