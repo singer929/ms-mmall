@@ -71,6 +71,7 @@
 				    	},{
 				        	field: 'commentAudit',
 				        	title: '审核状态',
+				        	align: 'center',
 				        	formatter: function (value, row, index){
 				        		if(value == 0){
 				        			return "未审核"
@@ -99,7 +100,7 @@
 	//不通过按钮
 	$("#noAuditOrderCommentBtn").click(function(){
 		var rows = $("#orderCommentList").bootstrapTable("getSelections");
-		for(var i = 0 ; i++ ; i < rows.length){
+		for(var i = 0 ; i < rows.length ; i++){
 			rows[i].commentAudit = 2;
 		}
 		$(this).text("正在审核...");
@@ -110,7 +111,7 @@
 	//通过按钮
 	$("#auditOrderCommentBtn").click(function(){
 		var rows = $("#orderCommentList").bootstrapTable("getSelections");
-		for(var i = 0 ; i++ ; i < rows.length){
+		for(var i = 0 ; i < rows.length ; i++){
 			rows[i].commentAudit = 1;
 		}
 		$(this).text("正在审核...");

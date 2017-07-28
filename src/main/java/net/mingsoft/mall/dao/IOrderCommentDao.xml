@@ -11,6 +11,7 @@
 		<result column="OC_LOGISTICS" property="ocLogistics" /><!--物流发货速度 -->
 		<result column="OC_SERVICE_DESCRIBE" property="ocServiceDescribe" /><!--评价服务 -->
 		<result column="OC_SERVICE_DESCRIBE" property="ocServiceDescribe" /><!--评价服务 -->
+		<result column="COMMENT_ID" property="commentId" />
 		<result column="COMMENT_COMMENTID" property="commentCommentId" />
 		<result column="COMMENT_CONTENT" property="commentContent" />
 		<result column="COMMENT_PICTURE" property="commentPicture" />
@@ -22,6 +23,7 @@
 		<result column="COMMENT_POINTS" property="commentPoints" />
 		<result column="COMMENT_BASICID" property="commentBasicId" />
 		<result column="COMMENT_IS_ANONYMOUS" property="isAnonymous"/>
+		<result column="COMMENT_AUDIT" property="commentAudit" />
 		<result column="BASIC_TITLE" property="basicTitle"/>
 		<association property="commentPeopleUser" javaType="com.mingsoft.people.entity.PeopleUserEntity">
 			<id column="PEOPLE_ID" property="peopleId" /><!-- 将实体的ID属性与表的ID字段对接 -->
@@ -35,19 +37,19 @@
 		parameterType="net.mingsoft.mall.entity.OrderCommentEntity" >
 		insert into mall_order_comment
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="ocOrderId != null">OC_ORDER_ID,</if>
+			<if test="ocOrderId &gt; 0">OC_ORDER_ID,</if>
 			<if test="ocImpression != null">OC_IMPRESSION,</if>
-			<if test="ocProduct != null">OC_PRODUCT,</if>
-			<if test="ocService != null">OC_SERVICE,</if>
-			<if test="ocLogistics != null">OC_LOGISTICS,</if>
+			<if test="ocProduct &gt; 0">OC_PRODUCT,</if>
+			<if test="ocService &gt; 0">OC_SERVICE,</if>
+			<if test="ocLogistics &gt; 0">OC_LOGISTICS,</if>
 			<if test="ocServiceDescribe != null">OC_SERVICE_DESCRIBE,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="ocOrderId != null">#{ocOrderId},</if>
+			<if test="ocOrderId &gt; 0">#{ocOrderId},</if>
 			<if test="ocImpression != null">#{ocImpression},</if>
-			<if test="ocProduct != null">#{ocProduct},</if>
-			<if test="ocService != null">#{ocService},</if>
-			<if test="ocLogistics != null">#{ocLogistics},</if>
+			<if test="ocProduct &gt; 0">#{ocProduct},</if>
+			<if test="ocService &gt; 0">#{ocService},</if>
+			<if test="ocLogistics &gt; 0">#{ocLogistics},</if>
 			<if test="ocServiceDescribe != null">#{ocServiceDescribe},</if>
 		</trim>
 	</insert>
@@ -56,11 +58,11 @@
 	<update id="updateEntity" parameterType="net.mingsoft.mall.entity.OrderCommentEntity">
 		update mall_order_comment
 		<set>
-			<if test="ocOrderId != null">OC_ORDER_ID=#{ocOrderId},</if>
+			<if test="ocOrderId &gt; 0">OC_ORDER_ID=#{ocOrderId},</if>
 			<if test="ocImpression != null">OC_IMPRESSION=#{ocImpression},</if>
-			<if test="ocProduct != null">OC_PRODUCT=#{ocProduct},</if>
-			<if test="ocService != null">OC_SERVICE=#{ocService},</if>
-			<if test="ocLogistics != null">OC_LOGISTICS=#{ocLogistics},</if>
+			<if test="ocProduct &gt; 0">OC_PRODUCT=#{ocProduct},</if>
+			<if test="ocService &gt; 0">OC_SERVICE=#{ocService},</if>
+			<if test="ocLogistics &gt; 0">OC_LOGISTICS=#{ocLogistics},</if>
 			<if test="ocServiceDescribe != null">OC_SERVICE_DESCRIBE=#{ocServiceDescribe},</if>
 		</set>
 		where OC_COMMENT_ID = #{ocCommentId}
@@ -107,7 +109,7 @@
 	
 	<!--条件查询-->	
 	<select id="query" resultMap="resultMap" parameterType="net.mingsoft.mall.entity.OrderCommentEntity">
-		SELECT mall_order_comment.*,PU_NICKNAME,COMMENT_CONTENT,BASIC_TITLE
+		SELECT mall_order_comment.*,PU_NICKNAME,COMMENT_CONTENT,BASIC_TITLE,comment.COMMENT_ID,comment.COMMENT_AUDIT
 		FROM mall_order_comment
 		LEFT JOIN `comment` ON OC_COMMENT_ID = COMMENT_ID
 		LEFT JOIN people_user ON COMMENT_PEOPLEID = PU_PEOPLE_ID
