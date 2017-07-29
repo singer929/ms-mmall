@@ -423,6 +423,7 @@ public class SearchAction extends BaseAction {
 		 * orderBy 排序字段，默认id<br/>
 		 * order 排序方式 默认desc|asc<br/>
 		 * keyworkd 关键字(必须)<br/>
+		 * 
 		 * <dt><span class="strong">返回</span></dt><br/>
 		 * {
 		 * "data": [
@@ -478,6 +479,7 @@ public class SearchAction extends BaseAction {
 //			product.setProductGood(0.9);
 //			ElasticsearchUtil.saveOrUpdate(product.getId(), product);
 //			search.setOrder("desc");
+			int c = BasicUtil.getInt("categoryId");
 			if(StringUtils.isBlank(search.getKeyworkd())) { //
 				this.outJson(response, false);
 				return;
