@@ -422,8 +422,9 @@ public class SearchAction extends BaseAction {
 		 * pageSize 一页显示数量，默认20条<br/>
 		 * orderBy 排序字段，默认id<br/>
 		 * order 排序方式 默认desc|asc<br/>
-		 * keyworkd 关键字(必须)<br/>
-		 * 
+		 * keyworkd 关键字<br/>
+		 * brand 品牌<br/>
+		 * category 分类<br/>
 		 * <dt><span class="strong">返回</span></dt><br/>
 		 * {
 		 * "data": [
@@ -480,7 +481,7 @@ public class SearchAction extends BaseAction {
 //			ElasticsearchUtil.saveOrUpdate(product.getId(), product);
 //			search.setOrder("desc");
 			int c = BasicUtil.getInt("categoryId");
-			if(StringUtils.isBlank(search.getKeyworkd())) { //
+			if(StringUtils.isBlank(search.getKeyword())) { //
 				this.outJson(response, false);
 				return;
 			}
