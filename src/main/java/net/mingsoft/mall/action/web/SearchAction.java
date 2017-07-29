@@ -11,8 +11,14 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.elasticsearch.search.sort.SortOrder;
+import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -421,9 +427,24 @@ public class SearchAction extends BaseAction {
 		@SuppressWarnings("rawtypes")
 		@RequestMapping(value = "/search")
 		@ResponseBody
-		public void search(@ModelAttribute SearchBean search, HttpServletRequest request,  HttpServletResponse response){
+		public void search(HttpServletRequest request,  HttpServletResponse response){
+			ProductMapping product = new ProductMapping();
+			product.setId("5");
+			product.setBasicTitle("bbb ccc12121");
+			ElasticsearchUtil.saveOrUpdate(product.getId(), product);
 			Map field = new HashMap();
-			List products =  ElasticsearchUtil.search(productSearch, search.getKeyworkd(), field,search.getOrderBy(), search.getOrder().equalsIgnoreCase("asc")?SortOrder.ASC:SortOrder.DESC, search.getPageNumber(), search.getPageSize());
+//			search.setKeyworkd("aaa");
+//			search.setOrderBy("id");
+//			search.setOrder("desc");
+//			search.setPageNumber(0);
+//			search.setPageSize(10);
+			field.put("basicTitle", 1000);
+			List products = null;// ElasticsearchUtil.search(productSearch, search.getKeyworkd(), field,search.getOrderBy(), search.getOrder().equalsIgnoreCase("asc")?SortOrder.ASC:SortOrder.DESC, search.getPageNumber(), search.getPageSize());
+			MatchQueryBuilder mqb = QueryBuilders.matchQuery("basicTitle", "bbb");
+			Pageable pageable = new PageRequest(0, 10);
+			
+			SearchQuery sq = new NativeSearchQueryBuilder().withPageable(pageable).withQuery(mqb).build();
+			products = productSearch.search(sq).getContent();
 			this.outJson(response, products);
 		}
 		
