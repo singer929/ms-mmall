@@ -40,15 +40,34 @@ public class ProductPeopleAction extends BaseAction{
 	 * appId 站点id<br/>
 	 * modelId 模块id<br>
 	 * peopleId 用户编号<br/>
+	 *  "page":{"endRow": 2, <br/>
+	 *            "firstPage": 1, <br/>
+	 *            "hasNextPage": true存在下一页false不存在, <br/>
+	 *            "hasPreviousPage": true存在上一页false不存在, <br/>
+	 *            "isFirstPage": true是第一页false不是第一页, <br/>
+	 *            "isLastPage": true是最后一页false不是最后一页, <br/>
+	 *            "lastPage": 最后一页的页码, <br/>
+	 *            "navigatePages": 导航数量，实现 1...5.6.7....10效果, <br/>
+	 *            "navigatepageNums": []导航页码集合, <br/>
+	 *            "nextPage": 下一页, <br/>
+	 *            "pageNum": 当前页码, <br/>
+	 *            "pageSize": 一页显示数量, <br/>
+	 *            "pages": 总页数, <br/>
+	 *            "prePage": 上一页, <br/>
+	 *            "size": 总记录, <br/>
+	 *            "startRow": , <br/>
+	 *            "total":总记录数量}<br/>
+	 *            }<br/>
 	 * <dt><span class="strong">返回</span></dt><br/>
 	 * <dd>[<br/>
 	 * { <br/>
 	 * 商品信息<br/>
-	 * BASIC_TITLE: 商品标题<br/>
-	 * BASIC_THUMBNAILS: 商品缩略图<br/>
-	 * product_linkUrl: 商品链接<br/>
-	 * product_price: 商品价格<br/>
-	 * BASIC_DESCRIPTION: 商品描述等<br/>
+	 * basicTitle: 商品标题<br/>
+	 * basicThumbnails: 商品缩略图<br/>
+	 * productLinkUrl: 商品链接<br/>
+	 * productPrice: 商品价格<br/> 
+	 * productSale: 商品销量<br/>
+	 * basicDescription: 商品描述等<br/>
 	 * }<br/>
 	 * ]</dd><br/>	 
 	 */
