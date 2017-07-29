@@ -221,16 +221,6 @@ public interface IProductDao extends IBaseDao {
 			@Param("categoryId") Integer categoryId);
 
 
-	/**
-	 * 根据时间和栏目id查询商品的规格商品
-	 * 
-	 * @param date时间
-	 * @param appId应用id
-	 * @param columnId
-	 * @return
-	 */
-	public List<ProductEntity> queryProducntSpecificationByDateAndByColumnId(@Param("dateTime") String dateTime,
-			@Param("appId") Integer appId, @Param("categoryId") Integer categoryId);
 
 	/**
 	 * 根据查询产品实体

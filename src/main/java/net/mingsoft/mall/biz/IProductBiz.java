@@ -172,16 +172,6 @@ public interface IProductBiz extends IBasicBiz {
 	 */
 	public void updateProductShelf(String[] productIds,ProductEnum productShelf);
 	
-	
-	/**
-	 * 根据时间和分类id集合查询商品规格商品
-	 * @param dateTime  时间
-	 * @param appId 应用id
-	 * @param categoryId 分类id
-	 * @return  产品列表
-	 */
-	public List<ProductEntity> queryProducntSpecificationByDateAndByColumnId(String dateTime,Integer appId,Integer categoryId);
-	
 	/**
 	 * 根据查询产品实体
 	 * 

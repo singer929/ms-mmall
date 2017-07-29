@@ -282,13 +282,6 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	
 
 	@Override
-	public List<ProductEntity> queryProducntSpecificationByDateAndByColumnId(
-			String dateTime, Integer appId, Integer categoryId) {
-		// TODO Auto-generated method stub
-		return this.productDao.queryProducntSpecificationByDateAndByColumnId(dateTime, appId, categoryId);
-	}
-
-	@Override
 	public List<ProductEntity> queryProducntSpecificationForSearch(
 			ContentModelEntity conntentModel, Map<String, List> map, int appId, List ids,
 			Map sortMap, PageUtil page,String orderBy,boolean order,String flag,String noFlag) {

@@ -606,41 +606,6 @@
 	</select>
 	<!-- 根据应用ID和分类查询上架或下架商品总数结束 -->
 
-	<!-- 根据产品分类id查询该商品的所有规格商品开始 -->
-	<select id="queryProducntSpecificationByDateAndByColumnId"
-		resultMap="resultPsMap">
-		select *,
-		CONCAT(basic_title,func_parent_specifications_field(psi_product_specifications_id))
-		as product_specification_title
-
-		from mall_product mp left join
-		mall_product_specifications_inventory mpsi
-		on mpsi.psi_productID =
-		mp.product_basicID
-		left join basic b on
-		b.basic_id=mp.product_basicID
-		LEFT JOIN
-		category c ON b.BASIC_CATEGORYID
-		= c.CATEGORY_ID
-		LEFT JOIN
-		cms_column
-		cl ON c.CATEGORY_ID =
-		cl.COLUMN_CATEGORYID
-		<where>
-			<if test="appId != null">
-				and mp.product_appId= #{appId}
-			</if>
-			<if test=" categoryId != null">
-				and
-				b.BASIC_CATEGORYID =#{categoryId}
-			</if>
-			<if test="dateTime!=null">
-				and basic_updatetime > #{dateTime}
-			</if>
-		</where>
-	</select>
-	<!-- 根据产品id查询该商品的所有规格商品结束 -->
-
 	<!-- 根据字段条件查找商品的所有规格商品列表实体开始 -->
 	<select id="queryProductSpecificationForSearch" resultMap="resultPsMap">
 		select *

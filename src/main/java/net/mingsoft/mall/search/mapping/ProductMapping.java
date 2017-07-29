@@ -68,9 +68,14 @@ public class ProductMapping extends BaseMapping {
 	private String productLinkUrl;
 	
 	/**
-	 * 商品规格数据,json格式提供 格式
+	 * 商品规格详情数据
 	 */
-	private String specification;
+	private String productSpecDetails;
+	
+	/**
+	 * 商品规
+	 */
+	private String productSpecs;
 	
 	/**
 	 * 品牌
@@ -144,13 +149,6 @@ public class ProductMapping extends BaseMapping {
 		this.productLinkUrl = productLinkUrl;
 	}
 
-	public String getSpecification() {
-		return specification;
-	}
-
-	public void setSpecification(String specification) {
-		this.specification = specification;
-	}
 
 	public int getBasicComment() {
 		return basicComment;
@@ -198,6 +196,22 @@ public class ProductMapping extends BaseMapping {
 
 	public void setProductGood(double productGood) {
 		this.productGood = productGood;
+	}
+
+	public String getProductSpecDetails() {
+		return productSpecDetails;
+	}
+
+	public void setProductSpecDetails(String productSpecDetails) {
+		this.productSpecDetails = productSpecDetails;
+	}
+
+	public String getProductSpecs() {
+		return productSpecs;
+	}
+
+	public void setProductSpecs(String productSpecs) {
+		this.productSpecs = productSpecs;
 	}
 	
 	
