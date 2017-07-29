@@ -2,6 +2,7 @@ package net.mingsoft.mall.action.web;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,21 +12,15 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.elasticsearch.index.query.MatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.sort.SortBuilders;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mingsoft.basic.biz.IAppBiz;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.biz.IColumnBiz;
@@ -420,32 +415,75 @@ public class SearchAction extends BaseAction {
 		}
 		
 		/**
-		 * 搜索引擎检索
+		 * 全文检索
+		 * @param search 
+		 * <i>search参数包含字段信息参考：</i><br/>
+		 * pageNumber 当前页码<br/>
+		 * pageSize 一页显示数量，默认20条<br/>
+		 * orderBy 排序字段，默认id<br/>
+		 * order 排序方式 默认desc|asc<br/>
+		 * keyworkd 关键字(必须)<br/>
+		 * <dt><span class="strong">返回</span></dt><br/>
+		 * {
+		 * "data": [
+		 *   {
+		 *   "basicHit": 10000, 
+		 *   "basicCategoryId": 900, 
+		 *   "productGood": 0.9, 
+		 *   "basicComment": 100, 
+		 *   "basicPic": "/upload/mall/product/1574///1500458469564.jpg!350x350.jpg", 
+ 		 *   "basicTitle": "【鸿星尔克】秋冬儿童新款运动鞋休闲鞋", 
+		 *   "id": "9", 
+		 *   "productSale": 99, 
+		 *   "productBrand": 1000, 
+ 		 *   "productStock": 100, 
+		 *   "basicUpdateTime": 1501310573655, 
+ 		 *   "productSpecs": "[{\"createBy\":0,\"delFlag\":0,\"img\":\"/upload/mall/product/1574///1500459392916.jpg!60x60.jpg\",\"productId\":15797,\"psId\":33,\"specName\":\"颜色\",\"specValue\":\"粉色\",\"updateBy\":0},{\"createBy\":0,\"delFlag\":0,\"img\":\"/upload/mall/product/1574///1500459395122.jpg!60x60.jpg\",\"productId\":15797,\"psId\":34,\"specName\":\"颜色\",\"specValue\":\"黑色\",\"updateBy\":0},{\"createBy\":0,\"delFlag\":0,\"img\":\"/upload/mall/product/1574///1500459397436.jpg!60x60.jpg\",\"productId\":15797,\"psId\":35,\"specName\":\"颜色\",\"specValue\":\"红色\",\"updateBy\":0}]", 
+		 *   "productSpecDetails": "[{\"code\":\"001\",\"createBy\":0,\"delFlag\":0,\"detailId\":36,\"price\":0.01,\"productId\":15797,\"sale\":0,\"sort\":0,\"specValues\":\"颜色:粉色:/upload/mall/product/1574///1500459392916.jpg!60x60.jpg\",\"stock\":94,\"updateBy\":0},{\"code\":\"002\",\"createBy\":0,\"delFlag\":0,\"detailId\":37,\"price\":0.02,\"productId\":15797,\"sale\":0,\"sort\":0,\"specValues\":\"颜色:黑色:/upload/mall/product/1574///1500459395122.jpg!60x60.jpg\",\"stock\":92,\"updateBy\":0}]", 
+ 		 *   "productCostPrice": 509, 
+ 		 *   "productPrice": 293.99, 
+ 		 *   "productLinkUrl": "/html/1574/6786/6790/15793.html"
+ 		 *    }
+ 		 *    ], 
+ 		 *    "page": {
+ 		 *        "pageSize": 1, 
+		 *        "currentPage": 0, 
+		 *        "totalPage": 2, 
+		 *        "totalCount": 2
+		 *     }
+		 * }
 		 * @param request
 		 * @param response
 		 */
 		@SuppressWarnings("rawtypes")
 		@RequestMapping(value = "/search")
 		@ResponseBody
-		public void search(HttpServletRequest request,  HttpServletResponse response){
-			ProductMapping product = new ProductMapping();
-			product.setId("5");
-			product.setBasicTitle("bbb ccc12121");
-			ElasticsearchUtil.saveOrUpdate(product.getId(), product);
-			Map field = new HashMap();
-//			search.setKeyworkd("aaa");
-//			search.setOrderBy("id");
+		public void search(SearchBean search,HttpServletRequest request,  HttpServletResponse response){
+//			ProductMapping product = new ProductMapping();
+//			product.setId("8");
+//			product.setBasicTitle("	烟花烫冬装新品女气质修身毛呢套装 凡翠");
+//			product.setBasicPic("/upload/mall/product/1574///1500458469564.jpg!350x350.jpg");
+//			product.setBasicComment(100);
+//			product.setBasicHit(10000);
+//			product.setProductPrice(293.99);
+//			product.setProductCostPrice(509);
+//			product.setBasicUpdateTime(new Date());
+//			product.setProductStock(100);
+//			product.setProductSale(99);
+//			product.setProductLinkUrl("/html/1574/6786/6790/15793.html");
+//			product.setProductSpecDetails("[{\"code\":\"001\",\"createBy\":0,\"delFlag\":0,\"detailId\":36,\"price\":0.01,\"productId\":15797,\"sale\":0,\"sort\":0,\"specValues\":\"颜色:粉色:/upload/mall/product/1574///1500459392916.jpg!60x60.jpg\",\"stock\":94,\"updateBy\":0},{\"code\":\"002\",\"createBy\":0,\"delFlag\":0,\"detailId\":37,\"price\":0.02,\"productId\":15797,\"sale\":0,\"sort\":0,\"specValues\":\"颜色:黑色:/upload/mall/product/1574///1500459395122.jpg!60x60.jpg\",\"stock\":92,\"updateBy\":0}]");
+//			product.setProductSpecs("[{\"createBy\":0,\"delFlag\":0,\"img\":\"/upload/mall/product/1574///1500459392916.jpg!60x60.jpg\",\"productId\":15797,\"psId\":33,\"specName\":\"颜色\",\"specValue\":\"粉色\",\"updateBy\":0},{\"createBy\":0,\"delFlag\":0,\"img\":\"/upload/mall/product/1574///1500459395122.jpg!60x60.jpg\",\"productId\":15797,\"psId\":34,\"specName\":\"颜色\",\"specValue\":\"黑色\",\"updateBy\":0},{\"createBy\":0,\"delFlag\":0,\"img\":\"/upload/mall/product/1574///1500459397436.jpg!60x60.jpg\",\"productId\":15797,\"psId\":35,\"specName\":\"颜色\",\"specValue\":\"红色\",\"updateBy\":0}]");
+//			product.setProductBrand(1000);
+//			product.setBasicCategoryId(900);
+//			product.setProductGood(0.9);
+//			ElasticsearchUtil.saveOrUpdate(product.getId(), product);
 //			search.setOrder("desc");
-//			search.setPageNumber(0);
-//			search.setPageSize(10);
-			field.put("basicTitle", 1000);
-			List products = null;// ElasticsearchUtil.search(productSearch, search.getKeyworkd(), field,search.getOrderBy(), search.getOrder().equalsIgnoreCase("asc")?SortOrder.ASC:SortOrder.DESC, search.getPageNumber(), search.getPageSize());
-			MatchQueryBuilder mqb = QueryBuilders.matchQuery("basicTitle", "bbb");
-			Pageable pageable = new PageRequest(0, 10);
-			
-			SearchQuery sq = new NativeSearchQueryBuilder().withPageable(pageable).withQuery(mqb).build();
-			products = productSearch.search(sq).getContent();
-			this.outJson(response, products);
+			if(StringUtils.isBlank(search.getKeyworkd())) { //
+				this.outJson(response, false);
+				return;
+			}
+			this.outJson(response, JSONObject.toJSON(ElasticsearchUtil.search(productSearch, "basicTitle", search)));
 		}
 		
 }
+
