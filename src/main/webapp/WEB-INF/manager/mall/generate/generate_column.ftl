@@ -34,7 +34,7 @@
 				}
 				
 				var URL="${managerPath}/mall/generate/"+columnId+"/genernateColumn.do";
-				if($("input[name=generateWay]").is(':checked')==true){
+				if($("input[name=generateWay]").is(':checked')==true) {
 					URL="${managerPath}/mall/specification/generate/"+columnId+"/genernateColumn.do";
 				}
 				$(this).html("更新中..").attr("disabled", "disabled");
