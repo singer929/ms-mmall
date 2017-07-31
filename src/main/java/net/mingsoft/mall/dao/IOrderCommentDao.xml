@@ -37,6 +37,7 @@
 		parameterType="net.mingsoft.mall.entity.OrderCommentEntity" >
 		insert into mall_order_comment
 		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="commentId &gt; 0">OC_COMMENT_ID,</if>
 			<if test="ocOrderId &gt; 0">OC_ORDER_ID,</if>
 			<if test="ocImpression != null">OC_IMPRESSION,</if>
 			<if test="ocProduct &gt; 0">OC_PRODUCT,</if>
@@ -45,6 +46,7 @@
 			<if test="ocServiceDescribe != null">OC_SERVICE_DESCRIBE,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="commentId &gt; 0">#{commentId},</if>
 			<if test="ocOrderId &gt; 0">#{ocOrderId},</if>
 			<if test="ocImpression != null">#{ocImpression},</if>
 			<if test="ocProduct &gt; 0">#{ocProduct},</if>

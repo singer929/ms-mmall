@@ -81,6 +81,10 @@ public class OrderCommentAction extends net.mingsoft.people.action.BaseAction{
 	@RequestMapping("/list")
 	@ResponseBody
 	public void list(@ModelAttribute OrderCommentEntity orderComment,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
+		if(orderComment == null){
+			orderComment = new OrderCommentEntity();
+		}
+		orderComment.setCommentAppId(BasicUtil.getAppId());
 		BasicUtil.startPage();
 		List orderCommentList = orderCommentBiz.query(orderComment);
 		this.outJson(response, JSONArray.toJSONStringWithDateFormat(new ListBean(orderCommentList, BasicUtil.endPage(orderCommentList)), "yyyy-MM-dd"));
@@ -175,7 +179,7 @@ public class OrderCommentAction extends net.mingsoft.people.action.BaseAction{
 			return;			
 		}
 		orderComment.setCommentPeopleId(this.getPeopleBySession().getPeopleId());
-		
+		orderComment.setCommentAppId(BasicUtil.getAppId());
 		orderCommentBiz.saveComment(orderComment);
 		this.outJson(response, orderComment);
 	}
