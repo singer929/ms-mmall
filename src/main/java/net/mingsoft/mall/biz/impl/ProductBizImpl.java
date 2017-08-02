@@ -13,11 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.mingsoft.base.dao.IBaseDao;
-import com.mingsoft.basic.biz.IBasicCategoryBiz;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.biz.IModelBiz;
 import com.mingsoft.basic.biz.impl.BasicBizImpl;
-import com.mingsoft.basic.entity.BasicCategoryEntity;
 import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.basic.entity.ModelEntity;
 import com.mingsoft.basic.biz.IColumnBiz;
@@ -106,12 +104,6 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	 */
 	@Autowired
 	private IModelBiz modelBiz;
-	
-	/**
-	 * 
-	 */
-	@Autowired
-	private IBasicCategoryBiz basicCategoryBiz;
 	
 	
 	/**
@@ -357,36 +349,6 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 		}
 	}
 
-	@Override
-	public void saveProduct(ProductEntity product, List<BasicCategoryEntity> basicCategoryList) {
-		// TODO Auto-generated method stub
-		this.saveBasic(product);
-		List<BasicCategoryEntity> newBasicCategoryList = new ArrayList<BasicCategoryEntity>();
-		for(int i=0;i<basicCategoryList.size();i++){
-			BasicCategoryEntity basicCategory= basicCategoryList.get(i);
-			basicCategory.setBcBasicId(product.getBasicId());
-			newBasicCategoryList.add(basicCategory);
-			
-		}
-		if(newBasicCategoryList==null || newBasicCategoryList.size()<=0){
-			return;
-		}
-		this.basicCategoryBiz.deleteEntity(product.getBasicId());
-		this.basicCategoryBiz.saveBatch(newBasicCategoryList);
-	}
-
-	@Override
-	public void updateProduct(ProductEntity product, List<BasicCategoryEntity> basicCategoryList) {
-		
-		this.updateBasic(product);
-		if(basicCategoryList==null || basicCategoryList.size()<=0){
-			return;
-		}
-		if(product!=null){
-			this.basicCategoryBiz.deleteEntity(product.getBasicId());
-			this.basicCategoryBiz.saveBatch(basicCategoryList);
-		}
-	}
 
 	@Override
 	public List<ProductEntity> queryByBasicIds(int appId,Integer categoryId,List<Integer> basicIds, PageUtil page, String orderBy, boolean order,Integer productShelf) {

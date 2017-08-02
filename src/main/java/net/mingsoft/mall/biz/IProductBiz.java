@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.mingsoft.basic.biz.IBasicBiz;
-import com.mingsoft.basic.entity.BasicCategoryEntity;
 import com.mingsoft.mdiy.entity.ContentModelEntity;
 import com.mingsoft.util.PageUtil;
 
@@ -254,19 +253,6 @@ public interface IProductBiz extends IBasicBiz {
 	 */
 	public List  queryByCategoryForBean(int appId,Integer categoryId,PageUtil page, boolean _isHasChilds);
 	
-	/**
-	 * 保存商品以及属性信息
-	 * @param product 商品实体
-	 * @param basicCategoryList 基础表和分类关联实体
-	 */
-	public void saveProduct(ProductEntity product,List<BasicCategoryEntity> basicCategoryList);
-	
-	/**
-	 * 保存商品以及属性信息
-	 * @param product 商品实体
-	 * @param basicCategoryList 基础表和分类关联实体
-	 */
-	public void updateProduct(ProductEntity product,List<BasicCategoryEntity> basicCategoryList);
 	
 	/**
 	 * 根据商品id集合和分页对象查询商品列表信息

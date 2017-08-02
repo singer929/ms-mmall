@@ -80,11 +80,6 @@ public class ColumnTypeAction  extends BaseAction {
 	@Autowired
 	private ICategoryBiz categoryBiz;
 	
-	/**
-	 * 注入基础分类关联业务层
-	 */
-	@Autowired
-	private IBasicCategoryBiz basicCategoryBiz;
 	
 	/**
 	 * 加载页面显示所有文章信息
@@ -112,27 +107,4 @@ public class ColumnTypeAction  extends BaseAction {
 		return view("/mall/type/index");
 	}
 	
-	/**
-	 * 根据栏目id去查询该分类下的属性,主要是供ajax请求使用
-	 * @param categoryId 分类id
-	 * @param request
-	 * @param response
-	 */
-	@RequestMapping("/{categoryId}/{basicId}/queryByCategoryId")
-	public String  queryByCategoryId(@PathVariable int categoryId,@PathVariable int basicId,HttpServletRequest request,HttpServletResponse response, ModelMap mode){
-		//获取属性的modeId
-		ModelEntity model = modelBiz.getEntityByModelCode(net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY_TYPE);
-		int appId = this.getAppId(request);
-		if(model!=null){
-			List<CategoryEntity> categoryList = this.categoryBiz.queryChildrenCategory(categoryId, appId, model.getModelId());
-			mode.addAttribute("categoryList",JSONArray.toJSONString(categoryList));
-		}
-		//获取basicid
-		if(basicId>0){
-			//根据basicI
-			List<BasicCategoryEntity> basicCategoryList = basicCategoryBiz.queryByBasicId(basicId);
-			mode.addAttribute("basicCategoryList",JSONArray.toJSONString(basicCategoryList));
-		}
-		return view("/mall/type/type_fields");
-	}
 }

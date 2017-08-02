@@ -83,11 +83,6 @@ public class ProductAction extends BaseAction{
 	@Resource(name="categoryBiz")
 	private ICategoryBiz categoryBiz;
 	
-	/**
-	 * 基础分类关联业务层
-	 */
-	@Autowired
-	private IBasicCategoryBiz basicCategoryBiz;
 	
 	@RequestMapping("/{productId}/getEntity")
 	public void getEntity(@PathVariable("productId")Integer productId, HttpServletRequest request, HttpServletResponse response){
@@ -128,65 +123,7 @@ public class ProductAction extends BaseAction{
 			outJson(response, ModelCode.MALL_PRODUCT, true, jsonStr);
 		}
 	}
-	
-	/**
-	 * 根据分类id和指定的条件查询商品信息
-	 * @param categoryId 分类id
-	 * @param request
-	 * @param response
-	 */
-	@RequestMapping("/{categoryId}/queryByCategory")
-	public void queryByCategory(@PathVariable("categoryId")Integer categoryId, HttpServletRequest request,HttpServletResponse response){
-		//分页
-		Integer pageNo = this.getInt(request, "pageNo", 1);
-		//分页数量
-		Integer pageSize = this.getInt(request, "pageSize", 10);
-		
-		//获取依据排序字段
-		String orderBy = request.getParameter("orderBy");
-		
-		//是否降序
-		String order = request.getParameter("order");
-		int appId = BasicUtil.getAppId();
-		
-		/**
-		 * 判断文章列表的orderby属性
-		 */
-		if (StringUtil.isBlank(order)) {
-			order = "desc";
-		}
-		
-		//获取查询 依据查询条件的集合
-		String categoryType = request.getParameter("categoryTypeIds");
-		List<Integer> basicIds = new ArrayList<Integer>();
-		
-		if(!StringUtil.isBlank(categoryType) && StringUtil.isIntegers(categoryType.split(","))){
-			
-			String[] _categoryType = categoryType.split(",");
-			//Integer[] ids = StringUtil.stringsToIntegers(categoryType.split(","));
-			StringUtil.stringsToIntegers(categoryType.split(","));
-			//将获取到的集合转换成整型列表类型
-			int ids[] = new int[_categoryType.length];
-			for (int i = 0; i < ids.length; i++){
-				ids[i] = Integer.parseInt(_categoryType[i]);
-			}
-				
-			//获取符合条件的商品id集合
-			basicIds = basicCategoryBiz.queryBasicIdsByCategoryId(ids);
-		}
-		
-		if(basicIds.size() <= 0){
-			basicIds = null;
-			//this.outJson(response, null);
-			//this.outJson(response, JSONObject.toJSONStringWithDateFormat(json,"yyyy-MM-dd HH:mm:ss"));
-		}
-		int count = productBiz.getCountByBasicIds(appId, categoryId, basicIds,ProductEnum.ON_SHELF.toInt());
-		PageUtil page = new PageUtil(pageNo,pageSize,count,getUrl(request)+"/queryByCategory/list.do");
-		
-		List<ProductEntity> list = productBiz.queryByBasicIds(appId,categoryId,basicIds, page, orderBy, order.equals("desc") ? true : false,ProductEnum.ON_SHELF.toInt());
-		ListJson json = new ListJson(count,list);
-		this.outJson(response, JSONObject.toJSONStringWithDateFormat(json,"yyyy-MM-dd HH:mm:ss"));
-	}
+
 	
 	
 	/**
