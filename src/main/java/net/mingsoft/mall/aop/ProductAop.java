@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.mingsoft.basic.aop.BaseAop;
-import com.mingsoft.basic.biz.IBasicTypeBiz;
 import com.mingsoft.basic.biz.ICategoryBiz;
-import com.mingsoft.basic.entity.BasicTypeEntity;
 import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.util.StringUtil;
 
@@ -27,8 +25,6 @@ import net.mingsoft.mall.entity.ProductEntity;
 @Aspect
 public class ProductAop extends BaseAop {
 
-	@Autowired
-	private IBasicTypeBiz basicTypeBiz;
 	
 	@Autowired
 	private ICategoryBiz categoryBiz;

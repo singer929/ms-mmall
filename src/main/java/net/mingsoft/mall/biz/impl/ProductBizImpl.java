@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.basic.biz.IBasicCategoryBiz;
-import com.mingsoft.basic.biz.IBasicTypeBiz;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.biz.IModelBiz;
 import com.mingsoft.basic.biz.impl.BasicBizImpl;
