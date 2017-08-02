@@ -245,7 +245,7 @@ public class ProductAction extends BaseAction{
 					return;
 				}
 				
-				CategoryEntity cate = categoryBiz.getCategory(brands[0]);
+				CategoryEntity cate = (CategoryEntity)this.categoryBiz.getEntity(brands[0]);
 				ColumnEntity col = (ColumnEntity) columnBiz.getEntity(cate.getCategoryCategoryId());
 				templatePath = col.getColumnListUrl();
 			}

@@ -182,7 +182,7 @@ public class BrandAction extends BaseAction {
 		if (!checkForm(category, response)) {
 			return;
 		}
-		CategoryEntity categoryEntity = categoryBiz.getCategory(category.getCategoryCategoryId());
+		CategoryEntity categoryEntity = (CategoryEntity)this.categoryBiz.getEntity(category.getCategoryCategoryId());
 		String categoryParentId = Integer.toString(categoryEntity.getCategoryId());
 		//判断categoryEntity中categoryParentId是否有值,有则累加
 		if(!StringUtil.isBlank(categoryEntity.getCategoryParentId())){
@@ -192,7 +192,7 @@ public class BrandAction extends BaseAction {
 		category.setCategoryDateTime(new Timestamp(System.currentTimeMillis()));
 		category.setCategoryAppId(this.getAppId(request));
 		category.setCategoryModelId(this.getModelCodeId(request));
-		categoryBiz.saveCategoryEntity(category);
+		categoryBiz.saveEntity(category);
 		this.outJson(response, ModelCode.MALL_BRAND, true, null, String.valueOf(category.getCategoryId()));
 	}
 
@@ -212,14 +212,14 @@ public class BrandAction extends BaseAction {
 		if (!checkForm(category, response)) {
 			return;
 		}
-		CategoryEntity categoryEntity = categoryBiz.getCategory(category.getCategoryCategoryId());
+		CategoryEntity categoryEntity = (CategoryEntity)this.categoryBiz.getEntity(category.getCategoryCategoryId());
 		String categoryParentId = Integer.toString( categoryEntity.getCategoryId());
 		//判断categoryEntity中categoryParentId是否有值,有则累加
 		if(!StringUtil.isBlank(categoryEntity.getCategoryParentId())){
 			categoryParentId = categoryEntity.getCategoryParentId() + ","+ categoryParentId;
 		}
 		category.setCategoryParentId(categoryParentId);
-		categoryBiz.updateCategoryEntity(category);
+		categoryBiz.updateEntity(category);
 		this.outJson(response, ModelCode.MALL_BRAND, true, null, JSONArray.toJSONString(category.getCategoryId()));
 
 	}

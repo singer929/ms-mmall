@@ -19,6 +19,7 @@ import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.biz.IColumnBiz;
 import com.mingsoft.basic.biz.IModelBiz;
 import com.mingsoft.basic.entity.AppEntity;
+import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.basic.entity.ColumnEntity;
 import com.mingsoft.basic.parser.IGeneralParser;
 import com.mingsoft.cms.parser.CmsParser;
@@ -377,7 +378,13 @@ public class MallParser extends IGeneralParser {
 				columnId = this.curColumnId;
 				// 如果没有栏目id，则取所有的栏目信息，否则去取栏目的子栏目
 				if (columnId == 0) {
-					columnIds = columnBiz.queryCategoryIdsByModelIdAndAppId(app.getAppId(), modelId);
+					//columnIds = columnBiz.queryCategoryIdsByModelIdAndAppId(app.getAppId(), modelId);
+					List<CategoryEntity>  categorys = columnBiz.queryByAppIdOrModelId(app.getAppId(), modelId);
+					int[] ids = new int[categorys.size()];
+					for(int i=0;i<categorys.size();i++) {
+						ids[i] = categorys.get(i).getCategoryId();
+					}
+					columnIds = ids;
 				} else {
 					
 					columnIds = columnBiz.queryChildrenCategoryIds(columnId, app.getAppId(), modelId);
