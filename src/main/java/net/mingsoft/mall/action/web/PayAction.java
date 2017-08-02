@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mingsoft.base.entity.ListJson;
-import com.mingsoft.basic.biz.IBasicCategoryBiz;
 import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
 

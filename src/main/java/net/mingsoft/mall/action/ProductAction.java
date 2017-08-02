@@ -26,7 +26,6 @@ import com.mingsoft.base.entity.BaseEntity;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.biz.IColumnBiz;
 import com.mingsoft.basic.constant.e.CookieConstEnum;
-import com.mingsoft.basic.entity.BasicCategoryEntity;
 import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.basic.entity.ColumnEntity;
 import com.mingsoft.mdiy.biz.IContentModelBiz;
@@ -352,16 +351,7 @@ public class ProductAction extends BaseAction {
 					column.getColumnPath() + File.separator + product.getBasicId() + IParserRegexConstant.HTML_SUFFIX);
 			// 更新商品基础数据
 			productBiz.updateBasic(product);
-			String productType = request.getParameter("productTypeJson");
-			if (!StringUtil.isBlank(productType)) {
-				// 将JSON字符串转换为数组
-				List<BasicCategoryEntity> basicCategoryList = JSONArray.parseArray(productType,
-						BasicCategoryEntity.class);
-				productBiz.updateProduct(product, basicCategoryList);
-			} else {
-				// 更新商品信息
-				productBiz.updateBasic(product);
-			}
+			
 			int productId = product.getBasicId();
 			// 保存商品数据
 			productSpecBiz.saveProductSpecification(productId, data, appId);

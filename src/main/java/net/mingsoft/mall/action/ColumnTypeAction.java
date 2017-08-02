@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.basic.action.BaseAction;
-import com.mingsoft.basic.biz.IBasicCategoryBiz;
 import com.mingsoft.basic.biz.ICategoryBiz;
 import com.mingsoft.basic.biz.IColumnBiz;
 import com.mingsoft.basic.biz.IModelBiz;
 import com.mingsoft.basic.constant.Const;
-import com.mingsoft.basic.entity.BasicCategoryEntity;
 import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.basic.entity.ColumnEntity;
 import com.mingsoft.basic.entity.ModelEntity;
