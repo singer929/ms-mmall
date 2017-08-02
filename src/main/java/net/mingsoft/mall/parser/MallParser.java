@@ -381,8 +381,8 @@ public class MallParser extends IGeneralParser {
 					//columnIds = columnBiz.queryCategoryIdsByModelIdAndAppId(app.getAppId(), modelId);
 					List<CategoryEntity>  categorys = columnBiz.queryByAppIdOrModelId(app.getAppId(), modelId);
 					int[] ids = new int[categorys.size()];
-					for(int i=0;i<categorys.size();i++) {
-						ids[i] = categorys.get(i).getCategoryId();
+					for(int k=0;k<categorys.size();k++) {
+						ids[k] = categorys.get(k).getCategoryId();
 					}
 					columnIds = ids;
 				} else {
