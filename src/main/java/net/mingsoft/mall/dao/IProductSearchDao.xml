@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.mingsoft.mall.dao.IProductSearchDao">
+	<sql id="column_list">
+		p.product_brand,p.product_price,p.product_sale,p.product_linkUrl,p.product_cost_price,p.product_good,
+		b.BASIC_TITLE,b.BASIC_THUMBNAILS,b.BASIC_HIT,b.BASIC_UPDATETIME,b.BASIC_CATEGORYID,b.BASIC_COMMENT,b.BASIC_ID
+	</sql>
+
+	<!-- 获取表字段 开始 -->
+	<resultMap type="net.mingsoft.mall.search.mapping.ProductMapping" id="resultMap">
+		<result column="BASIC_ID" property="id" />	<!-- 产品id -->
+		<result column="product_price" property="productPrice" />	<!-- 产品价格 -->
+		<result column="product_inventory" property="productStock" />		<!-- 产品库存量 -->
+		<result column="product_sale" property="productSale" />		<!-- 产品销量 -->
+		<result column="product_linkUrl" property="productLinkUrl" />		<!-- 产品链接 -->
+		<result column="product_cost_price" property="productCostPrice" />		<!-- 产品原价 -->
+		<result column="product_brand" property="productBrand" />		<!-- 商品的品牌 -->
+		<result column="product_good" property="productGood" />			<!-- 好评度 -->
+		<result column="BASIC_TITLE" property="basicTitle" />			<!-- 标题 -->
+		<result column="BASIC_THUMBNAILS" property="basicThumbnails" />	<!-- 缩略图 -->
+		<result column="BASIC_HIT" property="basicHit" />				<!-- 文章点击次数 -->
+		<result column="BASIC_UPDATETIME" property="basicUpdateTime" />	<!-- 更新时间 -->
+		<result column="BASIC_CATEGORYID" property="basicCategoryId" />	<!-- 所属主栏目id -->
+		<result column="BASIC_COMMENT" property="basicComment" />	<!-- 商品评论数 -->
+	</resultMap>
+	
+	<!-- 查询所有商品数据  -->
+	<select id="queryForSearchMapping" resultMap="resultMap" parameterType="net.mingsoft.mall.entity.ProductEntity">
+		select 
+		<include refid="column_list"/>
+		from mall_product p
+		left join
+		basic b on BASIC_ID = product_basicID
+	</select>
+</mapper>

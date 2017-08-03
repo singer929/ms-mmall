@@ -27,7 +27,7 @@ public class ProductMapping extends BaseMapping {
 	/**
 	 * 缩略图
 	 */
-	private String basicPic;
+	private String basicThumbnails;
 	
 	/**
 	 * 评论数
@@ -101,14 +101,6 @@ public class ProductMapping extends BaseMapping {
 
 	public void setBasicTitle(String basicTitle) {
 		this.basicTitle = basicTitle;
-	}
-
-	public String getBasicPic() {
-		return basicPic;
-	}
-
-	public void setBasicPic(String basicPic) {
-		this.basicPic = basicPic;
 	}
 
 	public double getProductPrice() {
@@ -214,6 +206,14 @@ public class ProductMapping extends BaseMapping {
 
 	public void setProductSpecs(String productSpecs) {
 		this.productSpecs = productSpecs;
+	}
+
+	public String getBasicThumbnails() {
+		return basicThumbnails;
+	}
+
+	public void setBasicThumbnails(String basicThumbnails) {
+		this.basicThumbnails = basicThumbnails;
 	}
 	
 	
