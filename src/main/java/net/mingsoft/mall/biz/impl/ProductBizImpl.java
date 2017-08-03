@@ -11,6 +11,7 @@ import org.codehaus.groovy.ast.expr.ElvisOperatorExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.basic.biz.ICategoryBiz;
@@ -25,11 +26,18 @@ import com.mingsoft.mdiy.entity.ContentModelEntity;
 import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
 
+import net.mingsoft.base.elasticsearch.bean.BaseMapping;
 import net.mingsoft.basic.util.BasicUtil;
+import net.mingsoft.basic.util.ElasticsearchUtil;
 import net.mingsoft.mall.biz.IProductBiz;
 import net.mingsoft.mall.constant.e.ProductEnum;
 import net.mingsoft.mall.dao.IProductDao;
+import net.mingsoft.mall.dao.IProductSpecificationDao;
+import net.mingsoft.mall.dao.IProductSpecificationDetailDao;
 import net.mingsoft.mall.entity.ProductEntity;
+import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
+import net.mingsoft.mall.entity.ProductSpecificationEntity;
+import net.mingsoft.mall.search.mapping.ProductMapping;
 
 /**
  * 
@@ -104,6 +112,18 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	 */
 	@Autowired
 	private IModelBiz modelBiz;
+	
+	/**
+	 * 产品关联规格 持久层
+	 */
+	@Autowired
+	private IProductSpecificationDao productSpecificationDao;
+
+	/**
+	 * 产品关联规格商品详情 持久层
+	 */
+	@Autowired
+	private IProductSpecificationDetailDao productSpecificationDetailDao;
 	
 	
 	/**
@@ -520,4 +540,20 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 		
 		return list;
 	}
+	
+	@Override
+	public List<BaseMapping> queryForSearchMapping(BaseMapping base) {
+		// TODO Auto-generated method stub
+		List<BaseMapping> productMapping =  productDao.queryForSearchMapping(null);
+		for(int i = 0 ; i < productMapping.size(); i++){
+			int productId = Integer.parseInt(productMapping.get(i).getId());
+			List<ProductSpecificationEntity> productSpecList = productSpecificationDao.queryByProductId(productId);
+			((ProductMapping) productMapping.get(i)).setProductSpecs(JSON.toJSONString(productSpecList));
+			List<ProductSpecificationDetailEntity> detailList =  productSpecificationDetailDao.queryEntitiesByProductId(productId);
+			((ProductMapping) productMapping.get(i)).setProductSpecDetails(JSON.toJSONString(detailList));
+		}
+		ElasticsearchUtil.saveOrUpdate(productMapping);
+		return productMapping;
+	}
+	
 }

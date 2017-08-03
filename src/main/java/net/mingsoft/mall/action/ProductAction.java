@@ -35,8 +35,10 @@ import com.mingsoft.mdiy.entity.ContentModelFieldEntity;
 import com.mingsoft.parser.IParserRegexConstant;
 import com.mingsoft.util.StringUtil;
 
+import net.mingsoft.base.elasticsearch.bean.BaseMapping;
 import net.mingsoft.basic.bean.EUListBean;
 import net.mingsoft.basic.util.BasicUtil;
+import net.mingsoft.basic.util.ElasticsearchUtil;
 import net.mingsoft.mall.bean.ProductSaveData;
 import net.mingsoft.mall.biz.IProductBiz;
 import net.mingsoft.mall.biz.IProductSpecificationBiz;
@@ -480,5 +482,19 @@ public class ProductAction extends BaseAction {
 			fieldBiz.insertBySQL(contentModel.getCmTableName(), param);
 		}
 		this.outJson(response, ModelCode.MALL_PRODUCT, true, String.valueOf(product.getBasicId()));
+	}
+	
+	/**
+	 * 同步搜索数据
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("/sync")
+	public void sync(HttpServletRequest request, HttpServletResponse response) {
+		//查询商品的基本信息
+		List<BaseMapping> productList= productBiz.queryForSearchMapping(null);
+		//将数据保存到搜索引擎中
+		ElasticsearchUtil.saveOrUpdate(productList);
+		this.outJson(response, productList);
 	}
 }
