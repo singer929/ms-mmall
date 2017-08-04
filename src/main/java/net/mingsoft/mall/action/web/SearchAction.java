@@ -454,9 +454,10 @@ public class SearchAction extends BaseAction {
 	 *            pageSize 一页显示数量，默认20条<br/>
 	 *            orderBy 排序字段，默认id<br/>
 	 *            order 排序方式 默认desc|asc<br/>
-	 *            keyworkd 关键字<br/>
+	 *            keyword 关键字<br/>
 	 *            brand 品牌<br/>
 	 *            category 分类<br/>
+	 *            type 商品属性<br/>
 	 *            <dt><span class="strong">返回</span></dt><br/>
 	 *            { "data": [ { "basicHit": 10000, "basicCategoryId": 900,
 	 *            "productGood": 0.9, "basicComment": 100, "basicPic":
@@ -538,7 +539,7 @@ public class SearchAction extends BaseAction {
 		Pageable pageable = new PageRequest(search.getPageNumber() - 1, search.getPageSize());
 		SearchQuery sq = new NativeSearchQueryBuilder().withPageable(pageable)
 				.withSort(SortBuilders.fieldSort(search.getOrderBy())
-						.order(search.getOrder().equalsIgnoreCase("asc") ? SortOrder.ASC : SortOrder.DESC))
+						.order(search.getOrder().equalsIgnoreCase("asc")?SortOrder.ASC:SortOrder.DESC))
 				.withQuery(bqb).build();
 		Page p = productSearch.search(sq);
 		ElasticsearchUtil.Pager pager = new ElasticsearchUtil.Pager();

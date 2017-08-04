@@ -38,6 +38,11 @@ public class ProductMapping extends BaseMapping {
 	 * 预览数
 	 */
 	private int basicHit;
+	
+	/**
+	 * 商品属性
+	 */
+	private int basicType;
 
 	/**
 	 * 商品价格
@@ -214,6 +219,14 @@ public class ProductMapping extends BaseMapping {
 
 	public void setBasicThumbnails(String basicThumbnails) {
 		this.basicThumbnails = basicThumbnails;
+	}
+
+	public int getBasicType() {
+		return basicType;
+	}
+
+	public void setBasicType(int basicType) {
+		this.basicType = basicType;
 	}
 	
 	
