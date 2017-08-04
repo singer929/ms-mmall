@@ -124,7 +124,7 @@
 			<if test="ocProduct != null"> and OC_PRODUCT=#{ocProduct} </if>				
 			<if test="ocService != null"> and OC_SERVICE=#{ocService} </if>				
 			<if test="ocLogistics != null"> and OC_LOGISTICS=#{ocLogistics} </if>
-			<if test="commentBasicId != null"> and COMMENT_BASICID=#{commentBasicId} </if>		
+			<if test="commentBasicId &gt; 0"> and COMMENT_BASICID=#{commentBasicId} </if>		
 			<if test="ocServiceDescribe != null"> and OC_SERVICE_DESCRIBE=#{ocServiceDescribe} </if>				
 			<if test="commentAudit != null"> and COMMENT_AUDIT=#{commentAudit} </if>
 			<if test="basicTitle != null and basicTitle !=''"> and BASIC_TITLE like CONCAT('%',#{basicTitle},'%')</if>				

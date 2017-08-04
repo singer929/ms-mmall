@@ -48,7 +48,9 @@
 		$("#orderCommentList").bootstrapTable({
 			url:"${managerPath}/mall/orderComment/list.do",
 			contentType : "application/x-www-form-urlencoded",
-			queryParamsType : "undefined",
+			queryParams:function(params) {
+				return {commentAudit:0};
+			},
 			toolbar: "#toolbar",
 	    	columns: [{ checkbox: true},
 				    	{

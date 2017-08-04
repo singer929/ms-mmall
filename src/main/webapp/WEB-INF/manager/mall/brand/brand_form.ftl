@@ -18,10 +18,13 @@
 					            		value="${category.categoryCategoryId?default('0')}"
 					            		onclick="isSelf"
 					            		parent=true
+					            		required=true
 					            	/>				    		
 					    	</@ms.formRow>	
 				    		<@ms.text name="categoryTitle" width="300" label="名称:" title="类别名称" maxlength="30"  placeholder="类别名称"  
-				    		validation={"required":"true", "data-bv-notempty-message":"请填写栏目类别"} value="${category.categoryTitle?default('')}"/>
+				    		validation={"data-bv-stringlength":"true","data-bv-stringlength-max":"20","data-bv-stringLength-message":"长度不能超过20个字符",
+				    		"data-bv-regexp":"true","data-bv-regexp-regexp":'^[^[!@#$%^&*()_+-/~?！@#￥%…&*（）——+—？》《：“‘’ ]+$',"data-bv-regexp-message":"名称不能包含特殊字符",
+				    		"required":"true", "data-bv-notempty-message":"请填写栏目类别"} value="${category.categoryTitle?default('')}"/>
 				    		<@ms.textarea id="description"  name="categoryDescription" label="描述:"  title="栏目描述" placeholder="类别描述" maxlength="45" value="${category.categoryDescription?default('')}"/>
 				    		
 				    		<@ms.formRow label="缩略图">
