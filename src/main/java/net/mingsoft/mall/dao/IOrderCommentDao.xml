@@ -111,10 +111,10 @@
 	
 	<!--条件查询-->	
 	<select id="query" resultMap="resultMap" parameterType="net.mingsoft.mall.entity.OrderCommentEntity">
-		SELECT mall_order_comment.*,PU_NICKNAME,COMMENT_CONTENT,BASIC_TITLE,comment.COMMENT_ID,comment.COMMENT_AUDIT
+		SELECT mall_order_comment.*,PU_NICKNAME,COMMENT_CONTENT,BASIC_TITLE,comment.COMMENT_ID,comment.COMMENT_AUDIT,COMMENT.COMMENT_POINTS
 		FROM mall_order_comment
-		LEFT JOIN `comment` ON OC_COMMENT_ID = COMMENT_ID
-		LEFT JOIN people_user ON COMMENT_PEOPLEID = PU_PEOPLE_ID
+		JOIN `comment` ON OC_COMMENT_ID = COMMENT_ID
+		JOIN people_user ON COMMENT_PEOPLEID = PU_PEOPLE_ID
 		JOIN `basic` ON COMMENT_BASICID = BASIC_ID
 		<where>
 			 and COMMENT_APPID=BASIC_APPID
@@ -123,9 +123,10 @@
 			<if test="ocImpression != null"> and OC_IMPRESSION=#{ocImpression} </if>				
 			<if test="ocProduct != null"> and OC_PRODUCT=#{ocProduct} </if>				
 			<if test="ocService != null"> and OC_SERVICE=#{ocService} </if>				
-			<if test="ocLogistics != null"> and OC_LOGISTICS=#{ocLogistics} </if>				
+			<if test="ocLogistics != null"> and OC_LOGISTICS=#{ocLogistics} </if>
+			<if test="commentBasicId != null"> and COMMENT_BASICID=#{commentBasicId} </if>		
 			<if test="ocServiceDescribe != null"> and OC_SERVICE_DESCRIBE=#{ocServiceDescribe} </if>				
-			<if test="commentAudit &gt; -1"> and COMMENT_AUDIT=#{commentAudit} </if>	
+			<if test="commentAudit != null"> and COMMENT_AUDIT=#{commentAudit} </if>
 			<if test="basicTitle != null and basicTitle !=''"> and BASIC_TITLE like CONCAT('%',#{basicTitle},'%')</if>				
 		</where>		
 		order by OC_COMMENT_ID desc

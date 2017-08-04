@@ -67,10 +67,12 @@ public class OrderCommentAction extends net.mingsoft.mall.action.BaseAction{
 	@RequestMapping("/list")
 	@ResponseBody
 	public void list(@ModelAttribute OrderCommentEntity orderComment,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
-		BasicUtil.startPage();
+		//BasicUtil.startPage();
+		
+		orderComment.setCommentAppId(BasicUtil.getAppId());
 		List orderCommentList = orderCommentBiz.query(orderComment);
-		ListBean list = new ListBean(orderCommentList, BasicUtil.endPage(orderCommentList));
-		this.outJson(response, JSONArray.toJSONStringWithDateFormat(list, "yyyy-MM-dd"));
+		//ListBean list = new ListBean(orderCommentList, BasicUtil.endPage(orderCommentList));
+		this.outJson(response, JSONArray.toJSONStringWithDateFormat(orderCommentList, "yyyy-MM-dd"));
 	}
 	
 	/**
@@ -95,6 +97,7 @@ public class OrderCommentAction extends net.mingsoft.mall.action.BaseAction{
 	@RequestMapping("/summar")
 	@ResponseBody
 	public void summar(@ModelAttribute OrderCommentEntity orderComment,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
+		orderComment.setCommentAppId(BasicUtil.getAppId());
 		List<OrderCommentEntity> orderComments = orderCommentBiz.query(orderComment);
 		int commentCount = orderComments.size();	//评论总数
 		int goodCount = 0;		//好评数，评分为4、5的评价
