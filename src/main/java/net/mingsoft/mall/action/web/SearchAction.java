@@ -515,8 +515,8 @@ public class SearchAction extends BaseAction {
 
 		String sort = BasicUtil.getString("sort"); // 排序方式
 		if (sort.split("-").length == 2) {
-			search.setOrderBy(sort.split("=")[0]);
-			search.setOrderBy(sort.split("=")[1]);
+			search.setOrderBy(sort.split("-")[0]);
+			search.setOrder(sort.split("-")[1]);
 		}
 
 		BoolQueryBuilder bqb = QueryBuilders.boolQuery();
