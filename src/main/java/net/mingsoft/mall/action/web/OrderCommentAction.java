@@ -67,8 +67,8 @@ public class OrderCommentAction extends net.mingsoft.mall.action.BaseAction{
 	@RequestMapping("/list")
 	@ResponseBody
 	public void list(@ModelAttribute OrderCommentEntity orderComment,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
-		BasicUtil.startPage();
 		orderComment.setCommentAppId(BasicUtil.getAppId());
+		BasicUtil.startPage();
 		List orderCommentList = orderCommentBiz.query(orderComment);
 		ListBean list = new ListBean(orderCommentList, BasicUtil.endPage(orderCommentList));
 		this.outJson(response, JSONArray.toJSONStringWithDateFormat(list, "yyyy-MM-dd"));
