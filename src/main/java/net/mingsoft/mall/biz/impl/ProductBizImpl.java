@@ -544,7 +544,12 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	@Override
 	public List<BaseMapping> queryForSearchMapping(BaseMapping base) {
 		// TODO Auto-generated method stub
-		List<BaseMapping> productMapping =  productDao.queryForSearchMapping(null);
+		if(base == null) {
+			base = new ProductMapping();
+		}
+		ProductMapping _p = (ProductMapping)base;
+		_p.setAppId(BasicUtil.getAppId());
+		List<BaseMapping> productMapping =  productDao.queryForSearchMapping(_p);
 		for(int i = 0 ; i < productMapping.size(); i++){
 			int productId = Integer.parseInt(productMapping.get(i).getId());
 			List<ProductSpecificationEntity> productSpecList = productSpecificationDao.queryByProductId(productId);

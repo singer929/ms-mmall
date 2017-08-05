@@ -18,6 +18,8 @@ import net.mingsoft.base.elasticsearch.bean.BaseMapping;
  */
 @Document(indexName = "ms-mmall", type = "product")
 public class ProductMapping extends BaseMapping {
+	
+	private int appId;
 
 	/**
 	 * 标题
@@ -227,6 +229,14 @@ public class ProductMapping extends BaseMapping {
 
 	public void setBasicType(int basicType) {
 		this.basicType = basicType;
+	}
+
+	public int getAppId() {
+		return appId;
+	}
+
+	public void setAppId(int appId) {
+		this.appId = appId;
 	}
 	
 	

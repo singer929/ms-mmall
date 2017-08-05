@@ -54,6 +54,7 @@
 	<!-- 获取表字段 开始 -->
 	<resultMap type="net.mingsoft.mall.search.mapping.ProductMapping" id="resultSearchMap">
 		<result column="BASIC_ID" property="id" />	<!-- 产品id -->
+		<result column="BASIC_APPID" property="appId" />	<!-- 产品id -->
 		<result column="product_price" property="productPrice" />	<!-- 产品价格 -->
 		<result column="product_inventory" property="productStock" />		<!-- 产品库存量 -->
 		<result column="product_sale" property="productSale" />		<!-- 产品销量 -->
@@ -1220,12 +1221,12 @@
 	</select>
 	
 	<!-- 搜索基础数据  -->
-	<select id="queryForSearchMapping" resultMap="resultSearchMap" parameterType="net.mingsoft.mall.entity.ProductEntity">
+	<select id="queryForSearchMapping" resultMap="resultSearchMap" parameterType="net.mingsoft.mall.search.mapping.ProductMapping">
 		select 
 		<include refid="search_list"/>
 		from mall_product p
 		left join
-		basic b on BASIC_ID = product_basicID
+		basic b on BASIC_ID = product_basicID where b.BASIC_APPID=#{appId}
 	</select>
 	
 </mapper>
