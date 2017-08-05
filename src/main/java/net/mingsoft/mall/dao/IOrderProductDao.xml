@@ -49,6 +49,8 @@
 	<select id="getByEntity" parameterType="net.mingsoft.mall.entity.OrderProductEntity" resultMap="resultMap">
 		select * from mall_order_product
 		<where>
+			<if test="opPeopleId &gt; 0">and OP_PEOPLE_ID= #{opPeopleId}</if>
+			<if test="opProductId &gt; 0">and OP_PRODUCT_ID= #{opProductId}</if>
 			<if test="opGoodsId != null">and OP_GOODS_ID=#{opGoodsId}</if>
 		</where>
 	</select>

@@ -87,12 +87,12 @@ public class OrderBizImpl extends net.mingsoft.order.biz.impl.OrderBizImpl imple
 			ope.setOpGoodsId(goods.getGoodsId());
 			ope.setOpPeopleId(order.getOrderPeopleId());
 			orderProductDao.updateEntity(ope);
-			OrderProductEntity temp = (OrderProductEntity) orderProductDao.getByEntity(ope);
-			if(temp != null){
-				ProductSpecificationDetailEntity psdEntity = (ProductSpecificationDetailEntity) productSpecificationDetailDao.getEntity(temp.getOpProductDetailId());
-				psdEntity.setStock(psdEntity.getStock() - goods.getGoodsNum());
-				productSpecificationDetailDao.updateEntity(psdEntity);
-			}
+//			OrderProductEntity temp = (OrderProductEntity) orderProductDao.getByEntity(ope);
+//			if(temp != null){
+//				ProductSpecificationDetailEntity psdEntity = (ProductSpecificationDetailEntity) productSpecificationDetailDao.getEntity(temp.getOpProductDetailId());
+//				psdEntity.setStock(psdEntity.getStock() - goods.getGoodsNum());
+//				productSpecificationDetailDao.updateEntity(psdEntity);
+//			}
 		}
 		return order.getOrderId();
 	}
