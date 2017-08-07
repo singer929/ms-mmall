@@ -23,7 +23,7 @@ import net.mingsoft.basic.entity.PeopleEntity;
 import net.mingsoft.basic.util.BasicUtil;
 
 @Controller("ProductPeopleAction")
-@RequestMapping("/people/mall/ProductPeople")
+@RequestMapping("/people/mall/productPeople")
 public class ProductPeopleAction extends BaseAction{
 	
 	/**
