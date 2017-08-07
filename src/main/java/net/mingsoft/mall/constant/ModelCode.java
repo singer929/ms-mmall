@@ -38,10 +38,6 @@ public  enum ModelCode implements BaseEnum{
 	 */
 	PRODUCT_PROPERTY("06990100"), 
 	/**
-	 * 商城订单状态
-	 */
-	ORDER_STATUS("06960000"),
-	/**
 	 * 商城
 	 */
 	MALL("06000000"),
@@ -69,16 +65,8 @@ public  enum ModelCode implements BaseEnum{
 	/**
 	 * 商城订单
 	 */
-	MALL_ORDER("06050000"),
-	
-	/**
-	 * 限时抢购
-	 */
-	MALL_PROMOTION("06040100"),
-	/**
-	 * 商品分类属性管理
-	 */
-	MALL_CATEGORY_TYPE("06990300")
+	MALL_ORDER("06050000");
+
 	;
 
 	ModelCode(String code) {
