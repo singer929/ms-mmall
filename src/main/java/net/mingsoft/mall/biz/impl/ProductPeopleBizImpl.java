@@ -1,7 +1,11 @@
 package net.mingsoft.mall.biz.impl;
 
-import net.mingsoft.basic.biz.impl.PeopleBizImpl;
+import org.springframework.stereotype.Service;
 
-public class ProductPeopleBizImpl extends PeopleBizImpl{
+import net.mingsoft.basic.biz.impl.PeopleBizImpl;
+import net.mingsoft.mall.biz.IProductPeopleBiz;
+
+@Service("ProductPeopleBizImpl")
+public class ProductPeopleBizImpl extends PeopleBizImpl implements IProductPeopleBiz{
 
 }

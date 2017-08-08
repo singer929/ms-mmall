@@ -27,7 +27,7 @@
 		<result column="product_cost_price" property="productCostPrice" />	<!-- 商品原价-->
 	</resultMap>
 
-	<select id="query" resultMap="resultMap">
+	<select id="queryByPeople" resultMap="resultMap">
 		SELECT * FROM basic_people
 		LEFT JOIN basic ON bp_basic_id = BASIC_ID
 		LEFT JOIN mall_product ON BASIC_ID = product_basicID AND product_appID = BASIC_APPID  

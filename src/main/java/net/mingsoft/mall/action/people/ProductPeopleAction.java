@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import net.mingsoft.basic.bean.ListBean;
 import net.mingsoft.basic.biz.IPeopleBiz;
 import net.mingsoft.basic.entity.PeopleEntity;
 import net.mingsoft.basic.util.BasicUtil;
+import net.mingsoft.mall.biz.IProductPeopleBiz;
 
 @Controller("ProductPeopleAction")
 @RequestMapping("/people/mall/productPeople")
@@ -29,8 +31,8 @@ public class ProductPeopleAction extends BaseAction{
 	/**
 	 * 注入通用用户与信息一对多表业务层
 	 */	
-	@Resource(name="basicPeopleBizImpl")
-	private IPeopleBiz peopleBiz;
+	@Autowired
+	private IProductPeopleBiz productPeopleBiz;
 	
 	
 	/**
@@ -74,14 +76,11 @@ public class ProductPeopleAction extends BaseAction{
 	@RequestMapping("/list")
 	@ResponseBody
 	public void list(HttpServletResponse response, HttpServletRequest request,ModelMap model) {
-		PeopleEntity people = (PeopleEntity) this.getSession(request, SessionConstEnum.PEOPLE_SESSION);
-		if(people == null){
-			this.outJson(response, false);
-			return;
-		}
-		int modelId = BasicUtil.getModeld();
+		int modelId = this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL);
+		int appId = BasicUtil.getAppId();
+		int peopleId = this.getPeopleBySession().getPeopleId();
 		BasicUtil.startPage();
-		List productList = peopleBiz.queryByPeople(BasicUtil.getAppId(), modelId, people.getBpPeopleId());
+		List productList = productPeopleBiz.queryByPeople(appId, modelId, peopleId);
 		BasicUtil.endPage(productList);
 		PageInfo page = BasicUtil.endPage(productList);
 		ListBean _list = new ListBean(productList, page);
