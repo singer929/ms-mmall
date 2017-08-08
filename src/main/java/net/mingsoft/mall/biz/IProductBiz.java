@@ -46,22 +46,6 @@ import net.mingsoft.mall.entity.ProductEntity;
  */
 public interface IProductBiz extends IBasicBiz {
 	
-	/**
-	 * 根据appID查询产品的总数
-	 * @param appId
-	 * @return
-	 */
-	public int getCountByAppId(Integer appId);
-	
-	/**
-	 * 根据appid查询产品分页
-	 * @param appId 应用id
-	 * @param page：页面信息
-	 * @param orderBy：排序方式
-	 * @param order：是否采用升序
-	 * @return 产品列表数据
-	 */
-	public List<ProductEntity> queryListPageByAppId(Integer appId,PageUtil page);
 	
 	/**
 	 * 根据分类与时间查询商品列表
@@ -73,25 +57,7 @@ public interface IProductBiz extends IBasicBiz {
 	public List<ProductEntity> query(Integer categoryId, String dateTime,Integer appId);
 	
 	
-	/**
-	 * 根据模块ID查询商品信息带分页
-	 * @param appId 应用ID
-	 * @param modelId 模块ID
-	 * @param categoryId 分类ID
-	 * @param begin 分页开始位置
-	 * @param end 分页结束位置
-	 * @return 商品集合
-	 */
-	public List<ProductEntity> queryPageByModelId(Integer appId,Integer modelId,Integer categoryId,PageUtil page);
 	
-	/**
-	 * 根据模块ID查询商品总数
-	 * @param appId 应用ID
-	 * @param modelId 模块ID
-	 * @param categoryId 分类ID
-	 * @return 商品总数
-	 */
-	public int queryCountByModelId(Integer appId,Integer modelId,Integer categoryId);
 	/**
 	 * 
 	 * @param appId
@@ -106,20 +72,6 @@ public interface IProductBiz extends IBasicBiz {
 	 */
 	public List<ProductEntity> queryList(int appId, int[] basicCategoryIds, String orderBy, boolean order,Integer productShelf,String flag,String noFlag);
 	
-	/**
-	 * 高级查询接口，主要提供给有自定义模型的栏目，返回产品总是
-	 * 
-	 * @param contentModel
-	 *            自定义模型
-	 * @param whereMap
-	 *            條件
-	 * @param appId
-	 *            appId 应用编号
-	 * @param ids
-	 *            子类id
-	 * @return 记录数量
-	 */
-	public int getSearchCount(ContentModelEntity contentModel, Map whereMap, int appId, List ids);
 	
 	/**
 	 * 高级查询接口，主要提供给有自定义模型的栏目，
@@ -138,38 +90,7 @@ public interface IProductBiz extends IBasicBiz {
 	 */
 	public List<ProductEntity> queryListForSearch(ContentModelEntity conntentModel, Map whereMap, PageUtil page, int appId, List ids, Map orders);
 	
-	/**
-	 * 查询上架或下架商品的分页列表
-	 * @param appId 应用id
-	 * @param proudctShelf 商品的上架状态
-	 * @param page ：分页对象
-	 * @return 商品列表信息
-	 */
-	public List<ProductEntity> queryByShelf(Integer appId,Integer productShelf,Integer categoryId,PageUtil page);
 	
-	/**
-	 * 查询站点下该板块所有上架商品
-	 * @param appId 应用id
-	 * @param productShelf 商品是否上架
-	 * @param categoryId 分类id
-	 * @return 商品列表信息
-	 */
-	public List<ProductEntity> queryAllShelf(Integer appId,Integer productShelf,Integer categoryId);
-	
-	
-	/**
-	 *  查询上架或下架商品的总数
-	 * @param appId 应用id
-	 * @param proudctShelf  商品的上架状态
-	 * @return 上架或下架商品的总数
-	 */
-	public int getCountByShelf(Integer appId,Integer productShelf, Integer categoryId);
-	
-	/**
-	 * 批量更新商品的
-	 * @param productIds 商品的id集合
-	 */
-	public void updateProductShelf(String[] productIds,ProductEnum productShelf);
 	
 	/**
 	 * 根据查询产品实体
@@ -214,73 +135,12 @@ public interface IProductBiz extends IBasicBiz {
 	
 	public int getProducntSpecificationSearchCount(ContentModelEntity contentModel, Map whereMap, int appId, List ids,String flag,String noFlag);
 	
-	/**
-	 * 根据商品条件查询商品
-	 * @param appId  应用id
-	 * @param columId 分类id
-	 * @param map 查询条件
-	 * @return 商品列表信息
-	 */
-	public List<ProductEntity> querySearch(int appId,int categoryId,Map map);
-	
-	/**
-	 * 根据自定义字段和商品字段信息查询商品总数
-	 * @param appId 应用id
-	 * @param categoryId 分类id
-	 * @param map 商品字段查询条件 
-	 * @param diyFieldMap 自定义字段的查询条件
-	 * @return 商品总数
-	 */
-	int getCountByDiyField(int appId,Integer categoryId, Map productMap,Map diyFieldMap,String tableName);
-	
-	/**
-	 * 根据自定义字段和商品字段信息查询商品列表信息
-	 * @param appId 应用id
-	 * @param categoryId  分类id
-	 * @param map 商品字段查询条件 
-	 * @param diyFieldMap 自定义字段的查询条件
-	 * @return 商品列表信息
-	 */
-	public List<ProductEntity> queryByDiyField(int appId,Integer categoryId,Map map,Map diyFieldMap,PageUtil page, String tableName);
 	
 	
-	/**
-	 * 根据栏目id查询商品bean，主要用于前端获取数据
-	 * @param categoryId 栏目id
-	 * @param page 分页对象
-	 * @param _isHasChilds 是否查询子分类的文章,true则进行查询子分类的文章
-	 * @return  商品bean
-	 */
-	public List  queryByCategoryForBean(int appId,Integer categoryId,PageUtil page, boolean _isHasChilds);
 	
 	
-	/**
-	 * 根据商品id集合和分页对象查询商品列表信息
-	 * @param categoryId 分类id
-	 * @param basicIds 商品id集合
-	 * @param page 分页对象
-	 * @param orderBy 依据排序字段
-	 * @param order 是否降序
-	 * @return 返回商品列表信息
-	 */
-	public List<ProductEntity> queryByBasicIds(int appId,Integer categoryId,List<Integer> basicIds,PageUtil page,String orderBy,boolean order,Integer productShelf);
 	
-	/**
-	 * 根据商品id集合和分类id,以及商品的上下架状态查询商品总数
-	 * @param appId 应用id
-	 * @param categoryId 分类id
-	 * @param basicIds 商品id集合
-	 * @param productShelf 商品上下架状态
-	 * @return 符合条件的商品总数
-	 */
-	int getCountByBasicIds(int appId,Integer categoryId,List<Integer> basicIds,Integer productShelf);
 	
-	/**
-	 * 删除商品信息
-	 * @param appId 应用编号
-	 * @param ids 商品编号
-	 */
-	void delete(int appId, int[] ids);
 	
 	/**
 	 * 规格搜索功能接口

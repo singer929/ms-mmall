@@ -50,38 +50,4 @@ public interface IProductSpecificationDetailBiz extends IBaseBiz{
 	 */
 	public void deleteByProductIds(int[] productIds);
 	
-	
-	/**
-	 * 更新排序
-	 * @param list 商品规格数据明细
-	 */
-	public void updateSort(List<ProductSpecificationDetailEntity> list);
-	
-	/**
-	 * 根据分类id和模块id查询商品规格产品的总数
-	 * @param appId 应用id
-	 * @param modelId 模块id
-	 * @param categoryId 分类id
-	 * @return 规格商品总数
-	 */
-	//public int getProducntSpecificationCountByColumnId(int appId, int  modelId, Integer categoryId, Map whereMap);
-	
-	/**
-	 * 根据分类id和模块id查询商品规格产品列表
-	 * @param appId 应用id
-	 * @param modelId 模块id
-	 * @param categoryId 分类id
-	 * @param page 分页
-	 * @return 商品规格产品列表
-	 */
-	//public List<ProductSpecificationsInventoryEntity> queryProducntSpecificationByColumnId(Integer appId,Integer modelId,Integer categoryId,PageUtil page,Map whereMap);
-	
-	/**
-	 * 根据商品id 查询商品规明细列表信息
-	 * @param productId 产品id
-	 * @return 商品规格产品列表
-	 */
-	public List<ProductSpecificationDetailEntity> queryDetailsByProductId(int productId);
-	
-	
 }

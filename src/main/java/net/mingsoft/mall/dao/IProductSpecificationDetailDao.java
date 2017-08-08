@@ -51,12 +51,6 @@ public interface IProductSpecificationDetailDao extends IBaseDao{
 	public void deleteEntityByProductIds(@Param("productIds")int[] productIds);
 	
 	/**
-	 * 批量进行更新操作
-	 * @param data
-	 */
-	public void updateSort(ProductSpecificationDetailEntity data);
-	
-	/**
 	 * 根据分类id和模块id查询商品规格产品的总数
 	 * @param appId 应用id
 	 * @param modelId 模块id
@@ -75,13 +69,6 @@ public interface IProductSpecificationDetailDao extends IBaseDao{
 	 */
 	//public List<ProductSpecDetailEntity> queryProducntSpecificationByColumnId(@Param("appId")int appId,@Param("modelId")int modelId,@Param("categoryId")Integer categoryId,@Param("page")PageUtil page,@Param("whereMap")Map whereMap);
 	
-	/**
-	 * 根据商品id查询商品规格库存列表信息
-	 * @param appId 应用id
-	 * @param productId 产品id
-	 * @return 商品规格库存列表
-	 */
-	public List<ProductSpecificationDetailEntity> queryByAppAndProductId(@Param("appId")int appId, @Param("productId")int productId);
 	
 	/**
 	 * 根据商品id查询商品规格库存列表信息

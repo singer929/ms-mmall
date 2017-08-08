@@ -92,23 +92,4 @@
 	 	<if test="appId != null">and specification_app_id = #{appId}</if>
 	</select>
 	
-	<!-- 查找与某商品有关的规格 -->
-<!-- 	<select id="queryByProductId" resultMap="resultMap"> -->
-<!-- 	 	select  -->
-<!-- 			ms.specification_name, -->
-<!-- 			ms.specification_default_fields, -->
-<!-- 			ms.specification_app_id -->
-<!-- 	 	from  -->
-<!-- 	 		mall_specification ms,  -->
-<!-- 	 		basic b, basic_category bc,  -->
-<!-- 	 		category c,  -->
-<!-- 	 		mall_product_specification mps -->
-<!-- 	 	where 1 = 1 -->
-<!-- 		 	and b.BASIC_ID = bc.bc_basic_id -->
-<!-- 		 	and c.CATEGORY_ID = bc.bc_category_id  -->
-<!-- 		 	and b.BASIC_ID = #{productId} -->
-<!-- 		 	and mps.ps_spec_id = ms.specification_id -->
-<!-- 		 	and mps.ps_product_id = b.BASIC_ID -->
-<!-- 		 group by ms.specification_id -->
-<!-- 	</select> -->
 </mapper>

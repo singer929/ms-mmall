@@ -126,29 +126,6 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	private IProductSpecificationDetailDao productSpecificationDetailDao;
 	
 	
-	/**
-	 * 根据appID查询产品的总数
-	 * @param appId
-	 * @return
-	 */
-	@Override
-	public int getCountByAppId(Integer appId) {
-		// TODO Auto-generated method stub
-		return productDao.count(appId);
-	}
-	
-	/**
-	 * 根据appid查询产品分页
-	 * @param appId 
-	 * @param page：页面信息
-	 * @param orderBy：排序方式
-	 * @param order：是否采用升序
-	 * @return
-	 */
-	@Override
-	public List<ProductEntity> queryListPageByAppId(Integer appId, PageUtil page) {
-		return productDao.queryPageByAppId(appId, page.getPageNo(), page.getPageSize());
-	}
 	
 	
 	/**
@@ -167,35 +144,7 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	
 	
 	
-	/**
-	 * 根据模块ID查询商品信息带分页
-	 * @param appId 应用ID
-	 * @param modelId 模块ID
-	 * @param categoryId 分类ID
-	 * @param begin 分页开始位置
-	 * @param end 分页结束位置
-	 * @return 商品集合
-	 */
-	public List<ProductEntity> queryPageByModelId(Integer appId,Integer modelId,Integer categoryId,PageUtil page){
-		if(categoryId == 0){
-			categoryId = null;
-		}
-		return this.productDao.queryPageByModelId(appId,modelId,categoryId,page.getPageNo()*page.getPageSize(), page.getPageSize());
-	}
 	
-	/**
-	 * 根据模块ID查询商品总数
-	 * @param appId 应用Id
-	 * @param modelId 模块ID
-	 * @param categoryId 分类ID
-	 * @return 商品总数
-	 */
-	public int queryCountByModelId(Integer appId,Integer modelId,Integer categoryId){
-		if(categoryId == 0){
-			categoryId = null;
-		}		
-		return this.productDao.queryCountByModelId(appId,modelId,categoryId);
-	}
 	
 	@Override
 	public List<ProductEntity> queryList(int appId,
@@ -227,13 +176,6 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 		return productDao.queryList(appId, basicCategoryIds,  orderBy, order, productShelf>=0?productShelf:null,flag==null?null:flag.split(","),noFlag==null?null:noFlag.split(","));
 	}
 
-	@Override
-	public int getSearchCount(ContentModelEntity contentModel,Map wherMap, int websiteId,List  ids) {
-		if (contentModel!=null) {
-			return productDao.getSearchCount(contentModel.getCmTableName(),wherMap, websiteId,ids);
-		}
-		return productDao.getSearchCount(null,wherMap, websiteId,ids);
-	}
 
 	@Override
 	public List<ProductEntity> queryListForSearch(
@@ -258,41 +200,6 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 	}
 
 	@Override
-	public List<ProductEntity> queryByShelf(Integer appId,
-			Integer productShelf, Integer categoryId,PageUtil page) {
-		if(categoryId!=null && categoryId==0){
-			categoryId = null;
-		}
-		// TODO Auto-generated method stub
-		return this.productDao.queryPageByShelf(appId, productShelf,categoryId, page.getPageNo(), page.getPageSize());
-	}
-
-	@Override
-	public int getCountByShelf(Integer appId, Integer productShelf, Integer categoryId) {
-		if(categoryId!=null && categoryId==0){
-			categoryId = null;
-		}
-		return productDao.getCountByShelf(appId, productShelf,categoryId);
-	}
-
-	
-	
-	@Override
-	public void updateProductShelf(String[] productIds,ProductEnum productShelf) {
-		// TODO Auto-generated method stub
-		if (!StringUtil.isBlank(productIds)) {
-			for (int i = 0; i < productIds.length; i++) {
-				int number = Integer.parseInt(productIds[i]);
-				// 获取id，查询该文章是否在该站点下
-				ProductEntity product = (ProductEntity) this.productDao.getEntity(number);
-				product.setProductShelf(productShelf);
-				this.productDao.updateEntity(product);
-			}
-		}
-	}
-	
-
-	@Override
 	public List<ProductEntity> queryProducntSpecificationForSearch(
 			ContentModelEntity conntentModel, Map<String, List> map, int appId, List ids,
 			Map sortMap, PageUtil page,String orderBy,boolean order,String flag,String noFlag) {
@@ -311,99 +218,6 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 		}
 		return productDao.getProducntSpecificationSearchCount(null,wherMap, websiteId,ids, flag, noFlag);
 	}
-
-	
-	@Override
-	public List<ProductEntity> querySearch(int appId, int categoryId,Map map) {
-		// TODO Auto-generated method stub
-		return productDao.querySearch(appId, categoryId, map);
-	}
-
-	@Override
-	public int getCountByDiyField(int appId, Integer categoryId,
-			Map productMap, Map diyFieldMap,String tableName) {
-		// TODO Auto-generated method stub
-		return this.productDao.getCountByDiyField(appId, categoryId, productMap, diyFieldMap,tableName);
-	}
-
-	@Override
-	public List<ProductEntity> queryByDiyField(int appId, Integer categoryId,
-			Map map, Map diyFieldMap, PageUtil page, String tableName) {
-		// TODO Auto-generated method stub
-		return this.productDao.queryByDiyField(appId, categoryId, map, diyFieldMap, page, tableName);
-	}
-
-	@Override
-	public List<ProductEntity> queryAllShelf(Integer appId,
-			Integer productShelf, Integer categoryId) {
-		// TODO Auto-generated method stub
-		return this.productDao.queryAllShelf(appId, productShelf, categoryId);
-	}
-
-	@Override
-	public List queryByCategoryForBean(int appId, Integer categoryId,
-			PageUtil page, boolean _isHasChilds) {
-		// TODO Auto-generated method stub
-		ModelEntity model=modelBiz.getEntityByModelCode(net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY);
-		//查询该分类下的所有子分类
-		List list = categoryBiz.queryChildrenCategory(categoryId,appId,model.getModelId());
-		// 分类不存在直接返回
-		if (list == null || list.size() == 0) {
-						return null;
-		}
-		//如果没有子分类
-		if(list.size()==1){
-			ColumnEntity column = (ColumnEntity) columnBiz.getEntity(categoryId);
-				if (column.getColumnContentModelId() != 0) { // 存在自定义模型
-					ContentModelEntity contentModel = (ContentModelEntity) contentModelBiz.getEntity(column.getColumnContentModelId());
-						return productDao.queryByCategoryForBean(categoryId, null, page, contentModel.getCmTableName());
-					} else {
-						return productDao.queryByCategoryForBean(categoryId, null, page, null);
-					}
-				}else{
-					if (_isHasChilds) {
-						return productDao.queryByCategoryForBean(categoryId, list, page,null);
-					} else {
-						return productDao.queryByCategoryForBean(categoryId, null, page,null);
-					}
-		}
-	}
-
-
-	@Override
-	public List<ProductEntity> queryByBasicIds(int appId,Integer categoryId,List<Integer> basicIds, PageUtil page, String orderBy, boolean order,Integer productShelf) {
-		if (orderBy!=null) {
-			if (orderBy.equals("sort")) {
-				orderBy = "basic_sort";
-			} else if (orderBy.equals("date")) {
-				orderBy = "basic_datetime";
-			} else if (orderBy.equals("hit")) {
-				orderBy = "basic_hit";
-			} else if (orderBy.equals("updatedate")) {
-				orderBy = "basic_updatedate";
-			} else if (orderBy.equals("id")) {
-				orderBy = "basic_id";
-			}else if (orderBy.equals("price")){
-				orderBy = "basic_id";
-			}else if (orderBy.equals("sale")){
-				orderBy = "product_sale";
-			}else{
-				orderBy=null;
-			}
-		}
-		return this.productDao.queryByBasicIds(appId,categoryId,basicIds, page, orderBy, order,productShelf);
-	}
-
-	@Override
-	public int getCountByBasicIds(int appId, Integer categoryId, List<Integer> basicIds, Integer productShelf) {
-		return this.productDao.getCountByBasicIds(appId, categoryId, basicIds, productShelf);
-	}
-
-	@Override
-	public void delete(int appId, int[] ids) {
-		
-	}
-
 	/**
 	 * 商城的搜索接口
 	 * @param appId		应用ID
@@ -560,5 +374,5 @@ public class ProductBizImpl extends BasicBizImpl implements IProductBiz {
 		ElasticsearchUtil.saveOrUpdate(productMapping);
 		return productMapping;
 	}
-	
+
 }

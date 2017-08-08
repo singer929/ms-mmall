@@ -155,15 +155,6 @@
 	</delete>
 	<!-- 根据产品ID删除产品规格库存信息结束 -->
 
-	<!-- 更新产品规格库存信息开始 -->
-	<update id="updateSort" parameterType="com.mingsoft.base.entity.BaseEntity">
-		update mall_product_specification_detail
-		<set>
-			<if test="sort != null">psd_sort = #{sort},</if>
-		</set>
-		where psd_id = #{detailId}
-	</update>
-	<!-- 更新产品规格库存信息结束 -->
 
 	<!-- 根据栏目id查询商品规格总数 -->
 	<select id="getProducntSpecificationCountByColumnId" resultType="int">
@@ -242,15 +233,6 @@
 		</where>
 	</select> -->
 	<!-- 根据栏目id查询商品规格列表结束 -->
-	
-	<!-- 根据AppId 和 产品id 查询 数据 -->
-	<select id="queryByAppAndProductId" parameterType="int" resultMap="resultMap">
-		select <include refid="column_list" /> 
-		from mall_product_specification_detail psd
-		where 1 = 1 
-		adn psd.psd_app_id = #{appId}
-		and psd.psd_product_id = #{productId}
-	</select>
 	
 	<!-- 根据 产品id 查询 数据 -->
 	<select id="queryEntitiesByProductId" parameterType="int" resultMap="resultMap">

@@ -54,18 +54,6 @@ public interface ISpecificationBiz extends IBaseBiz{
 	 */
 	public List<SpecificationEntity> queryPageByAppId(int appId, PageUtil page);
 	
-	/**
-	 * 根据产品规格类型查询数据
-	 * @return
-	 */
-	public List<SpecificationEntity> queryBySpecCateId(int specCateId, int appId);
-	
-	/**
-	 * 根据商品Id查找所相关的规格
-	 * @param productId
-	 * @return
-	 */
-	public List<SpecificationEntity> queryByProductId(int productId);
 	
 	/**
 	 * 根据appId查询规格总数

@@ -90,12 +90,6 @@ public class SpecificationBizImpl extends BaseBizImpl implements ISpecificationB
 		return count;
 	}
 
-	@Override
-	public List<SpecificationEntity> queryByProductId(int productId) {
-		
-		List<SpecificationEntity> list = specDao.queryByProductId(productId);
-		return list;
-	}
 
 	@Override
 	public void deleteBySpecificationName(String specName) {
@@ -118,11 +112,4 @@ public class SpecificationBizImpl extends BaseBizImpl implements ISpecificationB
 		deleteBySpecificationName(name);
 	}
 	
-	@Override
-	public List<SpecificationEntity> queryBySpecCateId(int specCateId, int appId){
-		
-		List<SpecificationEntity> list = specDao.queryBySpecCateId(specCateId, appId);
-		
-		return list;
-	}
 }

@@ -59,13 +59,6 @@ public class ProductSpecificationDetailBizImpl extends BaseBizImpl implements IP
 	private IProductSpecificationDetailDao detailDao;
 	
 	/**
-	 * 模块编码
-	 */
-	@Autowired
-	private IModelDao modelDao;
-
-	
-	/**
 	 * 根据产品ID 删除产品信息
 	 * @param productIds 产品ID数组
 	 */
@@ -77,22 +70,5 @@ public class ProductSpecificationDetailBizImpl extends BaseBizImpl implements IP
 	@Override
 	protected IBaseDao getDao() {
 		return detailDao;
-	}
-
-	/**
-	 * 批量更新排序
-	 */
-	@Override
-	public void updateSort(List<ProductSpecificationDetailEntity> list) {
-		
-	}
-
-	/**
-	 * 根据商品ID, 来查询它所拥有的规格
-	 */
-	@Override
-	public List<ProductSpecificationDetailEntity> queryDetailsByProductId(int productId) {
-		
-		return null;
 	}
 }
