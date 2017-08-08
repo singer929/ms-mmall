@@ -47,12 +47,6 @@ import net.mingsoft.mall.entity.ProductSpecificationEntity;
  */
 public interface IProductSpecificationDao extends IBaseDao {
 	
-	/**
-	 * 根据编号批量删除
-	 * @param ids 编号集合
-	 * @param productId商品编号
-	 */
-	public void deleteBatch(@Param("ids") List ids, @Param("productId")int productId);
 	
 	/**
 	 * 依据规格名称删除产品规格数据(例如规格删除之后需要清理产品规格数据)
@@ -66,12 +60,6 @@ public interface IProductSpecificationDao extends IBaseDao {
 	 */
 	public void deleteEntityByProductIds(@Param("productIds")int[] productIds);
 	
-	/**
-	 * 根据商品规格编号读取商品规格详情
-	 * @param productSpecificationsId 商品规格编号
-	 * @return 规格详情
-	 */
-	public ProductSpecificationEntity getEntityById(@Param("psId")int psId);
 	
 	/**
 	 * 根据商品 获取所有的数据

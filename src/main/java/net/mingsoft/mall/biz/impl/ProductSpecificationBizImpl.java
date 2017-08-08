@@ -96,15 +96,6 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 		return productSpecificationDao;
 	}
 
-	/**
-	 * 功能暂不需要 未实现
-	 */
-	@Override
-	@Deprecated
-	public List<ProductSpecificationEntity> queryListByPsId(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	/**
 	 * 保存产品规格数据(包括规格, 产品规格, 产品规格明细)

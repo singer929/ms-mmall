@@ -113,28 +113,6 @@
 	</delete>
 	<!-- 根据产品ID删除关联信息结束 -->
 
-	<!-- 根据商品ID关联查询产品规格/产品信息开始 -->
-	<select id="getEntityById" parameterType="int"
-		resultMap="resultMapList">
-		select * from mall_product_specification ps
-		left join
-		mall_product_specification_inventory psd on ps.ps_id =
-		psd.psd_id
-		where ps.ps_id =
-		#{psId}
-	</select>
-	<!-- 根据商品ID关联查询产品规格/产品信息结束 -->
-
-	<select id="deleteBatch" parameterType="List">
-		delete from mall_product_specification where ps_product_id = #{productId}
-		<if test="ids!=null">
-			and ps_id not in
-			<foreach collection="ids" item="id" separator="," open="("
-				close=")">
-				#{id}
-			</foreach>
-		</if>
-	</select>
 	
 	<!-- 根据规格名称删除数据 -->
 	<select id="deleteBySpecificationName" parameterType="String">

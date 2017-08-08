@@ -59,13 +59,6 @@ public interface IProductSpecificationBiz extends IBaseBiz{
 	public void deleteEntityByProductIds(int[] productIds);
 	
 	/**
-	 * 根据产品规格关联id查询所有的子产品规格关联列表
-	 * @param ProductSpecificationsId 产品规格关联id
-	 * @return  产品规格关联列表
-	 */
-	public List<ProductSpecificationEntity> queryListByPsId(int id);
-	
-	/**
 	 * 保存产品规格数据
 	 * @param productId		产品ID
 	 * @param data			产品规格数据集合
