@@ -1,119 +1,153 @@
 package net.mingsoft.mall.entity;
 
 import com.mingsoft.base.entity.BaseEntity;
+import java.util.Date;
 
-/**
- * 
- * 
- * <p>
- * <b>铭飞MS平台</b>
- * </p>
- * 
- * <p>
- * Copyright: Copyright (c) 2014 - 2015
- * </p>
- * 
- * <p>
- * Company:景德镇铭飞科技有限公司
- * </p>
- * 
- * @author 王敏
- * 
- * @version 300-001-001
- * 
- * <p>
- * 版权所有 铭飞科技
- * </p>
- *  
- * <p>
- * Comments:规格数据模型, 包含所有产品可能出现的规格
- * </p>
- *  
- * <p>
- * Create Date:2014-11-21
- * </p>
- *
- * <p>
- * </p>
+ /**
+ * 默认规格数据实体
+ * @author 伍晶晶
+ * @version 
+ * 版本号：100<br/>
+ * 创建日期：2017-8-8 15:18:35<br/>
+ * 历史修订：<br/>
  */
-public class SpecificationEntity extends BaseEntity{
+public class SpecificationEntity extends BaseEntity {
+
+	private static final long serialVersionUID = 1502176715887L;
 	
 	/**
-	 * 规格ID 主键
+	 * 规格id 主键
 	 */
-	private int specId;
+	private Integer specificationId; 
+	/**
+	 * 规格名称
+	 */
+	private String specificationName; 
+	/**
+	 * 规格的类型id
+	 */
+	private Integer specificationCategoryId; 
+	/**
+	 * 默认的字段
+	 */
+	private String specificationDefaultFields; 
+	/**
+	 * 应用ID
+	 */
+	private Integer specificationAppId; 
+	/**
+	 * 规格类型:1-标准规格,2-自定义规格
+	 */
+	private Byte specificationType; 
+	
+	public SpecificationEntity(){}
+	public SpecificationEntity(Integer specificationId) {
+	this.specificationId = specificationId;	
+	}
+	
+	public SpecificationEntity(String specificationName) {
+		this.specificationName = specificationName;	
+	}
+	
+	public SpecificationEntity(String specificationName,Integer specificationCategoryId) {
+		this.specificationName = specificationName;		this.specificationCategoryId = specificationCategoryId;	
+	}
+	
+	public SpecificationEntity(String specificationName,Integer specificationCategoryId,String specificationDefaultFields) {
+		this.specificationName = specificationName;		this.specificationCategoryId = specificationCategoryId;		this.specificationDefaultFields = specificationDefaultFields;	
+	}
+	
+	public SpecificationEntity(String specificationName,Integer specificationCategoryId,String specificationDefaultFields,Integer specificationAppId) {
+		this.specificationName = specificationName;		this.specificationCategoryId = specificationCategoryId;		this.specificationDefaultFields = specificationDefaultFields;		this.specificationAppId = specificationAppId;	
+	}
+	
+	public SpecificationEntity(String specificationName,Integer specificationCategoryId,String specificationDefaultFields,Integer specificationAppId,Byte specificationType) {
+		this.specificationName = specificationName;		this.specificationCategoryId = specificationCategoryId;		this.specificationDefaultFields = specificationDefaultFields;		this.specificationAppId = specificationAppId;		this.specificationType = specificationType;	
+	}
+	
+		
+	/**
+	 * 设置规格id 主键
+	 */
+	public void setSpecificationId(Integer specificationId) {
+		this.specificationId = specificationId;
+	}
+
+	/**
+	 * 获取规格id 主键
+	 */
+	public Integer getSpecificationId() {
+		return this.specificationId;
+	}
 	
 	/**
-	 * 规格名 
+	 * 设置规格名称
 	 */
-	private String name;
+	public void setSpecificationName(String specificationName) {
+		this.specificationName = specificationName;
+	}
+
+	/**
+	 * 获取规格名称
+	 */
+	public String getSpecificationName() {
+		return this.specificationName;
+	}
 	
 	/**
-	 * 规格分类ID
+	 * 设置规格的类型id
 	 */
-	private int specCateId = 0;
+	public void setSpecificationCategoryId(Integer specificationCategoryId) {
+		this.specificationCategoryId = specificationCategoryId;
+	}
+
+	/**
+	 * 获取规格的类型id
+	 */
+	public Integer getSpecificationCategoryId() {
+		return this.specificationCategoryId;
+	}
 	
 	/**
-	 * 默认的字段名
+	 * 设置默认的字段
 	 */
-	private String defaultFields;
+	public void setSpecificationDefaultFields(String specificationDefaultFields) {
+		this.specificationDefaultFields = specificationDefaultFields;
+	}
+
+	/**
+	 * 获取默认的字段
+	 */
+	public String getSpecificationDefaultFields() {
+		return this.specificationDefaultFields;
+	}
 	
 	/**
-	 * 规格类型 1:标准规格 2:自定义规格
+	 * 设置应用ID
 	 */
-	private int type = 1;
+	public void setSpecificationAppId(Integer specificationAppId) {
+		this.specificationAppId = specificationAppId;
+	}
+
+	/**
+	 * 获取应用ID
+	 */
+	public Integer getSpecificationAppId() {
+		return this.specificationAppId;
+	}
 	
 	/**
-	 * 规格所属的appId
+	 * 设置规格类型:1-标准规格,2-自定义规格
 	 */
-	private int appId;
-
-	public int getSpecId() {
-		return specId;
+	public void setSpecificationType(Byte specificationType) {
+		this.specificationType = specificationType;
 	}
 
-	public void setSpecId(int specId) {
-		this.specId = specId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getSpecCateId() {
-		return specCateId;
-	}
-
-	public void setSpecCateId(int specCateId) {
-		this.specCateId = specCateId;
-	}
-
-	public String getDefaultFields() {
-		return defaultFields;
-	}
-
-	public void setDefaultFields(String defaultFields) {
-		this.defaultFields = defaultFields;
-	}
-
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
-	}
-
-	public int getAppId() {
-		return appId;
-	}
-
-	public void setAppId(int appId) {
-		this.appId = appId;
+	/**
+	 * 获取规格类型:1-标准规格,2-自定义规格
+	 */
+	public Byte getSpecificationType() {
+		return this.specificationType;
 	}
 	
 }

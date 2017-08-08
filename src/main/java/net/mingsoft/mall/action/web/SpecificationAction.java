@@ -1,4 +1,4 @@
-package net.mingsoft.mall.action;
+package net.mingsoft.mall.action.web;
 
 import java.util.List;
 
@@ -13,22 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import net.mingsoft.mall.biz.ISpecificationBiz;
 import net.mingsoft.mall.entity.SpecificationEntity;
-import net.mingsoft.base.util.JSONObject;
 import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
-import com.mingsoft.base.entity.BaseEntity;
 import net.mingsoft.basic.util.BasicUtil;
-import net.mingsoft.basic.bean.ListBean;
-import com.mingsoft.base.filter.DateValueFilter;
-import com.mingsoft.base.filter.DoubleValueFilter;
-import net.mingsoft.basic.bean.EUListBean;
 	
 /**
  * 默认规格数据管理控制层
@@ -38,8 +31,8 @@ import net.mingsoft.basic.bean.EUListBean;
  * 创建日期：2017-8-8 15:18:35<br/>
  * 历史修订：<br/>
  */
-@Controller
-@RequestMapping("/${managerPath}/mall/specification")
+@Controller("webSpecificationAction")
+@RequestMapping("/mall/specification")
 public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 	
 	/**
@@ -48,13 +41,6 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 	@Autowired
 	private ISpecificationBiz specificationBiz;
 	
-	/**
-	 * 返回主界面index
-	 */
-	@RequestMapping("/index")
-	public String index(HttpServletResponse response,HttpServletRequest request){
-		return view ("/mall/specification/index");
-	}
 	
 	/**
 	 * 查询默认规格数据列表
@@ -83,21 +69,10 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 	public void list(@ModelAttribute SpecificationEntity specification,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
 		BasicUtil.startPage();
 		List specificationList = specificationBiz.query(specification);
-		this.outJson(response, net.mingsoft.base.util.JSONArray.toJSONString(new EUListBean(specificationList,(int)BasicUtil.endPage(specificationList).getTotal()),new DoubleValueFilter(),new DateValueFilter()));
+		BasicUtil.endPage(specificationList);
+		this.outJson(response, JSONArray.toJSONStringWithDateFormat(specificationList, "yyyy-MM-dd"));
 	}
 	
-	/**
-	 * 返回编辑界面specification_form
-	 */
-	@RequestMapping("/form")
-	public String form(@ModelAttribute SpecificationEntity specification,HttpServletResponse response,HttpServletRequest request,ModelMap model){
-		if(specification.getSpecificationId() != null){
-			BaseEntity specificationEntity = specificationBiz.getEntity(specification.getSpecificationId());			
-			model.addAttribute("specificationEntity",specificationEntity);
-		}
-		
-		return view ("/mall/specification/form");
-	}
 	
 	/**
 	 * 获取默认规格数据
@@ -190,9 +165,9 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 			return;			
 		}
 		specificationBiz.saveEntity(specification);
-		this.outJson(response, JSONObject.toJSONString(specification));
+		this.outJson(response, specification);
 	}
-	
+
 	/**
 	 * @param specification 默认规格数据实体
 	 * <i>specification参数包含字段信息参考：</i><br/>
@@ -206,10 +181,11 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 	 */
 	@RequestMapping("/delete")
 	@ResponseBody
-	public void delete(@RequestBody List<SpecificationEntity> specifications,HttpServletResponse response, HttpServletRequest request) {
-		int[] ids = new int[specifications.size()];
-		for(int i = 0;i<specifications.size();i++){
-			ids[i] = specifications.get(i).getSpecificationId();
+	public void delete(@ModelAttribute SpecificationEntity specification,HttpServletResponse response, HttpServletRequest request) {
+		int[] ids = BasicUtil.getInts("specificationId");
+		if(ids==null){
+			this.outJson(response,null, false);
+			return;
 		}
 		specificationBiz.delete(ids);		
 		this.outJson(response, true);
@@ -276,7 +252,8 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 			return;			
 		}
 		specificationBiz.updateEntity(specification);
-		this.outJson(response, JSONObject.toJSONString(specification));
+		this.outJson(response, specification);
 	}
+	
 		
 }

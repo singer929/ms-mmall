@@ -1,115 +1,55 @@
+/**
+The MIT License (MIT) * Copyright (c) 2016 铭飞科技
+
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package net.mingsoft.mall.biz.impl;
 
-import java.util.List;
-
-import org.aspectj.weaver.ast.Var;
-import org.hamcrest.core.IsNot;
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
-import com.mingsoft.util.PageUtil;
-
-import net.mingsoft.mall.biz.ISpecificationBiz;
-import net.mingsoft.mall.dao.IProductSpecificationDao;
-import net.mingsoft.mall.dao.IProductSpecificationDetailDao;
-import net.mingsoft.mall.dao.ISpecificationDao;
+import com.mingsoft.util.*;
+import java.util.*;
 import net.mingsoft.mall.entity.SpecificationEntity;
+import net.mingsoft.mall.biz.ISpecificationBiz;
+import net.mingsoft.mall.dao.ISpecificationDao;
 
 /**
- * 
- * 
- * <p>
- * <b>铭飞MS平台</b>
- * </p>
- * 
- * <p>
- * Copyright: Copyright (c) 2014 - 2015
- * </p>
- * 
- * <p>
- * Company:景德镇铭飞科技有限公司
- * </p>
- * 
- * @author 王敏
- * 
- * @version 300-001-001
- * 
- *          <p>
- *          版权所有 铭飞科技
- *          </p>
- * 
- *          <p>
- *          Comments:商品规格管理业务处理层实现类 || 继承IBaseBiz业务处理层||实现ISpecificationsBiz业务层接口
- *          </p>
- * 
- *          <p>
- *          Create Date:2014-7-14
- *          </p>
- * 
- *          <p>
- *          Modification history:
- *          </p>
+ * 默认规格数据管理持久化层
+ * @author 伍晶晶
+ * @version 
+ * 版本号：100<br/>
+ * 创建日期：2017-8-8 15:18:35<br/>
+ * 历史修订：<br/>
  */
-@Service("SpecificationBizImpl")
-public class SpecificationBizImpl extends BaseBizImpl implements ISpecificationBiz{
-	
-	/**
-	 * 商品规格数据层Dao
-	 */
-	@Autowired
-	private ISpecificationDao specDao;
+ @Service("specificationBizImpl")
+public class SpecificationBizImpl extends BaseBizImpl implements ISpecificationBiz {
+
 	
 	@Autowired
-	private IProductSpecificationDao productSpecDao;
+	private ISpecificationDao specificationDao;
 	
-	@Autowired
-	private IProductSpecificationDetailDao detailDao;
 	
-	@Override
+		@Override
 	protected IBaseDao getDao() {
-		return specDao;
-	}
-
-	@Override
-	public List<SpecificationEntity> queryPageByAppId(int appId, PageUtil page) {
-		
-		return specDao.queryByAppId(appId, 0, 0);
-	}
-
-	/**
-	 * 根据appId查询规格总数
-	 * @param appId 应用ID
-	 * @return 规格总数
-	 */
-	@Override
-	public int countByAppId(int appId) {
-		int count = specDao.countByAppId(appId);
-		return count;
-	}
-
-
-	@Override
-	public void deleteBySpecificationName(String specName) {
-		
-		// 删除规格
-		specDao.deleteEntityByName(specName);
-		// 删除相关的产品规格数据
-		productSpecDao.deleteBySpecificationName(specName);
-		// 删除相关的产品规格明细数据
-		detailDao.deleteBySpecificationName(specName);
-	}
-
-	@Override
-	public void deleteSpecificationById(int specId) {
-		
-		Integer id = Integer.valueOf(specId);
-		SpecificationEntity spec = (SpecificationEntity)specDao.getEntity(id);
-		String name = spec.getName();
-		
-		deleteBySpecificationName(name);
-	}
-	
+		// TODO Auto-generated method stub
+		return specificationDao;
+	} 
 }
