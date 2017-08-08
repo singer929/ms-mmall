@@ -120,11 +120,11 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 		List<SpecificationEntity> dbList = specificationDao.queryAll();
 		for (SpecificationEntity se : list){
 			
-			se.setAppId(appId);
+			se.setSpecificationAppId(appId);
 			
 			boolean isInDb = false;
 			for (SpecificationEntity dbSe : dbList){
-				if (dbSe.getName().equals(se.getName())){
+				if (dbSe.getSpecificationName().equals(se.getSpecificationName())){
 					isInDb = true;
 					break;
 				}
