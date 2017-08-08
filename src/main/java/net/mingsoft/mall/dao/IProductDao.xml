@@ -6,10 +6,6 @@
 		b.BASIC_ID,b.BASIC_TITLE,b.BASIC_DESCRIPTION,b.BASIC_THUMBNAILS,b.BASIC_HIT,b.BASIC_DATETIME,b.BASIC_UPDATETIME,b.BASIC_PEOPLEID,b.BASIC_CATEGORYID,b.BASIC_MODELID,b.BASIC_SORT,b.basic_type
 	</sql>
 
-	<sql id="search_list">
-		p.product_brand,p.product_price,p.product_sale,p.product_linkUrl,p.product_cost_price,p.product_good,
-		b.BASIC_TITLE,b.BASIC_THUMBNAILS,b.BASIC_HIT,b.BASIC_UPDATETIME,b.BASIC_CATEGORYID,b.BASIC_COMMENT,b.BASIC_ID
-	</sql>
 	
 	<!-- 获取表字段 开始 -->
 	<resultMap type="net.mingsoft.mall.entity.ProductEntity" id="resultMap">
@@ -67,6 +63,7 @@
 		<result column="BASIC_HIT" property="basicHit" />				<!-- 文章点击次数 -->
 		<result column="BASIC_UPDATETIME" property="basicUpdateTime" />	<!-- 更新时间 -->
 		<result column="BASIC_CATEGORYID" property="basicCategoryId" />	<!-- 所属主栏目id -->
+		<result column="CATEGORY_PARENT_ID" property="basicCategoryIds" />	<!-- 所属主栏目id -->
 		<result column="BASIC_COMMENT" property="basicComment" />	<!-- 商品评论数 -->
 	</resultMap>
 
@@ -733,10 +730,11 @@
 	<!-- 搜索基础数据  -->
 	<select id="queryForSearchMapping" resultMap="resultSearchMap" parameterType="net.mingsoft.mall.search.mapping.ProductMapping">
 		select 
-		<include refid="search_list"/>
-		from mall_product p
+		p.product_brand,p.product_price,p.product_sale,p.product_linkUrl,p.product_cost_price,p.product_good,
+		b.BASIC_TITLE,b.BASIC_THUMBNAILS,b.BASIC_HIT,b.BASIC_UPDATETIME,b.BASIC_CATEGORYID,b.BASIC_COMMENT,b.BASIC_ID,CATEGORY_PARENT_ID
+		from mall_product p 
 		left join
-		basic b on BASIC_ID = product_basicID where b.BASIC_APPID=#{appId}
+		basic b on BASIC_ID = product_basicID left join category on category_id=BASIC_CATEGORYID where b.BASIC_APPID=#{appId}
 	</select>
 	
 </mapper>

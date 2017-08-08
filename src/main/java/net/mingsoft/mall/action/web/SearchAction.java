@@ -499,10 +499,11 @@ public class SearchAction extends BaseAction {
 		// ElasticsearchUtil.saveOrUpdate(product.getId(), product);
 		// search.setOrder("desc");
 		int category = BasicUtil.getInt("category"); // 分类编号
-		int brand = BasicUtil.getInt("brand"); // 品牌编号
+		String brand = BasicUtil.getString("brand"); // 品牌编号
 		String price = BasicUtil.getString("price"); // 价格范围
+		String spec = BasicUtil.getString("spec"); // 规格 多个规格筛选用","分割,相同规格多选用@分割。如 spec=尺寸:1寸@2寸,形状:圆形
 		
-		if (StringUtils.isBlank(search.getKeyword()) && category<=0 && brand<=0) { //
+		if (StringUtils.isBlank(search.getKeyword()) && category<=0 && StringUtil.isBlank(brand)) { //
 			this.outJson(response, false);
 			return;
 		}
@@ -519,21 +520,42 @@ public class SearchAction extends BaseAction {
 			search.setOrderBy(sort.split("-")[0]);
 			search.setOrder(sort.split("-")[1]);
 		}
-
+		
 		BoolQueryBuilder bqb = QueryBuilders.boolQuery();
+		if(category > 0) {
+			bqb.must(QueryBuilders.matchQuery("basicCategoryId", category));
+			bqb.should(QueryBuilders.matchQuery("basicCategoryIds", category+","));
+		}
 		if(!StringUtil.isBlank(search.getKeyword())) {
 			bqb.must(QueryBuilders.matchQuery("basicTitle", search.getKeyword()));
 		}
 		
-		if(category > 0) {
-			bqb.should(QueryBuilders.matchQuery("basicCategoryId", category));
-		}
+	
 		
-		if(brand > 0) {
-			bqb.should(QueryBuilders.matchQuery("productBrand", brand));
+		if(!StringUtil.isBlank(brand)) {
+			String[] _brand = brand.split(",");
+			for(String b:_brand) {
+				bqb.should(QueryBuilders.matchQuery("productBrand", b));
+			}
 		}
 		if(price!=null) {
 			bqb.filter(QueryBuilders.rangeQuery("price").gte(_price[0]).lte(_price[1]));
+		}
+		
+		//动态组织规格
+		if(!StringUtil.isBlank(spec)) {
+			String[] _spec = spec.split(","); //分割规格类型
+			for(String s:_spec) {
+				String[] _s = s.split(":"); // 分割规格键值对
+				if(_s.length==2) {
+					String[] _v = _s[1].split("@"); //分割多个规格值数据
+					for(String v:_v) {
+						bqb.must(QueryBuilders.matchQuery("productSpecDetails", _s[0]+":"+v));
+						LOG.debug("->规格搜索："+_s[0]+":"+v);
+					}
+				}
+			}
+			
 		}
 
 		Pageable pageable = new PageRequest(search.getPageNumber() - 1, search.getPageSize());

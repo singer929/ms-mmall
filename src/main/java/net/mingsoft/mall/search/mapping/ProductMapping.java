@@ -97,6 +97,11 @@ public class ProductMapping extends BaseMapping {
 	private int basicCategoryId;
 	
 	/**
+	 * 分类编号集合之间用逗号隔开
+	 */
+	private String basicCategoryIds;
+	
+	/**
 	 * 好评度
 	 */
 	private double productGood;
@@ -237,6 +242,14 @@ public class ProductMapping extends BaseMapping {
 
 	public void setAppId(int appId) {
 		this.appId = appId;
+	}
+
+	public String getBasicCategoryIds() {
+		return basicCategoryIds;
+	}
+
+	public void setBasicCategoryIds(String basicCategoryIds) {
+		this.basicCategoryIds = basicCategoryIds;
 	}
 	
 	
