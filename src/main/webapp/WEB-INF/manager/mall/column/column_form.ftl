@@ -146,7 +146,7 @@ $(function(){
 	     			<#else>
 	     			alert("更新成功");
 	     			</#if>
-	    			location.href=base+"${baseManager}/cms/column/list.do?categoryId="+msg.resultData;
+	    			location.href="${managerPath}/mall/column/index.do";
 	    		}else{
 	    			<#if column.categoryId==0>
 	     			alert("保存失败");
