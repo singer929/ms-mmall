@@ -76,7 +76,7 @@ public class ProductPeopleAction extends BaseAction{
 	@RequestMapping("/list")
 	@ResponseBody
 	public void list(HttpServletResponse response, HttpServletRequest request,ModelMap model) {
-		int modelId = this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL);
+		int modelId = this.getModelCodeId(request, net.mingsoft.mall.constant.ModelCode.MALL_PRODUCT);
 		int appId = BasicUtil.getAppId();
 		int peopleId = this.getPeopleBySession().getPeopleId();
 		BasicUtil.startPage();
