@@ -1,10 +1,10 @@
 <@ms.html5>
 	<@ms.nav title="栏目表管理"></@ms.nav>
-	<@ms.searchForm name="searchForm" isvalidation=true>
+	<!--@ms.searchForm name="searchForm" isvalidation=true>
 		<@ms.searchFormButton>
 			 <@ms.queryButton onclick="search()"/> 
 		</@ms.searchFormButton>			
-	</@ms.searchForm>
+	</@ms.searchForm-->
 	<@ms.panel>
 		<div id="toolbar">
 			<@ms.panelNav>
@@ -37,7 +37,7 @@
 <script>
 	$(function(){
 		$("#columnList").bootstrapTable({
-			url:"${managerPath}/mall/column/list.do?modelId=96",
+			url:"${managerPath}/mall/column/list.do?modelId=${Session.model_id_session?default(0)}",
 			contentType : "application/x-www-form-urlencoded",
 			queryParamsType : "undefined",
 			toolbar: "#toolbar",
@@ -53,7 +53,7 @@
 		        	title: '标题',
 		        	align: 'left',
 		        	formatter:function(value,row,index) {
-		        		var url = "${managerPath}/mall/column/"+row.categoryId+"/edit.do";
+		        		var url = "${managerPath}/mall/column/"+row.categoryId+"/edit.do?modelId=${Session.model_id_session?default(0)}";
 		        		return "<a href=" +url+ " target='_self'>" + value + "</a>";
 		        	}
 		        	
@@ -109,7 +109,7 @@
 	})
 	//增加按钮
 	$("#addColumnBtn").click(function(){
-		location.href ="${managerPath}/mall/column/add.do"; 
+		location.href ="${managerPath}/mall/column/add.do??modelId=${Session.model_id_session?default(0)}"; 
 	})
 	//删除按钮
 	$("#delColumnBtn").click(function(){
