@@ -81,7 +81,6 @@ public class ProductPeopleAction extends BaseAction{
 		int peopleId = this.getPeopleBySession().getPeopleId();
 		BasicUtil.startPage();
 		List productList = productPeopleBiz.queryByPeople(appId, modelId, peopleId);
-		BasicUtil.endPage(productList);
 		PageInfo page = BasicUtil.endPage(productList);
 		ListBean _list = new ListBean(productList, page);
 		this.outJson(response, net.mingsoft.base.util.JSONArray.toJSONString(_list,new DoubleValueFilter(),new DateValueFilter("yyyy-MM-dd")));
