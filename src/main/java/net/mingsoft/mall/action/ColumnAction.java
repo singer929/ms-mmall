@@ -102,21 +102,6 @@ public class ColumnAction extends BaseAction{
 		return view ("/mall/column/index");
 	}
 	/**
-	 * 查询出商品的分类
-	 * @param response
-	 * @param request
-	 */
-	@RequestMapping("/queryProductColumn")
-	public void queryProductColumn(HttpServletResponse response,HttpServletRequest request){
-		// 该站点ID有session提供
-		int appId =  this.getAppId(request);
-		//根据modelId查询商品分类
-		List<ColumnEntity> list = columnBiz.queryAll(appId, this.getModelCodeId(request,net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY));
-		response.setCharacterEncoding("utf-8");
-		this.outJson(response, net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY, true, "", JSONObject.toJSON(list).toString());
-	}
-	
-	/**
 	 * 栏目添加跳转页面
 	 * 
 	 * @return
@@ -170,37 +155,6 @@ public class ColumnAction extends BaseAction{
 		return true;
 	}
 
-	/**
-	 * 子栏目列表显示
-	 */
-	@RequestMapping("/{categoryId}/childList")
-	public void childList(@PathVariable int categoryId,HttpServletResponse response, HttpServletRequest request) {
-		// 站点ID用session获取
-		int websiteId =this.getAppId(request);
-		// 需要打开的栏目节点树的栏目ID
-		List<ColumnEntity> list = new ArrayList<ColumnEntity>();
-		//查询子栏目集合
-		list = columnBiz.queryChild(categoryId, websiteId,this.getModelCodeId(request),null);
-		//设置编码格式
-		response.setCharacterEncoding("utf-8");
-		this.outJson(response, ModelCode.CMS_COLUMN, true, "", JSONArray.toJSON(list).toString());
-	}
-
-	/**
-	 * 查询全部栏目集合 使用queryJsonAll替代
-	 * @param response
-	 * @param request
-	 */
-	@Deprecated
-	@RequestMapping("/columnList")
-	public void columnList(HttpServletResponse response,HttpServletRequest request) {
-		//该站点ID有session提供
-		int websiteId = this.getAppId(request);
-		List<ColumnEntity> list  = columnBiz.queryColumnListByWebsiteId(websiteId);
-		response.setCharacterEncoding("utf-8");
-		this.outJson(response, ModelCode.CMS_COLUMN, true, "", JSONArray.toJSON(list).toString());
-	}
-	
 	/**
 	 * 组织栏目链接地址
 	 * @param request
@@ -261,24 +215,6 @@ public class ColumnAction extends BaseAction{
 	}
 		
 	/**
-	 * 根据栏目ID进行栏目删除确认，如果有子栏目则不能被删除
-	 * @param categoryId 栏目ID
-	 * @param response
-	 * @param request
-	 */
-	@RequestMapping("/{categoryId}/deleteConfirm")
-	public void deleteConfirm(@PathVariable int categoryId,HttpServletResponse response, HttpServletRequest request){
-		// 站点ID有session获取
-		int websiteId = this.getAppId(request);
-		// 查询该栏目是否有子栏目,如果存在子栏目则返回错误提示，否则删除该栏目
-		if (columnBiz.queryColumnChildListCountByWebsiteId(categoryId, websiteId) > 0) {
-			this.outJson(response, false);
-		} else {
-			this.outJson(response, true);
-		}
-	}
-	
-	/**
 	 * 栏目更新页面跳转
 	 * @param columnId 栏目ID
 	 * @param request
@@ -324,22 +260,6 @@ public class ColumnAction extends BaseAction{
 		List list = columnBiz.queryAll(websiteId, this.getModelCodeId(request));
 		EUListBean _list = new EUListBean(list, list.size());
 		this.outJson(response, net.mingsoft.base.util.JSONArray.toJSONString(_list));
-	}
-	
-	/**
-	 *  查询全部栏目集合（json数据）
-	 * @param response
-	 * @param request
-	 */
-	@RequestMapping("/queryJsonAll")
-	public void queryJsonAll(HttpServletResponse response,HttpServletRequest request) {
-		// 该站点ID有session提供
-		int websiteId =  this.getAppId(request);
-		Integer modelId = modelBiz.getEntityByModelCode(ModelCode.CMS_COLUMN).getModelId(); // 查询当前模块编号
-		//获取所有的内容管理栏目
-		List<ColumnEntity> list  = columnBiz.queryAll(websiteId,modelId);
-		response.setCharacterEncoding("utf-8");
-		this.outJson(response, ModelCode.CMS_COLUMN, true, "", JSONObject.toJSON(list).toString());
 	}
 	
 	/**
