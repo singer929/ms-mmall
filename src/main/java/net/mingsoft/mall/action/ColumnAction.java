@@ -1,113 +1,80 @@
 package net.mingsoft.mall.action;
 
-
-import java.io.File;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.ui.ModelMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import com.mingsoft.basic.constant.Const;
+import com.mingsoft.basic.constant.ModelCode;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import net.mingsoft.base.util.JSONObject;
+import com.mingsoft.util.PageUtil;
+import com.mingsoft.util.StringUtil;
 import com.mingsoft.base.entity.BaseEntity;
+import net.mingsoft.basic.util.BasicUtil;
+import net.mingsoft.basic.bean.ListBean;
+import com.mingsoft.base.filter.DateValueFilter;
+import com.mingsoft.base.filter.DoubleValueFilter;
 import com.mingsoft.basic.biz.IColumnBiz;
 import com.mingsoft.basic.biz.IModelBiz;
-import com.mingsoft.basic.constant.Const;
 import com.mingsoft.basic.constant.e.SessionConstEnum;
+import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.basic.entity.ColumnEntity;
 import com.mingsoft.basic.entity.ManagerEntity;
-import com.mingsoft.cms.constant.ModelCode;
-import com.mingsoft.cms.constant.e.ColumnTypeEnum;
 import com.mingsoft.mdiy.biz.IContentModelBiz;
-import com.mingsoft.parser.IParserRegexConstant;
-import com.mingsoft.util.StringUtil;
 
+import net.mingsoft.basic.bean.EUListBean;
+	
 /**
- * 
- * 
- * <p>
- * <b>铭飞MS平台</b>
- * </p>
- * 
- * 
- * <p>
- * Copyright: Copyright (c) 2014 - 2015
- * </p>
- * 
- * <p>
- * Company:景德镇铭飞科技有限公司
- * </p>
- * 
- * @author 史爱华
- * 
- * @version 300-001-001
- * 
- * 
- *          <p>
- *          版权所有 铭飞科技
- *          </p>
- * 
- *          <p>
- *          Comments: 商城分类控制层，继承BaseAction
- *          </p>
- * 
- *          <p>
- *          Create Date:2014-7-15
- *          </p>
- * 
- *          <p>
- *          Modification history:
- *          </p>
+ * 栏目表管理控制层
+ * @author 伍晶晶
+ * @version 
+ * 版本号：100<br/>
+ * 创建日期：2017-8-8 15:28:53<br/>
+ * 历史修订：<br/>
  */
 @Controller("mallColumnAction")
 @RequestMapping("/${managerPath}/mall/column")
 public class ColumnAction extends BaseAction{
 	
-	
 	/**
-	 * 栏目业务层
-	 */
+	 * 注入栏目表业务层
+	 */	
 	@Autowired
 	private IColumnBiz columnBiz;
-	
 	/**
 	 * 业务层的注入表单内容模型
 	 */
 	@Autowired
 	private IContentModelBiz contentModelBiz;
-	
-	
 	/**
 	 * 模块业务层注入
 	 */
 	@Autowired
 	private IModelBiz modelBiz;
+
 	
 	/**
-	 * 查询出商品的分类
-	 * @param response
-	 * @param request
+	 * 返回主界面index
 	 */
-	@RequestMapping("/queryProductColumn")
-	public void queryProductColumn(HttpServletResponse response,HttpServletRequest request){
-		// 该站点ID有session提供
-		int appId =  this.getAppId(request);
-		//根据modelId查询商品分类
-		List<ColumnEntity> list = columnBiz.queryAll(appId, this.getModelCodeId(request,net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY));
-		response.setCharacterEncoding("utf-8");
-		this.outJson(response, net.mingsoft.mall.constant.ModelCode.MALL_CATEGORY, true, "", JSONObject.toJSON(list).toString());
+	@RequestMapping("/index")
+	public String index(HttpServletResponse response,HttpServletRequest request){
+		return view ("/mall/column/index");
 	}
-	
 	/**
 	 * 栏目添加跳转页面
 	 * 
@@ -124,152 +91,10 @@ public class ColumnAction extends BaseAction{
 		ColumnEntity columnSuper = new ColumnEntity();
 		model.addAttribute("columnSuper", columnSuper);
 		model.addAttribute("column",new ColumnEntity());
-		model.addAttribute("listColumn", JSONObject.toJSON(list).toString());
+		model.addAttribute("listColumn", JSONArray.toJSONString(list));
 		model.addAttribute("listCm", listCm);
 		return view("/mall/column/column_form");
 	}
-
-	/**
-	 * 后台验证填写的栏目信息是否合法
-	 * @param column  栏目信息
-	 * @param response
-	 * @return false:不合法 true:合法
-	 */
-	private boolean checkForm(ColumnEntity column, HttpServletResponse response){
-		//栏目标题空值验证
-		if(StringUtil.isBlank(column.getCategoryTitle())){
-			this.outJson( response, ModelCode.CMS_COLUMN, false, getResString("err.empty", this.getResString("categoryTitle")));
-			return false;
-		}
-		//栏目标题长度验证
-		if(!StringUtil.checkLength(column.getCategoryTitle(), 1, 31)){
-			this.outJson( response, ModelCode.CMS_COLUMN, false, getResString("err.length", this.getResString("categoryTitle"), "1", "30"));
-			return false;
-		}
-		//栏目属性空值验证
-		if(StringUtil.isBlank(column.getColumnType())){
-			this.outJson( response, ModelCode.CMS_COLUMN, false, getResString("err.empty", this.getResString("columnType")));
-			return false;
-		}
-		//栏目描述处理
-		if(StringUtil.checkLength(column.getColumnDescrip(), 0, 500)){
-			column.setColumnDescrip(StringUtil.subString(column.getColumnDescrip(), 500));
-		}
-		//栏目简介处理
-		if(StringUtil.checkLength(column.getColumnKeyword(), 0, 500)){
-			column.setColumnKeyword(StringUtil.subString(column.getColumnKeyword(), 500));
-		}
-		return true;
-	}
-
-	/**
-	 * 子栏目列表显示
-	 */
-	@RequestMapping("/{categoryId}/childList")
-	public void childList(@PathVariable int categoryId,HttpServletResponse response, HttpServletRequest request) {
-		// 站点ID用session获取
-		int websiteId =this.getAppId(request);
-		// 需要打开的栏目节点树的栏目ID
-		List<ColumnEntity> list = new ArrayList<ColumnEntity>();
-		//查询子栏目集合
-		list = columnBiz.queryChild(categoryId, websiteId,this.getModelCodeId(request),null);
-		//设置编码格式
-		response.setCharacterEncoding("utf-8");
-		this.outJson(response, ModelCode.CMS_COLUMN, true, "", JSONObject.toJSON(list).toString());
-	}
-
-	/**
-	 * 查询全部栏目集合 使用queryJsonAll替代
-	 * @param response
-	 * @param request
-	 */
-	@Deprecated
-	@RequestMapping("/columnList")
-	public void columnList(HttpServletResponse response,HttpServletRequest request) {
-		//该站点ID有session提供
-		int websiteId = this.getAppId(request);
-		List<ColumnEntity> list  = columnBiz.queryColumnListByWebsiteId(websiteId);
-		response.setCharacterEncoding("utf-8");
-		this.outJson(response, ModelCode.CMS_COLUMN, true, "", JSONObject.toJSON(list).toString());
-	}
-	
-	/**
-	 * 组织栏目链接地址
-	 * @param request
-	 * @param column 栏目实体
-	 */
-	private void columnPath(HttpServletRequest request,ColumnEntity column){
-		String columnPath = "";
-		String file = this.getRealPath(request,null)+IParserRegexConstant.HTML_SAVE_PATH+File.separator+ column.getColumnWebsiteId();
-		String delFile = "";
-		//修改栏目路径时，删除已存在的文件夹
-		column = (ColumnEntity) columnBiz.getEntity(column.getCategoryId());
-		delFile = file + column.getColumnPath();
-		if(!StringUtil.isBlank(delFile)){
-			File delFileName = new File(delFile);
-			delFileName.delete();
-		}
-		//若为顶级栏目，则路径为：/+栏目ID
-		if(column.getCategoryCategoryId() == 0){
-			column.setColumnPath(File.separator+column.getCategoryId());
-			file = file + File.separator + column.getCategoryId();
-		} else {
-			List<ColumnEntity> list = columnBiz.queryParentColumnByColumnId(column.getCategoryId());
-			if(!StringUtil.isBlank(list)){
-				String temp = "";
-				for(int i = list.size()-1; i>=0; i--){
-					ColumnEntity entity = list.get(i);
-					columnPath = columnPath + File.separator + entity.getCategoryId();
-					temp = temp + File.separator + entity.getCategoryId();
-				}
-				column.setColumnPath(columnPath + File.separator + column.getCategoryId());
-				file = file + temp + File.separator + column.getCategoryId();
-			}
-		}
-		columnBiz.updateEntity(column);
-		//生成文件夹
-		File fileName = new File(file);
-        fileName.mkdir();
-	}
-	
-	/**
-	 * 根据栏目ID删除栏目记录
-	 * @param categoryId 栏目ID
-	 * @param response
-	 * @param request
-	 */
-	@RequestMapping("/{categoryId}/delete")
-	@ResponseBody
-	public void delete(@PathVariable int categoryId,HttpServletResponse response, HttpServletRequest request) {
-		// 站点ID有session获取
-		int websiteId = this.getAppId(request);
-		// 查询该栏目是否有子栏目,如果存在子栏目则返回错误提示，否则删除该栏目
-		if (columnBiz.queryChild(categoryId, websiteId,this.getModelCodeId(request),null).size() > 0) {
-			this.outJson(response, ModelCode.CMS_COLUMN, true, "false");
-		} else {
-			columnBiz.deleteCategory(categoryId);
-			this.outJson(response, ModelCode.CMS_COLUMN, true, "true");
-		}
-	}
-		
-	/**
-	 * 根据栏目ID进行栏目删除确认，如果有子栏目则不能被删除
-	 * @param categoryId 栏目ID
-	 * @param response
-	 * @param request
-	 */
-	@RequestMapping("/{categoryId}/deleteConfirm")
-	public void deleteConfirm(@PathVariable int categoryId,HttpServletResponse response, HttpServletRequest request){
-		// 站点ID有session获取
-		int websiteId = this.getAppId(request);
-		// 查询该栏目是否有子栏目,如果存在子栏目则返回错误提示，否则删除该栏目
-		if (columnBiz.queryColumnChildListCountByWebsiteId(categoryId, websiteId) > 0) {
-			this.outJson(response, ModelCode.CMS_COLUMN, true, "false");
-		} else {
-			this.outJson(response, ModelCode.CMS_COLUMN, true, "true");
-		}
-	}
-	
 	/**
 	 * 栏目更新页面跳转
 	 * @param columnId 栏目ID
@@ -299,115 +124,289 @@ public class ColumnAction extends BaseAction{
 			columnSuper = (ColumnEntity) columnBiz.getEntity(column.getCategoryCategoryId());
 		}
 		model.addAttribute("columnSuper", columnSuper);
-		model.addAttribute("listColumn", JSONObject.toJSON(list).toString());
+		model.addAttribute("listColumn", JSONArray.toJSONString(list));
 		return view("/mall/column/column_form");
 	}
-	
 	/**
-	 * 栏目首页面列表显示
+	 * 根据栏目ID删除栏目记录
+	 * @param categoryId 栏目ID
+	 * @param response
+	 * @param request
+	 */
+	@RequestMapping("/{categoryId}/delete")
+	@ResponseBody
+	public void delete(@PathVariable int categoryId,HttpServletResponse response, HttpServletRequest request) {
+		// 站点ID有session获取
+		int websiteId = this.getAppId(request);
+		// 查询该栏目是否有子栏目,如果存在子栏目则返回错误提示，否则删除该栏目
+		if (columnBiz.queryChild(categoryId, websiteId,this.getModelCodeId(request),null).size() > 0) {
+			this.outJson(response, false);
+		} else {
+			columnBiz.deleteCategory(categoryId);
+			this.outJson(response, true);
+		}
+	}
+		
+	/**
+	 * 根据栏目ID进行栏目删除确认，如果有子栏目则不能被删除
+	 * @param categoryId 栏目ID
+	 * @param response
+	 * @param request
+	 */
+	@RequestMapping("/{categoryId}/deleteConfirm")
+	public void deleteConfirm(@PathVariable int categoryId,HttpServletResponse response, HttpServletRequest request){
+		// 站点ID有session获取
+		int websiteId = this.getAppId(request);
+		// 查询该栏目是否有子栏目,如果存在子栏目则返回错误提示，否则删除该栏目
+		if (columnBiz.queryColumnChildListCountByWebsiteId(categoryId, websiteId) > 0) {
+			this.outJson(response, ModelCode.CMS_COLUMN, true, "false");
+		} else {
+			this.outJson(response, ModelCode.CMS_COLUMN, true, "true");
+		}
+	}
+	/**
+	 * 查询栏目表列表
+	 * @param column 栏目表实体
+	 * <i>column参数包含字段信息参考：</i><br/>
+	 * columnCategoryid 关联category表（类别表ID）<br/>
+	 * columnKeyword 栏目简介<br/>
+	 * columnDescrip 栏目关键字的扩展<br/>
+	 * columnType 1,代表最终列表栏目。2，代表频道封面。3，带表外部链接<br/>
+	 * columnUrl 如果是外部链接，则保持外部链接地址。如果为最终列表栏目，就保存文章显示列表<br/>
+	 * columnListurl 最终列表栏目的列表模板地址<br/>
+	 * columnTentmodelid 栏目类型,直接影响栏目发布的表单样式<br/>
+	 * columnWebsiteid 栏目所属站点ID<br/>
+	 * columnPath 栏目路径<br/>
+	 * columnContentmodelid 栏目管理的内容模型id<br/>
+	 * <dt><span class="strong">返回</span></dt><br/>
+	 * <dd>[<br/>
+	 * { <br/>
+	 * columnCategoryid: 关联category表（类别表ID）<br/>
+	 * columnKeyword: 栏目简介<br/>
+	 * columnDescrip: 栏目关键字的扩展<br/>
+	 * columnType: 1,代表最终列表栏目。2，代表频道封面。3，带表外部链接<br/>
+	 * columnUrl: 如果是外部链接，则保持外部链接地址。如果为最终列表栏目，就保存文章显示列表<br/>
+	 * columnListurl: 最终列表栏目的列表模板地址<br/>
+	 * columnTentmodelid: 栏目类型,直接影响栏目发布的表单样式<br/>
+	 * columnWebsiteid: 栏目所属站点ID<br/>
+	 * columnPath: 栏目路径<br/>
+	 * columnContentmodelid: 栏目管理的内容模型id<br/>
+	 * }<br/>
+	 * ]</dd><br/>	 
 	 */
 	@RequestMapping("/list")
-	public String list(HttpServletRequest request) {
+	@ResponseBody
+	public void list(@ModelAttribute ColumnEntity column,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
+		
 		// 站点ID有session获取
 		int websiteId = this.getAppId(request);
 		// 需要打开的栏目节点树的栏目ID
-		int categoryId = 0;
-		List<ColumnEntity> list = new ArrayList<ColumnEntity>();
-		Object cId = request.getParameter("categoryId");
-		if (!StringUtil.isBlank(cId)) {
-			categoryId = Integer.parseInt(cId.toString());
-		}
-		// 是否为顶级栏目
-		//if (categoryId == Const.COLUMN_TOP_CATEGORY_ID) {
-			list = columnBiz.queryAll(websiteId, this.getModelCodeId(request));// columnBiz.queryChild(categoryId,websiteId,this.getModelCodeId(request));
-//		} else {
-//			list = columnBiz.queryColumnChildListRecursionByWebsiteId(categoryId, websiteId);
-//		}
-			
-		//栏目链接标签拼接字符串
-		request.setAttribute("columnRegexConstant", IParserRegexConstant.HTML_SAVE_PATH+File.separator+websiteId);
-		request.setAttribute("listColumn", JSONArray.toJSONString(list));
-		return view("/mall/column/column_list");
+		List list = columnBiz.queryAll(websiteId, this.getModelCodeId(request));
+		EUListBean _list = new EUListBean(list, list.size());
+		this.outJson(response, net.mingsoft.base.util.JSONArray.toJSONString(_list));
 	}
 	
-	/**
-	 *  查询全部栏目集合（json数据）
-	 * @param response
-	 * @param request
-	 */
-	@RequestMapping("/queryJsonAll")
-	public void queryJsonAll(HttpServletResponse response,HttpServletRequest request) {
-		// 该站点ID有session提供
-		int websiteId =  this.getAppId(request);
-		Integer modelId = modelBiz.getEntityByModelCode(ModelCode.CMS_COLUMN).getModelId(); // 查询当前模块编号
-		//获取所有的内容管理栏目
-		List<ColumnEntity> list  = columnBiz.queryAll(websiteId,modelId);
-		response.setCharacterEncoding("utf-8");
-		this.outJson(response, ModelCode.CMS_COLUMN, true, "", JSONObject.toJSON(list).toString());
-	}
 	
 	/**
-	 * 栏目添加
-	 * 
-	 * @param column
-	 *            栏目对象
-	 * @return 返回页面跳转
+	 * 获取栏目表
+	 * @param column 栏目表实体
+	 * <i>column参数包含字段信息参考：</i><br/>
+	 * columnCategoryid 关联category表（类别表ID）<br/>
+	 * columnKeyword 栏目简介<br/>
+	 * columnDescrip 栏目关键字的扩展<br/>
+	 * columnType 1,代表最终列表栏目。2，代表频道封面。3，带表外部链接<br/>
+	 * columnUrl 如果是外部链接，则保持外部链接地址。如果为最终列表栏目，就保存文章显示列表<br/>
+	 * columnListurl 最终列表栏目的列表模板地址<br/>
+	 * columnTentmodelid 栏目类型,直接影响栏目发布的表单样式<br/>
+	 * columnWebsiteid 栏目所属站点ID<br/>
+	 * columnPath 栏目路径<br/>
+	 * columnContentmodelid 栏目管理的内容模型id<br/>
+	 * <dt><span class="strong">返回</span></dt><br/>
+	 * <dd>{ <br/>
+	 * columnCategoryid: 关联category表（类别表ID）<br/>
+	 * columnKeyword: 栏目简介<br/>
+	 * columnDescrip: 栏目关键字的扩展<br/>
+	 * columnType: 1,代表最终列表栏目。2，代表频道封面。3，带表外部链接<br/>
+	 * columnUrl: 如果是外部链接，则保持外部链接地址。如果为最终列表栏目，就保存文章显示列表<br/>
+	 * columnListurl: 最终列表栏目的列表模板地址<br/>
+	 * columnTentmodelid: 栏目类型,直接影响栏目发布的表单样式<br/>
+	 * columnWebsiteid: 栏目所属站点ID<br/>
+	 * columnPath: 栏目路径<br/>
+	 * columnContentmodelid: 栏目管理的内容模型id<br/>
+	 * }</dd><br/>
 	 */
-	@RequestMapping("/save")
-	public void save(@ModelAttribute ColumnEntity column,
-			HttpServletRequest request,HttpServletResponse response) {
-		if(!checkForm(column,response)){
-			return;
-		}
-		column.setCategoryAppId( this.getAppId(request));
-		column.setColumnWebsiteId(this.getAppId(request));
-		column.setCategoryManagerId(getManagerBySession(request).getManagerId());
-		column.setCategoryDateTime(new Timestamp(System.currentTimeMillis()));
-		column.setCategoryModelId(this.getModelCodeId(request));
-		if(column.getColumnType()==ColumnTypeEnum.COLUMN_TYPE_COVER.toInt()){
-			column.setColumnListUrl(null);
-		}
-		columnBiz.saveCategory(column);
-		this.columnPath(request,column);
-		this.outJson(response, ModelCode.CMS_COLUMN, true,null,JSONArray.toJSONString(column.getCategoryId()));
-	}
-	
-	/**
-	 * 更新栏目
-	 * @param column 栏目实体
-	 * @param request
-	 * @param response
-	 */
-	@RequestMapping("/update")
+	@RequestMapping("/get")
 	@ResponseBody
-	public void update(@ModelAttribute ColumnEntity column,HttpServletRequest request,HttpServletResponse response) {
-		//获取站点ID
-		int websiteId = this.getAppId(request);
-		//检测栏目信息是否合法
-		if(!checkForm(column,response)){
-			return;
-		}
-		//若栏目管理属性为单页，则栏目的列表模板地址设为Null
-		if(column.getColumnType()==ColumnTypeEnum.COLUMN_TYPE_COVER.toInt()){
-			column.setColumnListUrl(null);
-		}
-		column.setCategoryManagerId(getManagerBySession(request).getManagerId());
-		column.setColumnWebsiteId(websiteId);
-		columnBiz.updateCategory(column);
-		this.columnPath(request,column);
-		//查询当前栏目是否有子栏目，
-		List<ColumnEntity> childList = columnBiz.queryChild(column.getCategoryId(), websiteId,this.getModelCodeId(request),null);
-		if(childList != null && childList.size()>0){
-			//改变子栏目的顶级栏目ID为当前栏目的父级栏目ID
-			for(int i=0;i<childList.size();i++){
-				childList.get(i).setCategoryCategoryId(column.getCategoryId());
-				childList.get(i).setCategoryManagerId(getManagerBySession(request).getManagerId());
-				childList.get(i).setColumnWebsiteId(websiteId);
-				columnBiz.updateCategory(childList.get(i));
-				//组织子栏目链接地址
-				this.columnPath(request, childList.get(i));
-			}
-		}
-		this.outJson(response, ModelCode.CMS_COLUMN, true,null,JSONArray.toJSONString(column.getCategoryId()));
+	public void get(@ModelAttribute ColumnEntity column,HttpServletResponse response, HttpServletRequest request,ModelMap model){
+		
+		//ColumnEntity _column = (ColumnEntity)columnBiz.getEntity(column.getColumnCategoryid());
+		//this.outJson(response, _column);
 	}
+	
+	/**
+	 * 保存栏目表实体
+	 * @param column 栏目表实体
+	 * <i>column参数包含字段信息参考：</i><br/>
+	 * columnCategoryid 关联category表（类别表ID）<br/>
+	 * columnKeyword 栏目简介<br/>
+	 * columnDescrip 栏目关键字的扩展<br/>
+	 * columnType 1,代表最终列表栏目。2，代表频道封面。3，带表外部链接<br/>
+	 * columnUrl 如果是外部链接，则保持外部链接地址。如果为最终列表栏目，就保存文章显示列表<br/>
+	 * columnListurl 最终列表栏目的列表模板地址<br/>
+	 * columnTentmodelid 栏目类型,直接影响栏目发布的表单样式<br/>
+	 * columnWebsiteid 栏目所属站点ID<br/>
+	 * columnPath 栏目路径<br/>
+	 * columnContentmodelid 栏目管理的内容模型id<br/>
+	 * <dt><span class="strong">返回</span></dt><br/>
+	 * <dd>{ <br/>
+	 * columnCategoryid: 关联category表（类别表ID）<br/>
+	 * columnKeyword: 栏目简介<br/>
+	 * columnDescrip: 栏目关键字的扩展<br/>
+	 * columnType: 1,代表最终列表栏目。2，代表频道封面。3，带表外部链接<br/>
+	 * columnUrl: 如果是外部链接，则保持外部链接地址。如果为最终列表栏目，就保存文章显示列表<br/>
+	 * columnListurl: 最终列表栏目的列表模板地址<br/>
+	 * columnTentmodelid: 栏目类型,直接影响栏目发布的表单样式<br/>
+	 * columnWebsiteid: 栏目所属站点ID<br/>
+	 * columnPath: 栏目路径<br/>
+	 * columnContentmodelid: 栏目管理的内容模型id<br/>
+	 * }</dd><br/>
+	 */
+	@PostMapping("/save")
+	@ResponseBody
+	public void save(@ModelAttribute ColumnEntity column, HttpServletResponse response, HttpServletRequest request) {
+		//验证栏目简介的值是否合法			
+		if(StringUtil.isBlank(column.getColumnKeyword())){
+			this.outJson(response, null,false,getResString("err.empty", this.getResString("column.keyword")));
+			return;			
+		}
+		if(!StringUtil.checkLength(column.getColumnKeyword()+"", 1, 300)){
+			this.outJson(response, null, false, getResString("err.length", this.getResString("column.keyword"), "1", "300"));
+			return;			
+		}
+		//验证栏目关键字的扩展的值是否合法			
+		if(StringUtil.isBlank(column.getColumnDescrip())){
+			this.outJson(response, null,false,getResString("err.empty", this.getResString("column.descrip")));
+			return;			
+		}
+		if(!StringUtil.checkLength(column.getColumnDescrip()+"", 1, 500)){
+			this.outJson(response, null, false, getResString("err.length", this.getResString("column.descrip"), "1", "500"));
+			return;			
+		}
+		//验证1,代表最终列表栏目。2，代表频道封面。3，带表外部链接的值是否合法			
+		if(StringUtil.isBlank(column.getColumnType())){
+			this.outJson(response, null,false,getResString("err.empty", this.getResString("column.type")));
+			return;			
+		}
+		if(!StringUtil.checkLength(column.getColumnType()+"", 1, 10)){
+			this.outJson(response, null, false, getResString("err.length", this.getResString("column.type"), "1", "10"));
+			return;			
+		}
+		//验证如果是外部链接，则保持外部链接地址。如果为最终列表栏目，就保存文章显示列表的值是否合法			
+		if(StringUtil.isBlank(column.getColumnUrl())){
+			this.outJson(response, null,false,getResString("err.empty", this.getResString("column.url")));
+			return;			
+		}
+		if(!StringUtil.checkLength(column.getColumnUrl()+"", 1, 50)){
+			this.outJson(response, null, false, getResString("err.length", this.getResString("column.url"), "1", "50"));
+			return;			
+		}
+		
+		columnBiz.saveEntity(column);
+		this.outJson(response, JSONObject.toJSONString(column));
+	}
+	
+	/**
+	 * @param column 栏目表实体
+	 * <i>column参数包含字段信息参考：</i><br/>
+	 * columnCategoryid:多个columnCategoryid直接用逗号隔开,例如columnCategoryid=1,2,3,4
+	 * 批量删除栏目表
+	 *            <dt><span class="strong">返回</span></dt><br/>
+	 *            <dd>{code:"错误编码",<br/>
+	 *            result:"true｜false",<br/>
+	 *            resultMsg:"错误信息"<br/>
+	 *            }</dd>
+	 */
+	@RequestMapping("/delete")
+	@ResponseBody
+	public void delete(@RequestBody List<ColumnEntity> columns,HttpServletResponse response, HttpServletRequest request) {
+		int[] ids = new int[columns.size()];
+		for(int i = 0;i<columns.size();i++){
+			//ids[i] = columns.get(i).getColumnCategoryid();
+		}
+		columnBiz.delete(ids);		
+		this.outJson(response, true);
+	}
+	
+	/** 
+	 * 更新栏目表信息栏目表
+	 * @param column 栏目表实体
+	 * <i>column参数包含字段信息参考：</i><br/>
+	 * columnCategoryid 关联category表（类别表ID）<br/>
+	 * columnKeyword 栏目简介<br/>
+	 * columnDescrip 栏目关键字的扩展<br/>
+	 * columnType 1,代表最终列表栏目。2，代表频道封面。3，带表外部链接<br/>
+	 * columnUrl 如果是外部链接，则保持外部链接地址。如果为最终列表栏目，就保存文章显示列表<br/>
+	 * columnListurl 最终列表栏目的列表模板地址<br/>
+	 * columnTentmodelid 栏目类型,直接影响栏目发布的表单样式<br/>
+	 * columnWebsiteid 栏目所属站点ID<br/>
+	 * columnPath 栏目路径<br/>
+	 * columnContentmodelid 栏目管理的内容模型id<br/>
+	 * <dt><span class="strong">返回</span></dt><br/>
+	 * <dd>{ <br/>
+	 * columnCategoryid: 关联category表（类别表ID）<br/>
+	 * columnKeyword: 栏目简介<br/>
+	 * columnDescrip: 栏目关键字的扩展<br/>
+	 * columnType: 1,代表最终列表栏目。2，代表频道封面。3，带表外部链接<br/>
+	 * columnUrl: 如果是外部链接，则保持外部链接地址。如果为最终列表栏目，就保存文章显示列表<br/>
+	 * columnListurl: 最终列表栏目的列表模板地址<br/>
+	 * columnTentmodelid: 栏目类型,直接影响栏目发布的表单样式<br/>
+	 * columnWebsiteid: 栏目所属站点ID<br/>
+	 * columnPath: 栏目路径<br/>
+	 * columnContentmodelid: 栏目管理的内容模型id<br/>
+	 * }</dd><br/>
+	 */
+	@PostMapping("/update")
+	@ResponseBody	 
+	public void update(@ModelAttribute ColumnEntity column, HttpServletResponse response,
+			HttpServletRequest request) {
+		//验证栏目简介的值是否合法			
+		if(StringUtil.isBlank(column.getColumnKeyword())){
+			this.outJson(response, null,false,getResString("err.empty", this.getResString("column.keyword")));
+			return;			
+		}
+		if(!StringUtil.checkLength(column.getColumnKeyword()+"", 1, 300)){
+			this.outJson(response, null, false, getResString("err.length", this.getResString("column.keyword"), "1", "300"));
+			return;			
+		}
+		//验证栏目关键字的扩展的值是否合法			
+		if(StringUtil.isBlank(column.getColumnDescrip())){
+			this.outJson(response, null,false,getResString("err.empty", this.getResString("column.descrip")));
+			return;			
+		}
+		if(!StringUtil.checkLength(column.getColumnDescrip()+"", 1, 500)){
+			this.outJson(response, null, false, getResString("err.length", this.getResString("column.descrip"), "1", "500"));
+			return;			
+		}
+		//验证1,代表最终列表栏目。2，代表频道封面。3，带表外部链接的值是否合法			
+		if(StringUtil.isBlank(column.getColumnType())){
+			this.outJson(response, null,false,getResString("err.empty", this.getResString("column.type")));
+			return;			
+		}
+		if(!StringUtil.checkLength(column.getColumnType()+"", 1, 10)){
+			this.outJson(response, null, false, getResString("err.length", this.getResString("column.type"), "1", "10"));
+			return;			
+		}
+		//验证如果是外部链接，则保持外部链接地址。如果为最终列表栏目，就保存文章显示列表的值是否合法			
+		if(StringUtil.isBlank(column.getColumnUrl())){
+			this.outJson(response, null,false,getResString("err.empty", this.getResString("column.url")));
+			return;			
+		}
+		if(!StringUtil.checkLength(column.getColumnUrl()+"", 1, 50)){
+			this.outJson(response, null, false, getResString("err.length", this.getResString("column.url"), "1", "50"));
+			return;			
+		}
+		columnBiz.updateEntity(column);
+		this.outJson(response, JSONObject.toJSONString(column));
+	}
+		
 }
