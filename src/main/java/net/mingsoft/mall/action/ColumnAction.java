@@ -314,6 +314,7 @@ public class ColumnAction extends BaseAction{
 	/**
 	 * 栏目首页面列表显示
 	 */
+	@SuppressWarnings("deprecation")
 	@RequestMapping("/list")
 	public void list(@ModelAttribute ColumnEntity column,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
 
