@@ -52,7 +52,9 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 	 * 返回主界面index
 	 */
 	@RequestMapping("/index")
-	public String index(HttpServletResponse response,HttpServletRequest request){
+	public String index(HttpServletResponse response,HttpServletRequest request ,ModelMap model){
+		int categoryId =Integer.parseInt(request.getParameter("categoryId")) ;
+		model.addAttribute("categoryId",categoryId);
 		return view ("/mall/specification/index");
 	}
 	
@@ -81,6 +83,10 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 	@RequestMapping("/list")
 	@ResponseBody
 	public void list(@ModelAttribute SpecificationEntity specification,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
+		if(StringUtil.isBlank(specification)){
+			specification = new SpecificationEntity();
+		}
+		specification.setSpecificationAppId(BasicUtil.getAppId());
 		BasicUtil.startPage();
 		List specificationList = specificationBiz.query(specification);
 		this.outJson(response, net.mingsoft.base.util.JSONArray.toJSONString(new EUListBean(specificationList,(int)BasicUtil.endPage(specificationList).getTotal()),new DoubleValueFilter(),new DateValueFilter()));
@@ -95,7 +101,6 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 			BaseEntity specificationEntity = specificationBiz.getEntity(specification.getSpecificationId());			
 			model.addAttribute("specificationEntity",specificationEntity);
 		}
-		
 		return view ("/mall/specification/form");
 	}
 	
@@ -153,15 +158,6 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 	@PostMapping("/save")
 	@ResponseBody
 	public void save(@ModelAttribute SpecificationEntity specification, HttpServletResponse response, HttpServletRequest request) {
-		//验证规格的类型id(预留)的值是否合法			
-		if(StringUtil.isBlank(specification.getSpecificationCategoryId())){
-			this.outJson(response, null,false,getResString("err.empty", this.getResString("specification.category.id")));
-			return;			
-		}
-		if(!StringUtil.checkLength(specification.getSpecificationCategoryId()+"", 1, 10)){
-			this.outJson(response, null, false, getResString("err.length", this.getResString("specification.category.id"), "1", "10"));
-			return;			
-		}
 		//验证默认的字段的值是否合法			
 		if(StringUtil.isBlank(specification.getSpecificationDefaultFields())){
 			this.outJson(response, null,false,getResString("err.empty", this.getResString("specification.default.fields")));
@@ -171,24 +167,7 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 			this.outJson(response, null, false, getResString("err.length", this.getResString("specification.default.fields"), "1", "255"));
 			return;			
 		}
-		//验证应用ID的值是否合法			
-		if(StringUtil.isBlank(specification.getSpecificationAppId())){
-			this.outJson(response, null,false,getResString("err.empty", this.getResString("specification.app.id")));
-			return;			
-		}
-		if(!StringUtil.checkLength(specification.getSpecificationAppId()+"", 1, 10)){
-			this.outJson(response, null, false, getResString("err.length", this.getResString("specification.app.id"), "1", "10"));
-			return;			
-		}
-		//验证规格类型:1-标准规格,2-自定义规格的值是否合法			
-		if(StringUtil.isBlank(specification.getSpecificationType())){
-			this.outJson(response, null,false,getResString("err.empty", this.getResString("specification.type")));
-			return;			
-		}
-		if(!StringUtil.checkLength(specification.getSpecificationType()+"", 1, 3)){
-			this.outJson(response, null, false, getResString("err.length", this.getResString("specification.type"), "1", "3"));
-			return;			
-		}
+		specification.setSpecificationAppId(BasicUtil.getAppId());
 		specificationBiz.saveEntity(specification);
 		this.outJson(response, JSONObject.toJSONString(specification));
 	}
@@ -239,15 +218,6 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 	@ResponseBody	 
 	public void update(@ModelAttribute SpecificationEntity specification, HttpServletResponse response,
 			HttpServletRequest request) {
-		//验证规格的类型id(预留)的值是否合法			
-		if(StringUtil.isBlank(specification.getSpecificationCategoryId())){
-			this.outJson(response, null,false,getResString("err.empty", this.getResString("specification.category.id")));
-			return;			
-		}
-		if(!StringUtil.checkLength(specification.getSpecificationCategoryId()+"", 1, 10)){
-			this.outJson(response, null, false, getResString("err.length", this.getResString("specification.category.id"), "1", "10"));
-			return;			
-		}
 		//验证默认的字段的值是否合法			
 		if(StringUtil.isBlank(specification.getSpecificationDefaultFields())){
 			this.outJson(response, null,false,getResString("err.empty", this.getResString("specification.default.fields")));
@@ -255,24 +225,6 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 		}
 		if(!StringUtil.checkLength(specification.getSpecificationDefaultFields()+"", 1, 255)){
 			this.outJson(response, null, false, getResString("err.length", this.getResString("specification.default.fields"), "1", "255"));
-			return;			
-		}
-		//验证应用ID的值是否合法			
-		if(StringUtil.isBlank(specification.getSpecificationAppId())){
-			this.outJson(response, null,false,getResString("err.empty", this.getResString("specification.app.id")));
-			return;			
-		}
-		if(!StringUtil.checkLength(specification.getSpecificationAppId()+"", 1, 10)){
-			this.outJson(response, null, false, getResString("err.length", this.getResString("specification.app.id"), "1", "10"));
-			return;			
-		}
-		//验证规格类型:1-标准规格,2-自定义规格的值是否合法			
-		if(StringUtil.isBlank(specification.getSpecificationType())){
-			this.outJson(response, null,false,getResString("err.empty", this.getResString("specification.type")));
-			return;			
-		}
-		if(!StringUtil.checkLength(specification.getSpecificationType()+"", 1, 3)){
-			this.outJson(response, null, false, getResString("err.length", this.getResString("specification.type"), "1", "3"));
 			return;			
 		}
 		specificationBiz.updateEntity(specification);
