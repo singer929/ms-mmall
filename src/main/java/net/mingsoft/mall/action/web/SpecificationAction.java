@@ -68,9 +68,9 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 		if(categoryId <= 0){
 			this.outJson(response, false);
 		}
-//		SpecificationEntity specification = new SpecificationEntity();
-//		specification.setSpecificationCategoryId(categoryId);
-//		List<SpecificationEntity> specificationList = specificationBiz.query(specification);
+		SpecificationEntity specification = new SpecificationEntity();
+		specification.setSpecificationCategoryId(categoryId);
+		List specificationList = specificationBiz.query(specification);
 //		for(int i = 0 ;i<specificationList.size();i++){
 //			BasicUtil.getIds(specificationList.get(i).)
 //		}
