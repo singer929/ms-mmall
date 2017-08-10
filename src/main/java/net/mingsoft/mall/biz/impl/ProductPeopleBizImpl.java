@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 
 import com.mingsoft.base.dao.IBaseDao;
 
-import net.mingsoft.basic.biz.impl.PeopleBizImpl;
+import net.mingsoft.basic.biz.impl.BasicPeopleBizImpl;
 import net.mingsoft.mall.biz.IProductPeopleBiz;
 import net.mingsoft.mall.dao.IProductPeopleDao;
 
 @Service("ProductPeopleBizImpl")
-public class ProductPeopleBizImpl extends PeopleBizImpl implements IProductPeopleBiz{
+public class ProductPeopleBizImpl extends BasicPeopleBizImpl implements IProductPeopleBiz{
 
 	@Autowired
 	private IProductPeopleDao productPeopleDao;

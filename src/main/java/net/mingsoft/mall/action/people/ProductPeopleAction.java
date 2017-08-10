@@ -19,8 +19,8 @@ import com.mingsoft.people.action.BaseAction;
 import com.mingsoft.people.constant.e.SessionConstEnum;
 
 import net.mingsoft.basic.bean.ListBean;
-import net.mingsoft.basic.biz.IPeopleBiz;
-import net.mingsoft.basic.entity.PeopleEntity;
+import net.mingsoft.basic.biz.IBasicPeopleBiz;
+import net.mingsoft.basic.entity.BasicPeopleEntity;
 import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.mall.biz.IProductPeopleBiz;
 

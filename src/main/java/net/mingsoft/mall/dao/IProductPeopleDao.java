@@ -6,13 +6,13 @@ import org.apache.ibatis.annotations.Param;
 
 import com.mingsoft.base.dao.IBaseDao;
 
-import net.mingsoft.basic.dao.IPeopleDao;
+import net.mingsoft.basic.dao.IBasicPeopleDao;
 
 /**
  * 商品浏览记录
  * @author 伍晶晶
  *
  */
-public interface IProductPeopleDao extends IPeopleDao  {
+public interface IProductPeopleDao extends IBasicPeopleDao  {
 
 }
