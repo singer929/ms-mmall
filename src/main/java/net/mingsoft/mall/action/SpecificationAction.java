@@ -53,7 +53,7 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 	 */
 	@RequestMapping("/index")
 	public String index(HttpServletResponse response,HttpServletRequest request ,ModelMap model){
-		int categoryId =Integer.parseInt(request.getParameter("categoryId")) ;
+		int categoryId =BasicUtil.getInt("categoryId");
 		model.addAttribute("categoryId",categoryId);
 		return view ("/mall/specification/index");
 	}
@@ -83,7 +83,7 @@ public class SpecificationAction extends net.mingsoft.mall.action.BaseAction{
 	@RequestMapping("/list")
 	@ResponseBody
 	public void list(@ModelAttribute SpecificationEntity specification,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
-		if(StringUtil.isBlank(specification)){
+		if(specification == null){
 			specification = new SpecificationEntity();
 		}
 		specification.setSpecificationAppId(BasicUtil.getAppId());

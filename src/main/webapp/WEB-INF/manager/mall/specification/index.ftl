@@ -1,4 +1,5 @@
 <@ms.html5>
+	<div style="width:96%">
 	<div id="toolbar">
 		<@ms.panelNav>
 			<@ms.buttonGroup>
@@ -24,6 +25,7 @@
 			</@ms.modalButton>
 		</@ms.modalBody>
 	</@ms.modal>
+	</div>
 </@ms.html5>
 
 <script>
@@ -37,15 +39,13 @@
 				    	{
 				        	field: 'specificationName',
 				        	title: '规格名称',
-				        	width:'255',
 				        	formatter:function(value,row,index) {
 				        		var url = "${managerPath}/mall/specification/form.do?specificationId="+row.specificationId;
 				        		return "<a href=" +url+ " target='_self'>" + value + "</a>";
 				        	}
 				    	},						    	{
 				        	field: 'specificationDefaultFields',
-				        	title: '默认的字段',
-				        	width:'255'
+				        	title: '默认的字段'
 				    	}		]
 	    })
 	})
