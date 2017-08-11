@@ -33,7 +33,9 @@
 		$("#specificationList").bootstrapTable({
 			url:"${managerPath}/mall/specification/list.do",
 			contentType : "application/x-www-form-urlencoded",
-			queryParamsType : "undefined",
+			queryParams:function(params) {
+				return {specificationCategoryId:${categoryId?default('')}};
+			},
 			toolbar: "#toolbar",
 	    	columns: [{ checkbox: true},
 				    	{
