@@ -220,7 +220,7 @@
 		LEFT JOIN
 		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
 		LEFT JOIN
-		cms_column
+		basic_column
 		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
 		LEFT
 		JOIN
@@ -286,7 +286,7 @@
 		LEFT JOIN
 		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
 		LEFT JOIN
-		cms_column
+		basic_column
 		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
 		LEFT JOIN
 		mall_product p ON
@@ -345,7 +345,7 @@
 		left join category c
 		ON b.BASIC_CATEGORYID = c.CATEGORY_ID
 		left join
-		cms_column cl
+		basic_column cl
 		on c.CATEGORY_ID = cl.COLUMN_CATEGORYID
 		<if test="tableName!=null">left join ${tableName} d on d.basicId=p.product_basicID
 		</if>
@@ -420,7 +420,7 @@
 		left join mall_product_specification_detail mpsd on mpsd.psd_product_id = p.product_basicID
 		left join basic b on b.basic_id = p.product_basicID
 		LEFT JOIN category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
-		LEFT JOIN cms_column cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		LEFT JOIN basic_column cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
 		<if test="tableName!=null">
 		left join ${tableName} d on d.basicId = p.product_basicID 
 		</if>
@@ -560,7 +560,7 @@
 		left join mall_product_specification_detail mpsd on mpsd.psd_product_id = p.product_basicID
 		left join basic b on b.basic_id = p.product_basicID
 		LEFT JOIN category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
-		LEFT JOIN cms_column cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		LEFT JOIN basic_column cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
 		<if test="tableName!=null">left join ${tableName} d on d.basicId = p.product_basicID </if>
 		where p.product_appID = #{appId} and p.product_shelf = 1
 		
@@ -635,7 +635,7 @@
 		LEFT JOIN
 		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
 		LEFT JOIN
-		cms_column
+		basic_column
 		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
 		LEFT
 		JOIN
