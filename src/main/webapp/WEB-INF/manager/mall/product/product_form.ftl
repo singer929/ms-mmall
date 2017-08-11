@@ -125,9 +125,7 @@
     <div class="norms-group" data-id="${specName}">
         <div class="norms-title">
             <select class="js-example-theme-single js-states form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true" style="width: 100px;">
-	            {{each(i, spec) specArr}}
-                    <option value="${spec.name}" {{if spec.name==specName}}selected="selected"{{/if}}>${spec.name}</option>
-	            {{/each}}
+                 <option value="${specName}" selected="selected">${specName}</option>
             </select>
 </#noparse>
             <span class="delete-norms">×</span>

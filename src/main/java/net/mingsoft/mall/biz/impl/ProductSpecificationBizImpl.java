@@ -98,7 +98,7 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 
 
 	/**
-	 * 保存产品规格数据(包括规格, 产品规格, 产品规格明细)
+	 * 保存产品规格数据(包括 产品规格, 产品规格明细)
 	 * @param productId
 	 * @param data
 	 * @param appId
@@ -106,7 +106,6 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	@Override
 	public void saveProductSpecification(int productId, ProductSaveData data, int appId){
 		
-		saveSpecs(data.getSpecList(), appId);
 		saveProductSpecs(productId, data.getProductSpecList());
 		saveProductSpecDetails(productId, data.getDetailList());
 	}

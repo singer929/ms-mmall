@@ -34,7 +34,7 @@
 			data:$("form[name = 'specificationForm']").serialize(),
 			url:url,
 			success: function(status) {
-				if(status.result == true) { 
+				if(status.specificationId > 0) { 
 					<@ms.notify msg="保存或更新成功" type= "success" />
 					history.go(-1); 
 					location.reload(); 
