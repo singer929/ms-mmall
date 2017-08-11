@@ -21,6 +21,7 @@ import com.mingsoft.basic.entity.CategoryEntity;
 import com.mingsoft.util.StringUtil;
 
 import net.mingsoft.basic.util.BasicUtil;
+import net.mingsoft.basic.util.SpringUtil;
 import net.mingsoft.mall.constant.ModelCode;
 
 /**
