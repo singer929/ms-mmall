@@ -2,6 +2,7 @@ package net.mingsoft.mall.action.web;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -46,6 +47,7 @@ import com.mingsoft.parser.IParserRegexConstant;
 import com.mingsoft.util.FileUtil;
 import com.mingsoft.util.PageUtil;
 import com.mingsoft.util.StringUtil;
+import com.mysql.fabric.xmlrpc.base.Array;
 
 import net.mingsoft.base.elasticsearch.bean.SearchBean;
 import net.mingsoft.basic.util.BasicUtil;
@@ -455,9 +457,10 @@ public class SearchAction extends BaseAction {
 	 *            orderBy 排序字段，默认id<br/>
 	 *            order 排序方式 默认desc|asc<br/>
 	 *            keyword 关键字<br/>
-	 *            brand 品牌<br/>
+	 *            brand 品牌，多个品牌用逗号隔开<br/>
 	 *            category 分类<br/>
 	 *            type 商品属性<br/>
+	 *            spec 商品规格  多个规格筛选用","分割,相同规格多选用@分割。如 spec=尺寸:1寸@2寸,形状:圆形
 	 *            <dt><span class="strong">返回</span></dt><br/>
 	 *            { "data": [ { "basicHit": 10000, "basicCategoryId": 900,
 	 *            "productGood": 0.9, "basicComment": 100, "basicPic":
@@ -502,6 +505,7 @@ public class SearchAction extends BaseAction {
 		String brand = BasicUtil.getString("brand"); // 品牌编号
 		String price = BasicUtil.getString("price"); // 价格范围
 		String spec = BasicUtil.getString("spec"); // 规格 多个规格筛选用","分割,相同规格多选用@分割。如 spec=尺寸:1寸@2寸,形状:圆形
+		String type = BasicUtil.getString("type"); // 属性
 		
 		if (StringUtils.isBlank(search.getKeyword()) && category<=0 && StringUtil.isBlank(brand)) { //
 			this.outJson(response, false);
@@ -523,8 +527,8 @@ public class SearchAction extends BaseAction {
 		
 		BoolQueryBuilder bqb = QueryBuilders.boolQuery();
 		if(category > 0) {
-			bqb.must(QueryBuilders.matchQuery("basicCategoryId", category));
-			bqb.should(QueryBuilders.matchQuery("basicCategoryIds", category+","));
+			bqb.should(QueryBuilders.matchQuery("basicCategoryIds", category));
+			bqb.should(QueryBuilders.matchQuery("basicCategoryId", category));
 		}
 		if(!StringUtil.isBlank(search.getKeyword())) {
 			bqb.must(QueryBuilders.matchQuery("basicTitle", search.getKeyword()));
@@ -535,11 +539,19 @@ public class SearchAction extends BaseAction {
 		if(!StringUtil.isBlank(brand)) {
 			String[] _brand = brand.split(",");
 			for(String b:_brand) {
-				bqb.should(QueryBuilders.matchQuery("productBrand", b));
+				bqb.filter(QueryBuilders.matchQuery("productBrand", b));
 			}
 		}
 		if(price!=null) {
 			bqb.filter(QueryBuilders.rangeQuery("price").gte(_price[0]).lte(_price[1]));
+			
+		}
+		
+		if(!StringUtil.isBlank(type)) {
+			String[] _type = type.split(",");
+			for(String t:_type) {
+				bqb.filter(QueryBuilders.matchQuery("basicType", t));
+			}
 		}
 		
 		//动态组织规格
@@ -550,7 +562,7 @@ public class SearchAction extends BaseAction {
 				if(_s.length==2) {
 					String[] _v = _s[1].split("@"); //分割多个规格值数据
 					for(String v:_v) {
-						bqb.must(QueryBuilders.matchQuery("productSpecDetails", _s[0]+":"+v));
+						bqb.filter(QueryBuilders.matchQuery("productSpecDetails", _s[0]+":"+v));
 						LOG.debug("->规格搜索："+_s[0]+":"+v);
 					}
 				}
@@ -558,7 +570,7 @@ public class SearchAction extends BaseAction {
 			
 		}
 
-		Pageable pageable = new PageRequest(search.getPageNumber() - 1, search.getPageSize());
+		Pageable pageable = new PageRequest(search.getPageNo() - 1, search.getPageSize());
 		SearchQuery sq = new NativeSearchQueryBuilder().withPageable(pageable)
 				.withSort(SortBuilders.fieldSort(search.getOrderBy())
 						.order(search.getOrder().equalsIgnoreCase("asc")?SortOrder.ASC:SortOrder.DESC))
