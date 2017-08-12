@@ -201,7 +201,7 @@ public class SearchAction extends BaseAction {
 			}
 		}
 		// 获取对应搜索模型
-		SearchEntity search = (SearchEntity) searchBiz.getByIdAndAppId(searchId, app.getAppId());
+		SearchEntity search = (SearchEntity) searchBiz.getById(searchId);
 		// 默认显示的数量为20条
 		int size = 1;
 		// 判断是否存在搜索模型
