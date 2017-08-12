@@ -42,7 +42,7 @@
 			<result property="columnPath" column="column_path" />
 			<result property="categoryTitle" column="category_title" />
 			<result property="categoryId" column="category_id" />
-			<result property="columnContentModelId" column="COLUMN_CONTENTMODELID" />
+			<result property="columnContentModelId" column="COLUMN_CM_ID" />
 			<result property="columnType" column="COLUMN_TYPE" />
 		</association>
 	</resultMap>
@@ -106,7 +106,7 @@
 			<result property="columnPath" column="column_path" />
 			<result property="categoryTitle" column="category_title" />
 			<result property="categoryId" column="category_id" />
-			<result property="columnContentModelId" column="COLUMN_CONTENTMODELID" />
+			<result property="columnContentModelId" column="COLUMN_CM_ID" />
 			<result property="columnType" column="COLUMN_TYPE" />
 		</association>
 	</resultMap>
@@ -214,14 +214,14 @@
 	<select id="getEntity" resultMap="resultMap" parameterType="int">
 		select
 		<include refid="column_list" />
-		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CONTENTMODELID
+		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CM_ID
 		from
 		basic b
 		LEFT JOIN
 		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
 		LEFT JOIN
 		basic_column
-		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORY_ID
 		LEFT
 		JOIN
 		mall_product p ON
@@ -280,14 +280,14 @@
 	<select id="queryList" resultMap="resultMap">
 		select
 		<include refid="column_list" />
-		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CONTENTMODELID
+		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CM_ID
 		from
 		basic b
 		LEFT JOIN
 		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
 		LEFT JOIN
 		basic_column
-		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORY_ID
 		LEFT JOIN
 		mall_product p ON
 		b.basic_id=p.product_basicID
@@ -338,7 +338,7 @@
 	<select id="queryListForSearch" resultMap="resultMap">
 		select
 		<include refid="column_list" />
-		,c.CATEGORY_TITLE,cl.column_path,c.CATEGORY_id,cl.COLUMN_CONTENTMODELID
+		,c.CATEGORY_TITLE,cl.column_path,c.CATEGORY_id,cl.COLUMN_CM_ID
 		from mall_product p
 		left join basic b
 		on b.basic_id=p.product_basicID
@@ -346,7 +346,7 @@
 		ON b.BASIC_CATEGORYID = c.CATEGORY_ID
 		left join
 		basic_column cl
-		on c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		on c.CATEGORY_ID = cl.COLUMN_CATEGORY_ID
 		<if test="tableName!=null">left join ${tableName} d on d.basicId=p.product_basicID
 		</if>
 		where p.product_appID = #{websiteId}
@@ -420,7 +420,7 @@
 		left join mall_product_specification_detail mpsd on mpsd.psd_product_id = p.product_basicID
 		left join basic b on b.basic_id = p.product_basicID
 		LEFT JOIN category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
-		LEFT JOIN basic_column cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		LEFT JOIN basic_column cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORY_ID
 		<if test="tableName!=null">
 		left join ${tableName} d on d.basicId = p.product_basicID 
 		</if>
@@ -560,7 +560,7 @@
 		left join mall_product_specification_detail mpsd on mpsd.psd_product_id = p.product_basicID
 		left join basic b on b.basic_id = p.product_basicID
 		LEFT JOIN category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
-		LEFT JOIN basic_column cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		LEFT JOIN basic_column cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORY_ID
 		<if test="tableName!=null">left join ${tableName} d on d.basicId = p.product_basicID </if>
 		where p.product_appID = #{appId} and p.product_shelf = 1
 		
@@ -629,14 +629,14 @@
 	<select id="queryByBasicIds" resultMap="resultMap">
 		select
 		<include refid="column_list" />
-		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CONTENTMODELID
+		,c.CATEGORY_TITLE,cl.column_path,cl.column_type,c.CATEGORY_id,cl.COLUMN_CM_ID
 		from
 		basic b
 		LEFT JOIN
 		category c ON b.BASIC_CATEGORYID = c.CATEGORY_ID
 		LEFT JOIN
 		basic_column
-		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORYID
+		cl ON c.CATEGORY_ID = cl.COLUMN_CATEGORY_ID
 		LEFT
 		JOIN
 		mall_product p ON
