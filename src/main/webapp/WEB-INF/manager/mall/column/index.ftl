@@ -61,8 +61,11 @@
 	    	columns: [
 	    		{ 
 	    			checkbox: true
-	    		},
-		    	{
+	    		},{
+		        	field: 'categoryId',
+		        	title: '编号',
+		        	align: 'center'
+		    	},{
 		        	field: 'categoryTitle',
 		        	title: '标题',
 		        	align: 'left',
