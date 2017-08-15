@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.mingsoft.mall.dao.IColumnAttributeDao">
+	
+	<resultMap id="resultMap" type="net.mingsoft.mall.entity.ColumnAttributeEntity">
+		<id column="ca_id" property="caId" /><!--规格id 主键 -->
+		<result column="ca_category_id" property="caCategoryId" /><!--规格的类型id(预留) -->
+		<result column="ca_name" property="caName" /><!--规格名称 -->
+		<result column="ca_fields" property="caFields" /><!--默认的字段,多个值用逗号隔开 -->
+		<result column="ca_type" property="caType" /><!--类型 -->
+		<result column="ca_search" property="caSearch" /><!--0:不允许搜索 搜索状态 -->
+	</resultMap>
+	
+	<!--保存-->	
+	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="caId"
+		parameterType="net.mingsoft.mall.entity.ColumnAttributeEntity" >
+		insert into mall_column_attribute
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="caCategoryId != null">ca_category_id,</if>
+			<if test="caName != null and caName != ''">ca_name,</if>
+			<if test="caFields != null and caFields != ''">ca_fields,</if>
+			<if test="caType != null">ca_type,</if>
+			<if test="caSearch != null">ca_search,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="caCategoryId != null">#{caCategoryId},</if>
+			<if test="caName != null and caName != ''">#{caName},</if>
+			<if test="caFields != null and caFields != ''">#{caFields},</if>
+			<if test="caType != null">#{caType},</if>
+			<if test="caSearch != null">#{caSearch},</if>
+		</trim>
+	</insert>
+	
+	<!--更新-->	
+	<update id="updateEntity" parameterType="net.mingsoft.mall.entity.ColumnAttributeEntity">
+		update mall_column_attribute
+		<set>
+			<if test="caCategoryId != null">ca_category_id=#{caCategoryId},</if>			
+			<if test="caName != null and caName != ''">ca_name=#{caName},</if>			
+			<if test="caFields != null and caFields != ''">ca_fields=#{caFields},</if>			
+			<if test="caType != null">ca_type=#{caType},</if>			
+			<if test="caSearch != null">ca_search=#{caSearch},</if>			
+		</set>
+		where ca_id = #{caId}
+	</update>
+	
+	<!--根据id获取-->	
+	<select id="getEntity" resultMap="resultMap" parameterType="int">
+		select * from mall_column_attribute where ca_id=#{caId}
+	</select>
+	
+	<!--根据实体获取-->
+	<select id="getByEntity" resultMap="resultMap" parameterType="net.mingsoft.mall.entity.ColumnAttributeEntity">
+		select * from mall_column_attribute 
+		<where>
+			<if test="caCategoryId != null"> and ca_category_id=#{caCategoryId} </if>				
+			<if test="caName != null and caName != ''"> and ca_name=#{caName} </if>				
+			<if test="caFields != null and caFields != ''"> and ca_fields=#{caFields} </if>				
+			<if test="caType != null"> and ca_type=#{caType} </if>				
+			<if test="caSearch != null"> and ca_search=#{caSearch} </if>				
+		</where>
+		limit 0,1
+	</select>	
+	
+	
+	<!--删除-->	
+	<delete id="deleteEntity" parameterType="int">
+		delete from mall_column_attribute  where ca_id=#{caId}
+	</delete>	
+	
+	<!--批量删除-->	
+	<delete id="delete" >
+		delete from mall_column_attribute
+		<where>
+			 ca_id  in <foreach collection="ids" item="item" index="index" 
+			open="(" separator="," close=")">#{item}</foreach>
+		</where>
+	</delete>
+	<!--查询全部-->	
+	<select id="queryAll" resultMap="resultMap">
+		select * from mall_column_attribute order by ca_id desc
+	</select>
+	<!--条件查询-->	
+	<select id="query" resultMap="resultMap">
+		select * from mall_column_attribute  
+		<where>
+				<if test="caCategoryId != null"> and ca_category_id=#{caCategoryId} </if>				
+				<if test="caName != null and caName != ''"> and ca_name=#{caName} </if>				
+				<if test="caFields != null and caFields != ''"> and ca_fields=#{caFields} </if>				
+				<if test="caType != null"> and ca_type=#{caType} </if>				
+				<if test="caSearch != null"> and ca_search=#{caSearch} </if>				
+		</where>		
+		order by ca_id desc
+	</select>
+	
+</mapper>

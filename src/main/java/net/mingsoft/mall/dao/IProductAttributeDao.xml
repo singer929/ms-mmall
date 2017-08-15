@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.mingsoft.mall.dao.IProductAttributeDao">
+	
+	<resultMap id="resultMap" type="net.mingsoft.mall.entity.ProductAttributeEntity">
+		<id column="pa_id" property="paId" /><!-- -->
+		<result column="pa_product_id" property="paProductId" /><!--商品编号 -->
+		<result column="pa_ca_id" property="paCaId" /><!--分类扩展属性编号 -->
+		<result column="pa_name" property="paName" /><!-- -->
+		<result column="pa_value" property="paValue" /><!-- -->
+	</resultMap>
+	
+	<!--保存-->	
+	<insert id="saveEntity" useGeneratedKeys="true" keyProperty="paId"
+		parameterType="net.mingsoft.mall.entity.ProductAttributeEntity" >
+		insert into mall_product_attribute
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="paProductId != null">pa_product_id,</if>
+			<if test="paCaId != null">pa_ca_id,</if>
+			<if test="paName != null and paName != ''">pa_name,</if>
+			<if test="paValue != null and paValue != ''">pa_value,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="paProductId != null">#{paProductId},</if>
+			<if test="paCaId != null">#{paCaId},</if>
+			<if test="paName != null and paName != ''">#{paName},</if>
+			<if test="paValue != null and paValue != ''">#{paValue},</if>
+		</trim>
+	</insert>
+	
+	<!--更新-->	
+	<update id="updateEntity" parameterType="net.mingsoft.mall.entity.ProductAttributeEntity">
+		update mall_product_attribute
+		<set>
+			<if test="paProductId != null">pa_product_id=#{paProductId},</if>			
+			<if test="paCaId != null">pa_ca_id=#{paCaId},</if>			
+			<if test="paName != null and paName != ''">pa_name=#{paName},</if>			
+			<if test="paValue != null and paValue != ''">pa_value=#{paValue},</if>			
+		</set>
+		where pa_id = #{paId}
+	</update>
+	
+	<!--根据id获取-->	
+	<select id="getEntity" resultMap="resultMap" parameterType="int">
+		select * from mall_product_attribute where pa_id=#{paId}
+	</select>
+	
+	<!--根据实体获取-->
+	<select id="getByEntity" resultMap="resultMap" parameterType="net.mingsoft.mall.entity.ProductAttributeEntity">
+		select * from mall_product_attribute 
+		<where>
+			<if test="paProductId != null"> and pa_product_id=#{paProductId} </if>				
+			<if test="paCaId != null"> and pa_ca_id=#{paCaId} </if>				
+			<if test="paName != null and paName != ''"> and pa_name=#{paName} </if>				
+			<if test="paValue != null and paValue != ''"> and pa_value=#{paValue} </if>				
+		</where>
+		limit 0,1
+	</select>	
+	
+	
+	<!--删除-->	
+	<delete id="deleteEntity" parameterType="int">
+		delete from mall_product_attribute  where pa_id=#{paId}
+	</delete>	
+	
+	<!--批量删除-->	
+	<delete id="delete" >
+		delete from mall_product_attribute
+		<where>
+			 pa_id  in <foreach collection="ids" item="item" index="index" 
+			open="(" separator="," close=")">#{item}</foreach>
+		</where>
+	</delete>
+	<!--查询全部-->	
+	<select id="queryAll" resultMap="resultMap">
+		select * from mall_product_attribute order by pa_id desc
+	</select>
+	<!--条件查询-->	
+	<select id="query" resultMap="resultMap">
+		select * from mall_product_attribute  
+		<where>
+				<if test="paProductId != null"> and pa_product_id=#{paProductId} </if>				
+				<if test="paCaId != null"> and pa_ca_id=#{paCaId} </if>				
+				<if test="paName != null and paName != ''"> and pa_name=#{paName} </if>				
+				<if test="paValue != null and paValue != ''"> and pa_value=#{paValue} </if>				
+		</where>		
+		order by pa_id desc
+	</select>
+	
+</mapper>

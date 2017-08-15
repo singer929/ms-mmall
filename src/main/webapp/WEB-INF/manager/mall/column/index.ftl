@@ -141,7 +141,7 @@
 		}else if((rows[0].categoryCategoryId == 0) ||(rows[0].categoryCategoryId == null)){
 			 <@ms.notify msg="请选择子类进行设置" type="warning"/>
 		}else{
-			var frameSrc = "${managerPath}/mall/specification/index.do?categoryId="+rows[0].categoryId;  
+			var frameSrc = "${managerPath}/mall/columnAttribute/index.do?categoryId="+rows[0].categoryId;  
 	        $("#NoPermissioniframe").attr("src", frameSrc);  
 	        $('#NoPermissionModal').modal({ show: true, backdrop: 'static' });
 		}
