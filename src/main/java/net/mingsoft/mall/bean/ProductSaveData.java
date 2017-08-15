@@ -2,10 +2,10 @@ package net.mingsoft.mall.bean;
 
 import java.util.List;
 
+import net.mingsoft.mall.entity.ColumnAttributeEntity;
 import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
 import net.mingsoft.mall.entity.ProductSpecificationEntity;
-import net.mingsoft.mall.entity.SpecificationEntity;
 
 /**
  * 商品保存更新时, 传输的数据
@@ -16,7 +16,7 @@ public class ProductSaveData {
 	private ProductEntity product;
 	private List<ProductSpecificationEntity> productSpecList;
 	private List<ProductSpecificationDetailEntity> detailList;
-	private List<SpecificationEntity> specList;
+	private List<ColumnAttributeEntity> columnAttributeList;
 	
 	public ProductEntity getProduct() {
 		return product;
@@ -36,10 +36,11 @@ public class ProductSaveData {
 	public void setDetailList(List<ProductSpecificationDetailEntity> detailList) {
 		this.detailList = detailList;
 	}
-	public List<SpecificationEntity> getSpecList() {
-		return specList;
+	public List<ColumnAttributeEntity> getColumnAttributeList() {
+		return columnAttributeList;
 	}
-	public void setSpecList(List<SpecificationEntity> specList) {
-		this.specList = specList;
+	public void setColumnAttributeList(List<ColumnAttributeEntity> columnAttributeList) {
+		this.columnAttributeList = columnAttributeList;
 	}
+	
 }

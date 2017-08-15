@@ -16,10 +16,10 @@ import net.mingsoft.mall.dao.IProductDao;
 import net.mingsoft.mall.dao.IProductSpecificationDao;
 import net.mingsoft.mall.dao.IProductSpecificationDetailDao;
 import net.mingsoft.mall.dao.ISpecificationDao;
+import net.mingsoft.mall.entity.ColumnAttributeEntity;
 import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
 import net.mingsoft.mall.entity.ProductSpecificationEntity;
-import net.mingsoft.mall.entity.SpecificationEntity;
 
 /**
  * 
@@ -114,16 +114,13 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	 * 保存规格数据, 有添加则添加, 否则不做处理
 	 * @param list
 	 */
-	private void saveSpecs (List<SpecificationEntity> list, int appId) {
+	private void saveSpecs (List<ColumnAttributeEntity> list, int appId) {
 		
-		List<SpecificationEntity> dbList = specificationDao.queryAll();
-		for (SpecificationEntity se : list){
-			
-			se.setSpecificationAppId(appId);
-			
+		List<ColumnAttributeEntity> dbList = specificationDao.queryAll();
+		for (ColumnAttributeEntity se : list){
 			boolean isInDb = false;
-			for (SpecificationEntity dbSe : dbList){
-				if (dbSe.getSpecificationName().equals(se.getSpecificationName())){
+			for (ColumnAttributeEntity dbSe : dbList){
+				if (dbSe.getCaName().equals(se.getCaName())){
 					isInDb = true;
 					break;
 				}
@@ -182,7 +179,7 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
 	public String getDataStrByProductId(int productId) {
 		
 		//List<SpecificationEntity> specList = specDao.queryByProductId(productId);
-		List<SpecificationEntity> specList = specificationDao.queryAll();
+		List<ColumnAttributeEntity> specList = specificationDao.queryAll();
 		List<ProductSpecificationEntity> productSpecList = productSpecificationDao.queryByProductId(productId);
 		List<ProductSpecificationDetailEntity> detailList =  productSpecificationDetailDao.queryEntitiesByProductId(productId);
 		
@@ -248,14 +245,14 @@ public class ProductSpecificationBizImpl extends BaseBizImpl implements IProduct
  * 产品规格数据结构 将输出给前段获取页面
  */
 class ProductSpecData {
-	private List<SpecificationEntity> specs;
+	private List<ColumnAttributeEntity> specs;
 	private List<ProductSpecificationEntity> productSpecs;
 	private List<ProductSpecificationDetailEntity> productSpecDetails;
 	
-	public List<SpecificationEntity> getSpecs() {
+	public List<ColumnAttributeEntity> getSpecs() {
 		return specs;
 	}
-	public void setSpecs(List<SpecificationEntity> specs) {
+	public void setSpecs(List<ColumnAttributeEntity> specs) {
 		this.specs = specs;
 	}
 	public List<ProductSpecificationEntity> getProductSpecs() {
