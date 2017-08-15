@@ -83,7 +83,7 @@ public class ColumnAttributeAction extends net.mingsoft.mall.action.BaseAction{
 	@RequestMapping("/list")
 	@ResponseBody
 	public void list(@ModelAttribute ColumnAttributeEntity columnAttribute,HttpServletResponse response, HttpServletRequest request,ModelMap model) {
-		if(columnAttribute != null){
+		if(columnAttribute == null){
 			columnAttribute = new ColumnAttributeEntity();
 		}
 		BasicUtil.startPage();

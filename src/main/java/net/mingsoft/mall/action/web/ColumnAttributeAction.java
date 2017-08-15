@@ -66,29 +66,7 @@ public class ColumnAttributeAction extends net.mingsoft.mall.action.BaseAction{
 		if(categoryId <= 0){
 			this.outJson(response, false);
 		}
-		ColumnAttributeEntity columnAttribute = new ColumnAttributeEntity();
-		columnAttribute.setCaCategoryId(categoryId);
-		List columnAttributeList = columnAttributeBiz.query(columnAttribute);
-		List<ColumnAttributeEntity> columnAttributeEntityList = new ArrayList<ColumnAttributeEntity>();
-		List<Map> List = new ArrayList<Map>();
-		for(int i = 0 ;i<columnAttributeList.size();i++){
-			//转实体，获取规格名称
-			ColumnAttributeEntity temp = (ColumnAttributeEntity) columnAttributeList.get(i);
-			Map tempMap =new HashMap();
-			tempMap.put("columnAttributeName", temp.getCaName());
-			//切割默认值组成数组
-			String[] defaultFields = temp.getCaFields().split(",");
-			List<Map> field = new ArrayList<Map>();
-			for(int j=0; j < defaultFields.length; j++){
-				//获取默认规格参数，组成list
-				Map tempDefaultField =new HashMap();
-				tempDefaultField.put("columnAttributeDefaultField", defaultFields[j]);
-				field.add(tempDefaultField);
-			}
-			tempMap.put("columnAttributeDefaultFields", field);
-			List.add(tempMap);
-		}
-		String jsonStr = JSONArray.toJSONString(List);
+		String jsonStr = columnAttributeBiz.queryByCategoryId(categoryId);
 		this.outJson(response,jsonStr); 
 	}
 	

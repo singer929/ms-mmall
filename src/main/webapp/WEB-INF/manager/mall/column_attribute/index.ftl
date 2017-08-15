@@ -41,8 +41,6 @@
 				    	{
 				        	field: 'caName',
 				        	title: '规格名称',
-				        	width:'255',
-				        	align: 'center',
 				        	formatter:function(value,row,index) {
 				        		var url = "${managerPath}/mall/columnAttribute/form.do?caId="+row.caId;
 				        		return "<a href=" +url+ " target='_self'>" + value + "</a>";
@@ -50,16 +48,7 @@
 				    	},{
 				        	field: 'caFields',
 				        	title: '默认的字段,多个值用逗号隔开',
-				        	width:'255',
-				    	},{
-				        	field: 'caSearch',
-				        	title: '0: 搜索状态',
-				        	width:'10',
-				        	formatter:function(value,row,index) {
-				        		var url = "${managerPath}/mall/columnAttribute/form.do?caSearch="+row.caSearch;
-				        		return "<a href=" +url+ " target='_self'>" + value + "</a>";
-				        	}
-				    	}			]
+				    	}]
 	    })
 	})
 	//增加按钮

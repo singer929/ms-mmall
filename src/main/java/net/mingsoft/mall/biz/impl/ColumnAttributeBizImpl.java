@@ -23,6 +23,8 @@ package net.mingsoft.mall.biz.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSONArray;
 import com.mingsoft.base.biz.impl.BaseBizImpl;
 import com.mingsoft.base.dao.IBaseDao;
 import com.mingsoft.util.*;
@@ -51,5 +53,34 @@ public class ColumnAttributeBizImpl extends BaseBizImpl implements IColumnAttrib
 	protected IBaseDao getDao() {
 		// TODO Auto-generated method stub
 		return columnAttributeDao;
+	}
+
+
+	@Override
+	public String queryByCategoryId(int categoryId) {
+		ColumnAttributeEntity columnAttribute = new ColumnAttributeEntity();
+		columnAttribute.setCaCategoryId(categoryId);
+		List columnAttributeList = columnAttributeDao.query(columnAttribute);
+		List<ColumnAttributeEntity> columnAttributeEntityList = new ArrayList<ColumnAttributeEntity>();
+		List<Map> List = new ArrayList<Map>();
+		for(int i = 0 ;i<columnAttributeList.size();i++){
+			//转实体，获取规格名称
+			ColumnAttributeEntity temp = (ColumnAttributeEntity) columnAttributeList.get(i);
+			Map tempMap =new HashMap();
+			tempMap.put("columnAttributeName", temp.getCaName());
+			//切割默认值组成数组
+			String[] defaultFields = temp.getCaFields().split(",");
+			List<Map> field = new ArrayList<Map>();
+			for(int j=0; j < defaultFields.length; j++){
+				//获取默认规格参数，组成list
+				Map tempDefaultField =new HashMap();
+				tempDefaultField.put("columnAttributeDefaultField", defaultFields[j]);
+				field.add(tempDefaultField);
+			}
+			tempMap.put("columnAttributeDefaultFields", field);
+			List.add(tempMap);
+		}
+		String jsonStr = JSONArray.toJSONString(List);
+		return jsonStr;
 	} 
 }

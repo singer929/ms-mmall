@@ -14,5 +14,11 @@ import net.mingsoft.mall.entity.ColumnAttributeEntity;
  * 历史修订：<br/>
  */
 public interface IColumnAttributeBiz extends IBaseBiz {
-
+	
+	/**
+	 * 通过分类Id查询该栏目的属性
+	 * @param categoryId
+	 * @return 该栏目下的属性值得json数据
+	 */
+	public String queryByCategoryId(int categoryId);
 }
