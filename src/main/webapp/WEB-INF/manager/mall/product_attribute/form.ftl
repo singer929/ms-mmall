@@ -37,11 +37,13 @@
 			success: function(status) {
 				if(status.result == true) { 
 					<@ms.notify msg="保存或更新成功" type= "success" />
-					location.href = "${managerPath}/mall/productAttribute/index.do";
+					history.go(-1); 
+					location.reload();
 				}
 				else{
 					<@ms.notify msg= "保存或更新失败！" type= "fail" />
-					location.href= "${managerPath}/mall/productAttribute/index.do";
+					history.go(-1); 
+					location.reload();
 				}
 			}
 		})
