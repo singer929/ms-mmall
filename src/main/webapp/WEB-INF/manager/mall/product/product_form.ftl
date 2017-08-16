@@ -40,6 +40,10 @@
 			<@ms.formRow label="商品缩略图" width="400">
 				<@ms.uploadImg path="upload/mall/product/${appId}/" imgs="${product.basicThumbnails?default('')}" inputName="basicThumbnails" size="30" msg="提示：产品缩略图,最多可上传30张"  maxSize="2"   />
 			</@ms.formRow>
+			<!-- 装扩展属性的地方 -->
+			<div  id="extendAttribute">
+				
+			</div>
 			<!-- 装自定义模型数据的地方 -->
 			<div id="contentModelFiled"></div>
 			<@ms.radio label="开售时间" direction=true name="productShelf" list=[{"id":"1","text":"立刻"},{"id":"0","text":"放入仓库"}] listKey="id" listValue="text" value="${product.productShelf}"/>
@@ -118,8 +122,22 @@
     	</@ms.form>
     </@ms.panel>
 </@ms.html5>
-
-
+<script type="text/x-jquery-tmpl" id="showExtendAttribute">
+	<#noparse>
+		
+		<div class="columnAttribute norms-title column${index}" data-id=${caId}>
+		<span class="columnAttributeName">${columnAttributeName}</span>
+	    <select style="width:100px">
+	    	<option value = -1 >请选择</option>
+	    	{{each columnAttributeDefaultFields}}
+		  		<option value = "${columnAttributeDefaultField}" >${columnAttributeDefaultField}</option>
+		  	{{/each}}
+		</select>
+		</div>
+		
+		<br/>
+	</#noparse>
+</script>
 <script type="text/x-jquery-tmpl" id="showNormsGroup">
 <#noparse>
     <div class="norms-group" data-id="${specName}">
@@ -227,8 +245,19 @@
 			var name = $(this).attr('name');
 			customParams[name] = $(this).val();
 		});
-
-		var svrParams = {productParams:params, customParams:customParams};
+		// 扩展属性
+		var extendAttributeArray =[];
+		var obj = $('#extendAttribute').find(".columnAttribute");
+		for(i=0;i<obj.length;i++){
+			var _obj = $('#extendAttribute').find(".column"+i);
+			extendAttributeArray[i]={
+				paCaId : _obj.attr('data-id'),
+				paName : _obj.find(".columnAttributeName").text(),
+				paValue : _obj.find("option:selected").text(),
+			}
+		};
+		
+		var svrParams = {productParams:params, customParams:customParams,productAttributeList:extendAttributeArray};
 		
 		var paramStr = JSON.stringify(svrParams);
 		$.post('${managerPath}/mall/product/${autoCURD}.do', {jsonStr:paramStr}, function(data, status){
@@ -288,6 +317,27 @@
     function changeCategory(event,treeId,treeNode) {
 		brand(treeNode.categoryId,0);
         requestDiyContentModelFiled(treeNode.categoryId,${product.basicId?c?default(0)});
+        queryByCategory(treeNode.categoryId);
+    }
+    
+    //加载扩展属性
+    function queryByCategory(categoryId) {
+        var url="${managerPath}/mall/columnAttribute/queryByCategoryId.do";
+        var _data= "categoryId=" + categoryId;
+        var list = [];
+        $(this).request({url:url,data:_data, method:"post", func:function(data) {
+        	$("extendAttribute").remove();
+        	for(i=0;i<data.length;i++){
+        		list[i]={
+        			index:i,
+        			caId:data[i].caId,
+        			columnAttributeDefaultFields:data[i].columnAttributeDefaultFields,
+        			columnAttributeName:data[i].columnAttributeName,
+        		}
+        		
+        	}
+        	$("#showExtendAttribute").tmpl(list).appendTo("#extendAttribute")
+        }});   
     }
     
     function requestDiyContentModelFiled(categoryId, basicId) {
