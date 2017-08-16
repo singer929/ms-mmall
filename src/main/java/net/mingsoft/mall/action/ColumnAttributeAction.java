@@ -261,7 +261,7 @@ public class ColumnAttributeAction extends net.mingsoft.mall.action.BaseAction{
 	 * }<br/>
 	 * ]</dd><br/>	 
 	 */
-	@PostMapping("/queryByCategoryId")
+	@RequestMapping("/queryByCategoryId")
 	@ResponseBody
 	public void queryByCategoryId(@RequestParam int categoryId, HttpServletResponse response, HttpServletRequest request) {
 		if(categoryId <= 0){
