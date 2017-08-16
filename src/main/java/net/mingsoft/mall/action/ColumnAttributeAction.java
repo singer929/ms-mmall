@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -247,4 +248,26 @@ public class ColumnAttributeAction extends net.mingsoft.mall.action.BaseAction{
 		this.outJson(response, JSONObject.toJSONString(columnAttribute));
 	}
 		
+	/**
+	 * 查询默认规格数据列表
+	 * @param categoryId 栏目Id
+	 * <dt><span class="strong">返回</span></dt><br/>
+	 * <dd>[<br/>
+	 * { <br/>
+	 * caId: 规格id 主键<br/>
+	 * caName: 规格名称<br/>
+	 * caCategoryId: 分类Id<br/>
+	 * caFields: 默认的字段<br/>
+	 * }<br/>
+	 * ]</dd><br/>	 
+	 */
+	@PostMapping("/queryByCategoryId")
+	@ResponseBody
+	public void queryByCategoryId(@RequestParam int categoryId, HttpServletResponse response, HttpServletRequest request) {
+		if(categoryId <= 0){
+			this.outJson(response, false);
+		}
+		String jsonStr = columnAttributeBiz.queryByCategoryId(categoryId);
+		this.outJson(response,jsonStr); 
+	}
 }
