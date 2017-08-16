@@ -68,6 +68,7 @@ public class ColumnAttributeBizImpl extends BaseBizImpl implements IColumnAttrib
 			ColumnAttributeEntity temp = (ColumnAttributeEntity) columnAttributeList.get(i);
 			Map tempMap =new HashMap();
 			tempMap.put("columnAttributeName", temp.getCaName());
+			tempMap.put("caId", temp.getCaId());
 			//切割默认值组成数组
 			String[] defaultFields = temp.getCaFields().split(",");
 			List<Map> field = new ArrayList<Map>();
