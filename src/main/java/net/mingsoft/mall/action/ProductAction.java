@@ -40,10 +40,12 @@ import net.mingsoft.basic.bean.EUListBean;
 import net.mingsoft.basic.util.BasicUtil;
 import net.mingsoft.basic.util.ElasticsearchUtil;
 import net.mingsoft.mall.bean.ProductSaveData;
+import net.mingsoft.mall.biz.IProductAttributeBiz;
 import net.mingsoft.mall.biz.IProductBiz;
 import net.mingsoft.mall.biz.IProductSpecificationBiz;
 import net.mingsoft.mall.constant.ModelCode;
 import net.mingsoft.mall.constant.e.ProductEnum;
+import net.mingsoft.mall.entity.ProductAttributeEntity;
 import net.mingsoft.mall.entity.ProductEntity;
 import net.mingsoft.mall.entity.ProductSpecificationDetailEntity;
 import net.mingsoft.mall.search.mapping.ProductMapping;
@@ -90,7 +92,13 @@ public class ProductAction extends BaseAction {
 	 */
 	@Autowired
 	private IProductSpecificationBiz productSpecBiz;
-
+	
+	/**
+	 * 商品栏目属性
+	 */
+	@Autowired
+	private IProductAttributeBiz productAttributeBiz;
+	
 	/**
 	 * 判断是否为checkbox类型
 	 */
@@ -391,6 +399,10 @@ public class ProductAction extends BaseAction {
 		if (!StringUtil.isBlank(cookie) && Integer.valueOf(cookie) > 0) {
 			pageNo = Integer.valueOf(cookie);
 		}
+		//更新栏目属性
+//		for(ProductAttributeEntity pa : data.getProductAttributeList()){
+//			productAttributeBiz.updateEntity(pa);
+//		}
 		this.outJson(response, ModelCode.MALL_PRODUCT, true, String.valueOf(pageNo));
 	}
 	
@@ -412,6 +424,7 @@ public class ProductAction extends BaseAction {
 		JSONObject obj = JSON.parseObject(jsonStr);
 		ProductSaveData data = obj.getObject("productParams", ProductSaveData.class);
 		JSONObject customParams = obj.getJSONObject("customParams");
+		
 		// 数据解析有问题
 		if (data == null) {
 			this.outJson(response, ModelCode.MALL_PRODUCT, false, getResString("mall.err.parse"));
@@ -481,6 +494,10 @@ public class ProductAction extends BaseAction {
 			// 向新增内容模型表中插入数据
 			fieldBiz.insertBySQL(contentModel.getCmTableName(), param);
 		}
+		//保存栏目属性
+//		for(ProductAttributeEntity pa : data.getProductAttributeList()){
+//			productAttributeBiz.saveEntity(pa);
+//		}
 		this.outJson(response, ModelCode.MALL_PRODUCT, true, String.valueOf(product.getBasicId()));
 	}
 	
