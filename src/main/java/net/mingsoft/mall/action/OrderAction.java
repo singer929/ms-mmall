@@ -142,7 +142,7 @@ public class OrderAction extends BaseAction {
 	@ResponseBody
 	public void delivery(@ModelAttribute net.mingsoft.mall.entity.OrderEntity order, HttpServletRequest request,
 			HttpServletResponse response) {
-		int freightCityId = Integer.parseInt(request.getParameter("orderExpressCityId"));//获取orderExpressCityId
+		long freightCityId = Long.parseLong(request.getParameter("orderExpressCityId"));//获取orderExpressCityId
 		List<FreightEntity> freight = freightBiz.queryByCityEnable(freightCityId);//根据orderExpressCityId查询freight表中的启用数据
 		int[] expressCompanyIds = new int[freight.size()];	
 		List<String> expressCompanyTitles = new ArrayList();
