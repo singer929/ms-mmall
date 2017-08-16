@@ -196,8 +196,14 @@ public class ProductAction extends BaseAction {
 		// 获取当前app下的栏目列表信息
 		int modelId = this.getModelCodeId(request, ModelCode.MALL_CATEGORY);
 		List<ColumnEntity> columnList = columnBiz.queryAll(appId, modelId);
+		//获取商品栏目属性
+		ProductAttributeEntity productAttributeEntity = new ProductAttributeEntity();
+		productAttributeEntity.setPaProductId(product.getBasicId());
+		List productAttributeList = productAttributeBiz.query(productAttributeEntity);
+		
 		model.addAttribute("columnList", JSONArray.toJSONString(columnList));
 		model.addAttribute("product", _product);
+		model.addAttribute("productAttributeList",productAttributeList);
 		model.addAttribute("appId", appId);
 		return view("/mall/product/product_form");
 	}

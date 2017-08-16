@@ -138,12 +138,23 @@
 			<@ms.notify msg="请选择需要设置栏目的记录" type="warning"/>
 		}else if(rows.length > 1){
 			 <@ms.notify msg="请选择一条记录" type="warning"/>
-		}else if((rows[0].categoryCategoryId == 0) ||(rows[0].categoryCategoryId == null)){
-			 <@ms.notify msg="请选择子类进行设置" type="warning"/>
 		}else{
-			var frameSrc = "${managerPath}/mall/columnAttribute/index.do?categoryId="+rows[0].categoryId;  
-	        $("#NoPermissioniframe").attr("src", frameSrc);  
-	        $('#NoPermissionModal').modal({ show: true, backdrop: 'static' });
+			$.ajax({
+				type: "post",
+				async: false,
+				url: "${managerPath}/category/"+rows[0].categoryId+"/queryChildren.do",
+				dataType: "json",
+				contentType: "application/json",
+				success:function(data) {
+					if(data.length >0){
+						<@ms.notify msg="请选择子类进行设置" type="warning"/>
+					}else{
+						var frameSrc = "${managerPath}/mall/columnAttribute/index.do?categoryId="+rows[0].categoryId;  
+				        $("#NoPermissioniframe").attr("src", frameSrc);  
+				        $('#NoPermissionModal').modal({ show: true, backdrop: 'static' });
+					}
+				}
+			})
 		}
     }); 
 	
