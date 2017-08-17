@@ -84,7 +84,7 @@
 				<if test="paName != null and paName != ''"> and pa_name=#{paName} </if>				
 				<if test="paValue != null and paValue != ''"> and pa_value=#{paValue} </if>				
 		</where>		
-		order by pa_id desc
+		order by pa_id 
 	</select>
 	
 </mapper>

@@ -124,19 +124,19 @@
 </@ms.html5>
 <script type="text/x-jquery-tmpl" id="showExtendAttribute">
 	<#noparse>
-		
 		<div class="columnAttribute norms-title column${index}" data-id=${caId}>
-		<span class="columnAttributeName">${columnAttributeName}</span>
-	    <select style="width:100px">
-	    	<option value = -1 >请选择</option>
-	    	{{each columnAttributeDefaultFields}}
-		  		<option value = "${columnAttributeDefaultField}" >${columnAttributeDefaultField}</option>
-		  	{{/each}}
-		</select>
+			<span class="columnAttributeName">${columnAttributeName}</span>
+		    <select class="selector" style="width:100px">
+		    	<option value = -1 >请选择</option>
+		    	{{each columnAttributeDefaultFields}}
+			  		<option value = "${columnAttributeDefaultField}" >${columnAttributeDefaultField}</option>
+			  	{{/each}}
+			</select>
 		</div>
-		
 		<br/>
 	</#noparse>
+	
+    
 </script>
 <script type="text/x-jquery-tmpl" id="showNormsGroup">
 <#noparse>
@@ -339,6 +339,9 @@
         	$("#showExtendAttribute").tmpl(list).appendTo("#extendAttribute")
         }});   
     }
+    <#if productAttributeList?has_content>
+    	queryByCategory(${product.basicCategoryId});
+    </#if>
     
     function requestDiyContentModelFiled(categoryId, basicId) {
         //加载自定义模型
@@ -430,7 +433,24 @@
         }
         
         brand(${product.basicCategoryId},${product.productBrand});
-
+		<#if productAttributeList?has_content>
+	    	var productAttributeList = "${productAttributeList?size}";
+	    	if(productAttributeList!=0) {  
+		        <#if productAttributeList?has_content>
+	    	var productAttributeList = "${productAttributeList?size}";
+	    	if(productAttributeList!=0) {  
+	         	var  j=-1;  
+		        <#list productAttributeList as productAttribute >  
+		          j++;  
+			       var selectContact = $('#extendAttribute').delegate(".column"+j ).find(".selector"); 
+			       for(i = 0;i<selectContact.length;i++){ 
+				        	selectContact[j].select2().val("${(productAttribute.paValue)}").trigger("change");  
+				       }  
+		        </#list>  
+	       	} 
+	    </#if>  
+	       	} 
+	    </#if>
         $.post('${base}/mall/productSpecification/${product.basicId}/list.do', {}, specDataCallback);
 
 
