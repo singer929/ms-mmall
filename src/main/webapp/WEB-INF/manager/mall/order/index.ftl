@@ -227,7 +227,7 @@
 			for(var i=1 ; i<numlist.length ; i++){
 				scale += parseInt(numlist[i]);		//将发货数量进行累加求和
 			}
-			if(freightExpressId != ""){
+			if((freightExpressId != "")&&(freightExpressId != undefined)){
 				$.post("${managerPath}/freight/cost.do",
 					{
 						freightExpressId:freightExpressId,
