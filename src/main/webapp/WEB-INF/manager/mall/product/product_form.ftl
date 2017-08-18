@@ -40,10 +40,38 @@
 			<@ms.formRow label="商品缩略图" width="400">
 				<@ms.uploadImg path="upload/mall/product/${appId}/" imgs="${product.basicThumbnails?default('')}" inputName="basicThumbnails" size="30" msg="提示：产品缩略图,最多可上传30张"  maxSize="2"   />
 			</@ms.formRow>
-			<!-- 装扩展属性的地方 -->
-			<div  id="extendAttribute">
-				
+			<!----------- 商品栏目属性绑定开始 --------------->
+			<div id="extendAttribute">
+				<template  v-for="item in arrayList">  
+					<div class="columnAttribute" data-id="item.caId">
+						<span class="columnAttributeName">{{item.columnAttributeName}}</span>
+					    <select class="selector" style="width:100px">
+					    	<option value = -1 >请选择</option>
+					    	<template  v-for="columnAttributeDefaultField in item.columnAttributeDefaultFields">
+						  	<option value = "columnAttributeDefaultField.columnAttributeDefaultField" >{{columnAttributeDefaultField.columnAttributeDefaultField}}</option>
+						  	</template>
+						</select>
+					</div>
+					<br/>
+				</template>
 			</div>
+			<script>
+			//获取栏目属性
+		    function queryByCategory(categoryId) {
+		        var url="${managerPath}/mall/columnAttribute/queryByCategoryId.do";
+		        var _data= "categoryId=" + categoryId;
+		        $(this).request({url:url,data:_data, method:"post", func:function(data) {
+		        	var columnAttributeVue = new Vue({
+						el: '#extendAttribute',  //对控制部分进行指定
+						data: {
+							arrayList:data,
+						}
+					})
+		        }});   
+		    }
+		    queryByCategory(204);
+			</script>
+			<!----------- 商品栏目属性绑定结束 --------------->
 			<!-- 装自定义模型数据的地方 -->
 			<div id="contentModelFiled"></div>
 			<@ms.radio label="开售时间" direction=true name="productShelf" list=[{"id":"1","text":"立刻"},{"id":"0","text":"放入仓库"}] listKey="id" listValue="text" value="${product.productShelf}"/>
@@ -122,22 +150,6 @@
     	</@ms.form>
     </@ms.panel>
 </@ms.html5>
-<script type="text/x-jquery-tmpl" id="showExtendAttribute">
-	<#noparse>
-		<div class="columnAttribute norms-title column${index}" data-id=${caId}>
-			<span class="columnAttributeName">${columnAttributeName}</span>
-		    <select class="selector" style="width:100px">
-		    	<option value = -1 >请选择</option>
-		    	{{each columnAttributeDefaultFields}}
-			  		<option value = "${columnAttributeDefaultField}" >${columnAttributeDefaultField}</option>
-			  	{{/each}}
-			</select>
-		</div>
-		<br/>
-	</#noparse>
-	
-    
-</script>
 <script type="text/x-jquery-tmpl" id="showNormsGroup">
 <#noparse>
     <div class="norms-group" data-id="${specName}">
@@ -245,19 +257,8 @@
 			var name = $(this).attr('name');
 			customParams[name] = $(this).val();
 		});
-		// 扩展属性
-		var extendAttributeArray =[];
-		var obj = $('#extendAttribute').find(".columnAttribute");
-		for(i=0;i<obj.length;i++){
-			var _obj = $('#extendAttribute').find(".column"+i);
-			extendAttributeArray[i]={
-				paCaId : _obj.attr('data-id'),
-				paName : _obj.find(".columnAttributeName").text(),
-				paValue : _obj.find("option:selected").text(),
-			}
-		};
 		
-		var svrParams = {productParams:params, customParams:customParams,productAttributeList:extendAttributeArray};
+		var svrParams = {productParams:params, customParams:customParams};
 		
 		var paramStr = JSON.stringify(svrParams);
 		$.post('${managerPath}/mall/product/${autoCURD}.do', {jsonStr:paramStr}, function(data, status){
@@ -320,28 +321,6 @@
         queryByCategory(treeNode.categoryId);
     }
     
-    //加载扩展属性
-    function queryByCategory(categoryId) {
-        var url="${managerPath}/mall/columnAttribute/queryByCategoryId.do";
-        var _data= "categoryId=" + categoryId;
-        var list = [];
-        $(this).request({url:url,data:_data, method:"post", func:function(data) {
-        	$("extendAttribute").remove();
-        	for(i=0;i<data.length;i++){
-        		list[i]={
-        			index:i,
-        			caId:data[i].caId,
-        			columnAttributeDefaultFields:data[i].columnAttributeDefaultFields,
-        			columnAttributeName:data[i].columnAttributeName,
-        		}
-        		
-        	}
-        	$("#showExtendAttribute").tmpl(list).appendTo("#extendAttribute")
-        }});   
-    }
-    <#if productAttributeList?has_content>
-    	queryByCategory(${product.basicCategoryId});
-    </#if>
     
     function requestDiyContentModelFiled(categoryId, basicId) {
         //加载自定义模型
@@ -433,24 +412,6 @@
         }
         
         brand(${product.basicCategoryId},${product.productBrand});
-		<#if productAttributeList?has_content>
-	    	var productAttributeList = "${productAttributeList?size}";
-	    	if(productAttributeList!=0) {  
-		        <#if productAttributeList?has_content>
-	    	var productAttributeList = "${productAttributeList?size}";
-	    	if(productAttributeList!=0) {  
-	         	var  j=-1;  
-		        <#list productAttributeList as productAttribute >  
-		          j++;  
-			       var selectContact = $('#extendAttribute').delegate(".column"+j ).find(".selector"); 
-			       for(i = 0;i<selectContact.length;i++){ 
-				        	selectContact[j].select2().val("${(productAttribute.paValue)}").trigger("change");  
-				       }  
-		        </#list>  
-	       	} 
-	    </#if>  
-	       	} 
-	    </#if>
         $.post('${base}/mall/productSpecification/${product.basicId}/list.do', {}, specDataCallback);
 
 
@@ -998,4 +959,5 @@
 
         return true;
     }
+    
 </script>
