@@ -67,18 +67,18 @@ public class ColumnAttributeBizImpl extends BaseBizImpl implements IColumnAttrib
 			//转实体，获取规格名称
 			ColumnAttributeEntity temp = (ColumnAttributeEntity) columnAttributeList.get(i);
 			Map tempMap =new HashMap();
-			tempMap.put("columnAttributeName", temp.getCaName());
-			tempMap.put("caId", temp.getCaId());
+			tempMap.put("name", temp.getCaName());
+			tempMap.put("id", temp.getCaId());
 			//切割默认值组成数组
 			String[] defaultFields = temp.getCaFields().split(",");
 			List<Map> field = new ArrayList<Map>();
 			for(int j=0; j < defaultFields.length; j++){
 				//获取默认规格参数，组成list
 				Map tempDefaultField =new HashMap();
-				tempDefaultField.put("columnAttributeDefaultField", defaultFields[j]);
+				tempDefaultField.put("field", defaultFields[j]);
 				field.add(tempDefaultField);
 			}
-			tempMap.put("columnAttributeDefaultFields", field);
+			tempMap.put("fields", field);
 			List.add(tempMap);
 		}
 		String jsonStr = JSONArray.toJSONString(List);
