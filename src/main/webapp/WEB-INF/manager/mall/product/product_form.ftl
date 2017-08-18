@@ -43,12 +43,12 @@
 			<!----------- 商品栏目属性绑定开始 --------------->
 			<div id="extendAttribute">
 				<template  v-for="item in arrayList">  
-					<div class="columnAttribute" data-id="item.caId">
-						<span class="columnAttributeName">{{item.columnAttributeName}}</span>
+					<div class="columnAttribute" :data-id="item.id">
+						<span class="columnAttributeName">{{item.name}}</span>
 					    <select class="selector" style="width:100px">
 					    	<option value = -1 >请选择</option>
-					    	<template  v-for="columnAttributeDefaultField in item.columnAttributeDefaultFields">
-						  	<option value = "columnAttributeDefaultField.columnAttributeDefaultField" >{{columnAttributeDefaultField.columnAttributeDefaultField}}</option>
+					    	<template  v-for="field in item.fields">
+						  	<option :value = "field.field" >{{field.field}}</option>
 						  	</template>
 						</select>
 					</div>
@@ -69,7 +69,22 @@
 					})
 		        }});   
 		    }
-		    queryByCategory(204);
+		    function queryAttribute(basicId) {
+		        var url="${managerPath}/mall/productAttribute/list.do";
+		        var _data= "paProductId=" + basicId;
+		        $(this).request({url:url,data:_data, method:"post", func:function(data) {
+		        	var columnAttributeVue = new Vue({
+						el: '#extendAttribute',  //对控制部分进行指定
+						data: {
+							attributeList:data,
+						}
+					})
+		        }});   
+		    }
+		    <#if product?has_content>
+		    	queryByCategory(${product.basicCategoryId});
+		    	queryAttribute(${product.basicId});
+		    </#if>
 			</script>
 			<!----------- 商品栏目属性绑定结束 --------------->
 			<!-- 装自定义模型数据的地方 -->
