@@ -48,8 +48,7 @@
 					    <select class="selector" style="width:100px">
 					    	<option value = -1 >请选择</option>
 					    	<template  v-for="field in item.fields">
-						  			<option :value = "field.field">{{field.field}}</option>
-						  		</template>
+						  		<option :value = "field.field">{{field.field}}</option>
 						  	</template>
 						</select>
 					</div>
