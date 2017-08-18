@@ -42,11 +42,11 @@
 			</@ms.formRow>
 			<!----------- 商品栏目属性绑定开始 --------------->
 			<div id="extendAttribute">
-				<template  v-for="item in columnAttribute">  
+				<template  v-for="(item,index) in columnAttribute">  
 					<div class="columnAttribute" :data-id="item.id">
 						<span class="columnAttributeName">{{item.name}}</span>
-					    <select class="selector" style="width:100px">
-					    	<option value = -1 >请选择</option>
+					    <select :class="'column'+index" :data-id="item.id" :data-name="item.name" :data-paId="item.paId" style="width:150px" v-model="item.select">
+					    	<option value = "-1" >请选择</option>
 					    	<template  v-for="field in item.fields">
 						  		<option :value = "field.field">{{field.field}}</option>
 						  	</template>
@@ -68,16 +68,34 @@
 						var _obj = this;
 						var url="${managerPath}/mall/columnAttribute/queryByCategoryId.do";
 				        var _data= "categoryId=" + categoryId;
+				        var list = [];
 				        $(this).request({url:url,data:_data, method:"post", func:function(data) {
-				        	_obj.columnAttribute = data;
+				        	for(i=0;i<data.length;i++){
+				        		list[i]={
+				        			id:data[i].id,
+				        			select:"-1",
+				        			fields:data[i].fields,
+				        			name:data[i].name,
+				        			paId:"",
+				        		}
+				        	}
+				        	_obj.columnAttribute = list;
 				        }});   
 					},
-					queryAttribute:function(basicId){
+					queryAttribute:function(basicId,index){
 						var _obj = this;
 						var url="${managerPath}/mall/productAttribute/list.do";
 				        var _data= "paProductId=" + basicId;
 				        $(this).request({url:url,data:_data, method:"post", func:function(data) {
-				        	_obj.productAttribute = data;
+				        	_obj.productAttribute = data.rows;
+				        	for(i = 0;i < _obj.productAttribute.length;i++){
+				        		for(j = 0;j < _obj.columnAttribute.length;j++){
+				        			if(_obj.productAttribute[i].paCaId == _obj.columnAttribute[j].id){
+				        			_obj.columnAttribute[j].select = _obj.productAttribute[i].paValue;
+				        			_obj.columnAttribute[j].paId = _obj.productAttribute[i].paId;
+				        			}
+				        		}
+				        	}
 				        }});
 					}
 				}
@@ -265,7 +283,6 @@
 			productContent: UE.getEditor('editor_productContent').getContent()
 		};
 		
-		
 		params.product = productParams;
 		// 自定义模型数据
 		var customParams = {};
@@ -274,7 +291,20 @@
 			customParams[name] = $(this).val();
 		});
 		
-		var svrParams = {productParams:params, customParams:customParams};
+		// 扩展属性
+		var extendAttributeArray =[];
+		var obj = $('#extendAttribute').find(".columnAttribute");
+		for(i=0;i<obj.length;i++){
+			var _obj = $('#extendAttribute').find(".column"+i);
+			extendAttributeArray[i]={
+				paId : _obj.attr('data-paId'),
+				paCaId : _obj.attr('data-id'),
+				paName : _obj.attr('data-name'),
+				paValue : _obj.find("option:selected").text(),
+			}
+		};
+		
+		var svrParams = {productParams:params, customParams:customParams, productAttributeList:extendAttributeArray};
 		
 		var paramStr = JSON.stringify(svrParams);
 		$.post('${managerPath}/mall/product/${autoCURD}.do', {jsonStr:paramStr}, function(data, status){

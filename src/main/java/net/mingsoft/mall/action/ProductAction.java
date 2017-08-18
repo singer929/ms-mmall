@@ -293,7 +293,7 @@ public class ProductAction extends BaseAction {
 		}
 		JSONObject obj = JSON.parseObject(jsonStr);
 		JSONObject customParams = obj.getJSONObject("customParams");
-		//List<ProductAttributeEntity> productAttributeList = JSONArray.parseArray(obj.getString("productAttributeList"), ProductAttributeEntity.class);
+		List<ProductAttributeEntity> productAttributeList = JSONArray.parseArray(obj.getString("productAttributeList"), ProductAttributeEntity.class);
 		ProductSaveData data = obj.getObject("productParams", ProductSaveData.class);
 		if (data == null){
 			this.outJson(response, ModelCode.MALL_PRODUCT, false, getResString("mall.err.parse"));
@@ -402,10 +402,18 @@ public class ProductAction extends BaseAction {
 			pageNo = Integer.valueOf(cookie);
 		}
 		//更新栏目属性
-//		for(ProductAttributeEntity pa : productAttributeList){
-//			pa.setPaProductId(product.getBasicId());
-//			productAttributeBiz.updateEntity(pa);
-//		}
+		if(productAttributeList.size() == 0){
+			productAttributeBiz.deleteByProduct(product.getBasicId());
+		}else{
+			//更新时，先将之前的删除，然后添加新的栏目属性
+			productAttributeBiz.deleteByProduct(product.getBasicId());
+			for(ProductAttributeEntity pa : productAttributeList){
+				if(!pa.getPaValue().equals(this.getResString("pa.value"))){
+					pa.setPaProductId(product.getBasicId());
+					productAttributeBiz.saveEntity(pa);
+				}
+			}
+		}
 		this.outJson(response, ModelCode.MALL_PRODUCT, true, String.valueOf(pageNo));
 	}
 	
@@ -426,7 +434,7 @@ public class ProductAction extends BaseAction {
 		}
 		JSONObject obj = JSON.parseObject(jsonStr);
 		ProductSaveData data = obj.getObject("productParams", ProductSaveData.class);
-		//List<ProductAttributeEntity> productAttributeList = JSONArray.parseArray(obj.getString("productAttributeList"), ProductAttributeEntity.class);
+		List<ProductAttributeEntity> productAttributeList = JSONArray.parseArray(obj.getString("productAttributeList"), ProductAttributeEntity.class);
 		JSONObject customParams = obj.getJSONObject("customParams");
 		
 		// 数据解析有问题
@@ -499,10 +507,12 @@ public class ProductAction extends BaseAction {
 			fieldBiz.insertBySQL(contentModel.getCmTableName(), param);
 		}
 		//更新栏目属性
-//		for(ProductAttributeEntity pa : productAttributeList){
-//			pa.setPaProductId(product.getBasicId());
-//			productAttributeBiz.saveEntity(pa);
-//		}
+		for(ProductAttributeEntity pa : productAttributeList){
+			if(!pa.getPaValue().equals(this.getResString("pa.value"))){
+				pa.setPaProductId(product.getBasicId());
+				productAttributeBiz.saveEntity(pa);
+			}
+		}
 		this.outJson(response, ModelCode.MALL_PRODUCT, true, String.valueOf(product.getBasicId()));
 	}
 	

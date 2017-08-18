@@ -51,5 +51,12 @@ public class ProductAttributeBizImpl extends BaseBizImpl implements IProductAttr
 	protected IBaseDao getDao() {
 		// TODO Auto-generated method stub
 		return productAttributeDao;
-	} 
+	}
+
+
+		@Override
+		public void deleteByProduct(int paProductId) {
+			productAttributeDao.deleteByProduct(paProductId);
+			
+		} 
 }

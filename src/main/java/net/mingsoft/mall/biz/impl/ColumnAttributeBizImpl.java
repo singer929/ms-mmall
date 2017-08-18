@@ -70,7 +70,7 @@ public class ColumnAttributeBizImpl extends BaseBizImpl implements IColumnAttrib
 			tempMap.put("name", temp.getCaName());
 			tempMap.put("id", temp.getCaId());
 			//切割默认值组成数组
-			String[] defaultFields = temp.getCaFields().split(",");
+			String[] defaultFields = temp.getCaFields().split("[,，]");
 			List<Map> field = new ArrayList<Map>();
 			for(int j=0; j < defaultFields.length; j++){
 				//获取默认规格参数，组成list

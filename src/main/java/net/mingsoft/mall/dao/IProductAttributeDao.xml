@@ -63,6 +63,11 @@
 		delete from mall_product_attribute  where pa_id=#{paId}
 	</delete>	
 	
+	<!--删除-->	
+	<delete id="deleteByProduct" parameterType="int">
+		delete from mall_product_attribute  where pa_product_id=#{paProductId}
+	</delete>	
+	
 	<!--批量删除-->	
 	<delete id="delete" >
 		delete from mall_product_attribute

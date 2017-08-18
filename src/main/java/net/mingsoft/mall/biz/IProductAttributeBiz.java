@@ -14,5 +14,9 @@ import net.mingsoft.mall.entity.ProductAttributeEntity;
  * 历史修订：<br/>
  */
 public interface IProductAttributeBiz extends IBaseBiz {
-
+	/**
+	 * 根据商品id删除商品栏目绑定属性
+	 * @param paProductId 商品主键编号
+	 */
+	void deleteByProduct(int paProductId);
 }
