@@ -42,13 +42,14 @@
 			</@ms.formRow>
 			<!----------- 商品栏目属性绑定开始 --------------->
 			<div id="extendAttribute">
-				<template  v-for="item in arrayList">  
+				<template  v-for="item in columnAttribute">  
 					<div class="columnAttribute" :data-id="item.id">
 						<span class="columnAttributeName">{{item.name}}</span>
 					    <select class="selector" style="width:100px">
 					    	<option value = -1 >请选择</option>
 					    	<template  v-for="field in item.fields">
-						  	<option :value = "field.field" >{{field.field}}</option>
+						  			<option :value = "field.field">{{field.field}}</option>
+						  		</template>
 						  	</template>
 						</select>
 					</div>
@@ -57,33 +58,34 @@
 			</div>
 			<script>
 			//获取栏目属性
-		    function queryByCategory(categoryId) {
-		        var url="${managerPath}/mall/columnAttribute/queryByCategoryId.do";
-		        var _data= "categoryId=" + categoryId;
-		        $(this).request({url:url,data:_data, method:"post", func:function(data) {
-		        	var columnAttributeVue = new Vue({
-						el: '#extendAttribute',  //对控制部分进行指定
-						data: {
-							arrayList:data,
-						}
-					})
-		        }});   
-		    }
-		    function queryAttribute(basicId) {
-		        var url="${managerPath}/mall/productAttribute/list.do";
-		        var _data= "paProductId=" + basicId;
-		        $(this).request({url:url,data:_data, method:"post", func:function(data) {
-		        	var columnAttributeVue = new Vue({
-						el: '#extendAttribute',  //对控制部分进行指定
-						data: {
-							attributeList:data,
-						}
-					})
-		        }});   
-		    }
-		    <#if product?has_content>
-		    	queryByCategory(${product.basicCategoryId});
-		    	queryAttribute(${product.basicId});
+			var columnAttributeVue = new Vue({
+				el: '#extendAttribute',  //对控制部分进行指定
+				data: {
+					columnAttribute:"",
+					productAttribute:"",
+				},
+				methods:{
+					queryByCategory:function(categoryId){
+						var _obj = this;
+						var url="${managerPath}/mall/columnAttribute/queryByCategoryId.do";
+				        var _data= "categoryId=" + categoryId;
+				        $(this).request({url:url,data:_data, method:"post", func:function(data) {
+				        	_obj.columnAttribute = data;
+				        }});   
+					},
+					queryAttribute:function(basicId){
+						var _obj = this;
+						var url="${managerPath}/mall/productAttribute/list.do";
+				        var _data= "paProductId=" + basicId;
+				        $(this).request({url:url,data:_data, method:"post", func:function(data) {
+				        	_obj.productAttribute = data;
+				        }});
+					}
+				}
+			})
+		    <#if product.basicId gt 0>
+		    	columnAttributeVue.queryByCategory(${product.basicCategoryId});
+		    	columnAttributeVue.queryAttribute(${product.basicId});
 		    </#if>
 			</script>
 			<!----------- 商品栏目属性绑定结束 --------------->
@@ -333,7 +335,7 @@
     function changeCategory(event,treeId,treeNode) {
 		brand(treeNode.categoryId,0);
         requestDiyContentModelFiled(treeNode.categoryId,${product.basicId?c?default(0)});
-        queryByCategory(treeNode.categoryId);
+        columnAttributeVue.queryByCategory(treeNode.categoryId);
     }
     
     
