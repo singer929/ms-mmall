@@ -30,11 +30,13 @@
 
 <script>
 	$(function(){
+		var caCategoryId = {caCategoryId:${categoryId?default('0')}};
 		$("#columnAttributeList").bootstrapTable({
 			url:"${managerPath}/mall/columnAttribute/list.do",
 			contentType : "application/x-www-form-urlencoded",
+			queryParamsType : "undefined",
 			queryParams:function(params) {
-				return {caCategoryId:${categoryId?default('0')}};
+				return $.extend(params,caCategoryId);
 			},
 			toolbar: "#toolbar",
 	    	columns: [{ checkbox: true},
