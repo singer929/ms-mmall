@@ -230,13 +230,16 @@ public class ProductAction extends BaseAction {
 		//循环的到要删除的ID
 		for(int i=0;i<products.size();i++){
 			ids[i] = products.get(i).getBasicId();
+			productAttributeBiz.deleteByProduct(ids[i]);
+			
 		}
 		if (ids.length == 0 || ids == null) {
 			this.outJson(response, ModelCode.MALL_PRODUCT, false, "", this.redirectBack(request, false));
-				return;
+			return;
 		}
 		// 根据ID批量删除微信
 		productBiz.deleteBasic(ids);
+		
 		// 返回json数据
 		this.outJson(response, ModelCode.MALL_PRODUCT, true);
 	}
