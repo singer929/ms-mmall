@@ -137,7 +137,7 @@
 		if(rows.length <= 0){
 			<@ms.notify msg="请选择需要设置栏目的记录" type="warning"/>
 		}else if(rows.length > 1){
-			 <@ms.notify msg="请选择一条记录" type="warning"/>
+			 <@ms.notify msg="只能对单个栏目的规格进行设置" type="warning"/>
 		}else{
 			$.ajax({
 				type: "post",
