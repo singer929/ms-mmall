@@ -19,6 +19,22 @@
 	}
 	//编辑按钮onclick
 	function save() {
+		var caFields = $("input[name = caFields]").val();
+		var arr = [];
+		var str = caFields.replace(/，/g,',');
+		arr = str.split(",");
+		for(i = 0;i < arr.length ; i++){
+			if(arr[i] == ""){
+				<@ms.notify msg= "默认字段有误，请重新输入" type= "warning" />
+				return;
+			}
+			for(j = i+1 ;j<arr.length ;j++){
+				if(arr[i] == arr[j]){
+					<@ms.notify msg= "默认字段重复，请重新输入" type= "warning" />	
+					return;
+				}
+			}
+		}
 		$("#columnAttributeForm").data("bootstrapValidator").validate();
 			var isValid = $("#columnAttributeForm").data("bootstrapValidator").isValid();
 			if(!isValid) {
