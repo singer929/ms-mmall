@@ -103,6 +103,8 @@
 		    <#if product.basicId gt 0>
 		    	columnAttributeVue.queryByCategory(${product.basicCategoryId});
 		    	columnAttributeVue.queryAttribute(${product.basicId});
+		    <#elseif product.basicCategoryId gt 0>
+		    	columnAttributeVue.queryByCategory(${product.basicCategoryId});
 		    </#if>
 			</script>
 			<!----------- 商品栏目属性绑定结束 --------------->
