@@ -156,8 +156,8 @@
 			<@ms.number label="价格"  
 				name="orderExpressPrice" 
 				label="快递价格"
-				min=最小值
-				max=最大值  
+				min=0
+				max=999999  
 				isFloat=true
 				readonly="false"
 				value="0"
