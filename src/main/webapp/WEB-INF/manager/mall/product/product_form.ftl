@@ -44,7 +44,7 @@
 			<div id="extendAttribute">
 				<template  v-for="(item,index) in columnAttribute">  
 					<div class="columnAttribute" :data-id="item.id">
-						<span class="columnAttributeName">{{item.name}}</span>
+						<span class="columnAttributeName col-sm-2 control-label ">{{item.name}}</span>
 					    <select :class="'column'+index" :data-id="item.id" :data-name="item.name" :data-paId="item.paId" style="width:150px" v-model="item.select">
 					    	<option value = "-1" >请选择</option>
 					    	<template  v-for="field in item.fields">

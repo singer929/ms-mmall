@@ -1,31 +1,29 @@
 <@ms.html5>
-	<div style="width:96%">
-		<div id="toolbar">
-			<@ms.panelNav>
-				<@ms.buttonGroup>
-					<@ms.addButton id="addColumnAttributeBtn"/>
-					<@ms.delButton id="delColumnAttributeBtn"/>
-				</@ms.buttonGroup>
-			</@ms.panelNav>
-		</div>
-		<table id="columnAttributeList" 
-			data-show-refresh="true"
-			data-show-columns="true"
-			data-show-export="true"
-			data-method="post" 
-			data-pagination="true"
-			data-page-size="10"
-			data-side-pagination="server">
-		</table>
-		<@ms.modal  modalName="delColumnAttribute" title="规格数据删除" >
-			<@ms.modalBody>删除此规格
-				<@ms.modalButton>
-					<!--模态框按钮组-->
-					<@ms.button  value="确认删除？"  id="deleteColumnAttributeBtn"  />
-				</@ms.modalButton>
-			</@ms.modalBody>
-		</@ms.modal>
+	<div id="toolbar">
+		<@ms.panelNav>
+			<@ms.buttonGroup>
+				<@ms.addButton id="addColumnAttributeBtn"/>
+				<@ms.delButton id="delColumnAttributeBtn"/>
+			</@ms.buttonGroup>
+		</@ms.panelNav>
 	</div>
+	<table id="columnAttributeList" 
+		data-show-refresh="true"
+		data-show-columns="true"
+		data-show-export="true"
+		data-method="post" 
+		data-pagination="true"
+		data-page-size="10"
+		data-side-pagination="server">
+	</table>
+	<@ms.modal  modalName="delColumnAttribute" title="规格数据删除" >
+		<@ms.modalBody>删除此规格
+			<@ms.modalButton>
+				<!--模态框按钮组-->
+				<@ms.button  value="确认删除？"  id="deleteColumnAttributeBtn"  />
+			</@ms.modalButton>
+		</@ms.modalBody>
+	</@ms.modal>
 </@ms.html5>
 
 <script>
