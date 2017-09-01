@@ -27,7 +27,7 @@
 		<result column="BASIC_TITLE" property="basicTitle"/>
 		<association property="commentPeopleUser" javaType="com.mingsoft.people.entity.PeopleUserEntity">
 			<id column="PEOPLE_ID" property="peopleId" /><!-- 将实体的ID属性与表的ID字段对接 -->
-			<result property="peopleUserNickName" column="PU_NICKNAME"/>
+			<result property="puNickname" column="PU_NICKNAME"/>
 		</association>
 	</resultMap>
 	
