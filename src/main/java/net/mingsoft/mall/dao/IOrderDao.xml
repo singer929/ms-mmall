@@ -58,7 +58,7 @@
 			javaType="com.mingsoft.people.entity.PeopleUserEntity">
 			<id column="PU_PEOPLE_ID" property="puPeopleId" />
 			<result column="PU_REAL_NAME" property="puRealName" />
-			<result column="PU_NICKNAME" property="puNickName" />
+			<result column="PU_NICKNAME" property="puNickname" />
 			<result column="PU_ICON" property="puIcon" />
 		</association>
 		<association property="productEntity" 
